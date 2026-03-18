@@ -1,0 +1,2540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toolskin · Design System Showcase</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+  <!-- Toolskin System -->
+  <link rel="stylesheet" href="assets/css/toolskin.css" />
+
+  <!-- External Libraries (loaded before toolskin.js) -->
+  <script src="https://unpkg.com/lenis@1.3.18/dist/lenis.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.18/dist/lenis.css">
+  <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll/bundled/locomotive-scroll.min.js"></script>
+  <!-- Three.js removed — gradient canvas uses 2D Canvas API, not Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"
+    integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+
+  <!-- Toolskin Framework (loads after dependencies) -->
+  <script src="assets/js/toolskin.js" defer></script>
+
+  <!-- Gradient Canvas (isolated mesh animation — replaces 67K-line bundle) -->
+  <script src="assets/js/ts-gradient-canvas.js" defer></script>
+
+  <!-- Toolskin Configuration -->
+  <script>
+    // Wait for Toolskin to be ready
+    window.addEventListener('ts:ready', () => {
+      console.log('✅ Toolskin Framework Initialized');
+      console.log('Config:', Toolskin.config);
+    });
+
+   
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const marquees = document.querySelectorAll(".ts-marquee");
+
+      marquees.forEach(el => {
+        // 1. Get the original text and clear the element
+        const originalText = el.textContent.trim();
+        el.innerText = '';
+
+        // 2. Map data-mq-* attributes to CSS Variables
+        Array.from(el.attributes).forEach(attr => {
+          if (attr.name.startsWith('data-mq-')) {
+            const varName = `--ts-marquee-${attr.name.replace('data-mq-', '')}`;
+            el.style.setProperty(varName, attr.value);
+          }
+        });
+
+        // 3. Create the "Scaffolding"
+        const wrap = document.createElement('div');
+        wrap.className = 'ts-marquee-text-wrap';
+
+        const content = document.createElement('div');
+        content.className = 'ts-marquee-text-content';
+
+        const textSpan = document.createElement('div');
+        textSpan.className = 'ts-marquee-text-text';
+
+        // 4. Calculate Repeats (Dynamic Loop Logic)
+        const containerWidth = el.offsetWidth || window.innerWidth;
+        const tempSpan = document.createElement("span");
+        tempSpan.style.visibility = "hidden";
+        tempSpan.style.position = "absolute";
+        tempSpan.style.whiteSpace = "nowrap";
+        tempSpan.style.fontSize = getComputedStyle(el).getPropertyValue('--ts-marquee-font-size') || '2rem';
+        tempSpan.innerText = originalText;
+        document.body.appendChild(tempSpan);
+
+        const textWidth = tempSpan.offsetWidth;
+        // Repeat text enough to fill at least 2x the container width for safety
+        const repeats = Math.ceil((containerWidth * 2) / textWidth) || 1;
+        const finalString = (originalText + " ").repeat(repeats);
+
+        document.body.removeChild(tempSpan);
+
+        // 5. Assemble and Inject
+        textSpan.innerText = finalString;
+        textSpan.setAttribute('data-text-content', finalString);
+
+        content.appendChild(textSpan);
+        wrap.appendChild(content);
+        el.appendChild(wrap);
+
+        // Add the base container class for the CSS to kick in
+        el.classList.add('ts-marquee-container');
+      });
+    });
+
+  </script>
+
+  <style>
+    /* ── SHOWCASE-ONLY STYLES ──────────────────────────────────── */
+    /* Styles specific to this demo page only.                      */
+    /* Reusable patterns live in toolskin.css (§4f / §6 / §7)     */
+
+    /* Theme swatch color picker */
+    .theme-swatches {
+      display: flex;
+      gap: var(--ts-sp-2);
+      margin-top: var(--ts-sp-10);
+      align-items: center;
+    }
+
+    .theme-swatches.ts-visible {
+      display: flex !important;
+    }
+
+    .theme-swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--ts-radius-sm);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all .15s;
+      flex-shrink: 0;
+    }
+
+    .theme-swatch:hover {
+      transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Fixed header body offset */
+    body {
+      padding-top: var(--ts-topbar-h);
+    }
+
+    /* Demo-specific helpers */
+    .demo-hero-lead {
+      max-width: 540px;
+      margin-bottom: 0;
+    }
+
+    .demo-icon-dot {
+      font-size: 6px;
+    }
+
+    .demo-icon-tiny {
+      font-size: 7px;
+    }
+
+    .demo-icon-mr {
+      margin-right: 6px;
+    }
+
+    .demo-counter-hidden {
+      display: none;
+    }
+
+    .demo-compact-text {
+      font-size: var(--ts-fs-2xs);
+    }
+
+    .demo-masonry-hero-bg {
+      background: linear-gradient(135deg, var(--ts-accent-dim), var(--ts-bg-2));
+    }
+
+    .demo-masonry-hero-text {
+      font-size: var(--ts-fs-3xl);
+      font-weight: 700;
+    }
+
+    .demo-topbar-static {
+      position: static;
+      border-radius: var(--ts-radius-md);
+      border: 1px solid var(--ts-border-0);
+    }
+
+    /* Showcase-specific mobile overrides */
+    @media (max-width: 768px) {
+      .demo-topbar-static {
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      .demo-topbar-static .ts-nav {
+        flex-shrink: 0;
+      }
+
+      .ts-hero .ts-container {
+        padding-top: var(--ts-sp-8);
+        padding-bottom: var(--ts-sp-8);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .demo-topbar-static .ts-topbar__logo span {
+        display: none;
+      }
+    }
+
+    /* ── PROMO BANNER (dismissable top bar) ──────────────────── */
+    .ts-promo-banner {
+      background: linear-gradient(135deg, var(--ts-accent), color-mix(in srgb, var(--ts-accent) 60%, #ec4899));
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--ts-sp-4);
+      position: relative;
+      z-index: 200;
+      max-height: 120px;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.35s ease;
+    }
+
+    .ts-promo-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg,
+          rgba(255, 255, 255, 0.04) 0px,
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px,
+          transparent 40px);
+      pointer-events: none;
+    }
+
+    .ts-promo-banner.ts-dismissed {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ts-promo-banner__text {
+      font-family: var(--ts-ff-body);
+      font-size: var(--ts-fs-sm);
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      letter-spacing: 0.02em;
+    }
+
+    .ts-promo-banner__text strong {
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .ts-promo-banner__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 20px;
+      border-radius: var(--ts-radius-full);
+      background: rgba(0, 0, 0, 0.35);
+      color: #fff;
+      font-weight: 700;
+      font-size: var(--ts-fs-xs);
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .ts-promo-banner__cta:hover {
+      background: rgba(0, 0, 0, 0.55);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .ts-promo-banner__close {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.25);
+      border: none;
+      color: rgba(255, 255, 255, 0.8);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all .2s;
+    }
+
+    .ts-promo-banner__close:hover {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+    }
+
+    /* ── MOCKUP PARALLAX SHOWCASE ────────────────────────────── */
+    .ts-parallax {
+      position: relative;
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: var(--ts-sp-20) var(--ts-sp-6);
+    }
+
+    .ts-parallax__bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/img/bg_yt.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.35) saturate(1.4);
+      transform: scale(1.01);
+      transition: transform 8s ease;
+    }
+
+    .ts-parallax:hover .ts-parallax__bg {
+      transform: scale(1.3);
+    }
+
+    .ts-parallax__overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, var(--ts-bg-0) 0%, transparent 25%, transparent 75%, var(--ts-bg-0) 100%),
+        radial-gradient(ellipse at center, transparent 30%, var(--ts-bg-0) 80%);
+      z-index: 1;
+    }
+
+    .ts-parallax__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 700px;
+    }
+
+    .ts-parallax__content .ts-overline {
+      letter-spacing: 0.2em;
+      margin-bottom: var(--ts-sp-4);
+    }
+
+    .ts-parallax__content h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: var(--ts-sp-6);
+    }
+
+    .ts-parallax__content p {
+      color: var(--ts-text-secondary);
+      font-size: var(--ts-fs-lg);
+      margin-bottom: var(--ts-sp-10);
+      line-height: 1.6;
+    }
+
+    .ts-parallax .ts-btn--xl {
+      font-size: var(--ts-fs-lg);
+      padding: 18px 40px;
+    }
+
+    /* ── BANNER GENERATOR SPLIT SECTION ──────────────────────── */
+    .ts-split-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+      overflow: hidden;
+    }
+
+    @media (max-width: 900px) {
+      .ts-split-feature {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+    }
+
+    .ts-split-feature__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--ts-section-gap) var(--ts-section-gap);
+      background-color: var(--ts-bg-1);
+      position: relative;
+      gap: var(--ts-sp-2);
+    }
+
+    .ts-split-feature__content::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 10%;
+      bottom: 10%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--ts-accent-dim), transparent);
+    }
+
+    @media (max-width: 900px) {
+      .ts-split-feature__content {
+        padding: var(--ts-sp-10) var(--ts-sp-6);
+      }
+
+      .ts-split-feature__content::after {
+        display: none;
+      }
+    }
+
+    .ts-split-feature__content .ts-overline {
+      color: var(--ts-accent);
+      letter-spacing: 0.15em;
+      margin-bottom: var(--ts-sp-3);
+    }
+
+    .ts-split-feature__content h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: var(--ts-sp-4);
+    }
+
+    .ts-split-feature__content .ts-lead {
+      color: var(--ts-text-secondary);
+      margin-bottom: var(--ts-sp-8);
+      max-width: 480px;
+    }
+
+
+    /* Split slider panel */
+    .ts-split-feature__slider {
+      position: relative;
+      overflow: hidden;
+      background: var(--ts-bg-0);
+    }
+
+    .ts-split-feature__slider img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .ts-split-feature__slider img.active {
+      opacity: 1;
+    }
+
+    @media (max-width: 900px) {
+      .ts-split-feature__slider {
+        min-height: 50vh;
+      }
+    }
+
+    .ts-slider-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .ts-slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all .25s;
+    }
+
+    .ts-slider-dot.active {
+      background: var(--ts-accent);
+      transform: scale(1.2);
+    }
+
+    /* ── PORTFOLIO FLIP CARDS ────────────────────────────────── */
+    .ts-portfolio-section {
+      padding: var(--ts-sp-16) 0;
+    }
+
+    .ts-portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--ts-sp-6);
+      max-width: var(--ts-container-lg);
+      margin: 0 auto;
+      padding: 0 var(--ts-sp-6);
+    }
+
+    .ts-portfolio-grid .ts-flip-card {
+      min-height: 320px;
+    }
+
+    .ts-portfolio-grid .ts-flip-card__front {
+      background: linear-gradient(145deg, var(--ts-bg-2), var(--ts-bg-1));
+    }
+
+    .ts-portfolio-grid .ts-flip-card__front .ts-portfolio-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--ts-radius-md);
+      background: var(--ts-accent-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: var(--ts-sp-4);
+    }
+
+    .ts-portfolio-grid .ts-flip-card__back {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ts-sp-3);
+    }
+
+
+    body:has(.ts-promo-banner:not(.ts-dismissed)) nav.ts-nav-fixed {
+      top: var(--ts-topbar-h);
+    }
+
+    .ts-promo-banner:not(.ts-dismissed) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999999999999999999;
+      max-height: var(--ts-topbar-h);
+    }
+
+    /* ── FULL HEIGHT SECTION ────────────────────────────────── */
+    .ts-h-full {
+      height: 100%;
+      min-height: 100vh !important;
+      padding-block: 0 !important;
+
+    }
+
+    .ts-h-70 {
+      height: 70vh;
+      min-height: 70vh !important;
+
+    }
+
+    .ts-h-50 {
+      height: 50vh;
+      min-height: 50vh !important;
+
+    }
+
+    .ts-h-full,
+    .ts-h-70,
+    .ts-h-50 {
+      background-attachment: fixed;
+      margin-block: -1px;
+      border-block-width: 1px;
+      border-block-color: var(--ts-border-0);
+      border-block-style: solid !important;
+      z-index: 10;
+      overflow: clip !important;
+      position: relative !important;
+    }
+
+    .ts-visible[style*="transform: translate(0px, 40px);"] {
+      visibility: visible !important;
+      transform: translate(0px, 0px) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ PROMO BANNER — Dismissable top notification ═══════════════ -->
+  <div class="ts-promo-banner" id="promo-banner">
+    <span class="ts-promo-banner__text">
+      <strong><i class="fa-solid fa-wand-magic-sparkles"></i> New:</strong>
+      Explore our interactive Toolpanel Mockups — live demos of real userscript automation panels.
+    </span>
+    <a href="mockup/index.html" class="ts-promo-banner__cta">
+      <i class="fa-solid fa-arrow-right"></i> View Mockups
+    </a>
+    <button class="ts-promo-banner__close" onclick="this.parentElement.classList.add('ts-dismissed')"
+      aria-label="Dismiss">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!--  FIXED NAV ────── -->
+  <nav class="ts-nav-fixed">
+    <div class="ts-topbar__logo">
+      TOOL<em>SKIN</em>
+      <span>Design System v1.0</span>
+    </div>
+
+    <div class="ts-nav-fixed__links">
+      <a href="#top">Top</a>
+      <a href="#tokens">Tokens</a>
+      <a href="#typography">Type</a>
+      <a href="#buttons">Buttons</a>
+      <a href="#cards">Cards</a>
+      <a href="#panels">Panels</a>
+      <a href="#forms">Forms</a>
+      <a href="#components">Components</a>
+      <a href="#layouts">Layouts</a>
+      <a href="#mockups">Mockups</a>
+      <a href="#banner-generator">Generator</a>
+      <a href="#portfolio">Portfolio</a>
+    </div>
+
+    <!-- Theme Toggle (right side of menu) -->
+    <button class="ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
+      <i class="fa-solid fa-sun ts-theme-icon-light"></i>
+      <i class="fa-solid fa-moon ts-theme-icon-dark"></i>
+    </button>
+  </nav>
+
+
+  <!--  HERO /////  add classes ts-grain ts-grain-flickered  add classes ba-grid interactive grid-bg anim ts-grain ts-grain-flickered -->
+  <section class="ts-hero ts-section--glow-center gradient-canvas ba-grid ts-grain ts-grain--flickered" id="top">
+    <!-- Canvas auto-injected by ts-gradient-canvas.js into .gradient-canvas#top -->
+
+    <div class="ts-section-color-overlay"
+      style="background: color-mix(in srgb, var(--ts-bg-0) 80%, transparent);position: absolute; inset: 0;z-index: 0;">
+    </div>
+    <div class="ts-container ts-max-w-lg ts-relative ts-z-1" style="z-index: 1;">
+      <div class="ts-hero__badge ts-fade-up">
+        <i class="fa-solid fa-circle demo-icon-dot"></i>
+        Design System · v1.0.0 · 2026
+      </div>
+
+      <h1 class="ts-hero-title ts-fade-up ts-delay-1">
+        TOOL<span class="ts-gradient-text">SKIN</span>
+      </h1>
+
+      <p class="ts-lead demo-hero-lead ts-fade-up ts-delay-2">
+        A token-driven CSS design system built for WordPress, web applications, and UI toolkits. One stylesheet.
+        Infinite control.
+      </p>
+
+      <div class="ts-hero__actions ts-fade-up ts-delay-3">
+        <button class="ts-btn ts-btn--primary ts-btn--lg" data-modal-open="modal-demo">
+          <i class="fa-solid fa-bolt"></i> View Components
+        </button>
+        <a href="#tokens" class="ts-btn ts-btn--outline ts-btn--lg">
+          <i class="fa-solid fa-code"></i> Design Tokens
+        </a>
+      </div>
+
+      <!-- Live accent swatches -->
+      <div class="theme-swatches ts-delay-4 ts-fade-up">
+        <span class="ts-accent-label">Accent</span>
+        <div class="theme-swatch" data-color="#ff5500" onclick="Toolskin.setAccentHex('#ff5500')" title="Orange"></div>
+        <div class="theme-swatch" data-color="#00e5ff" onclick="Toolskin.setAccentHex('#00e5ff')" title="Cyan"></div>
+        <div class="theme-swatch" data-color="#2efc86" onclick="Toolskin.setAccentHex('#2efc86')" title="Green"></div>
+        <div class="theme-swatch" data-color="#a855f7" onclick="Toolskin.setAccentHex('#a855f7')" title="Purple"></div>
+        <div class="theme-swatch" data-color="#f7931a" onclick="Toolskin.setAccentHex('#f7931a')" title="Bitcoin"></div>
+        <div class="theme-swatch" data-color="#ec4899" onclick="Toolskin.setAccentHex('#ec4899')" title="Pink"></div>
+      </div>
+    </div>
+
+    <!-- decorative accent glow blob 
+    <div class="glow-bulb-2"></div>-->
+  </section>
+
+
+  <!--  SECTION: DESIGN TOKENS ──────────────────────────────────── -->
+  <section class="ts-section" id="tokens">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent ts-fade-up">
+        <h2>§1 — Design Tokens</h2>
+      </div>
+
+      <!-- Color palette -->
+      <span class="ts-label ts-fade-up ts-delay-1">Surfaces — ts-surface-0 through ts-surface-5</span>
+      <div class="ts-row ts-mb-8 ts-fade-up ts-delay-2">
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-surface-0 ts-rounded ts-border ts-swatch"></div>
+          <span class="ts-caption">bg-0</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-surface-1 ts-rounded ts-border ts-swatch"></div>
+          <span class="ts-caption">bg-1</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-surface-2 ts-rounded ts-border ts-swatch"></div>
+          <span class="ts-caption">bg-2</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-surface-3 ts-rounded ts-border ts-swatch"></div>
+          <span class="ts-caption">bg-3</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-surface-4 ts-rounded ts-border ts-swatch"></div>
+          <span class="ts-caption">bg-4</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-surface-5 ts-rounded ts-border ts-swatch"></div>
+          <span class="ts-caption">bg-5</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-swatch ts-swatch--accent"></div>
+          <span class="ts-caption">accent</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-swatch ts-swatch--accent-dim"></div>
+          <span class="ts-caption">accent-dim</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-swatch ts-swatch--alt"></div>
+          <span class="ts-caption">alt</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-swatch ts-swatch--success"></div>
+          <span class="ts-caption">success</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-swatch ts-swatch--warning"></div>
+          <span class="ts-caption">warning</span>
+        </div>
+        <div class="ts-flex-col ts-gap-1">
+          <div class="ts-swatch ts-swatch--danger"></div>
+          <span class="ts-caption">danger</span>
+        </div>
+      </div>
+
+      <!-- Token code reference -->
+      <span class="ts-label">Key Token Reference</span>
+      <div class="ts-grid ts-grid--2 ts-mb-8 ts-gap-4">
+        <div class="ts-card ts-card--accent-bar">
+          <div class="ts-card__title"><i class="fa-solid fa-palette"></i> &nbsp;Color Engine (HSL)</div>
+          <code class="ts-mono ts-code-block">
+            --ts-accent-h: 18;<br>
+            --ts-accent-s: 100%;<br>
+            --ts-accent-l: 52%;<br>
+            --ts-accent: hsl(h,s,l);<br>
+            --ts-accent-dim: color-mix(…,transparent 82%);<br>
+            --ts-accent-border: color-mix(…,transparent 60%);
+          </code>
+        </div>
+        <div class="ts-card ts-card--accent-bar">
+          <div class="ts-card__title"><i class="fa-solid fa-ruler"></i> &nbsp;Radius (Global)</div>
+          <code class="ts-mono ts-code-block">
+            --ts-radius-base: 10px; ← master<br>
+            --ts-radius-xs: calc(base × 0.3)<br>
+            --ts-radius-sm: calc(base × 0.5)<br>
+            --ts-radius-md: base<br>
+            --ts-radius-lg: calc(base × 1.4)<br>
+            --ts-radius-xl: calc(base × 2)
+          </code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!--  SECTION: TYPOGRAPHY ─────────────────────────────────────── -->
+  <section class="ts-section ts-section--alt" id="typography">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent">
+        <h2>§3 — Typography</h2>
+      </div>
+
+      <div class="ts-mb-8">
+        <p class="ts-overline">Display / Hero</p>
+        <h1 class="ts-hero-title">HERO TITLE<br><span class="ts-gradient-text">Gradient</span></h1>
+      </div>
+
+      <div class="ts-grid ts-grid--2 ts-mb-8 ts-gap-6">
+        <div class="ts-card">
+          <span class="ts-label">Type Scale</span>
+          <div class="ts-h1 ts-mb-2">H1 — Display Heading</div>
+          <div class="ts-h2 ts-mb-2">H2 — Section Title</div>
+          <div class="ts-h3 ts-mb-2">H3 — Card Header</div>
+          <div class="ts-h4 ts-mb-2">H4 — Subsection</div>
+          <div class="ts-h5 ts-mb-2">H5 — Label Heading</div>
+          <div class="ts-h6 ts-mb-2">H6 — Micro Label</div>
+        </div>
+        <div class="ts-card">
+          <span class="ts-label">Text Utilities</span>
+          <p class="ts-text-primary ts-mb-3">Body text: primary color, default weight. Used for
+            main content paragraphs with relaxed line-height.</p>
+          <p class="ts-text-secondary ts-mb-3">Secondary text — slightly muted for supporting content.</p>
+          <p class="ts-text-muted ts-mb-3">Muted text — labels, captions, metadata.</p>
+          <p class="ts-text-accent ts-mb-3">Accent colored text — highlights, links.</p>
+          <p class="ts-gradient-text bevel ts-h3 ts-mb-3">Gradient Text</p>
+          <span class="ts-overline">Overline Label</span>
+          <p class="ts-label ts-mb-2">UI Label / Category</p>
+          <p class="ts-caption">Caption text — smallest readable size for metadata, timestamps, and supporting details.
+          </p>
+        </div>
+      </div>
+
+      <span class="ts-label">Code / Mono</span>
+      <p class="ts-lh-relaxed">
+        Use <code class="ts-mono">ts-mono</code> for inline code, or pair it with the log component for terminal output.
+        Reference tokens like <code class="ts-mono">--ts-accent</code> or <code class="ts-mono">--ts-radius-base</code>
+        in your overrides.
+      </p>
+    </div>
+  </section>
+
+
+  <!--  SECTION: BUTTONS  -->
+  <section class="ts-section" id="buttons">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent ts-fade-up">
+        <h2>§6a — Buttons</h2>
+      </div>
+
+      <div class="ts-grid ts-grid--2 ts-gap-6">
+        <!-- Left column: Variants + Sizes -->
+        <div class="ts-grid-col">
+          <span class="ts-label ts-fade-up ts-delay-1">Variants</span>
+          <div class="ts-card ts-row ts-mb-6 ts-fade-up ts-delay-2">
+            <button class="ts-btn ts-btn--primary"><i class="fa-solid fa-bolt"></i> Primary</button>
+            <button class="ts-btn ts-btn--outline"><i class="fa-solid fa-arrow-right"></i> Outline</button>
+            <button class="ts-btn"><i class="fa-solid fa-layer-group"></i> Default</button>
+            <button class="ts-btn ts-btn--ghost"><i class="fa-solid fa-ellipsis"></i> Ghost</button>
+            <button class="ts-btn ts-btn--alt"><i class="fa-solid fa-wifi"></i> Alt</button>
+            <button class="ts-btn ts-btn--success"><i class="fa-solid fa-check"></i> Success</button>
+            <button class="ts-btn ts-btn--danger"><i class="fa-solid fa-trash"></i> Danger</button>
+            <button class="ts-btn" disabled>Disabled</button>
+          </div>
+
+          <span class="ts-label">Sizes</span>
+          <div class="ts-card ts-row ts-items-center">
+            <button class="ts-btn ts-btn--primary ts-btn--sm"><i class="fa-solid fa-bolt"></i> Small</button>
+            <button class="ts-btn ts-btn--primary"><i class="fa-solid fa-bolt"></i> Default</button>
+            <button class="ts-btn ts-btn--primary ts-btn--lg"><i class="fa-solid fa-bolt"></i> Large</button>
+            <button class="ts-btn ts-btn--primary ts-btn--xl"><i class="fa-solid fa-rocket"></i> X-Large</button>
+          </div>
+        </div>
+
+        <!-- Right column: Icon-only + Counter -->
+        <div class="ts-grid-col">
+          <span class="ts-label">Icon-only</span>
+          <div class="ts-card ts-row ts-mb-6">
+            <button class="ts-btn ts-btn--primary ts-btn--icon" title="Launch"><i
+                class="fa-solid fa-rocket"></i></button>
+            <button class="ts-btn ts-btn--outline ts-btn--icon" title="Settings"><i
+                class="fa-solid fa-gear"></i></button>
+            <button class="ts-btn ts-btn--icon" title="Download"><i class="fa-solid fa-download"></i></button>
+            <button class="ts-btn ts-btn--ghost ts-btn--icon" title="More"><i
+                class="fa-solid fa-ellipsis-vertical"></i></button>
+            <button class="ts-btn ts-btn--danger ts-btn--icon ts-btn--sm" title="Delete"><i
+                class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <span class="ts-label">With counter badge</span>
+          <div class="ts-card ts-row">
+            <button class="ts-btn ts-btn--primary">
+              <i class="fa-solid fa-bell"></i> Notifications
+              <span class="ts-btn__counter">12</span>
+            </button>
+            <button class="ts-btn">
+              <i class="fa-solid fa-download"></i> Downloads
+              <span class="ts-btn__counter">3</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!--  SECTION: CARDS ── -->
+  <section class="ts-section ts-section--alt" id="cards">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent ts-zoom-in">
+        <h2>§6b — Cards</h2>
+      </div>
+
+      <div class="ts-grid ts-grid--3 ts-mb-8">
+        <!-- Default card -->
+        <div class="ts-card ts-fade-up">
+          <div class="ts-card__header">
+            <div class="ts-card__title"><i class="fa-solid fa-cube"></i> &nbsp;Default Card</div>
+            <span class="ts-badge ts-badge--accent">v1</span>
+          </div>
+          <div class="ts-card__body">A standard surface card with header, body, and footer sections. Border and
+            background derived from the surface stack.</div>
+          <div class="ts-card__footer">
+            <span class="ts-caption">Updated 2h ago</span>
+            <button class="ts-btn ts-btn--ghost ts-btn--sm">Details</button>
+          </div>
+        </div>
+
+        <!-- Accent card -->
+        <div class="ts-card ts-card--accent ts-fade-up ts-delay-1">
+          <div class="ts-card__header">
+            <div class="ts-card__title"><i class="fa-solid fa-star"></i> &nbsp;Accent Card</div>
+            <span class="ts-badge ts-badge--accent">Active</span>
+          </div>
+          <div class="ts-card__body">Accent variant — border and subtle gradient background tinted with the current
+            accent color.</div>
+          <div class="ts-card__footer">
+            <div class="ts-flex ts-gap-2">
+              <span class="ts-dot ts-dot--accent ts-dot--pulse"></span>
+              <span class="ts-caption">Live</span>
+            </div>
+            <button class="ts-btn ts-btn--primary ts-btn--sm">Open</button>
+          </div>
+        </div>
+
+        <!-- Featured card -->
+        <div class="ts-card ts-card--featured ts-fade-up ts-delay-2">
+          <div class="ts-card__header">
+            <div class="ts-card__title"><i class="fa-solid fa-crown"></i> &nbsp;Featured Card</div>
+          </div>
+          <div class="ts-card__body">Featured state — full accent border with glow shadow. Used for recommended or
+            highlighted items.</div>
+          <div class="ts-card__footer">
+            <span class="ts-badge ts-badge--success"><i class="fa-solid fa-check demo-icon-tiny"></i>
+              Verified</span>
+            <button class="ts-btn ts-btn--primary ts-btn--sm">Select</button>
+          </div>
+        </div>
+
+        <!-- Glass card -->
+        <div class="ts-card ts-card--glass ts-fade-up">
+          <div class="ts-card__header">
+            <div class="ts-card__title"><i class="fa-solid fa-droplet"></i> &nbsp;Glass Card</div>
+          </div>
+          <div class="ts-card__body">Frosted glass surface using backdrop-filter blur. Great for overlays on media
+            backgrounds.</div>
+        </div>
+
+        <!-- Accent bar card -->
+        <div class="ts-card ts-card--accent-bar ts-fade-up ts-delay-1">
+          <div class="ts-card__header">
+            <div class="ts-card__title"><i class="fa-solid fa-chart-line"></i> &nbsp;Accent Bar</div>
+          </div>
+          <div class="ts-card__body">Left accent stripe decoration — .ts-card--accent-bar. Good for dashboard metric
+            cards or status panels.</div>
+          <div class="ts-card__footer">
+            <span class="ts-text-accent ts-stat-value">+24.8%</span>
+            <span class="ts-caption">vs last week</span>
+          </div>
+        </div>
+
+        <!-- Interactive card -->
+        <div class="ts-card ts-card--interactive ts-fade-up ts-delay-2 ts-cursor-pointer">
+          <div class="ts-card__header">
+            <div class="ts-card__title"><i class="fa-solid fa-hand-pointer"></i> &nbsp;Interactive Card</div>
+          </div>
+          <div class="ts-card__body">Hover to see the lift + shadow interaction. Add .ts-card--interactive for hover
+            effects.</div>
+          <div class="ts-card__footer">
+            <span class="ts-badge">Hover me</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!--  SECTION: TOOL PANELS ────────────────────────────────────── -->
+  <section class="ts-section" id="panels">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent">
+        <h2>§6c — Tool Panels</h2>
+      </div>
+
+      <div class="ts-gap-8 ts-grid ts-grid--2">
+        <!-- Full panel demo -->
+        <div class="ts-grid-col">
+          <span class="ts-label">Tool Panel — Control Block</span>
+          <div class="ts-max-w-none ts-panel">
+            <div class="ts-panel__header">
+              <div class="ts-panel__title">YSS <strong>Toolpanel</strong> · 4.2.2</div>
+              <div class="ts-panel__header-actions flat">
+                <button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm" title="Help"><i
+                    class="fa-solid fa-circle-question"></i></button>
+                <button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm" title="Settings"><i
+                    class="fa-solid fa-gear"></i></button>
+                <button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm" title="Collapse"
+                  data-collapse-trigger="panel-body-demo"><i class="fa-solid fa-chevron-down"></i></button>
+              </div>
+            </div>
+
+            <div class="ts-panel__body" id="panel-body-demo">
+              <!-- Control row -->
+              <div class="ts-panel__row">
+                <div class="ts-panel__group ts-flex-1">
+                  <button class="ts-btn ts-btn--primary ts-btn--sm ts-flex-1">
+                    <i class="fa-solid fa-calendar-check"></i> Schedule
+                    <span class="ts-btn__counter demo-counter-hidden">0</span>
+                  </button>
+                  <button class="ts-btn ts-btn--sm ts-btn--icon" disabled="" title="Pause">
+                    <i class="fa-solid fa-pause"></i>
+                  </button>
+                </div>
+                <div class="ts-panel__group">
+                  <button class="ts-btn ts-btn--sm ts-flex-1">
+                    <i class="fa-solid fa-bell-slash"></i> Disable Notifs
+                  </button>
+                </div>
+              </div>
+              <div class="ts-panel__row">
+                <div class="ts-panel__group ts-flex-1">
+                  <button class="ts-btn ts-btn--sm ts-flex-1"><i class="fa-solid fa-download"></i>
+                    Downloader</button>
+                  <button class="ts-btn ts-btn--sm ts-flex-1"><i class="fa-solid fa-cloud-arrow-up"></i>
+                    Uploader</button>
+                </div>
+                <div class="ts-panel__group">
+                  <button class="ts-btn ts-btn--sm"><i class="fa-solid fa-file-export"></i> Export</button>
+                </div>
+              </div>
+
+              <!-- Log area -->
+              <div class="ts-log">
+                <div class="ts-log__entry ts-log__entry--info">[10:22:01] [Init] Framework v1.0.0 loaded</div>
+                <div class="ts-log__entry ts-log__entry--success">[10:22:02] [Auth] Session established</div>
+                <div class="ts-log__entry ts-log__entry--debug">[10:22:04] [Downloader] Storage pre-fetch complete — 3
+                  items</div>
+                <div class="ts-log__entry ts-log__entry--warning">[10:22:08] [Scheduler] Rate limit detected —
+                  throttling</div>
+                <div class="ts-log__entry ts-log__entry--accent">[10:22:15] [Export] CSV generated: 147 rows</div>
+                <div class="ts-log__entry ts-log__entry--error">[10:22:20] [Upload] Batch 2 failed — timeout</div>
+              </div>
+            </div>
+
+            <div class="ts-panel__status">
+              <div class="ts-panel__status-item">
+                <span class="ts-dot ts-dot--success ts-dot--pulse"></span> Status: Idle
+              </div>
+              <div class="ts-panel__status-item">
+                <i class="fa-solid fa-video"></i> Total: 147
+              </div>
+              <div class="ts-panel__status-item">
+                <i class="fa-solid fa-list"></i> Page: 1/6
+              </div>
+              <button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm ts-ml-auto" title="Download log">
+                <i class="fa-solid fa-download"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- App topbar demo -->
+        <div class="ts-grid-col">
+
+
+
+          <span class="ts-label">Sidebar Nav</span>
+          <div class="ts-card--accent-bar ts-card ts-p-2">
+            <nav class="ts-sidenav ts-p-0">
+              <span class="ts-sidenav__group-label">Main</span>
+              <a class="ts-nav__item ts-nav__item--active" href="#"><i class="fa-solid fa-house"></i> Dashboard</a>
+              <a class="ts-nav__item" href="#"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+              <a class="ts-nav__item" href="#"><i class="fa-solid fa-folder"></i> Projects</a>
+              <span class="ts-sidenav__group-label">Settings</span>
+              <a class="ts-nav__item" href="#"><i class="fa-solid fa-palette"></i> Appearance</a>
+              <a class="ts-nav__item" href="#"><i class="fa-solid fa-chart-line"></i> Analytics</a><a
+                class="ts-nav__item" href="#"><i class="fa-solid fa-shield"></i> Security</a>
+              <a class="ts-nav__item" href="#"><i class="fa-solid fa-folder"></i> Projects</a>
+            </nav>
+          </div>
+        </div>
+        <div class="ts-col-full ts-grid-col">
+          <span class="ts-label">App Topbar</span>
+          <div class="ts-topbar ts-mb-5 demo-topbar-static">
+            <div class="ts-topbar__logo">
+              TOOL<em>SKIN</em>
+              <span>Design System</span>
+            </div>
+            <div class="ts-topbar__sep"></div>
+            <nav class="ts-nav">
+              <a class="ts-nav__item ts-nav__item--active" href="#"><i class="fa-solid fa-house"></i> Dashboard</a>
+              <a class="ts-nav__item" href="#"><i class="fa-solid fa-chart-bar"></i> Analytics</a>
+              <a class="ts-nav__item" href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+            </nav>
+            <div class="ts-topbar__actions">
+              <button class="ts-btn ts-btn--primary ts-btn--sm"><i class="fa-solid fa-plus"></i> New</button>
+              <button class="ts-btn ts-btn--icon ts-btn--ghost ts-btn--sm"><i class="fa-solid fa-bell"></i></button>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!--  SECTION: FORMS ── -->
+  <section class="ts-section ts-section--alt" id="forms">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent">
+        <h2>§6d–6f — Forms, Toggles, Sliders</h2>
+      </div>
+
+      <div class="ts-grid ts-grid--2">
+        <!-- Form fields -->
+        <div class="ts-card">
+          <span class="ts-label">Inputs & Fields</span>
+          <div class="ts-field">
+            <label class="ts-field-label">Project Name</label>
+            <div class="ts-input-group">
+              <i class="ts-input-icon fa-solid fa-folder"></i>
+              <input type="text" class="ts-input" placeholder="Enter project name…" />
+            </div>
+          </div>
+
+          <div class="ts-field-row-2">
+            <div class="ts-field">
+              <label class="ts-field-label">Status</label>
+              <div class="ts-select-wrap">
+                <select class="ts-select">
+                  <option>Active</option>
+                  <option>Paused</option>
+                  <option>Archived</option>
+                </select>
+              </div>
+            </div>
+            <div class="ts-field">
+              <label class="ts-field-label">Priority</label>
+              <div class="ts-select-wrap">
+                <select class="ts-select">
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="ts-field">
+            <label class="ts-field-label">Notes</label>
+            <textarea class="ts-input ts-textarea" placeholder="Add a note…" rows="3"></textarea>
+          </div>
+
+          <div class="ts-field">
+            <label class="ts-field-label">CSS Token (Mono)</label>
+            <input type="text" class="ts-input ts-input--mono" value="--ts-accent-h: 18;" />
+          </div>
+
+          <!-- Checkboxes -->
+          <span class="ts-label">Checkboxes</span>
+          <div class="ts-flex-col ts-gap-3">
+            <label class="ts-checkbox-row">
+              <input type="checkbox" checked /> <span>Enable auto-scheduling</span>
+            </label>
+            <label class="ts-checkbox-row">
+              <input type="checkbox" /> <span>Rename-only mode</span>
+            </label>
+            <label class="ts-checkbox-row">
+              <input type="checkbox" /> <span>Notify subscribers on publish</span>
+            </label>
+          </div>
+
+          <!-- Sample Asset Window design imported from a css extractor. needs to be addapted.-->
+          <span class="ts-label">Code Wrappers</span>
+
+          <div class="ts-code-window" data-purpose="code-example">
+            <div class="ts-code-header">
+              <div class="ts-code-dotbtn red"></div>
+              <div class="ts-code-dotbtn yellow"></div>
+              <div class="ts-code-dotbtn green"></div>
+              <span class="ts-code-label">ts-button.config.json</span>
+              <button class="ts-code-copy" aria-label="Copy code" title="Copy code">
+                <i class="fa-solid fa-copy"></i>
+              </button>
+            </div>
+            <div class="ts-code-content">
+              <pre><code>{
+                  <span class="ts-accent-text">"prefix"</span>: "ts-",
+                  <span class="ts-accent-text">"states"</span>: {
+                  "default": "bg-brand text-black",
+                  "hover": "translate-y-[-2px]",
+                  "active": "scale-95"
+                  },
+                  <span class="ts-accent-text">"animation"</span>: "spring-smooth"
+                  }</code></pre>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Toggles, sliders, color -->
+        <div>
+          <div class="ts-card ts-flex-col ts-gap-4 ts-mb-6">
+            <span class="ts-label">Toggle Switches</span>
+
+            <div class="ts-toggle-row">
+              <span class="ts-toggle-label"><i class="fa-solid fa-bolt demo-icon-mr ts-text-accent"></i>UI
+                Transitions</span>
+              <label class="ts-toggle"><input type="checkbox" checked /><span class="ts-toggle__knob"></span></label>
+            </div>
+            <div class="ts-toggle-row">
+              <span class="ts-toggle-label"><i class="fa-solid fa-comment demo-icon-mr ts-text-muted"></i>Show
+                Tooltips</span>
+              <label class="ts-toggle"><input type="checkbox" /><span class="ts-toggle__knob"></span></label>
+            </div>
+            <div class="ts-toggle-row">
+              <span class="ts-toggle-label"><i class="fa-solid fa-wifi demo-icon-mr ts-text-success"></i>Live
+                Updates</span>
+              <label class="ts-toggle"><input type="checkbox" checked /><span class="ts-toggle__knob"></span></label>
+            </div>
+            <div class="ts-toggle-row">
+              <span class="ts-toggle-label">Disabled Toggle</span>
+              <label class="ts-toggle"><input type="checkbox" disabled /><span class="ts-toggle__knob"></span></label>
+            </div>
+            <div class="ts-toggle-row">
+              <span class="ts-toggle-label">Small Toggle</span>
+              <label class="ts-toggle ts-toggle--sm"><input type="checkbox" checked /><span
+                  class="ts-toggle__knob"></span></label>
+            </div>
+            <div class="ts-toggle-row">
+              <span class="ts-toggle-label">Large Toggle</span>
+              <label class="ts-toggle ts-toggle--lg"><input type="checkbox" checked /><span
+                  class="ts-toggle__knob"></span></label>
+            </div>
+            <div class="ts-toggle-row">
+              <span class="ts-toggle-label">Extra Large Toggle</span>
+              <label class="ts-toggle ts-toggle--xl"><input type="checkbox" checked /><span
+                  class="ts-toggle__knob"></span></label>
+            </div>
+          </div>
+
+          <div class="ts-card ts-flex-col ts-gap-4 ts-mb-6">
+            <span class="ts-label">Range Sliders</span>
+
+            <div class="ts-field">
+              <label class="ts-field-label">Delay (ms)</label>
+              <div class="ts-range-row">
+                <input type="range" class="ts-range" min="0" max="100" value="50" data-unit="ms" />
+                <span class="ts-range-val">50ms</span>
+              </div>
+            </div>
+            <div class="ts-field">
+              <label class="ts-field-label">Scale</label>
+              <div class="ts-range-row">
+                <input type="range" class="ts-range" min="0" max="100" value="65" data-unit="%" />
+                <span class="ts-range-val">65%</span>
+              </div>
+            </div>
+            <div class="ts-field">
+              <label class="ts-field-label">Volume (0-200)</label>
+              <div class="ts-range-row">
+                <input type="range" class="ts-range" min="0" max="200" value="120" data-unit="" />
+                <span class="ts-range-val">120</span>
+              </div>
+            </div>
+            <div class="ts-field">
+              <label class="ts-field-label">Small Slider</label>
+              <div class="ts-range-row">
+                <input type="range" class="ts-range ts-range--sm" min="0" max="100" value="35" data-unit="%" />
+                <span class="ts-range-val">35%</span>
+              </div>
+            </div>
+            <div class="ts-field">
+              <label class="ts-field-label">Large Slider</label>
+              <div class="ts-range-row">
+                <input type="range" class="ts-range ts-range--lg" min="0" max="100" value="80" data-unit="%" />
+                <span class="ts-range-val">80%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ts-card">
+            <span class="ts-label">Color Swatch</span>
+            <div class="ts-color-row ts-mb-4">
+              <div class="ts-swatch">
+                <input type="color" value="#ff5500" oninput="this.nextElementSibling.style.background=this.value" />
+                <div class="ts-swatch__preview" style="background:#ff5500"></div>
+              </div>
+              <input type="text" class="ts-input ts-input--mono ts-max-w-120" value="#ff5500" />
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!--  SECTION: COMPONENTS ─────────────────────────────────────── -->
+  <section class="ts-section" id="components">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent">
+        <h2>§6g–6r — Components</h2>
+      </div>
+
+      <!-- Row 1: Chips + Badges side by side -->
+      <div class="ts-grid ts-grid--2 ts-gap-6 ts-mb-8">
+        <div>
+          <span class="ts-label">Chips / Tags</span>
+          <div class="ts-chips">
+            <span class="ts-chip ts-chip--active">Selected</span>
+            <span class="ts-chip">Default</span>
+            <span class="ts-chip ts-chip--accent">Accent</span>
+            <span class="ts-chip ts-chip--success"><i class="fa-solid fa-check"></i> Success</span>
+            <span class="ts-chip ts-chip--warning"><i class="fa-solid fa-triangle-exclamation"></i> Warning</span>
+            <span class="ts-chip ts-chip--danger"><i class="fa-solid fa-xmark"></i> Danger</span>
+          </div>
+        </div>
+        <div>
+          <span class="ts-label">Badges & Status Dots</span>
+          <div class="ts-row ts-mb-4">
+            <span class="ts-badge">Default</span>
+            <span class="ts-badge ts-badge--accent">Accent</span>
+            <span class="ts-badge ts-badge--success"><i class="fa-solid fa-check demo-icon-tiny"></i> Live</span>
+            <span class="ts-badge ts-badge--warning">Beta</span>
+            <span class="ts-badge ts-badge--danger">Error</span>
+            <span class="ts-badge ts-badge--alt">Alt</span>
+          </div>
+          <div class="ts-row">
+            <div class="ts-status-dot">
+              <span class="ts-dot ts-dot--pulse ts-dot--accent"></span><span class="ts-caption">Live</span>
+            </div>
+            <div class="ts-status-dot">
+              <span class="ts-dot ts-dot--success"></span><span class="ts-caption">Online</span>
+            </div>
+            <div class="ts-status-dot">
+              <span class="ts-dot ts-dot--warning"></span><span class="ts-caption">Idle</span>
+            </div>
+            <div class="ts-status-dot">
+              <span class="ts-dot ts-dot--danger"></span><span class="ts-caption">Offline</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Tabs — full width -->
+      <div class="ts-grid ts-grid--2 ts-gap-6 ts-mb-8">
+        <div>
+          <span class="ts-label">Tabs</span>
+          <div class="ts-card ts-tab-wrap">
+            <div class="ts-tabs" id="demo-tabs">
+              <button class="ts-tab ts-tab--active" data-tab="pane-overview">Overview</button>
+              <button class="ts-tab" data-tab="pane-analytics">Analytics</button>
+              <button class="ts-tab" data-tab="pane-settings">Settings</button>
+            </div>
+            <div class="ts-tab-pane ts-tab-pane--active" id="pane-overview">
+              <p class="ts-text-secondary">Overview tab content. This pane is visible by default.</p>
+            </div>
+            <div class="ts-tab-pane" id="pane-analytics">
+              <p class="ts-text-secondary">Analytics tab content. Activated when the Analytics tab is clicked.</p>
+            </div>
+            <div class="ts-tab-pane" id="pane-settings">
+              <p class="ts-text-secondary">Settings tab content. Each pane can contain any component.</p>
+            </div>
+          </div>
+
+        </div>
+        <div>
+          <span class="ts-label">Tabs — Pill Variant</span>
+          <div class="ts-card ts-tab-wrap">
+            <div class="ts-tabs ts-tabs--pill" id="demo-tabs-pill">
+              <button class="ts-tab ts-tab--active" data-tab="pane-0">All</button>
+              <button class="ts-tab" data-tab="pane-1">Published</button>
+              <button class="ts-tab" data-tab="pane-2">Drafts</button>
+              <button class="ts-tab" data-tab="pane-3">Archived</button>
+            </div>
+            <div class="ts-tab-pane ts-tab-pane--active" id="pane-0">
+              <p class="ts-text-secondary">Overview tab content. This pane is visible by default.</p>
+            </div>
+            <div class="ts-tab-pane" id="pane-1">
+              <p class="ts-text-secondary">Analytics tab content.</p>
+            </div>
+            <div class="ts-tab-pane" id="pane-2">
+              <p class="ts-text-secondary">Settings tab content.</p>
+            </div>
+            <div class="ts-tab-pane" id="pane-3">
+              <p class="ts-text-secondary">Archived tab content.</p>
+            </div>
+          </div>
+
+          <span class="ts-label ts-mt-6">Tabs — Pill Rounded</span>
+          <div class="ts-tabs ts-tabs--pill ts-tabs--pill-rounded ts-w-fit">
+            <button class="ts-tab ts-tab--active">All</button>
+            <button class="ts-tab">Published</button>
+            <button class="ts-tab">Drafts</button>
+            <button class="ts-tab">Archived</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Progress + Toasts/Modals side by side -->
+      <div class="ts-grid ts-grid--2 ts-gap-6 ts-mb-8">
+        <div>
+          <span class="ts-label">Progress Bars</span>
+          <div class="ts-flex-col ts-gap-4">
+            <div>
+              <div class="ts-progress-row"><span class="ts-progress-label">Uploading files</span><span
+                  class="ts-progress-value">68%</span></div>
+              <div class="ts-progress">
+                <div class="ts-progress__bar" style="width:68%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="ts-progress-row"><span class="ts-progress-label">Processing queue</span><span
+                  class="ts-progress-value">32%</span></div>
+              <div class="ts-progress ts-progress--lg">
+                <div class="ts-progress__bar" style="width:32%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="ts-progress-row"><span class="ts-progress-label">Striped style</span><span
+                  class="ts-progress-value">55%</span></div>
+              <div class="ts-progress ts-progress--striped">
+                <div class="ts-progress__bar" style="width:55%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="ts-label">Toast Notifications</span>
+          <div class="ts-row ts-mb-6">
+            <button class="ts-btn ts-btn--sm"
+              onclick="Toolskin.showToast('Operation completed successfully.', {type:'success',title:'Success'})">
+              <i class="fa-solid fa-circle-check ts-text-success"></i> Success
+            </button>
+            <button class="ts-btn ts-btn--sm"
+              onclick="Toolskin.showToast('Rate limit detected — retrying in 3s.', {type:'warning',title:'Warning'})">
+              <i class="fa-solid fa-triangle-exclamation ts-text-warning"></i> Warning
+            </button>
+            <button class="ts-btn ts-btn--sm"
+              onclick="Toolskin.showToast('Upload failed: Connection timeout.', {type:'error',title:'Error'})">
+              <i class="fa-solid fa-circle-xmark ts-text-danger"></i> Error
+            </button>
+            <button class="ts-btn ts-btn--sm"
+              onclick="Toolskin.showToast('New batch ready for processing.', {type:'info',title:'Info'})">
+              <i class="fa-solid fa-circle-info ts-text-alt"></i> Info
+            </button>
+          </div>
+
+          <span class="ts-label">Modal (click to open)</span>
+          <div class="ts-row">
+            <button class="ts-btn ts-btn--primary" data-modal-open="modal-demo">
+              <i class="fa-solid fa-window-maximize"></i> Open Modal
+            </button>
+            <button class="ts-btn ts-btn--outline" data-modal-open="modal-sm">
+              <i class="fa-solid fa-compress"></i> Small Modal
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tables -->
+      <span class="ts-label">Data Table</span>
+      <div class="ts-table-wrap ts-mb-8">
+        <table class="ts-table">
+          <thead>
+            <tr>
+              <th>Video Title</th>
+              <th>Status</th>
+              <th>Views</th>
+              <th>Published</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ts-text-primary ts-fw-semi">Variation Ballad</td>
+              <td><span class="ts-badge ts-badge--success">Published</span></td>
+              <td><span class="ts-mono">14,820</span></td>
+              <td class="ts-caption">Mar 5, 2026</td>
+              <td><button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm"><i
+                    class="fa-solid fa-ellipsis"></i></button></td>
+            </tr>
+            <tr>
+              <td class="ts-text-primary ts-fw-semi">Tundra in Mineral</td>
+              <td><span class="ts-badge ts-badge--warning">Unlisted</span></td>
+              <td><span class="ts-mono">6,241</span></td>
+              <td class="ts-caption">Mar 2, 2026</td>
+              <td><button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm"><i
+                    class="fa-solid fa-ellipsis"></i></button></td>
+            </tr>
+            <tr>
+              <td class="ts-text-primary ts-fw-semi">TechBuzz Episode 12</td>
+              <td><span class="ts-badge ts-badge--accent">Scheduled</span></td>
+              <td><span class="ts-mono">—</span></td>
+              <td class="ts-caption">Mar 10, 2026</td>
+              <td><button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm"><i
+                    class="fa-solid fa-ellipsis"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 3D Flip Cards -->
+      <span class="ts-label">3D Flip Cards (hover)</span>
+      <div class="ts-grid ts-grid--3 ts-mb-8">
+        <div class="ts-flip-card">
+          <div class="ts-flip-card__inner">
+            <div class="ts-flip-card__front">
+              <div class="ts-label">01</div>
+              <div class="ts-h2 ts-text-accent">DYNAMICS</div>
+              <p class="ts-caption">Hover to inspect</p>
+            </div>
+            <div class="ts-flip-card__back">
+              <div class="ts-h3">Precision Logic</div>
+              <p class="ts-text-secondary ts-caption">Calculated interactions with micro-feedback loops.</p>
+              <button class="ts-btn ts-btn--primary ts-btn--sm">View Specs</button>
+            </div>
+          </div>
+        </div>
+        <div class="ts-flip-card">
+          <div class="ts-flip-card__inner">
+            <div class="ts-flip-card__front">
+              <div class="ts-label">02</div>
+              <div class="ts-h2 ts-text-accent">VISUALS</div>
+              <p class="ts-caption">Hover to inspect</p>
+            </div>
+            <div class="ts-flip-card__back">
+              <div class="ts-h3">Aesthetic Depth</div>
+              <p class="ts-text-secondary ts-caption">Multi-layer SVG noise grain architecture.</p>
+              <button class="ts-btn ts-btn--primary ts-btn--sm">View Specs</button>
+            </div>
+          </div>
+        </div>
+        <div class="ts-flip-card">
+          <div class="ts-flip-card__inner">
+            <div class="ts-flip-card__front">
+              <div class="ts-label">03</div>
+              <div class="ts-h2 ts-text-accent">SPEED</div>
+              <p class="ts-caption">Hover to inspect</p>
+            </div>
+            <div class="ts-flip-card__back">
+              <div class="ts-h3">Runtime Flux</div>
+              <p class="ts-text-secondary ts-caption">Zero external dependencies. Minimal footprint.</p>
+              <button class="ts-btn ts-btn--primary ts-btn--sm">View Specs</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!--  SECTION: PRICING  -->
+  <section class="ts-section ts-section--alt">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent">
+        <h2>§6r — Pricing Cards</h2>
+      </div>
+
+      <div class="ts-grid ts-grid--3">
+        <div class="ts-pricing-card ts-fade-up">
+          <div class="ts-label">Starter</div>
+          <div class="ts-pricing-card__price ts-text-accent"><sup>$</sup>49</div>
+          <div class="ts-pricing-card__features">
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> 1 Domain License</div>
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> Core Modules</div>
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> Community Support</div>
+          </div>
+          <button class="ts-btn ts-btn--full ts-btn--outline">Get Started</button>
+        </div>
+
+        <div class="ts-pricing-card ts-pricing-card--featured ts-fade-up ts-delay-1">
+          <div class="ts-pricing-card__recommend">Recommended</div>
+          <div class="ts-label">Studio</div>
+          <div class="ts-pricing-card__price ts-text-accent"><sup>$</sup>199</div>
+          <div class="ts-pricing-card__features">
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> Unlimited Domains</div>
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> Full Source CSS/JS</div>
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> Priority Support</div>
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> All Toolcore Modules</div>
+          </div>
+          <button class="ts-btn ts-btn--primary ts-btn--full">Select Studio</button>
+        </div>
+
+        <div class="ts-pricing-card ts-fade-up ts-delay-2">
+          <div class="ts-label">Enterprise</div>
+          <div class="ts-pricing-card__price ts-text-accent"><sup>$</sup>899</div>
+          <div class="ts-pricing-card__features">
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> White-label Rights</div>
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> Dedicated Architect</div>
+            <div class="ts-pricing-card__feature"><i class="fa-solid fa-check"></i> 24/7 Hotline</div>
+          </div>
+          <button class="ts-btn ts-btn--full">Contact Sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ts-section" id="marquee-documentation">
+    <div class="ts-container">
+
+      <div class="ts-section-divider rounded ts-neon-accent ts-neon-accent ts-mb-8">
+        <h2>Marquee Component</h2>
+      </div>
+      <p class="ts-lead ts-mb-8" style="max-width: unset; display: none;">Infinite scrolling text marquee with full CSS variable support,
+        data attributes, and JavaScript API. Perfect for hero sections, tickers, and announcements.</p>
+      
+      <div class="ts-marquee fullwidth ts-mb-8" data-mq-speed="58s" data-mq-weight="200" data-mq-font-size="2rem" data-mq-gutter="0px">
+            Infinite scrolling text marquee with full CSS variable support, data attributes, and JavaScript API. Perfect for hero sections, tickers, and announcements.
+        </div>
+      <div class="ts-masonry ts-mt-8" style="--ts-masonry-cols: 2;">
+
+
+
+        <!-- Documentation card -->
+        <div class="ts-masonry-item ts-masonry--tall">
+
+          <div class="ts-card ts-flex-col ts-gap-2">
+            <h3 class="ts-label">Features</h3>
+            <ul class="ts-list ts-checklist">
+              <li>Configurable via CSS variables</li>
+              <li>Data attribute support (<code>data-mq-*</code>)</li>
+              <li>Pause on hover (optional)</li>
+              <li>Direction control (left/right)</li>
+              <li>Responsive and performant</li>
+              <li>Auto-calculates text repeats</li>
+              <li>Viewport-aware pausing</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CSS Variables documentation -->
+        <div class="ts-masonry-item ts-masonry--tall">
+          <div class="ts-flex-col ts-gap-2">
+            <h3 class="ts-label">CSS Variables</h3>
+            <div class="ts-code-window">
+              <div class="ts-code-header">
+                <div class="ts-code-dotbtn red"></div>
+                <div class="ts-code-dotbtn yellow"></div>
+                <div class="ts-code-dotbtn green"></div>
+                <span class="ts-code-label">marquee-variables.css</span>
+                <button class="ts-code-copy" aria-label="Copy code">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+              <div class="ts-code-content">
+                <pre><code style="white-space: pre-line;">--ts-marquee-speed: 45s;
+                    --ts-marquee-font-size: 2rem;
+                    --ts-marquee-color: var(--ts-accent);
+                    --ts-marquee-bg: var(--ts-bg-1);
+                    --ts-marquee-border: 1px;
+                    --ts-marquee-radius: var(--ts-radius-lg);
+                    --ts-marquee-pad: var(--ts-sp-8);
+                    --ts-marquee-gutter: var(--ts-sp-6);
+                    --ts-marquee-weight: 600;</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+         <div class="ts-masonry-item ts-masonry--wide-full">
+          <div class="ts-marquee fullwidth" data-mq-font-size="5rem" data-mq-radius="0" data-mq-bg="var(--ts-accent-dim)" data-mq-gutter="20px">
+            Design, Software And Marketing Systems For The Future.
+          </div>
+        </div>
+
+        <div class="ts-masonry-item">
+            <div class="ts-marquee" data-mq-speed="18s" data-mq-font-size="2rem" data-mq-bg="var(--ts-bg-1)"
+            data-mq-gutter="0px" data-mq-color="var(--ts-text-primary)">
+            Design, Software And Marketing.
+          </div>
+          
+        </div>
+         <div class="ts-masonry-item">
+
+          <div class="ts-marquee" data-mq-speed="48s" data-mq-font-size="5rem" data-mq-gutter="0px" data-mq-pad="30px"
+            data-mq-color="var(--ts-accent)">
+            Design, Software And Marketing Systems For The Future.
+          </div>
+        </div>
+
+
+
+
+
+
+      </div>
+    </div>
+  </section>
+
+ 
+  <!-- ======== /MARQUEE ======== -->
+
+  <!--  SECTION: LAYOUT PATTERNS ───────────────────────────────── -->
+  <section class="ts-section ts-mb-10 section--alt" id="layouts">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent">
+        <h2>§4 — Layout Patterns</h2>
+      </div>
+
+      <span class="ts-label">Dashboard App Shell (mini preview)</span>
+      <div class="ts-card ts-dashboard">
+        <!-- minibar -->
+        <div class="flat ts-card-header ts-panel__header-actions">
+          <span class="ts-logo-text">TOOL<span class="ts-text-accent">SKIN</span>
+          </span>
+          <div class="ts-card-header__actions">
+            <span class="ts-badge ts-badge--success"><span class="ts-dot ts-dot--success ts-dot--pulse"></span>
+              Live</span>
+            <button class="ts-btn ts-btn--icon"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+        <!-- sidebar -->
+        <div class="ts-sidenav">
+          <div class="ts-nav__item ts-nav__item--active ts-mb-1"><i class="fa-solid fa-house"></i> Dashboard</div>
+          <div class="ts-nav__item ts-mb-1"><i class="fa-solid fa-video"></i> Videos</div>
+          <div class="ts-nav__item ts-mb-1"><i class="fa-solid fa-chart-line"></i> Analytics</div>
+          <div class="ts-nav__item"><i class="fa-solid fa-gear"></i> Settings</div>
+        </div>
+        <!-- content -->
+        <div class="ts-card-body">
+          <div class="ts-flex-row ts-gap-3">
+            <div class="ts-card ts-card--accent-bar ts-flex-1">
+              <div class="ts-label">Total Videos</div>
+              <div class="ts-h2 ts-text-accent">
+                14,820</div>
+            </div>
+            <div class="ts-card ts-card--accent-bar ts-flex-1">
+              <div class="ts-label">Scheduled</div>
+              <div class="ts-h2 ts-text-accent">
+                47</div>
+            </div>
+            <div class="ts-card ts-card--accent-bar ts-flex-1">
+              <div class="ts-label">Queue Size</div>
+              <div class="ts-h2 ts-text-accent">
+                12</div>
+            </div>
+          </div>
+          <div class="ts-progress-row"><span class="ts-progress-label">Batch progress</span><span
+              class="ts-progress-value">68%</span></div>
+          <div class="ts-progress">
+            <div class="ts-progress__bar" style="width:68%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Masonry grid demo -->
+      <span class="ts-label ts-mt-8">Masonry Grid (.ts-masonry)</span>
+      <p class="ts-caption ts-mb-4">Responsive grid that adapts to viewport width. Items can span multiple rows/columns.
+      </p>
+
+      <div class="ts-masonry">
+        <!-- Regular items (1x1) -->
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 1</span>
+        </div>
+
+        <!-- Tall item (1x2) -->
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--tall">
+          <span class="ts-caption ts-masonry-item-text">Tall<br>Item 2</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 3</span>
+        </div>
+
+        <!-- Wide item (2x1) -->
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--wide">
+          <span class="ts-caption ts-masonry-item-text">Wide Item 4</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 5</span>
+        </div>
+
+        <!-- Large item (2x2) -->
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--large">
+          <span class="ts-caption ts-masonry-item-text">Large<br>Item 6<br>(2×2)</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 7</span>
+        </div>
+
+        <!-- Tall full (1x3) -->
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--tall-full">
+          <span class="ts-caption ts-masonry-item-text">Tall<br>Full<br>Item 8</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 9</span>
+        </div>
+
+        <!-- Wide full (3x1) -->
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--wide-full">
+          <span class="ts-caption ts-masonry-item-text">Wide Full Item 10</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 11</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 12</span>
+        </div>
+
+        <!-- Hero item (3x3) -->
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--hero demo-masonry-hero-bg">
+          <span class="ts-caption ts-masonry-item-text demo-masonry-hero-text">Hero<br>Item
+            13<br>(3×3)</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 14</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text">Item 15</span>
+        </div>
+
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--wide">
+          <span class="ts-caption ts-masonry-item-text">Wide Item 16</span>
+        </div>
+      </div>
+
+      <!-- Compact masonry variant -->
+      <span class="ts-label ts-mt-8">Compact Masonry
+        (.ts-masonry--compact)</span>
+      <div class="ts-masonry ts-masonry--compact">
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">1</span>
+        </div>
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--tall">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">2</span>
+        </div>
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">3</span>
+        </div>
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--wide">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">4</span>
+        </div>
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">5</span>
+        </div>
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">6</span>
+        </div>
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item ts-masonry--large">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">7</span>
+        </div>
+        <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
+          <span class="ts-caption ts-masonry-item-text demo-compact-text">8</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SOCIAL LINKS SHOWCASE -->
+  <section class="ts-section ts-section--alt" id="social-links">
+    <div class="ts-container">
+      <h2 class="ts-section-title ts-fade-up">Social Links</h2>
+      <p class="ts-lead ts-fade-up ts-delay-1">Flexible social media icon components with multiple style variants.</p>
+
+      <!-- Social Links — multi-column grid -->
+      <div class="ts-grid ts-grid--3 ts-gap-6 ts-mt-6">
+        <div>
+          <span class="ts-label">Standard</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link" data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link" data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link" data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link" data-icon="ion:logo-linkedin"></a></li>
+            <li><a href="#" class="ts-social-link" data-icon="ion:logo-github"></a></li>
+            <li><a href="#" class="ts-social-link" data-icon="ion:logo-youtube"></a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="ts-label">Light (.light)</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link light" data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link light" data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link light" data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link light" data-icon="ion:logo-linkedin"></a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="ts-label">Dark (.dark)</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link dark" data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link dark" data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link dark" data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link dark" data-icon="ion:logo-linkedin"></a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="ts-label">Accent (.accent)</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link accent" data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link accent" data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link accent" data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link accent" data-icon="ion:logo-linkedin"></a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="ts-label">Rounded (.rounded)</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link rounded" data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link rounded" data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link rounded" data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link rounded" data-icon="ion:logo-linkedin"></a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="ts-label">Flat (.flat)</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link flat" data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link flat" data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link flat" data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link flat" data-icon="ion:logo-linkedin"></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Full-width rows for wider variants -->
+      <div class="ts-grid ts-grid--2 ts-gap-6 ts-mt-8">
+        <div>
+          <span class="ts-label">Colored (.colored) — Hover for brand colors</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="facebook"
+                data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="twitter"
+                data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="instagram"
+                data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="linkedin"
+                data-icon="ion:logo-linkedin"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="github" data-icon="ion:logo-github"></a>
+            </li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="youtube"
+                data-icon="ion:logo-youtube"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="pinterest"
+                data-icon="ion:logo-pinterest"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="tiktok" data-icon="ion:logo-tiktok"></a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <span class="ts-label">Combined: Rounded + Accent</span>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link rounded accent" data-icon="ion:logo-facebook"></a></li>
+            <li><a href="#" class="ts-social-link rounded accent" data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link rounded accent" data-icon="ion:logo-instagram"></a></li>
+            <li><a href="#" class="ts-social-link rounded accent" data-icon="ion:logo-linkedin"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER SHOWCASE -->
+  <section class="ts-section ts-grain" id="footer-showcase">
+    <div class="ts-container">
+      <h2 class="ts-section-title ts-fade-up">Footer Components</h2>
+      <p class="ts-lead ts-fade-up ts-delay-1">Comprehensive footer system with widgets, menus, newsletter, and social
+        links.</p>
+
+      <!-- Menu Bullet Variants -->
+      <div class="ts-grid--auto-fit ts-mt-8">
+        <div>
+          <h4 class="ts-label ts-mb-4">Chevron (›)</h4>
+          <ul class="ts-menu-list">
+            <li class="ts-menu-item chevron"><a href="#" class="ts-menu-link">Documentation</a></li>
+            <li class="ts-menu-item chevron"><a href="#" class="ts-menu-link">Components</a></li>
+            <li class="ts-menu-item chevron"><a href="#" class="ts-menu-link">Layouts</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="ts-label ts-mb-4">Arrow (→)</h4>
+          <ul class="ts-menu-list">
+            <li class="ts-menu-item arrow"><a href="#" class="ts-menu-link">Get Started</a></li>
+            <li class="ts-menu-item arrow"><a href="#" class="ts-menu-link">Examples</a></li>
+            <li class="ts-menu-item arrow"><a href="#" class="ts-menu-link">GitHub</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="ts-label ts-mb-4">Dot (•)</h4>
+          <ul class="ts-menu-list">
+            <li class="ts-menu-item dot"><a href="#" class="ts-menu-link">About Us</a></li>
+            <li class="ts-menu-item dot"><a href="#" class="ts-menu-link">Contact</a></li>
+            <li class="ts-menu-item dot"><a href="#" class="ts-menu-link">Careers</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="ts-label ts-mb-4">Plain (No bullet)</h4>
+          <ul class="ts-menu-list">
+            <li class="ts-menu-item"><a href="#" class="ts-menu-link">Privacy Policy</a></li>
+            <li class="ts-menu-item"><a href="#" class="ts-menu-link">Terms of Service</a></li>
+            <li class="ts-menu-item"><a href="#" class="ts-menu-link">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Newsletter Widget — beside the menu lists -->
+      <div class="ts-grid ts-grid--2 ts-gap-6 ts-mt-8">
+        <div>
+          <span class="ts-label">Newsletter Widget</span>
+          <div class="ts-card ts-surface-2 ts-rounded ts-border ts-mt-4">
+            <div class="ts-footer-newsletter ts-gap-1">
+              <h3 class="ts-label dashed">Subscribe to Our Newsletter</h3>
+              <p class="ts-footer-newsletter-desc">Get the latest updates, articles, and resources delivered to your
+                inbox
+                weekly.</p>
+              <form class="ts-newsletter-form" onsubmit="event.preventDefault(); alert('Newsletter signup demo!');">
+                <div class="ts-newsletter-input-group">
+                  <input type="email" class="ts-newsletter-input" placeholder="Enter your email address" required />
+                  <button type="submit" class="ts-newsletter-btn">Subscribe</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="ts-label">Testimonial</span>
+          <div class="ts-testimonial ts-mt-4">
+            <blockquote>
+              "The token depth and dynamic color engine are unparalleled. Toolskin changed how I perceive CSS
+              architecture."
+            </blockquote>
+            <div>
+              <div class="ts-testimonial__author-name">Marcus Vance</div>
+              <div class="ts-testimonial__author-role">Lead Architect · Neon Logic</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ MOCKUP SHOWCASE — Parallax reveal section ════════════════════ -->
+  <section class="ts-parallax ts-h-70" id="mockups">
+    <div class="ts-parallax__bg"></div>
+    <div class="ts-parallax__overlay"></div>
+    <div class="ts-parallax__content ts-fade-up">
+      <p class="ts-overline ts-text-accent">PORTFOLIO · LIVE DEMOS</p>
+      <h2>
+        <span class="ts-gradient-text">Toolpanel</span> Mockup Previews
+      </h2>
+      <p>Semi-functional interactive previews of real userscript automation panels. YouTube bulk scheduler,
+        Suno AI music generator, and Higgsfield video automation — all built with our design system.</p>
+      <a href="mockup/index.html" class="ts-btn ts-btn--primary ts-btn--xl">
+        <i class="fa-solid fa-rocket"></i> Explore Mockups
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ═══ BANNER GENERATOR — Split-screen feature section ═════════════ -->
+  <section class="ts-split-feature" id="banner-generator">
+    <!-- Left: Content -->
+    <div class="ts-split-feature__content">
+      <p class="ts-overline"><i class="fa-solid fa-sparkles"></i> TOOLSKIN TOOL</p>
+      <h2>
+        <span class="ts-gradient-text">Banner</span> Generator
+      </h2>
+      <p class="ts-lead" style="font-size: var(--ts-fs-lg);">
+        Create stunning, minimalistic and professional presentation banners in seconds. Pure CSS &amp; Canvas 2D
+        rendering — gradient text, noise textures,
+        custom typography, icon picker, multiple presets. No dependencies. <strong class="ts-accent-text">What you see
+          is what you export.</strong>
+      </p>
+
+      <div class="ts-feat-list ts-feat-list--grid">
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-palette"></i>
+          <span>Gradient Text with custom color stops</span>
+        </div>
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-font"></i>
+          <span>Multiple fonts &amp; weight controls</span>
+        </div>
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-image"></i>
+          <span>Background presets &amp; noise layers</span>
+        </div>
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-expand"></i>
+          <span>Preset sizes: OG, HD, 4K &amp; custom</span>
+        </div>
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-icons"></i>
+          <span>Icon picker with 1400+ Ionicons</span>
+        </div>
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-download"></i>
+          <span>PNG / JPEG export at 2× resolution</span>
+        </div>
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Live preview with real-time controls</span>
+        </div>
+        <div class="ts-feat-item">
+          <i class="fa-solid fa-floppy-disk"></i>
+          <span>Save &amp; load preset configurations</span>
+        </div>
+      </div>
+
+      <a href="generator/index.html" class="ts-btn ts-btn--primary ts-btn--lg" style="align-self:flex-start;">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Launch Banner Generator
+      </a>
+    </div>
+
+    <!-- Right: Image Slider -->
+    <div class="ts-split-feature__slider" id="banner-slider">
+      <img src="assets/img/banner-toolskin-1200x900-01.png" alt="Banner Preview 1" class="active">
+      <img src="assets/img/banner-toolskin-1200x900-02.png" alt="Banner Preview 2">
+      <img src="assets/img/banner-toolskin-1200x900-03.png" alt="Banner Preview 3">
+      <img src="assets/img/banner-toolskin-1200x900-04.jpg" alt="Banner Preview 4">
+      <img src="assets/img/banner-toolskin-1200x900-05.jpg" alt="Banner Preview 5">
+      <img src="assets/img/banner-generator-1.jpg" alt="Banner Generator Interface 1">
+      <img src="assets/img/banner-generator-2.jpg" alt="Banner Generator Interface 2">
+      <img src="assets/img/banner-generator-3.jpg" alt="Banner Generator Preview Export">
+      <div class="ts-slider-dots" id="slider-dots"></div>
+    </div>
+  </section>
+
+
+  <!-- ═══ PORTFOLIO GRID — 3D Flip Cards ══════════════════════════════ -->
+  <section class="ts-section ts-portfolio-section" id="portfolio">
+    <div class="ts-container">
+      <div class="ts-section-divider rounded ts-neon-accent ts-fade-up">
+        <h2>§ — Portfolio Showcase</h2>
+      </div>
+      <p class="ts-lead ts-mb-8 dashed" style="margin-left: var(--ts-sp-8);">
+        Interactive automation toolpanels — hover to reveal details, click to launch.
+      </p>
+
+      <div class="ts-portfolio-grid">
+        <!-- YouTube Toolpanel -->
+        <div class="ts-flip-card ts-fade-up">
+          <div class="ts-flip-card__inner">
+            <div class="ts-flip-card__front">
+              <div class="ts-portfolio-icon" style="background: rgba(255,0,0,0.15);">
+                <i class="fa-brands fa-youtube" style="color:#ff4444;"></i>
+              </div>
+              <div class="ts-h3">YouTube Toolpanel</div>
+              <span class="ts-badge ts-badge--danger">v4.2.7</span>
+              <p class="ts-caption ts-mt-2" style="color:var(--ts-text-muted);">YSS Studio &amp; Watch modes</p>
+            </div>
+            <div class="ts-flip-card__back">
+              <div class="ts-h4">Full Studio Automation</div>
+              <p class="ts-text-secondary ts-caption">Transcript fetcher, batch processor, Gemini AI summarizer,
+                video downloader, scheduling, and bulk studio actions.</p>
+              <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+                <a href="mockup/yss-toolpanel-watch-mockup.html" class="ts-btn ts-btn--primary ts-btn--sm"
+                  style="width:100%;justify-content:center;">
+                  <i class="fa-solid fa-play"></i> Watch Mode
+                </a>
+                <a href="mockup/yss-toolpanel-studio-mockup.html" class="ts-btn ts-btn--outline ts-btn--sm"
+                  style="width:100%;justify-content:center;">
+                  <i class="fa-solid fa-film"></i> Studio Mode
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Suno Automation -->
+        <div class="ts-flip-card ts-fade-up ts-delay-1">
+          <div class="ts-flip-card__inner">
+            <div class="ts-flip-card__front">
+              <div class="ts-portfolio-icon" style="background: rgba(168,85,247,0.15);">
+                <i class="fa-solid fa-music" style="color:#a855f7;"></i>
+              </div>
+              <div class="ts-h3">Suno Automation</div>
+              <span class="ts-badge"
+                style="background:rgba(168,85,247,0.15); color:#a855f7; border-color:rgba(168,85,247,0.3);">v3.8.1</span>
+              <p class="ts-caption ts-mt-2" style="color:var(--ts-text-muted);">AI Music Generation</p>
+            </div>
+            <div class="ts-flip-card__back">
+              <div class="ts-h4">Bulk Music Pipeline</div>
+              <p class="ts-text-secondary ts-caption">Automated track generation, bulk downloader, queue viewer,
+                track status monitoring, and workspace management.</p>
+              <a href="mockup/suno-toolpanel-mockup.html" class="ts-btn ts-btn--primary ts-btn--sm"
+                style="width:100%;justify-content:center">
+                <i class="fa-solid fa-music"></i> Launch Panel
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Higgsfield Automation -->
+        <div class="ts-flip-card ts-fade-up ts-delay-2">
+          <div class="ts-flip-card__inner">
+            <div class="ts-flip-card__front">
+              <div class="ts-portfolio-icon" style="background: rgba(0,229,255,0.12);">
+                <i class="fa-solid fa-video" style="color:#00e5ff;"></i>
+              </div>
+              <div class="ts-h3">Higgsfield Automation</div>
+              <span class="ts-badge"
+                style="background:rgba(0,229,255,0.12); color:#00e5ff; border-color:rgba(0,229,255,0.3);">v4.9.6</span>
+              <p class="ts-caption ts-mt-2" style="color:var(--ts-text-muted);">AI Video Generation</p>
+            </div>
+            <div class="ts-flip-card__back">
+              <div class="ts-h4">Video Workflow Engine</div>
+              <p class="ts-text-secondary ts-caption">CSV queue import, automated video generation, dashboard with
+                filter tabs, bulk download, and workflow logging.</p>
+              <a href="mockup/hf-toolpanel-mockup.html" class="ts-btn ts-btn--primary ts-btn--sm"
+                style="width:100%;justify-content:center">
+                <i class="fa-solid fa-video"></i> Launch Panel
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner Generator -->
+        <div class="ts-flip-card ts-fade-up ts-delay-3">
+          <div class="ts-flip-card__inner">
+            <div class="ts-flip-card__front">
+              <div class="ts-portfolio-icon" style="background: var(--ts-accent-dim);">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--ts-accent);"></i>
+              </div>
+              <div class="ts-h3">Banner Generator</div>
+              <span class="ts-badge ts-badge--accent">v2.3</span>
+              <p class="ts-caption ts-mt-2" style="color:var(--ts-text-muted);">Canvas 2D Export Tool</p>
+            </div>
+            <div class="ts-flip-card__back">
+              <div class="ts-h4">Design &amp; Export</div>
+              <p class="ts-text-secondary ts-caption">Gradient text, noise textures, custom typography, icon picker,
+                multiple presets. Pure Canvas 2D — pixel-perfect PNG/JPEG export.</p>
+              <a href="generator/index.html" class="ts-btn ts-btn--primary ts-btn--sm"
+                style="width:100%;justify-content:center">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Open Generator
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ts-card ts-card--interactive ts-col-span-2 ts-fade-up ts-delay-3">
+          <div class="ts-card__header">
+            <img class="ts-card__icon" src="https://www.google.com/s2/favicons?sz=64&amp;domain=youtube.com"
+              alt="YouTube">
+            <h2 class="ts-card__title ts-card__title--lg">YouTube Toolpanel</h2>
+            <span class="ts-card__version">v4.2.7</span>
+          </div>
+          <div class="ts-card__body">Transcript fetcher, batch processor, Gemini AI summarizer, video downloader,
+            studio bulk actions,
+            scheduling, and more.</div>
+          <span class="ts-badge-color red"><ion-icon name="logo-youtube" role="img" class="md hydrated"></ion-icon> YSS
+            Toolpanel</span>
+          <div class="ts-card__links"
+            style="flex-direction: row; flex: 1 1; flex-wrap: wrap; width: 100%; align-content: center; align-items: center;">
+            <a class="ts-card-link" href="mockup/yss-toolpanel-watch-mockup.html" style="flex: 1;">
+              <ion-icon name="play-circle" role="img" class="md hydrated"></ion-icon>
+              Watch Mode
+              <span class="ts-card-link__meta">Transcript + Summarizer</span>
+            </a>
+            <a class="ts-card-link" href="mockup/yss-toolpanel-studio-mockup.html" style="flex: 1;">
+              <ion-icon name="construct" role="img" class="md hydrated"></ion-icon>
+              Studio Mode
+              <span class="ts-card-link__meta">Scheduler + Bulk Ops</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!--  FOOTER ─────────── -->
+  <footer class="ts-footer ts-footer--dark ts-grain">
+    <div class="ts-container">
+      <div class="ts-footer-row">
+        <!-- Brand Column -->
+        <div class="ts-footer-column">
+          <div class="ts-topbar__logo ts-fs-base ts-mb-4">TOOL<em>SKIN</em></div>
+          <p class="ts-caption ts-mb-4">A framework-independent design system. Built for
+            real products.</p>
+
+          <!-- Social Links -->
+          <h4 class="ts-label ts-footer-widget-title dashed">Follow Us</h4>
+          <ul class="ts-social-links">
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="github" data-icon="ion:logo-github"></a>
+            </li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="twitter"
+                data-icon="ion:logo-twitter"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="linkedin"
+                data-icon="ion:logo-linkedin"></a></li>
+            <li><a href="#" class="ts-social-link rounded colored" data-brand="youtube"
+                data-icon="ion:logo-youtube"></a></li>
+          </ul>
+        </div>
+
+        <!-- Multi-column Widgets -->
+        <div class="ts-footer-columns">
+          <!-- Framework Links -->
+          <div class="ts-footer-widget">
+            <h3 class="ts-label ts-footer-widget-title dashed">Framework</h3>
+            <div class="ts-footer-menu">
+              <ul class="ts-menu-list">
+                <li class="ts-menu-item chevron"><a href="#tokens" class="ts-menu-link">Design Tokens</a></li>
+                <li class="ts-menu-item chevron"><a href="#buttons" class="ts-menu-link">Components</a></li>
+                <li class="ts-menu-item chevron"><a href="#layouts" class="ts-menu-link">Layouts</a></li>
+                <li class="ts-menu-item chevron"><a href="#forms" class="ts-menu-link">Forms</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Resources Links -->
+          <div class="ts-footer-widget">
+            <h3 class="ts-label ts-footer-widget-title dashed">Resources</h3>
+            <div class="ts-footer-menu">
+              <ul class="ts-menu-list">
+                <li class="ts-menu-item arrow"><a href="#" class="ts-menu-link">Documentation</a></li>
+                <li class="ts-menu-item arrow"><a href="#" class="ts-menu-link">Changelog</a></li>
+                <li class="ts-menu-item arrow"><a href="#" class="ts-menu-link">WordPress Guide</a></li>
+                <li class="ts-menu-item arrow"><a href="#" class="ts-menu-link">GitHub Repo</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Newsletter Widget -->
+          <div class="ts-footer-widget ts-widget--wide">
+            <h3 class="ts-label ts-footer-widget-title dashed">Newsletter</h3>
+            <div class="ts-footer-newsletter">
+              <p class="ts-footer-newsletter-desc">Stay updated with the latest design patterns and framework updates.
+              </p>
+              <form class="ts-newsletter-form"
+                onsubmit="event.preventDefault(); alert('Newsletter signup coming soon!');">
+                <div class="ts-newsletter-input-group">
+                  <input type="email" class="ts-newsletter-input" placeholder="your@email.com" required />
+                  <button type="submit" class="ts-newsletter-btn">Subscribe</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Socket -->
+    <div class="ts-footer-socket">
+      <div class="ts-footer-socket-row">
+        <p class="ts-footer-copyright">© 2026 Toolskin / Toolcore Design System — All patterns are framework-independent
+          native CSS.</p>
+
+        <!-- Alternative Social Links (flat style in footer socket) -->
+        <ul class="ts-social-links">
+          <li><a href="#" class="ts-social-link flat" data-icon="ion:logo-facebook"></a></li>
+          <li><a href="#" class="ts-social-link flat" data-icon="ion:logo-instagram"></a></li>
+          <li><a href="#" class="ts-social-link flat" data-icon="ion:logo-pinterest"></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  MODALS ─────────── -->
+
+  <!-- Demo Modal (Large) -->
+  <div class="ts-overlay" id="modal-demo">
+    <div class="ts-modal ts-modal--lg">
+      <div class="ts-modal__header">
+        <div class="ts-topbar__logo ts-fs-lg">TOOL<em>SKIN</em></div>
+        <div class="ts-modal__title">Modal — Full Demo</div>
+        <button class="ts-modal__close" data-modal-close aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="ts-modal__body">
+        <p class="ts-text-secondary ts-mb-5">This modal is controlled entirely via HTML attributes. No JavaScript
+          required for basic open/close.</p>
+        <div class="ts-grid ts-grid--2 ts-mb-4 ts-gap-4">
+          <div class="ts-field">
+            <label class="ts-field-label">Project Name</label>
+            <input type="text" class="ts-input" placeholder="Enter name…" />
+          </div>
+          <div class="ts-field">
+            <label class="ts-field-label">Status</label>
+            <div class="ts-select-wrap"><select class="ts-select">
+                <option>Active</option>
+                <option>Paused</option>
+              </select></div>
+          </div>
+        </div>
+        <div class="ts-field ts-mb-4">
+          <label class="ts-field-label">Notes</label>
+          <textarea class="ts-input ts-textarea" placeholder="Add a note…" rows="3"></textarea>
+        </div>
+        <div class="ts-toggle-row">
+          <span class="ts-toggle-label">Send notification on save</span>
+          <label class="ts-toggle"><input type="checkbox" /><span class="ts-toggle__knob"></span></label>
+        </div>
+      </div>
+      <div class="ts-modal__footer">
+        <button class="ts-btn ts-btn--ghost" data-modal-close>Cancel</button>
+        <button class="ts-btn ts-btn--primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo Modal (Small) -->
+  <div class="ts-overlay" id="modal-sm">
+    <div class="ts-modal ts-modal--sm">
+      <div class="ts-modal__header">
+        <div class="ts-modal__title"><i class="fa-solid fa-triangle-exclamation ts-text-warning"></i>
+          &nbsp;Confirm Action</div>
+        <button class="ts-modal__close" data-modal-close><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ts-modal__body">
+        <p class="ts-text-secondary">Are you sure you want to proceed? This action cannot be undone.</p>
+      </div>
+      <div class="ts-modal__footer">
+        <button class="ts-btn ts-btn--ghost" data-modal-close>Cancel</button>
+        <button class="ts-btn ts-btn--danger"><i class="fa-solid fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container (auto-created by JS, shown here for reference) -->
+  <div class="ts-toast-container"></div>
+
+  <!-- Code Window Copy Functionality -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.ts-code-copy').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const codeWindow = btn.closest('.ts-code-window');
+          const codeContent = codeWindow?.querySelector('.ts-code-content code');
+          if (!codeContent) return;
+
+          // Get text content preserving formatting
+          const text = codeContent.innerText || codeContent.textContent;
+
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.classList.add('copied');
+            setTimeout(() => {
+              btn.classList.remove('copied');
+            }, 2000);
+          } catch (err) {
+            // Fallback for older browsers
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              document.execCommand('copy');
+              btn.classList.add('copied');
+              setTimeout(() => {
+                btn.classList.remove('copied');
+              }, 2000);
+            } catch (fallbackErr) {
+              console.error('Failed to copy:', fallbackErr);
+            }
+            document.body.removeChild(textarea);
+          }
+        });
+      });
+    });
+  </script>
+
+  <!-- Data-driven styles (replaces inline style attributes) -->
+  <script>
+    document.querySelectorAll('[data-color]').forEach(el => {
+      el.style.background = el.dataset.color;
+    });
+  </script>
+
+  <!-- Banner slider + Promo banner logic -->
+  <script>
+    // ── Banner Generator Image Slider ──────────────────────────
+    (function () {
+      const slider = document.getElementById('banner-slider');
+      if (!slider) return;
+      const images = slider.querySelectorAll('img');
+      const dotsContainer = document.getElementById('slider-dots');
+      let current = 0;
+      let interval;
+
+      // Create dots
+      images.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'ts-slider-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+      });
+
+      function goTo(idx) {
+        images[current].classList.remove('active');
+        dotsContainer.children[current]?.classList.remove('active');
+        current = idx;
+        images[current].classList.add('active');
+        dotsContainer.children[current]?.classList.add('active');
+        resetInterval();
+      }
+
+      function next() {
+        goTo((current + 1) % images.length);
+      }
+
+      function resetInterval() {
+        clearInterval(interval);
+        interval = setInterval(next, 4000);
+      }
+
+      // Start auto-slide — pause on hover
+      resetInterval();
+      slider.addEventListener('mouseenter', () => clearInterval(interval));
+      slider.addEventListener('mouseleave', resetInterval);
+
+      // Only auto-slide when visible
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting) resetInterval();
+          else clearInterval(interval);
+        }, { threshold: 0.2 }).observe(slider);
+      }
+    })();
+
+    // ── Promo banner dismiss persistence ───────────────────────
+    (function () {
+      const banner = document.getElementById('promo-banner');
+      if (!banner) return;
+      if (sessionStorage.getItem('ts-promo-dismissed') === '1') {
+        banner.classList.add('ts-dismissed');
+      }
+      banner.querySelector('.ts-promo-banner__close')?.addEventListener('click', () => {
+        sessionStorage.setItem('ts-promo-dismissed', '1');
+      });
+    })();
+  </script>
+
+</body>
+</html>
