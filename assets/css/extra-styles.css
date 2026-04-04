@@ -1243,36 +1243,31 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	outline-offset: -2px;
 }
 
-#main.container > #header h1 .yss-btn.yss-btn-index, 
-#main.container > #header a[href="index.html"], 
-#main.container > #header > button[id="switch-mode"],
-#hf-ui-root.container > #header h1 .yss-btn.yss-btn-index, 
-#hf-ui-root.container > #header a[href="index.html"], 
-#hf-ui-root.container > #header > button[id="switch-mode"] {
-	text-decoration: none;
-	margin-left: 0;
-	padding-block: 8px;
-	height: calc(100% + 2px);
-	max-height: unset;
-	box-sizing: border-box!important;
-	order: 1;
-	--yss-accent-color: var(--yss-log-success);
+#main.container > #header h1 .yss-btn.yss-btn-index, #main.container > #header a[href="index.html"], #main.container > #header > button[id="switch-mode"], #hf-ui-root.container > #header h1 .yss-btn.yss-btn-index, #hf-ui-root.container > #header a[href="index.html"], #hf-ui-root.container > #header > button[id="switch-mode"] {
+    text-decoration: none;
+    margin-inline: 5px;
+    padding-block: 8px;
+    height: calc(100% + 2px);
+    max-height: unset;
+    box-sizing: border-box !important;
+    order: 1;
+    --yss-accent-color: var(--yss-log-success);
     color: var(--mockup-text-primary);
-    flex: 0 1 auto;
+    flex: 0 1 !important;
+    min-width: fit-content !important;
 }
-#main.container > #header h1 .yss-btn, 
-#hf-ui-root.container > #header .hf-btn {
-	/* max-height: calc(var(--yss-btn-height, 44px)/14.25)!important; */
-	height: stretch;
-	min-height: stretch;
+#main.container > #header h1 .yss-btn, #hf-ui-root.container > #header .hf-btn {
+	max-height: 43px !important;
+	height: -webkit-fill-available;
+	min-height: unset;
 	/* outline: none; */
-	margin-inline: 0;
+	margin-inline: 5px;
 	/* border: none; */
-	max-height: unset;
-	height: stretch;
+	/* max-height: unset; */
+	height: -webkit-fill-available;
 	display: inline-flex;
 	flex-direction: row-reverse;
-	font-size: 1.1rem;
+	font-size: 14px;
 	/* background-image: none; */
 	order: -2;
 	flex-wrap: nowrap;
@@ -1280,7 +1275,13 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	justify-content: center;
 	border-radius: calc(var(--mockup-border-radius)/1.6);
 	background: var(--mockup-accent-bg);
-	border-color: var(--mockup-accent-border)!important;
+	outline-color: var(--mockup-accent-border) !important;
+	flex: 0;
+	border-color: var(--mockup-accent-border) !important;
+	line-height: 1.5;
+}
+#yss-icons-only-toggle-btn-clone {
+    flex: 0;
 }
 
 .container > header h1 > strong {
@@ -1300,24 +1301,25 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	--yss-accent-color: var(--mockup-color-green);
 }
 .content > header, #header {
-	background: #101010c9;
-	cursor: default;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	border-radius: calc(var(--mockup-border-radius)*1.6)!important;
-	overflow: hidden;
-	height: auto;
-	min-height: unset;
-	transition: height 300ms, min-height 300ms, max-height 300ms, background-color 300ms, border-color 300ms;
-	border: 1px solid #ffffff26;
-	width: stretch;
-	position: fixed;
-	top: 10px;
-	left: 10px;
-	right: 10px;
-	z-index: 9999999999999999;
-	padding: 5px!important;
+    background: #101010c9;
+    cursor: default;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: calc(var(--mockup-border-radius)*1.6)!important;
+    overflow: hidden;
+    height: auto;
+    min-height: unset;
+    transition: height 300ms, min-height 300ms, max-height 300ms, background-color 300ms, border-color 300ms;
+    border: 1px solid #ffffff26;
+    width: stretch;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 99999;
+    padding: 5px!important;
+    width: auto;
 }
 
 .content > header, #header > h1 {
@@ -1336,5 +1338,278 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
     padding: 0px;
     flex: 1;
     flex-direction: row-reverse;
-    font-size: 1.5rem!important;
+}
+
+
+.ts-range-row {
+	display: flex;
+	align-items: center;
+	gap: var(--ts-sp-3);
+	flex-wrap: wrap;
+  }
+  
+  .ts-range {
+	flex: 1;
+	appearance: none;
+	-webkit-appearance: none;
+	height: 6px;
+	background: var(--ts-border-1);
+	border-radius: var(--ts-radius-full);
+	cursor: pointer;
+	accent-color: var(--ts-accent);
+	min-width: 80px;
+  }
+  
+  .ts-range::-webkit-slider-thumb {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--ts-accent);
+	cursor: pointer;
+	box-shadow: 0 0 0 3px var(--ts-accent-dim);
+	transition: box-shadow var(--ts-dur-fast);
+  }
+  
+  .ts-range::-webkit-slider-thumb:hover {
+	box-shadow: 0 0 0 5px var(--ts-accent-dim);
+  }
+  
+  .ts-range::-moz-range-thumb {
+	width: 16px;
+	height: 16px;
+	border: none;
+	border-radius: 50%;
+	background: var(--ts-accent);
+	cursor: pointer;
+  }
+  /* â”€â”€â”€ Â§6f.1  ADVANCED RANGE SLIDER (with gradient fill) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  
+  /* CSS Property for value tracking */
+  @property --ts-range-val {
+	syntax: "<number>";
+	inherits: true;
+	initial-value: 0;
+  }
+  
+  input[type="range"].ts-range {
+	/* Reset default appearance */
+	-webkit-appearance: none;
+	appearance: none;
+	background: transparent;
+	cursor: pointer;
+	
+	/* Layout */
+	flex: 1 1 100%;
+	min-width: 80px;
+	box-sizing: border-box;
+	
+	/* Sizing variables */
+	--ts-slider-height: 12px;
+	--ts-slider-thumb-size: calc(var(--ts-slider-height) * 1.5);
+	--ts-slider-radius: calc(var(--ts-slider-height) / 2);
+	--ts-slider-thumb-offset: calc((var(--ts-slider-height) - var(--ts-slider-thumb-size)) / 2);
+	
+	/* Colors */
+	--ts-slider-accent: var(--ts-accent);
+	--ts-slider-accent-darker: color-mix(in srgb, var(--ts-slider-accent), #000000 25%);
+	--ts-slider-bg: var(--ts-border-0);
+	--ts-slider-border: var(--ts-input-border);
+	--ts-slider-grad: linear-gradient(-135deg, var(--ts-slider-accent-darker), var(--ts-slider-accent));
+	
+	/* Value tracking for gradient fill */
+	--ts-range-val: 50;
+	--ts-range-min: 0;
+	--ts-range-max: 100;
+	--ts-range-percent: calc((var(--ts-range-val) - var(--ts-range-min)) / (var(--ts-range-max) - var(--ts-range-min)) * 100%);
+	
+	height: var(--ts-slider-height);
+	border: 1px solid var(--ts-slider-border);
+	border-radius: var(--ts-slider-radius);
+  }
+  .fa-solid, .fas {
+	  line-height: normal;
+  }
+  /* Remove default focus outline */
+  input[type="range"].ts-range:focus {
+	outline: none;
+  }
+  
+  /* Webkit (Chrome, Safari, Edge) track styling */
+  input[type="range"].ts-range::-webkit-slider-runnable-track {
+	width: 100%;
+	height: var(--ts-slider-height);
+	border-radius: var(--ts-slider-radius);
+	background: 
+	  linear-gradient(to right, var(--ts-slider-accent), var(--ts-slider-accent-darker)) 
+	  0 0 / var(--ts-range-percent) 100% no-repeat,
+	  var(--ts-slider-bg);
+	border: 0;
+  }
+  
+  /* Firefox track styling */
+  input[type="range"].ts-range::-moz-range-track {
+	width: 100%;
+	height: var(--ts-slider-height);
+	border-radius: var(--ts-slider-radius);
+	background: var(--ts-slider-bg);
+	border: 0;
+  }
+  
+  input[type="range"].ts-range::-moz-range-progress {
+	height: var(--ts-slider-height);
+	border-radius: var(--ts-slider-radius) 0 0 var(--ts-slider-radius);
+	background: linear-gradient(to right, var(--ts-slider-accent), var(--ts-slider-accent-darker));
+  }
+  
+  /* Webkit thumb styling */
+  input[type="range"].ts-range::-webkit-slider-thumb {
+	  -webkit-appearance: none;
+	  appearance: none;
+	  width: var(--ts-slider-thumb-size);
+	  height: var(--ts-slider-thumb-size);
+	  margin-top: var(--ts-slider-thumb-offset);
+	  border-radius: 50%;
+	  background: var(--ts-slider-grad);
+	  /* border: 2px solid var(--ts-bg-0); */
+	  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); */
+	  cursor: pointer;
+	  transition: all var(--ts-dur-fast) var(--ts-ease-out);
+  }
+  
+  input[type="range"].ts-range::-webkit-slider-thumb:hover {
+	transform: scale(1.15);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
+				0 0 0 4px color-mix(in srgb, var(--ts-slider-accent), transparent 80%);
+  }
+  
+  input[type="range"].ts-range:focus::-webkit-slider-thumb {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
+				0 0 0 4px color-mix(in srgb, var(--ts-slider-accent), transparent 70%);
+  }
+  
+  /* Firefox thumb styling */
+  input[type="range"].ts-range::-moz-range-thumb {
+	width: var(--ts-slider-thumb-size);
+	height: var(--ts-slider-thumb-size);
+	border-radius: 50%;
+	background: var(--ts-slider-grad);
+	border: 2px solid var(--ts-bg-0);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+	cursor: pointer;
+	transition: all var(--ts-dur-fast) var(--ts-ease-out);
+  }
+  
+  input[type="range"].ts-range::-moz-range-thumb:hover {
+	transform: scale(1.15);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
+				0 0 0 4px color-mix(in srgb, var(--ts-slider-accent), transparent 80%);
+  }
+  
+  input[type="range"].ts-range:focus::-moz-range-thumb {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
+				0 0 0 4px color-mix(in srgb, var(--ts-slider-accent), transparent 70%);
+  }
+  
+  /* Range value display */
+  .ts-range-val {
+	font-size: var(--ts-fs-sm);
+	font-weight: 700;
+	color: var(--ts-accent);
+	min-width: 32px;
+	text-align: right;
+	flex-shrink: 0;
+	font-family: var(--ts-font-mono);
+  }
+  
+  /* Size variants */
+  input[type="range"].ts-range--sm {
+	--ts-slider-height: 8px;
+  }
+  
+  input[type="range"].ts-range--lg {
+	--ts-slider-height: 16px;
+  }
+  .yss-modal-content.yss-batch .yss-form-block input[type="range"].ts-range {
+	-webkit-appearance: none!important;
+	appearance: none!important;
+	background: transparent!important;
+	cursor: pointer!important;
+	flex: 1 1 !important;
+	min-width: 80px!important;
+	box-sizing: border-box!important;
+	--ts-slider-height: 16px!important;
+	--ts-slider-thumb-size: calc(var(--ts-slider-height) * 1.5);
+	--ts-slider-radius: calc(var(--ts-slider-height) * 2);
+	--ts-slider-thumb-offset: calc((var(--ts-slider-height) - var(--ts-slider-thumb-size)*1)/ 2 - 1px);
+	--ts-slider-accent: var(--ts-accent);
+	--ts-slider-accent-darker: color-mix(in srgb, var(--ts-slider-accent), #000000 25%);
+	--ts-slider-bg: var(--ts-border-0);
+	--ts-slider-border: var(--ts-input-border);
+	--ts-slider-grad: linear-gradient(-135deg, var(--ts-slider-accent-darker), var(--ts-slider-accent));
+	--ts-range-val: 50;
+	--ts-range-min: 0;
+	--ts-range-max: 100;
+	--ts-range-percent: calc((var(--ts-range-val) - var(--ts-range-min)) / (var(--ts-range-max) - var(--ts-range-min)) * 100%);
+	height: var(--ts-slider-height);
+	border: 0px solid var(--ts-slider-border);
+	border-radius: var(--ts-slider-radius);
+	/* outline: 1px solid var(--ts-slider-border); */
+	/* outline-offset: -1px; */
+}
+.yss-modal-content.yss-batch .yss-form-block input[type="range"].ts-range::-webkit-slider-runnable-track {
+	width: 100%;
+	height: var(--ts-slider-height);
+	border-radius: var(--ts-slider-radius);
+	background: linear-gradient(to right, var(--ts-slider-accent), var(--ts-slider-accent-darker)) 
+    0 0 / var(--ts-range-percent) 100% no-repeat,
+    var(--ts-slider-bg)!important;
+	border: 1px solid var(--ts-slider-border);
+	/* outline: 1px solid var(--ts-slider-border); */
+	/* outline-offset: -1px; */
+}
+.yss-modal-content.yss-batch .yss-form-block input[type="range"].ts-range::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: var(--ts-slider-thumb-size)!important;
+	height: var(--ts-slider-thumb-size)!important;
+	margin-top: var(--ts-slider-thumb-offset)!important;
+	border-radius: 50%!important;
+	background: var(--ts-slider-grad)!important;
+	/* border: 2px solid var(--ts-bg-0); */
+	/* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); */
+	cursor: pointer!important;
+	transition: all var(--ts-dur-fast) var(--ts-ease-out);
+}
+#yt-batch-download-delay-slider-container.yss-form-block {
+	font-size: var(--yss-font-size);
+	color: var(--yt-spec-text-secondary);
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px;
+	gap: 5px!important;
+}
+.yss-modal-content.yss-batch .yss-form-block:has(input[type="range"].ts-range) > label {
+	display: flex;
+	flex: 0 1;
+	order: 1;
+	margin: 0;
+	white-space: nowrap;
+}
+.yss-modal-content.yss-batch .yss-form-block:has(input[type="range"].ts-range) > span {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-content: stretch;
+	justify-content: space-evenly;
+	align-items: stretch;
+	flex: 0;
+	text-align: center!important;
+	height: -webkit-fill-available;
+	min-width: 55px!important;
+	order: 1;
 }

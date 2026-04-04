@@ -1,190 +1,405 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="ts-banner-generator-app">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toolskin Pattern Generator</title>
+    <style id="ts-preloader-boot">
+        html.ts-preloader-lock,
+        html.ts-preloader-lock body {
+            overflow: hidden !important;
+        }
 
-    <!-- Toolskin System -->
+        html.ts-preloader-lock #ts-app {
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        html.ts-preloader-lock #ts-preloader {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            position: fixed;
+            inset: 0;
+            z-index: 2147483647;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* Spacing scale */
+            --ts-sp-1: 4px;
+            --ts-sp-2: 8px;
+            --ts-sp-3: 12px;
+            --ts-sp-4: 16px;
+            --ts-sp-5: 20px;
+            --ts-sp-6: 24px;
+
+            /* Border radius scale */
+            --ts-radius-sm: 5px;
+            --ts-radius-md: 8px;
+            --ts-radius-lg: 12px;
+            --ts-radius-xl: 16px;
+
+            /* Font sizes */
+            --ts-fs-xs: 10px;
+            --ts-fs-sm: 11px;
+            --ts-fs-md: 13px;
+            --ts-fs-lg: 15px;
+
+            /* UI palette */
+            --ts-bg-body: #0c0c0e;
+            --ts-bg-0: #111114;
+            --ts-bg-1: #18181c;
+            --ts-bg-2: #1f1f24;
+            --ts-bg-3: #26262c;
+            --ts-border-0: #222228;
+            --ts-border-1: #2c2c34;
+            --ts-border-2: #38383f;
+            --ts-text-primary: #f0f0f2;
+            --ts-text-secondary: #9090a0;
+            --ts-text-muted: #50505e;
+            --ts-accent: #ff5500;
+            --ts-accent-dim-3: color-mix(in srgb, var(--ts-accent), transparent 90%);
+
+            /* Layout & Panel */
+            --ts-panel-w: 400px;
+            --ts-topbar-h: 65px;
+
+            /* Card component (Merged) */
+            --ts-card-pad: var(--ts-sp-5);
+            --ts-card-gap: var(--ts-sp-2);
+            --ts-card-sp: var(--ts-sp-3);
+            --ts-card-radius: var(--ts-radius-md);
+            --ts-card-header-h: 45px;
+
+            --ts-card-bg: var(--ts-bg-1-t);
+            --ts-card-bg-2: var(--ts-bg-2);
+            --ts-card-border: var(--ts-border-1);
+
+            /* Input component (Merged) */
+            --ts-input-h: 45px;
+            --ts-input-fs: var(--ts-fs-md);
+            --ts-input-pad-y: calc(var(--ts-input-h)*.3);
+            --ts-input-pad-left: calc(var(--ts-input-h) - var(--ts-input-pad-y));
+            --ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-x) var(--ts-input-pad-y) var(--ts-input-pad-left);
+            --ts-input-radius: var(--ts-radius-md);
+
+
+
+            /* Button (Merged) */
+            --ts-btn-h: 45px;
+            --ts-btn-pad-x: var(--ts-sp-3);
+            --ts-btn-radius: var(--ts-radius-md);
+            --ts-btn-fs: var(--ts-fs-sm);
+
+            /* Range component (Added) */
+            --ts-range-h: 10px;
+            --ts-range-thumb: calc(var(--ts-range-h) * 2);
+            --ts-range-bg: var(--ts-bg-3);
+            --ts-range-bg-2: var(--ts-bg-0);
+            --ts-range-border: var(--ts-border-1);
+            --ts-range-accent: var(--ts-accent);
+            --ts-range-label: var(--ts-bg-4);
+            --ts-range-text: var(--ts-text-primary);
+            --ts-range-rad: var(--ts-radius-base);
+            --ts-range-arrow: 5px;
+            --ts-toggle-knob-bg: var(--ts-text-muted);
+            --ts-toggle-knob-bg-active: #ffffffe9;
+
+            /* Toggle (Added) */
+            --ts-toggle-size: 30px;
+
+            /* Banner & Canvas */
+            --ts-title-color: #ffffff;
+            --ts-badge-radius: 7px;
+            --ts-badge-opacity: 1;
+            --ts-icon-size: 60px;
+            --ts-icon-top: 0px;
+            --ts-icon-right: 0px;
+            --ts-canvas-grid-size: 35px;
+            --ts-canvas-grid-opacity: 93%;
+            --ts-canvas-grid-color: color-mix(in srgb, var(--ts-text-primary), var(--ts-bg-body) var(--ts-canvas-grid-opacity));
+            --ts-bg-grid-pattern: repeating-linear-gradient(0deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size)), repeating-linear-gradient(90deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size));
+
+        }
+
+
+        .ts-banner-generator-app .ts-card .ts-hint {
+            width: auto;
+            padding: var(--ts-card-sp);
+            border: 1px solid var(--ts-accent-dim);
+            border-radius: calc(var(--ts-card-radius)/1.5);
+            position: relative;
+            font-family: var(--ts-font-mono);
+            background: var(--ts-accent-dim-2);
+            display: flex;
+            flex-flow: row;
+            justify-content: flex-start;
+            color: var(--ts-text-secondary);
+            gap: var(--ts-card-gap);
+            --ts-text-secondary: color-mix(in srgb, var(--ts-accent), var(--ts-range-text) 28%);
+            /* flex-wrap: wrap; */
+            /* font-size: var(--ts-fs-xs); */
+            line-height: 1.3;
+            align-items: center;
+            align-content: center;
+            margin-block: 5px;
+        }
+    </style>
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
     <link rel="stylesheet" href="../assets/css/toolskin.css" />
-    <link rel="stylesheet" href="../assets/css/ts-patterns.css" />
-    <link rel="stylesheet" href="patterns.css" />
+
+
+    <script defer src="../assets/js/toolskin.js"></script>
+    <script defer src="../assets/js/toolskin-uikit.js"></script>
 </head>
+
 <body>
-    <div class="ts-generator-app">
-        <!-- ── TOPBAR ── -->
-        <div class="ts-generator-topbar">
-            <div class="ts-generator-logo">Tool<em>skin</em></div>
-            <span class="ts-generator-logo-sub">Pattern Generator</span>
-            <div class="ts-generator-topbar-sep"></div>
-            <div class="ts-generator-topbar-right">
-                <a href="index.html" class="ts-btn ts-btn--ghost ts-btn--sm">
-                    <ion-icon name="image-outline"></ion-icon> Banner
+    <script>
+        document.documentElement.classList.add('ts-preloader-lock');
+    </script>
+    <div id="ts-preloader" class="ts-preloader" aria-hidden="true">
+        <div class="ts-preloader__brand">
+            <div class="ts-preloader__logo">
+                <span class="ts-icon" data-ts-icon="fa-solid fa-bolt" aria-hidden="true"></span>
+                TOOL<em>SKIN</em>
+            </div>
+            <div class="ts-preloader__bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                aria-valuenow="0" aria-label="Page load progress"><span class="ts-preloader__bar"></span></div>
+            <div class="ts-preloader__hint">Loading Pattern Generator</div>
+        </div>
+    </div>
+    <div id="ts-app">
+        <div id="ts-topbar">
+            <div class="ts-logo">Tool<em>skin</em></div> <span class="ts-logo-sub">Pattern Generator</span>
+            <div class="ts-topbar-sep"></div> <span class="ts-accent-text">patterns</span>
+            <div class="ts-topbar-right">
+                <a href="index.html" class="ts-btn ts-btn-secondary" style="text-decoration: none;"
+                    data-ts-icon="ion:image-outline" data-icon-position="left">
+                    <span>Banner Generator</span>
                 </a>
-                <a href="../index.html" class="ts-btn ts-btn--ghost ts-btn--sm">
-                    <ion-icon name="home-outline"></ion-icon> Home
+                <a href="../index.html" class="ts-btn ts-btn-icon-only ts-btn-secondary" style="text-decoration: none;"
+                    data-ts-icon="ion:home-outline" data-icon-position="left">
+                    <span>Home</span>
                 </a>
-                <button class="ts-btn ts-btn--ghost ts-btn--sm" id="btn-reset">
-                    <ion-icon name="refresh-outline"></ion-icon> Reset
+                <button class="ts-btn ts-btn-icon-only" id="btn-reset" title="Reset" data-ts-icon="ion:refresh-outline"
+                    data-icon-position="left">
+                    <span>Reset</span>
                 </button>
             </div>
         </div>
-
-        <!-- ── CANVAS ── -->
-        <div class="ts-generator-canvas">
+        <div id="ts-canvas-area">
+            <div class="ts-canvas-info-bar">
+                <span class="ts-canvas-badge">Pattern preview</span>
+            </div>
             <div id="pattern-sandbox">
                 <div id="pattern-preview"></div>
             </div>
         </div>
-
-        <!-- ── PANEL ── -->
-        <div class="ts-generator-panel">
-            <div class="ts-generator-tabs">
-                <div class="ts-generator-tab ts-generator-tab--active" data-tab="controls">Controls</div>
-                <div class="ts-generator-tab" data-tab="code">CSS Code</div>
+        <div id="ts-panel">
+            <div id="ts-panel-tabs">
+                <div class="ts-ptab active" data-tab="controls">Controls</div>
+                <div class="ts-ptab" data-tab="code">CSS Code</div>
             </div>
-
-            <div class="ts-generator-panel-body">
-                <!-- ══ TAB: CONTROLS ══ -->
-                <div class="ts-generator-tab-pane ts-generator-tab-pane--active" data-pane="controls">
+            <div id="ts-panel-body">
+                <div class="ts-tab-pane active" data-pane="controls">
                     <div class="ts-card">
-                        <div class="ts-card-header absolute">Pattern Type</div>
-                        <div class="ts-card-body">
-                            <div class="ts-field">
-                                <label>Select Pattern</label>
-                                <div class="ts-generator-select-wrap">
-                                    <select class="ts-input ts-generator-select" id="input-pattern-type">
-                                        <option value="dots">Dots</option>
-                                        <option value="dots-dense">Dots Dense</option>
-                                        <option value="grid">Grid</option>
-                                        <option value="grid-bold">Grid Bold</option>
-                                        <option value="checkerboard">Checkerboard</option>
-                                        <option value="diagonal-stripes" selected>Diagonal Stripes</option>
-                                        <option value="triangle">Triangle</option>
-                                        <option value="circles-grid">Circles Grid</option>
-                                        <option value="cross">Cross</option>
-                                        <option value="zigzag">Zigzag</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="ts-card">
-                        <div class="ts-card-header absolute">Animation</div>
-                        <div class="ts-card-body">
-                            <div class="ts-toggle-row">
-                                <span class="ts-toggle-label">Enable Animation</span>
-                                <label class="ts-toggle">
-                                    <input type="checkbox" id="input-animated">
-                                    <span class="ts-toggle__knob"></span>
-                                </label>
-                            </div>
-                            <div id="animation-controls" class="disabled">
-                                <div class="ts-field">
-                                    <label>Direction</label>
-                                    <div class="ts-generator-select-wrap">
-                                        <select class="ts-input ts-generator-select" id="input-anim-direction">
-                                            <option value="diagonal">Diagonal</option>
-                                            <option value="horizontal">Horizontal</option>
-                                            <option value="vertical">Vertical</option>
-                                            <option value="reverse">Reverse</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="ts-field">
-                                    <label>Speed</label>
-                                    <div class="ts-range-row">
-                                        <input type="range" class="ts-range" id="input-anim-speed" min="25" max="200"
-                                            step="25" value="100">
-                                        <span class="ts-range-val" id="val-anim-speed">1.0×</span>
-                                    </div>
-                                    <p class="ts-fs-xs ts-text-muted ts-mt-2">100% = normal speed, lower = slower,
-                                        higher = faster</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="ts-card">
-                        <div class="ts-card-header absolute">Color</div>
-                        <div class="ts-card-body">
-                            <div class="ts-field">
-                                <label>Pattern Color</label>
-                                <div class="ts-generator-color-row">
-                                    <div class="ts-generator-swatch">
-                                        <div class="ts-generator-swatch__preview" id="sw-pattern-color"
-                                            style="background:#ff5500"></div>
-                                        <input type="color" id="input-pattern-color" value="#ff5500">
-                                    </div>
-                                    <input type="text" class="ts-input ts-input--mono" id="input-pattern-color-text"
-                                        value="#ff5500" maxlength="9">
-                                </div>
-                                <p class="ts-fs-xs ts-text-muted ts-mt-2">Leave blank to use accent color</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="ts-card">
-                        <div class="ts-card-header absolute">Background</div>
-                        <div class="ts-card-body">
-                            <div class="ts-field">
-                                <label>Background Color</label>
-                                <div class="ts-generator-color-row">
-                                    <div class="ts-generator-swatch">
-                                        <div class="ts-generator-swatch__preview" id="sw-bg-color"
-                                            style="background:#0a0a0a">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:grid-outline">Pattern type</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field">
+                                        <label>Select pattern</label>
+                                        <div class="ts-ui-select" data-ts-ui-select-search="false">
+                                            <select class="ts-ui-select__native" id="input-pattern-type">
+                                                <option value="dots" selected>Dots</option>
+                                                <option value="dots-dense">Dots Dense</option>
+                                                <option value="grid">Grid</option>
+                                                <option value="grid-bold">Grid Bold</option>
+                                                <option value="checkerboard">Checkerboard</option>
+                                                <option value="diagonal-stripes">Diagonal Stripes</option>
+                                                <option value="triangle">Triangle</option>
+                                                <option value="circles-grid">Circles Grid</option>
+                                                <option value="cool">WTF Cool</option>
+                                                <option value="cross">Cross</option>
+                                                <option value="zigzag">Zigzag</option>
+                                            </select>
                                         </div>
-                                        <input type="color" id="input-bg-color" value="#0a0a0a">
                                     </div>
-                                    <input type="text" class="ts-input ts-input--mono" id="input-bg-color-text"
-                                        value="#0a0a0a" maxlength="9">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="ts-card">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:color-palette-outline">Pattern color</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field">
+                                        <label class="ts-field-label">Pattern
+                                            color</label>
+                                        <div class="ts-color-row">
+                                            <div class="ts-color-swatch">
+                                                <div class="ts-sw" id="sw-pattern-color" style="background:#ff5500">
+                                                </div>
+                                                <input type="color" id="input-pattern-color" value="#ff5500">
+                                            </div>
+                                            <input type="text" class="ts-input-text mono" id="input-pattern-color-text"
+                                                value="#ff5500" maxlength="9">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field">
+                                        <label class="ts-field-label">Background
+                                            color</label>
+                                        <div class="ts-color-row">
+                                            <div class="ts-color-swatch">
+                                                <div class="ts-sw" id="sw-bg-color" style="background:#0a0a0a"></div>
+                                                <input type="color" id="input-bg-color" value="#0a0a0a">
+                                            </div>
+                                            <input type="text" class="ts-input-text mono" id="input-bg-color-text"
+                                                value="#0a0a0a" maxlength="9">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field-hint ts-hint">Leave blank to use accent color</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ts-card">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:play-outline">Animation</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-toggle-row">
+                                        <span class="ts-toggle-label" data-ts-icon="ion:play-outline"
+                                            data-icon-position="left">Enable animation</span>
+                                        <label class="ts-toggle">
+                                            <input type="checkbox" id="input-animated">
+                                            <span class="ts-toggle__knob"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="animation-controls" class="ts-card-row disabled">
+                                <div class="ts-card-col-quarter">
+                                    <div class="ts-field" id="ts-anim-direction-wrap">
+                                        <label>Direction</label>
+                                        <div class="ts-chips ts-align-anchor-grid" id="input-anim-direction" style="
+                                                    --ts-anchor-cols: 2;
+                                                    --ts-btn-h: 22px;
+                                                ">
+                                            <button
+                                                class="ts-chip ts-align-anchor-btn ts-arrow-rotate bottom-right active"
+                                                type="button" value="diagonal" data-icon="ion:arrow-forward"
+                                                data-tooltip="Diagonal motion"><span class="sr-only">Diagonal</span>
+                                            </button>
+                                            <button class="ts-chip ts-align-anchor-btn" type="button" value="horizontal"
+                                                data-icon="ion:arrow-forward" data-tooltip="Horizontal motion"><span
+                                                    class="sr-only">Horizontal</span>
+                                            </button>
+                                            <button class="ts-chip ts-align-anchor-btn" type="button" value="vertical"
+                                                data-icon="ion:arrow-down" data-tooltip="Vertical motion"><span
+                                                    class="sr-only">Vertical</span>
+                                            </button>
+                                            <button class="ts-chip ts-align-anchor-btn" type="button" value="reverse"
+                                                data-icon="ion:arrow-back" data-tooltip="Reverse direction"><span
+                                                    class="sr-only">Reverse</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field">
+                                        <label>Speed</label>
+                                        <div class="ts-range-row">
+                                            <input type="range" class="ts-range" id="input-anim-speed" min="25"
+                                                max="200" step="25" value="100">
+                                            <span class="ts-range-val" id="val-anim-speed">1.0×</span>
+                                        </div>
+                                        <div class="ts-field-hint ts-hint">100% = normal speed, lower =
+                                            slower, higher = faster</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ts-card">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:resize-outline">Scale</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field ts-range-stack">
+                                        <label class="ts-field-label" data-ts-icon="ion:resize-outline">Pattern
+                                            scale</label>
+                                        <div class="ts-range-row">
+                                            <input type="range" class="ts-range" id="input-scale" min="1" max="3"
+                                                step="0.25" value="1">
+                                            <span class="ts-range-val" id="val-scale">1×</span>
+                                        </div>
+
+
+                                        <p class="ts-fs-xs ts-text-muted ts-mt-2">Minimum scale is 1× to prevent pattern
+                                            breakage</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field ts-range-stack">
+                                        <label class="ts-field-label" data-ts-icon="ion:contrast-outline">Pattern
+                                            opacity</label>
+                                        <div class="ts-range-row">
+                                            <input type="range" class="ts-range" id="input-opacity" min="0" max="100"
+                                                value="50">
+                                            <span class="ts-range-val" id="val-opacity">50%</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="ts-card">
-                        <div class="ts-card-header absolute">Scale</div>
-                        <div class="ts-card-body">
-                            <div class="ts-field">
-                                <label>Pattern Scale</label>
-                                <div class="ts-range-row">
-                                    <input type="range" class="ts-range" id="input-scale" min="1" max="3" step="0.25"
-                                        value="1">
-                                    <span class="ts-range-val" id="val-scale">1×</span>
-                                </div>
-                                <p class="ts-fs-xs ts-text-muted ts-mt-2">Minimum scale is 1× to prevent pattern
-                                    breakage</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="ts-card">
-                        <div class="ts-card-header absolute">Opacity</div>
-                        <div class="ts-card-body">
-                            <div class="ts-field">
-                                <label>Pattern Opacity</label>
-                                <div class="ts-range-row">
-                                    <input type="range" class="ts-range" id="input-opacity" min="0" max="100"
-                                        value="50">
-                                    <span class="ts-range-val" id="val-opacity">50%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- ══ TAB: CODE ══ -->
-                <div class="ts-generator-tab-pane" data-pane="code">
+                <div class="ts-tab-pane" data-pane="code">
                     <div class="ts-code-window" data-purpose="code-example">
                         <div class="ts-code-header">
                             <div class="ts-code-dotbtn red"></div>
                             <div class="ts-code-dotbtn yellow"></div>
                             <div class="ts-code-dotbtn green"></div> <span
                                 class="ts-code-label">generated-pattern.css</span>
-                            <button class="ts-code-copy" aria-label="Copy code" title="Copy code">
-                                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16"
+                            <button class="ts-code-copy" aria-label="Copy code" data-tooltip="Copy code"
+                                data-ts-icon="ion:copy-outline" data-icon-position="left">
+                                <!-- <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16"
                                     class="octicon octicon-copy js-clipboard-copy-icon m-2">
                                     <path
                                         d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z">
@@ -192,7 +407,7 @@
                                     <path
                                         d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z">
                                     </path>
-                                </svg>
+                                </svg> -->
                             </button>
                         </div>
                         <div id="code-export" class="ts-generator-code-export"></div>
@@ -202,17 +417,12 @@
         </div>
     </div>
 
-    <!-- Toolskin Framework -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="../assets/js/toolskin.js"></script>
-
     <script>
         document.addEventListener("DOMContentLoaded", () => {
 
             // ── STATE ──
             const S = {
-                patternType: 'diagonal-stripes',
+                patternType: 'dots',
                 animated: false,
                 animDirection: 'diagonal',
                 animSpeed: 100, // Speed as percentage (100% = normal, 200% = 2x faster, 50% = 2x slower)
@@ -236,7 +446,7 @@
             }
 
             // Non-animatable patterns
-            const NON_ANIMATABLE_PATTERNS = ['zigzag', 'checkerboard', 'diagonal-stripes', 'dots-dense'];
+            const NON_ANIMATABLE_PATTERNS = ['zigzag', 'checkerboard', 'diagonal-stripes', 'dots-dense', 'cross'];
 
             function isPatternAnimatable(patternType) {
                 return !NON_ANIMATABLE_PATTERNS.includes(patternType);
@@ -258,6 +468,7 @@
                     } else {
                         animatedEl.disabled = false;
                         animControls.classList.remove('disabled');
+                        animControls.style.display = S.animated ? '' : 'none';
                     }
                 }
             }
@@ -390,6 +601,14 @@
                 console.log('Code exported:', output.substring(0, 100) + '...');
             }
 
+            function syncAnimDirectionUI() {
+                const wrap = $('input-anim-direction');
+                if (!wrap) return;
+                wrap.querySelectorAll('button[value]').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('value') === S.animDirection);
+                });
+            }
+
             // ── BIND CONTROLS ──
             function bindControls() {
                 console.log('🔧 Binding controls...');
@@ -421,10 +640,7 @@
                         console.log('Animation toggled:', e.target.checked);
                         S.animated = e.target.checked && isPatternAnimatable(S.patternType);
                         if (animControls) {
-                            animControls.style.display = S.animated ? 'flex' : 'none';
-                            animControls.style.flexDirection = 'column';
-                            animControls.style.gap = 'var(--ts-sp-4)';
-                            animControls.style.marginTop = 'var(--ts-sp-4)';
+                            animControls.style.display = S.animated ? '' : 'none';
                         }
                         updatePreview();
                     });
@@ -433,14 +649,22 @@
                     console.error('❌ Animation input not found');
                 }
 
-                // Animation direction
-                const animDirectionEl = $('input-anim-direction');
-                if (animDirectionEl) {
-                    animDirectionEl.addEventListener('change', e => {
-                        console.log('Animation direction changed:', e.target.value);
-                        S.animDirection = e.target.value;
+                // Animation direction (button grid; container id kept for compatibility)
+                const animDirectionWrap = $('input-anim-direction');
+                if (animDirectionWrap) {
+                    animDirectionWrap.addEventListener('click', e => {
+                        const btn = e.target.closest('button[value]');
+                        if (!btn || !animDirectionWrap.contains(btn)) return;
+                        const val = btn.getAttribute('value');
+                        if (!val || val === S.animDirection) return;
+                        console.log('Animation direction changed:', val);
+                        S.animDirection = val;
+                        animDirectionWrap.querySelectorAll('button[value]').forEach(b => {
+                            b.classList.toggle('active', b.getAttribute('value') === val);
+                        });
                         updatePreview();
                     });
+                    syncAnimDirectionUI();
                     console.log('✅ Animation direction control bound');
                 }
 
@@ -591,7 +815,7 @@
                 if (resetBtn) {
                     resetBtn.addEventListener('click', () => {
                         console.log('Reset clicked');
-                        S.patternType = 'diagonal-stripes';
+                        S.patternType = 'dots';
                         S.animated = false;
                         S.animDirection = 'diagonal';
                         S.animSpeed = 100;
@@ -600,12 +824,16 @@
                         S.scale = 1;
                         S.opacity = 50;
 
-                        $('input-pattern-type').value = S.patternType;
+                        const patternTypeInput = $('input-pattern-type');
+                        if (patternTypeInput) {
+                            patternTypeInput.value = S.patternType;
+                            patternTypeInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
                         $('input-animated').checked = S.animated;
                         if ($('animation-controls')) {
-                            $('animation-controls').style.display = S.animated ? 'flex' : 'none';
+                            $('animation-controls').style.display = S.animated ? '' : 'none';
                         }
-                        $('input-anim-direction').value = S.animDirection;
+                        syncAnimDirectionUI();
                         $('input-anim-speed').value = S.animSpeed;
                         $('val-anim-speed').textContent = (S.animSpeed / 100).toFixed(1) + '×';
                         $('input-pattern-color').value = S.patternColor;
@@ -626,15 +854,16 @@
                     console.error('❌ Reset button not found');
                 }
 
-                // Tabs
-                const tabs = $$('.ts-generator-tab');
+                // Tabs (same contract as banner generator)
+                const tabs = $$('#ts-panel-tabs .ts-ptab');
                 if (tabs.length > 0) {
                     tabs.forEach(t => t.addEventListener('click', () => {
-                        $$('.ts-generator-tab').forEach(x => x.classList.remove('ts-generator-tab--active'));
-                        $$('.ts-generator-tab-pane').forEach(x => x.classList.remove('ts-generator-tab-pane--active'));
-                        t.classList.add('ts-generator-tab--active');
-                        const pane = document.querySelector(`.ts-generator-tab-pane[data-pane="${t.dataset.tab}"]`);
-                        if (pane) pane.classList.add('ts-generator-tab-pane--active');
+                        $$('#ts-panel-tabs .ts-ptab').forEach(x => x.classList.remove('active'));
+                        $$('#ts-panel-body .ts-tab-pane').forEach(x => x.classList.remove('active'));
+                        t.classList.add('active');
+                        const pane = document.querySelector(
+                            `#ts-panel-body .ts-tab-pane[data-pane="${t.dataset.tab}"]`);
+                        if (pane) pane.classList.add('active');
                     }));
                     console.log('✅ Tabs bound');
                 } else {
@@ -663,17 +892,7 @@
 
                 console.log('✅ DOM elements found');
 
-                // Initialize Toolskin if available (but don't let it block)
-                if (typeof Toolskin !== 'undefined') {
-                    try {
-                        Toolskin.init();
-                        console.log('✅ Toolskin initialized');
-                    } catch (e) {
-                        console.warn('⚠️ Toolskin init failed:', e);
-                    }
-                } else {
-                    console.warn('⚠️ Toolskin not loaded (this is OK, continuing anyway)');
-                }
+                // Toolskin auto-inits from deferred toolskin.js (icons, preloader, range, ui-select).
 
                 // Bind controls
                 console.log('🔧 Binding controls...');
@@ -690,21 +909,90 @@
                 console.log('Current state:', S);
             }
 
-            // Wait for everything to load - use window.onload to ensure all scripts are loaded
             if (document.readyState === 'loading') {
-                window.addEventListener('load', () => {
-                    setTimeout(init, 50);
-                });
-            } else if (document.readyState === 'interactive') {
-                window.addEventListener('load', () => {
-                    setTimeout(init, 50);
-                });
+                document.addEventListener('DOMContentLoaded', init);
             } else {
-                // DOM already ready
-                setTimeout(init, 100);
+                init();
             }
 
         });
     </script>
+
+
+    <script>
+        // === CONFIGURATION ===
+        const ACCORDION_MODE = false;   // Set to false to allow multiple open cards per pane
+
+        // Helper: get all cards inside a pane (or the whole document if no pane)
+        function getCardsInSamePane(element) {
+            const pane = element.closest('.ts-tab-pane');
+            if (pane) {
+                return Array.from(pane.querySelectorAll('.ts-card'));
+            } else {
+                // If no pane, consider all cards on page
+                return Array.from(document.querySelectorAll('.ts-card'));
+            }
+        }
+
+        // Function to open a specific card (adds open class to its header)
+        function openCard(card) {
+            const header = card.querySelector('.ts-card-header.ts-accordion');
+            if (header && !header.classList.contains('open')) {
+                header.classList.add('open');
+            }
+        }
+
+        // Function to close a specific card (removes open class from its header)
+        function closeCard(card) {
+            const header = card.querySelector('.ts-card-header.ts-accordion');
+            if (header && header.classList.contains('open')) {
+                header.classList.remove('open');
+            }
+        }
+
+        // Close all cards inside a given container (pane or whole document)
+        function closeAllCards(container) {
+            const cards = container.querySelectorAll('.ts-card');
+            cards.forEach(card => closeCard(card));
+        }
+
+        // Initialize: attach click handlers to all accordion headers
+        document.querySelectorAll('.ts-card-header.ts-accordion').forEach(header => {
+            header.addEventListener('click', (e) => {
+                const card = header.closest('.ts-card');
+                if (!card) return;
+
+                if (ACCORDION_MODE) {
+                    const pane = card.closest('.ts-tab-pane');
+                    if (pane) {
+                        // Close all other cards in the same pane
+                        const otherCards = Array.from(pane.querySelectorAll('.ts-card')).filter(c => c !== card);
+                        otherCards.forEach(c => closeCard(c));
+                    } else {
+                        // No pane – close all other cards on the page
+                        const allCards = document.querySelectorAll('.ts-card');
+                        allCards.forEach(c => {
+                            if (c !== card) closeCard(c);
+                        });
+                    }
+                    // Open the clicked card (toggle its own state)
+                    header.classList.toggle('open');
+                } else {
+                    // Simple toggle: just this card
+                    header.classList.toggle('open');
+                }
+            });
+        });
+
+        // Make the first card in each tab pane open by default
+        document.querySelectorAll('.ts-tab-pane').forEach(pane => {
+            const firstCard = pane.querySelector('.ts-card');
+            if (firstCard) {
+                openCard(firstCard);
+            }
+        });
+    </script>
+
 </body>
+
 </html>

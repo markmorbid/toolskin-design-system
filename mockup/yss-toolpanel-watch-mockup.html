@@ -9,6 +9,7 @@
 	<link rel="icon" type="image/x-icon" href="https://www.google.com/s2/favicons?sz=64&domain=youtube.com" sizes="any">
 
 	<link rel="stylesheet" href="../assets/css/extra-styles.css">
+	<link rel="stylesheet" href="../assets/css/toolskin.css">
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -20,14 +21,27 @@
 		href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
 		rel="stylesheet">
 	<script type="text/javascript" src="../assets/js/mockup-scripts.js"></script>
+	<script type="text/javascript" src="../assets/js/toolskin.js"></script>
 	<style>
 		body {
 			background-image: url(../assets/img/bg_yt.jpg);
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-position: left center;
+			--ts-accent: var(--yss-accent-color);
+		}
+		:root, :root *{
+			--ts-accent: var(--yss-accent-color);
 		}
 	</style>
+	<script>
+
+		window.addEventListener('DOMContentLoaded', () => {
+			Toolskin.config.cursor = {
+			enabled: false
+			};
+		});
+	</script>
 </head>
 
 <body>
@@ -144,11 +158,11 @@
 							disabled="" title="Clear the list of URLs in the batch processing queue."
 							data-tooltip="Clear the list of URLs in the batch processing queue."><i
 								class="fa-solid fa-trash"></i><span>Clear Queue</span></button>
-						<button id="help_transcript" class="helpIcon_label"><i
-								class="fa-solid fa-circle-info"></i><span></span></button>
+						<!-- <button id="help_transcript" class="helpIcon_label"><i
+								class="fa-solid fa-circle-info"></i><span></span></button> -->
 					</div>
-					<div class="yss-group-label help">Automatically open and retrieve the transcript for the current
-						video. Open the batch processing modal to download transcripts for multiple videos.</div>
+					<!-- <div class="yss-group-label help">Automatically open and retrieve the transcript for the current
+						video. Open the batch processing modal to download transcripts for multiple videos.</div> -->
 				</div>
 				<div id="yss-transcript-dock" class="yss-controls-dock-row">
 					<div id="yt-batch-controls-wrapper"
@@ -165,12 +179,21 @@
 							<div class="yss-form-group">
 								<textarea id="yt-batch-input-textarea"
 									placeholder="Enter YouTube playlist URL or video URLs (one per line)"></textarea>
-								<div class="yss-form-block" id="yt-batch-download-delay-slider-container"
+								<!-- <div class="yss-form-block" id="yt-batch-download-delay-slider-container"
 									style="pointer-events: auto; opacity: 1;">
 									<label for="yt-batch-download-delay-slider">Nav Delay (s):</label>
 									<input type="range" id="yt-batch-download-delay-slider" min="1" max="30" step="1"
 										class="yss-range-progress-initialized"><span
 										id="yt-batch-download-delay-value">5</span>
+								</div> -->
+								<div class="yss-form-block" id="yt-batch-download-delay-slider-container">
+									<label for="yt-batch-download-delay-slider" id="yt-batch-download-delay-slider-label">Nav Delay (s):</label>
+									
+										
+									<input type="range" class="ts-range ts-range--lg yss-range-progress-initialized" min="1" max="30" value="5" data-unit="s" data-min="1" data-max="30" data-value="5">
+									
+									<span
+										id="yt-batch-download-delay-value" class="ts-range-val">5</span>
 								</div>
 							</div>
 							<div class="yss-log-wrapper" id="yt-batch-progress-display"></div>

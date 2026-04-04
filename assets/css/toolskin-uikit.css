@@ -1,0 +1,1546 @@
+/*!
+ * Toolskin UI Kit — companion to toolskin-uikit.js
+ * Uses design tokens (--ts-*) from toolskin.css; prefix ts-ui-* (no collisions with core).
+ * Naming:
+ *   - ts-ui-* : UI kit components (accordion, table, masonry, …)
+ *   - ts-*      : Core-friendly aliases for form controls (checkbox/radio/groups) — mirror ts-ui-control-* where noted.
+ * Aliases: .ts-accordion ↔ .ts-ui-accordion; .ts-checkbox/.ts-radio wrappers ↔ .ts-ui-control--checkbox/--radio inputs.
+ * Scrollbar: <html> gets .ts-env-moz in Firefox only; .ts-ui-scrollbar--moz rules apply there so Chromium keeps ::-webkit-scrollbar.
+ */
+
+/* Defaults so native checkbox/radio inputs keep size even without a wrapper (inherits from :root). */
+:root {
+  --ts-ui-control-size: 1.125rem;
+  --ts-ui-control-mark-inset: 22%;
+}
+
+/* ── Accordion ─────────────────────────────────────────────────── */
+.ts-ui-accordion,
+.ts-accordion {
+  --ts-ui-accordion-header-pad: var(--ts-sp-3) var(--ts-sp-4);
+  --ts-ui-accordion-header-fs: var(--ts-fs-sm);
+  --ts-ui-accordion-header-min-h: 0;
+  --ts-ui-accordion-header-bg: var(--ts-bg-1);
+  --ts-ui-accordion-header-bg-hover: var(--ts-bg-3);
+  --ts-ui-accordion-header-bg-active: var(--ts-bg-3);
+  --ts-ui-accordion-header-color: var(--ts-text-primary);
+  --ts-ui-accordion-panel-pad: var(--ts-sp-4);
+  --ts-ui-accordion-panel-fs: var(--ts-fs-sm);
+  --ts-ui-accordion-panel-lh: 1.55;
+  --ts-ui-accordion-panel-color: var(--ts-text-secondary);
+  --ts-ui-accordion-gap: var(--ts-sp-3);
+  --ts-ui-accordion-toggle-stroke: 2px;
+  --ts-ui-accordion-toggle-color: var(--ts-text-muted);
+  --ts-ui-accordion-toggle-color-hover: var(--ts-text-primary);
+  --ts-ui-accordion-toggle-bg: transparent;
+  --ts-ui-accordion-toggle-bg-hover: color-mix(in srgb, var(--ts-bg-3), transparent 40%);
+  --ts-ui-accordion-toggle-border: var(--ts-border-1);
+  --ts-ui-accordion-toggle-radius: var(--ts-radius-sm);
+  --ts-ui-accordion-toggle-pad: 4px;
+  border: 1px solid var(--ts-border-1);
+  border-radius: var(--ts-radius-md);
+  overflow: hidden;
+  background: var(--ts-bg-2);
+}
+
+.ts-ui-accordion--separated,
+.ts-accordion.ts-ui-accordion--separated {
+  border: none;
+  background: transparent;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-ui-accordion-gap);
+}
+
+.ts-ui-accordion--separated .ts-ui-accordion__item,
+.ts-accordion.ts-ui-accordion--separated .ts-accordion__item {
+  border: 1px solid var(--ts-border-1);
+  border-radius: var(--ts-radius-md);
+  overflow: hidden;
+  background: var(--ts-bg-2);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ts-border-1), transparent 55%);
+}
+
+.ts-ui-accordion__header,
+.ts-accordion__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ts-sp-3);
+  min-height: var(--ts-ui-accordion-header-min-h);
+  padding: var(--ts-ui-accordion-header-pad);
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid var(--ts-border-1);
+  background: var(--ts-ui-accordion-header-bg);
+  color: var(--ts-ui-accordion-header-color);
+  font-size: var(--ts-ui-accordion-header-fs);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background var(--ts-dur-fast) var(--ts-ease-out),
+    color var(--ts-dur-fast) var(--ts-ease-out);
+}
+
+.ts-ui-accordion--separated .ts-ui-accordion__header,
+.ts-accordion.ts-ui-accordion--separated .ts-accordion__header {
+  border-bottom: 1px solid var(--ts-border-1);
+}
+
+.ts-ui-accordion__header:hover,
+.ts-accordion__header:hover {
+  background: var(--ts-ui-accordion-header-bg-hover);
+}
+
+.ts-ui-accordion__header--active,
+.ts-accordion__header--active {
+  background: var(--ts-ui-accordion-header-bg-active);
+}
+
+.ts-ui-accordion__header-main,
+.ts-accordion__header-main {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+  min-width: 0;
+  flex: 1;
+}
+
+.ts-ui-accordion__icon,
+.ts-accordion__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ts-text-muted);
+}
+
+.ts-ui-accordion__label,
+.ts-accordion__label {
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+}
+
+/* Dual icon: category column + separator + header-main (item icon + label) */
+.ts-ui-accordion--dual-icon,
+.ts-accordion.ts-ui-accordion--dual-icon {
+  --ts-ui-accordion-category-icon-size: 1.25rem;
+  --ts-ui-accordion-category-gap: var(--ts-sp-2);
+  --ts-ui-accordion-category-sep-width: 1px;
+  --ts-ui-accordion-category-sep-height: 1.25rem;
+  --ts-ui-accordion-header-radius: var(--ts-radius-md);
+}
+
+.ts-ui-accordion--dual-icon .ts-ui-accordion__category-icon,
+.ts-ui-accordion--dual-icon .ts-accordion__category-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ts-ui-accordion-category-icon-size);
+  height: var(--ts-ui-accordion-category-icon-size);
+  margin-right: var(--ts-ui-accordion-category-gap);
+  color: color-mix(in srgb, var(--ts-accent), var(--ts-text-muted) 35%);
+  font-size: var(--ts-ui-accordion-category-icon-size);
+}
+
+.ts-ui-accordion--dual-icon .ts-ui-accordion__category-sep,
+.ts-ui-accordion--dual-icon .ts-accordion__category-sep {
+  flex-shrink: 0;
+  width: var(--ts-ui-accordion-category-sep-width);
+  height: var(--ts-ui-accordion-category-sep-height);
+  margin-right: var(--ts-ui-accordion-category-gap);
+  border-radius: 1px;
+  background: var(--ts-border-1);
+  align-self: center;
+}
+
+.ts-ui-accordion--dual-icon.ts-ui-accordion--separated .ts-ui-accordion__item,
+.ts-accordion.ts-ui-accordion--dual-icon.ts-ui-accordion--separated .ts-accordion__item {
+  border-radius: var(--ts-ui-accordion-header-radius);
+}
+
+/* Chevron (default): not when using plus/minus indicator */
+.ts-ui-accordion:not(.ts-ui-accordion--toggle-plus) .ts-ui-accordion__header::after,
+.ts-accordion:not(.ts-ui-accordion--toggle-plus) .ts-accordion__header::after {
+  content: '';
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--ts-text-muted);
+  border-bottom: 2px solid var(--ts-text-muted);
+  transform: rotate(45deg);
+  transition: transform var(--ts-dur-fast) var(--ts-ease-out);
+}
+
+.ts-ui-accordion:not(.ts-ui-accordion--toggle-plus) .ts-ui-accordion__header[aria-expanded='true']::after,
+.ts-accordion:not(.ts-ui-accordion--toggle-plus) .ts-accordion__header[aria-expanded='true']::after {
+  transform: rotate(-135deg);
+  margin-top: 4px;
+}
+
+/* Plus / minus (CSS lines) */
+.ts-ui-accordion--toggle-plus .ts-ui-accordion__header::after,
+.ts-accordion.ts-ui-accordion--toggle-plus .ts-accordion__header::after {
+  display: none;
+}
+
+.ts-ui-accordion__indicator,
+.ts-accordion__indicator {
+  position: relative;
+  flex-shrink: 0;
+  width: calc(1.25rem + var(--ts-ui-accordion-toggle-pad) * 2);
+  height: calc(1.25rem + var(--ts-ui-accordion-toggle-pad) * 2);
+  box-sizing: border-box;
+  padding: var(--ts-ui-accordion-toggle-pad);
+  border: 1px solid var(--ts-ui-accordion-toggle-border);
+  border-radius: var(--ts-ui-accordion-toggle-radius);
+  background: var(--ts-ui-accordion-toggle-bg);
+  transition:
+    background var(--ts-dur-fast) var(--ts-ease-out),
+    border-color var(--ts-dur-fast) var(--ts-ease-out);
+}
+
+.ts-ui-accordion__header:hover .ts-ui-accordion__indicator,
+.ts-accordion__header:hover .ts-accordion__indicator {
+  background: var(--ts-ui-accordion-toggle-bg-hover);
+  border-color: var(--ts-border-0);
+}
+
+.ts-ui-accordion__header--active .ts-ui-accordion__indicator,
+.ts-accordion__header--active .ts-accordion__indicator {
+  border-color: color-mix(in srgb, var(--ts-accent), transparent 55%);
+}
+
+.ts-ui-accordion__indicator::before,
+.ts-ui-accordion__indicator::after,
+.ts-accordion__indicator::before,
+.ts-accordion__indicator::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: var(--ts-ui-accordion-toggle-color);
+  transform: translate(-50%, -50%);
+  transition:
+    opacity var(--ts-dur-fast) var(--ts-ease-out),
+    transform var(--ts-dur-fast) var(--ts-ease-out);
+}
+
+.ts-ui-accordion__indicator::before,
+.ts-accordion__indicator::before {
+  width: 0.65rem;
+  height: var(--ts-ui-accordion-toggle-stroke);
+}
+
+.ts-ui-accordion__indicator::after,
+.ts-accordion__indicator::after {
+  width: var(--ts-ui-accordion-toggle-stroke);
+  height: 0.65rem;
+}
+
+.ts-ui-accordion__header[aria-expanded='true'] .ts-ui-accordion__indicator::after,
+.ts-accordion__header[aria-expanded='true'] .ts-accordion__indicator::after {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+}
+
+.ts-ui-accordion__header:hover .ts-ui-accordion__indicator::before,
+.ts-ui-accordion__header:hover .ts-ui-accordion__indicator::after,
+.ts-accordion__header:hover .ts-accordion__indicator::before,
+.ts-accordion__header:hover .ts-accordion__indicator::after {
+  background: var(--ts-ui-accordion-toggle-color-hover);
+}
+
+.ts-ui-accordion__panel,
+.ts-accordion__panel {
+  padding: var(--ts-ui-accordion-panel-pad);
+  font-size: var(--ts-ui-accordion-panel-fs);
+  color: var(--ts-ui-accordion-panel-color);
+  line-height: var(--ts-ui-accordion-panel-lh);
+}
+
+.ts-ui-accordion__panel[hidden],
+.ts-accordion__panel[hidden] {
+  display: none !important;
+}
+
+/* ── Select ───────────────────────────────────────────────────── */
+.ts-ui-select {
+  position: relative;
+  display: inline-block;
+  min-width: 220px;
+  max-width: 100%;
+  /* Options match trigger row height; override per instance if needed */
+  --ts-ui-select-trigger-min-height: 2.75rem;
+}
+
+.ts-ui-select__native {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  pointer-events: none !important;
+}
+
+.ts-ui-select__trigger {
+  width: 100%;
+  min-height: var(--ts-ui-select-trigger-min-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ts-sp-2);
+  padding: var(--ts-sp-2) var(--ts-sp-3);
+  box-sizing: border-box;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid var(--ts-border-1);
+  background: var(--ts-bg-1);
+  color: var(--ts-text-primary);
+  font-size: var(--ts-fs-sm);
+  cursor: pointer;
+  transition: border-color var(--ts-dur-fast), box-shadow var(--ts-dur-fast);
+}
+
+.ts-ui-select__trigger:hover {
+  border-color: var(--ts-border-0);
+}
+
+.ts-ui-select--open .ts-ui-select__trigger {
+  border-color: var(--ts-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ts-accent), transparent 70%);
+}
+
+.ts-ui-select__value {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+  min-width: 0;
+}
+
+.ts-ui-select__value-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ts-ui-select__chevron {
+  flex-shrink: 0;
+  opacity: 0.7;
+  font-size: 0.7rem;
+}
+
+.ts-ui-select__dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 2000;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid var(--ts-border-1);
+  background: var(--ts-bg-1);
+  box-shadow: var(--ts-shadow-3);
+  max-height: 280px;
+  flex-direction: column;
+}
+
+/* [hidden] must win over display:flex (otherwise panel stays visible) */
+.ts-ui-select__dropdown[hidden] {
+  display: none !important;
+}
+
+.ts-ui-select__dropdown:not([hidden]) {
+  display: flex;
+}
+
+.ts-ui-select__search {
+  position: relative;
+  padding: 0;
+  border-bottom: 1px solid var(--ts-border-1);
+  flex-shrink: 0;
+}
+
+.ts-ui-select--no-search .ts-ui-select__search {
+  display: none;
+}
+
+.ts-ui-select__search-icon {
+  position: absolute;
+  left: var(--ts-sp-3);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--ts-text-muted);
+  font-size: 0.85em;
+  line-height: 1;
+  z-index: 1;
+}
+
+.ts-ui-select__filter {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: var(--ts-ui-select-trigger-min-height);
+  padding: var(--ts-sp-2) var(--ts-sp-3) var(--ts-sp-2) calc(var(--ts-sp-3) + 1.1em + var(--ts-sp-2));
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--ts-border-1);
+  background: var(--ts-bg-0);
+  color: var(--ts-text-primary);
+  font-size: var(--ts-fs-sm);
+  outline: none;
+  box-shadow: none;
+}
+
+.ts-ui-select__filter:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.ts-ui-select__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  max-height: 220px;
+}
+
+/* ── UI Kit scrollbars (thin, transparent track, token thumb) ───── */
+.ts-ui-table-scroll,
+.ts-ui-select__dropdown,
+.ts-ui-select__list {
+  --ts-ui-scrollbar-size: 8px;
+  scrollbar-gutter: auto;
+}
+
+.ts-ui-table-scroll::-webkit-scrollbar,
+.ts-ui-select__dropdown::-webkit-scrollbar,
+.ts-ui-select__list::-webkit-scrollbar {
+  width: var(--ts-ui-scrollbar-size);
+  height: var(--ts-ui-scrollbar-size);
+}
+
+.ts-ui-table-scroll::-webkit-scrollbar-track,
+.ts-ui-select__dropdown::-webkit-scrollbar-track,
+.ts-ui-select__list::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+}
+
+.ts-ui-table-scroll::-webkit-scrollbar-thumb,
+.ts-ui-select__dropdown::-webkit-scrollbar-thumb,
+.ts-ui-select__list::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ts-text-muted), transparent 42%);
+  border-radius: var(--ts-radius-full, 9999px);
+  border: none;
+}
+
+.ts-ui-table-scroll::-webkit-scrollbar-thumb:hover,
+.ts-ui-select__dropdown::-webkit-scrollbar-thumb:hover,
+.ts-ui-select__list::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--ts-text-muted), transparent 22%);
+}
+
+/* Opt-in Mozilla: only when html.ts-env-moz (set by toolskin-uikit.js on Firefox).
+   Applying scrollbar-width / scrollbar-color on Chromium breaks ::-webkit-scrollbar styling. */
+html.ts-env-moz .ts-ui-scrollbar--moz.ts-ui-table-scroll,
+html.ts-env-moz .ts-ui-scrollbar--moz.ts-ui-select__dropdown,
+html.ts-env-moz .ts-ui-scrollbar--moz .ts-ui-select__list {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ts-text-muted), transparent 35%) transparent;
+}
+
+.ts-ui-select__option {
+  min-height: var(--ts-ui-select-trigger-min-height);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: var(--ts-sp-2) var(--ts-sp-3);
+  border-radius: 0;
+  border-bottom: 1px solid var(--ts-border-0);
+  cursor: pointer;
+  font-size: var(--ts-fs-sm);
+  color: var(--ts-text-primary);
+}
+
+.ts-ui-select__option:last-child {
+  border-bottom: none;
+}
+
+.ts-ui-select__option:hover,
+.ts-ui-select__option:focus {
+  background: var(--ts-bg-3);
+  outline: none;
+}
+
+.ts-ui-select__option--selected {
+  background: color-mix(in srgb, var(--ts-accent), transparent 88%);
+}
+
+.ts-ui-select__option-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+}
+
+.ts-ui-select__option-inner i {
+  width: 1.1em;
+  text-align: center;
+  color: var(--ts-text-muted);
+}
+
+/* ── Spinner (input + stacked chevrons on the right, YSS-style) ─── */
+.ts-ui-spinner {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-width: 7rem;
+  max-width: 100%;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid var(--ts-border-1);
+  overflow: hidden;
+  background: var(--ts-bg-1);
+}
+
+.ts-ui-spinner input[type='number'] {
+  flex: 1;
+  min-width: 2.5rem;
+  width: auto;
+  border: none;
+  text-align: center;
+  background: transparent;
+  color: var(--ts-text-primary);
+  font-size: var(--ts-fs-sm);
+  -moz-appearance: textfield;
+  appearance: textfield;
+  -webkit-appearance: textfield;
+}
+
+.ts-ui-spinner input::-webkit-outer-spin-button,
+.ts-ui-spinner input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.ts-ui-spinner__controls {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-left: 1px solid var(--ts-border-1);
+  min-width: 2rem;
+}
+
+.ts-ui-spinner__dec,
+.ts-ui-spinner__inc {
+  flex: 1;
+  min-height: 1.25rem;
+  border: none;
+  background: var(--ts-bg-2);
+  color: var(--ts-text-primary);
+  cursor: pointer;
+  font-size: 0.65rem;
+  line-height: 1;
+  padding: 0 0.4rem;
+  transition: background var(--ts-dur-fast);
+}
+
+.ts-ui-spinner__dec:hover,
+.ts-ui-spinner__inc:hover {
+  background: var(--ts-bg-3);
+}
+
+.ts-ui-spinner__dec + .ts-ui-spinner__inc,
+.ts-ui-spinner__inc + .ts-ui-spinner__dec {
+  border-top: 1px solid var(--ts-border-1);
+}
+
+/* ── Draggable / Resizable ───────────────────────────────────────── */
+.ts-ui-draggable--dragging {
+  z-index: 3000;
+  box-shadow: var(--ts-shadow-3);
+}
+
+.ts-ui-resizable {
+  position: relative;
+  min-width: 160px;
+  min-height: 100px;
+  resize: none;
+}
+
+.ts-ui-resizable__handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  background: linear-gradient(
+    135deg,
+    transparent 50%,
+    var(--ts-text-muted) 50%,
+    var(--ts-text-muted) 60%,
+    transparent 60%
+  );
+  opacity: 0.5;
+}
+
+.ts-ui-resizable__handle:hover {
+  opacity: 1;
+}
+
+/* ── Sortable ───────────────────────────────────────────────────── */
+.ts-ui-sortable {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ts-ui-sortable__item {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+  padding: var(--ts-sp-2) var(--ts-sp-3);
+  margin-bottom: var(--ts-sp-2);
+  border: 1px solid var(--ts-border-1);
+  border-radius: var(--ts-radius-md);
+  background: var(--ts-bg-1);
+  cursor: grab;
+}
+
+.ts-ui-sortable[data-ts-ui-sort-handle-only] .ts-ui-sortable__item {
+  cursor: default;
+}
+
+.ts-ui-sortable[data-ts-ui-sort-handle-only] .ts-ui-sortable__handle {
+  cursor: grab;
+}
+
+.ts-ui-sortable__item--dragging {
+  opacity: 1;
+  cursor: grabbing;
+}
+
+.ts-ui-sortable__item--source {
+  pointer-events: none;
+}
+
+.ts-ui-sortable__ghost {
+  opacity: 1;
+  cursor: grabbing;
+  box-shadow: var(--ts-shadow-3);
+  border-color: var(--ts-accent) !important;
+  background: var(--ts-bg-2) !important;
+}
+
+.ts-ui-sortable__placeholder {
+  box-sizing: border-box;
+  margin-bottom: var(--ts-sp-2);
+  border: 2px dashed color-mix(in srgb, var(--ts-accent), transparent 35%);
+  border-radius: var(--ts-radius-md);
+  background: color-mix(in srgb, var(--ts-accent), transparent 92%);
+  pointer-events: none;
+}
+
+.ts-ui-sortable__handle {
+  cursor: grab;
+  color: var(--ts-text-muted);
+}
+
+/* ── Number input auto-wrap (chevrons) ─────────────────────────── */
+.ts-ui-number-input-wrapper {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-width: 7rem;
+  max-width: 100%;
+  position: relative;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid var(--ts-border-1);
+  overflow: hidden;
+  background: var(--ts-bg-1);
+}
+
+.ts-ui-number-input-wrapper input[type='number'] {
+  flex: 1;
+  min-width: 2.5rem;
+  width: auto;
+  border: none;
+  text-align: center;
+  background: transparent;
+  color: var(--ts-text-primary);
+  font-size: var(--ts-fs-sm);
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.ts-ui-number-input-wrapper input::-webkit-outer-spin-button,
+.ts-ui-number-input-wrapper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.ts-ui-number-input-controls {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-left: 1px solid var(--ts-border-1);
+  min-width: 2rem;
+}
+
+.ts-ui-number-btn {
+  flex: 1;
+  min-height: 1.25rem;
+  padding: 0 0.4rem;
+  border: none;
+  background: var(--ts-bg-2);
+  color: var(--ts-text-primary);
+  cursor: pointer;
+  font-size: 0.65rem;
+  line-height: 1;
+  transition: background var(--ts-dur-fast);
+}
+
+.ts-ui-number-btn:hover {
+  background: var(--ts-bg-3);
+}
+
+.ts-ui-number-btn + .ts-ui-number-btn {
+  border-top: 1px solid var(--ts-border-1);
+}
+
+/* ── Checkbox / Radio (pure CSS, native input; label = hit target) ─ */
+.ts-ui-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-sp-3);
+}
+
+.ts-ui-table--bulk {
+  --ts-ui-control-size: 1rem;
+  --ts-ui-control-mark-inset: 22%;
+}
+
+.ts-ui-control {
+  --ts-ui-control-size: 1.125rem;
+  --ts-ui-control-mark-inset: 22%;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+  cursor: pointer;
+  user-select: none;
+  color: var(--ts-text-primary);
+  font-size: var(--ts-fs-sm);
+}
+
+.ts-ui-control--checkbox input[type='checkbox'],
+.ts-ui-control--radio input[type='radio'],
+.ts-ui-control-row input[type='checkbox'],
+.ts-ui-control-row input[type='radio'],
+.ts-checkbox input[type='checkbox'],
+.ts-radio input[type='radio'],
+.ts-ui-table--bulk input[type='checkbox'] {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: var(--ts-ui-control-size, 1.125rem);
+  height: var(--ts-ui-control-size, 1.125rem);
+  border: 1px solid color-mix(in srgb, var(--ts-accent), transparent 62%);
+  border-radius: var(--ts-radius-xs);
+  background: var(--ts-bg-1);
+  position: relative;
+  cursor: pointer;
+  transition:
+    border-color var(--ts-dur-fast),
+    box-shadow var(--ts-dur-fast),
+    background var(--ts-dur-fast);
+}
+
+.ts-ui-control--radio input[type='radio'],
+.ts-ui-control-row input[type='radio'],
+.ts-radio input[type='radio'] {
+  border-radius: 50%;
+}
+
+.ts-ui-control--checkbox input[type='checkbox']::before,
+.ts-ui-control-row input[type='checkbox']::before,
+.ts-checkbox input[type='checkbox']::before,
+.ts-ui-table--bulk input[type='checkbox']::before {
+  content: '';
+  position: absolute;
+  inset: var(--ts-ui-control-mark-inset, 22%);
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform 0.28s var(--ts-ease-out);
+  background-color: color-mix(in srgb, var(--ts-bg-0), var(--ts-text-primary) 88%);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.ts-ui-control--checkbox input[type='checkbox']:checked,
+.ts-ui-control-row input[type='checkbox']:checked,
+.ts-checkbox input[type='checkbox']:checked,
+.ts-ui-table--bulk input[type='checkbox']:checked {
+  --ts-ui-accent-border: color-mix(in srgb, var(--ts-accent), #ffffff 18%);
+  border-color: var(--ts-ui-accent-border);
+  background: linear-gradient(
+    -136deg,
+    var(--ts-accent),
+    color-mix(in srgb, var(--ts-accent), #000000 17%),
+    var(--ts-accent)
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff, transparent 78%);
+}
+
+.ts-ui-control--checkbox input[type='checkbox']:checked::before,
+.ts-ui-control-row input[type='checkbox']:checked::before,
+.ts-checkbox input[type='checkbox']:checked::before,
+.ts-ui-table--bulk input[type='checkbox']:checked::before {
+  transform: scale(1);
+  background-color: color-mix(in srgb, var(--ts-bg-0), var(--ts-text-primary) 88%);
+}
+
+.ts-ui-control--radio input[type='radio']::before,
+.ts-ui-control-row input[type='radio']::before,
+.ts-radio input[type='radio']::before {
+  content: '';
+  position: absolute;
+  inset: var(--ts-ui-control-mark-inset, 22%);
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.28s var(--ts-ease-out);
+  background: linear-gradient(
+    to top left,
+    color-mix(in srgb, var(--ts-accent), #ffffff 47%),
+    color-mix(in srgb, var(--ts-accent), #ffffff 8%),
+    var(--ts-accent)
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff, transparent 55%);
+}
+
+.ts-ui-control--radio input[type='radio']:checked,
+.ts-ui-control-row input[type='radio']:checked,
+.ts-radio input[type='radio']:checked {
+  --ts-ui-accent-border: color-mix(in srgb, var(--ts-accent), #ffffff 22%);
+  border-color: var(--ts-ui-accent-border);
+  background: color-mix(in srgb, var(--ts-bg-1), var(--ts-accent) 12%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ts-accent), transparent 55%);
+}
+
+.ts-ui-control--radio input[type='radio']:checked::before,
+.ts-ui-control-row input[type='radio']:checked::before,
+.ts-radio input[type='radio']:checked::before {
+  transform: scale(1);
+}
+
+.ts-ui-control input:focus-visible,
+.ts-ui-control-row input:focus-visible,
+.ts-checkbox input:focus-visible,
+.ts-radio input:focus-visible,
+.ts-ui-table--bulk input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--ts-accent);
+  outline-offset: 2px;
+}
+
+.ts-ui-control__label {
+  line-height: 1.45;
+}
+
+/* Clickable row / block that toggles nested checkbox */
+.ts-ui-control-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-3);
+  padding: var(--ts-sp-3) var(--ts-sp-4);
+  border-radius: var(--ts-radius-md);
+  border: 1px solid var(--ts-border-1);
+  background: var(--ts-bg-1);
+  cursor: pointer;
+  transition: background var(--ts-dur-fast), border-color var(--ts-dur-fast);
+}
+
+.ts-ui-control-row:hover {
+  background: var(--ts-bg-2);
+  border-color: var(--ts-border-0);
+}
+
+.ts-ui-control-row input:first-of-type {
+  margin-inline-end: 0;
+}
+
+/* ts-* wrappers (alias API; inputs use --ts-ui-control-* from ancestors) */
+.ts-checkbox,
+.ts-radio {
+  --ts-ui-control-size: 1.125rem;
+  --ts-ui-control-mark-inset: 22%;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+  cursor: pointer;
+  user-select: none;
+  color: var(--ts-text-primary);
+  font-size: var(--ts-fs-sm);
+}
+
+/* Size presets (md = default scale; no “sm” — too small for touch targets) */
+.ts-checkbox--md,
+.ts-radio--md {
+  --ts-ui-control-size: 1.125rem;
+  --ts-ui-control-mark-inset: 22%;
+}
+
+.ts-checkbox--lg,
+.ts-radio--lg {
+  --ts-ui-control-size: 1.375rem;
+  --ts-ui-control-mark-inset: 26%;
+}
+
+.ts-checkbox--xl,
+.ts-radio--xl {
+  --ts-ui-control-size: 1.625rem;
+  --ts-ui-control-mark-inset: 28%;
+}
+
+/* Form columns + list groups (YSS modal parity, Toolskin tokens) */
+.ts-form-column-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ts-sp-4);
+  align-items: flex-start;
+}
+
+.ts-form-column {
+  flex: 1 1 min(280px, 100%);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-sp-3);
+}
+
+.ts-group-title-label,
+.ts-ui-group-title-label {
+  display: block;
+  margin: 0 0 var(--ts-sp-2);
+  font-size: var(--ts-fs-sm);
+  font-weight: 600;
+  color: var(--ts-text-secondary);
+}
+
+.ts-checkbox-group,
+.ts-ui-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-sp-2);
+  margin-top: 0;
+}
+
+.ts-checkbox-container,
+.ts-ui-checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ts-sp-2);
+  padding: var(--ts-sp-2) var(--ts-sp-3);
+  border: 1px solid var(--ts-border-1);
+  border-radius: var(--ts-radius-md);
+  background: var(--ts-bg-1);
+  cursor: pointer;
+  transition:
+    background var(--ts-dur-fast) var(--ts-ease-out),
+    border-color var(--ts-dur-fast) var(--ts-ease-out),
+    color var(--ts-dur-fast) var(--ts-ease-out);
+}
+
+.ts-checkbox-container:hover,
+.ts-ui-checkbox-container:hover {
+  border-color: var(--ts-border-strong);
+  background: var(--ts-bg-2);
+}
+
+.ts-checkbox-container .ts-checkbox,
+.ts-checkbox-container .ts-ui-control--checkbox,
+.ts-ui-checkbox-container .ts-checkbox,
+.ts-ui-checkbox-container .ts-ui-control--checkbox {
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Radio lists: default = flush container, padded rows; compact = single pane + dividers */
+.ts-radio-group,
+.ts-ui-radio-group {
+  --ts-ui-radio-group-item-py: var(--ts-sp-2);
+  --ts-ui-radio-group-item-px: var(--ts-sp-3);
+  --ts-ui-radio-group-compact-padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ts-radio-group--compact,
+.ts-ui-radio-group--compact,
+.ts-radio-group.compact,
+.ts-ui-radio-group.compact {
+  gap: 0;
+  padding: var(--ts-ui-radio-group-compact-padding);
+  border: 1px solid var(--ts-border-1);
+  border-radius: var(--ts-radius-md);
+  background: var(--ts-bg-1);
+}
+
+.ts-radio-item,
+.ts-ui-radio-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--ts-ui-radio-group-item-py) var(--ts-ui-radio-group-item-px);
+  cursor: pointer;
+  font-size: var(--ts-fs-sm);
+  color: var(--ts-text-primary);
+  transition: background var(--ts-dur-fast), color var(--ts-dur-fast);
+}
+
+.ts-radio-group--compact .ts-radio-item:not(:last-child),
+.ts-radio-group--compact .ts-ui-radio-item:not(:last-child),
+.ts-ui-radio-group--compact .ts-radio-item:not(:last-child),
+.ts-ui-radio-group--compact .ts-ui-radio-item:not(:last-child),
+.ts-radio-group.compact .ts-radio-item:not(:last-child),
+.ts-radio-group.compact .ts-ui-radio-item:not(:last-child),
+.ts-ui-radio-group.compact .ts-radio-item:not(:last-child),
+.ts-ui-radio-group.compact .ts-ui-radio-item:not(:last-child) {
+  border-bottom: 1px solid var(--ts-border-1);
+}
+
+.ts-control-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ts-sp-2);
+  padding: var(--ts-sp-2) var(--ts-sp-3);
+  border-radius: var(--ts-radius-full);
+  border: 1px solid color-mix(in srgb, var(--ts-accent), transparent 55%);
+  background: color-mix(in srgb, var(--ts-bg-2), transparent 20%);
+  cursor: pointer;
+  transition:
+    border-color var(--ts-dur-fast),
+    background var(--ts-dur-fast);
+}
+
+.ts-control-chip:hover {
+  border-color: color-mix(in srgb, var(--ts-accent), transparent 25%);
+  background: color-mix(in srgb, var(--ts-accent), transparent 92%);
+}
+
+/* Surface variants (gradients on container only; marks stay readable) */
+.ts-control-surface--glass {
+  background: color-mix(in srgb, var(--ts-bg-1), transparent 35%);
+  backdrop-filter: blur(10px);
+  border-color: color-mix(in srgb, var(--ts-border-1), transparent 25%);
+}
+
+.ts-control-surface--accent-gradient {
+  border-color: color-mix(in srgb, var(--ts-accent), transparent 40%);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ts-accent), transparent 88%),
+    color-mix(in srgb, var(--ts-bg-2), transparent 15%),
+    color-mix(in srgb, var(--ts-accent), transparent 92%)
+  );
+}
+
+.ts-control-surface--accent-gradient .ts-ui-control__label,
+.ts-control-surface--accent-gradient .ts-checkbox,
+.ts-control-surface--accent-gradient .ts-radio {
+  color: var(--ts-text-primary);
+}
+
+/* Light panel: strong border + dark text so it works on dark page chrome */
+.ts-control-surface--light {
+  background: color-mix(in srgb, #ffffff, var(--ts-bg-2) 12%);
+  border: 1px solid color-mix(in srgb, var(--ts-border-strong), var(--ts-bg-0) 35%);
+  color: color-mix(in srgb, var(--ts-bg-0), #000000 8%);
+}
+
+.ts-control-surface--light .ts-group-title-label,
+.ts-control-surface--light .ts-ui-group-title-label {
+  color: color-mix(in srgb, var(--ts-bg-0), var(--ts-text-secondary) 25%);
+}
+
+.ts-control-surface--light .ts-ui-control__label,
+.ts-control-surface--light .ts-checkbox,
+.ts-control-surface--light .ts-radio,
+.ts-control-surface--light .ts-checkbox-container,
+.ts-control-surface--light .ts-radio-item {
+  color: color-mix(in srgb, var(--ts-bg-0), #1a1a1a 6%);
+}
+
+/* ── Toast (enhanced) ──────────────────────────────────────────── */
+.ts-ui-toast-stack {
+  position: fixed;
+  bottom: var(--ts-sp-6);
+  right: var(--ts-sp-6);
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-sp-2);
+  max-width: min(420px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.ts-ui-toast-stack .ts-ui-toast {
+  pointer-events: auto;
+}
+
+.ts-ui-toast {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid var(--ts-border-1);
+  background: color-mix(in srgb, var(--ts-bg-2), transparent 6%);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--ts-shadow-3);
+  animation: ts-ui-toast-in 0.35s var(--ts-ease-out) both;
+}
+
+@keyframes ts-ui-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ts-ui-toast--out {
+  animation: ts-ui-toast-out 0.28s var(--ts-ease-out) both;
+}
+
+@keyframes ts-ui-toast-out {
+  to {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+}
+
+.ts-ui-toast__track {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--ts-border-1);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.ts-ui-toast__track--animate {
+  transform: scaleX(1);
+  background: linear-gradient(90deg, var(--ts-accent), color-mix(in srgb, var(--ts-accent), #fff 25%));
+}
+
+.ts-ui-toast__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ts-sp-3);
+  padding: var(--ts-sp-3) var(--ts-sp-4);
+}
+
+.ts-ui-toast__icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.ts-ui-toast--success .ts-ui-toast__icon {
+  color: var(--ts-success);
+}
+.ts-ui-toast--warning .ts-ui-toast__icon {
+  color: var(--ts-warning);
+}
+.ts-ui-toast--error .ts-ui-toast__icon {
+  color: var(--ts-danger);
+}
+.ts-ui-toast--info .ts-ui-toast__icon {
+  color: var(--ts-alt);
+}
+
+.ts-ui-toast__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ts-ui-toast__title {
+  font-weight: 700;
+  font-size: var(--ts-fs-sm);
+  color: var(--ts-text-primary);
+}
+
+.ts-ui-toast__msg {
+  font-size: var(--ts-fs-sm);
+  color: var(--ts-text-secondary);
+  margin-top: 2px;
+  line-height: 1.45;
+}
+
+.ts-ui-toast__close {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--ts-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--ts-radius-sm);
+  transition: opacity var(--ts-dur-fast), background var(--ts-dur-fast);
+}
+
+.ts-ui-toast__close:hover {
+  background: var(--ts-bg-3);
+  color: var(--ts-text-primary);
+}
+
+/* ── Table sort + scroll + sticky thead + bulk bar ─────────────── */
+.ts-ui-table-scroll {
+  position: relative;
+  max-height: min(420px, 70vh);
+  overflow: auto;
+  overflow-x: auto;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+  background: var(--ts-bg-1);
+}
+
+.ts-ui-table-bulk-wrap {
+  position: relative;
+  padding-bottom: 4.5rem;
+}
+
+.ts-ui-table--sortable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.ts-ui-table--sortable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--ts-bg-2);
+  color: var(--ts-text-primary);
+  font-size: var(--ts-fs-xs);
+  font-weight: 600;
+  text-align: left;
+  padding: var(--ts-sp-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 40%);
+  background-clip: padding-box;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-ui-table--sortable thead th[data-sort-key],
+.ts-ui-table--sortable thead th[data-ts-ui-sort] {
+  position: sticky;
+  padding-right: 2rem;
+}
+
+.ts-ui-table--sortable tbody td {
+  padding: var(--ts-sp-3);
+  font-size: var(--ts-fs-sm);
+  color: var(--ts-text-secondary);
+  border-bottom: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 50%);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-ui-table--sortable tbody tr:last-child td {
+  border-bottom: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 50%);
+}
+
+.ts-ui-table--sortable tbody tr.ts-ui-row--selected td {
+  background: color-mix(in srgb, var(--ts-accent), transparent 92%);
+}
+
+.ts-ui-table--sortable.ts-ui-table--striped tbody tr:nth-child(odd) td {
+  background: color-mix(in srgb, var(--ts-bg-2), transparent 72%);
+}
+
+.ts-ui-table--sortable.ts-ui-table--striped tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--ts-bg-1), transparent 55%);
+}
+
+.ts-ui-table--sortable.ts-ui-table--striped tbody tr.ts-ui-row--selected td {
+  background: color-mix(in srgb, var(--ts-accent), transparent 88%);
+}
+
+.ts-ui-table--sortable.ts-ui-table--grid th,
+.ts-ui-table--sortable.ts-ui-table--grid td {
+  border-left: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 45%);
+  border-right: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 45%);
+}
+
+.ts-ui-table--sortable.ts-ui-table--grid thead th {
+  border-bottom: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 40%);
+}
+
+.ts-ui-table--sortable .ts-ui-th--sortable[data-sort-key]::after,
+.ts-ui-table--sortable th[data-ts-ui-sort]::after {
+  content: '⇅';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  left: auto;
+  margin-left: 0 !important;
+  float: none;
+  transform: translateY(-50%);
+  font-size: 12px;
+  line-height: 1;
+  opacity: 1 !important;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ts-accent);
+  vertical-align: middle;
+  pointer-events: none;
+}
+
+.ts-ui-table--sortable .ts-ui-th--active:not(.ts-ui-th--reverse)::after {
+  content: '▲';
+  opacity: 1 !important;
+  color: var(--ts-accent);
+}
+
+.ts-ui-table--sortable .ts-ui-th--active.ts-ui-th--reverse::after {
+  content: '▼';
+  opacity: 1 !important;
+  color: var(--ts-accent);
+}
+
+.ts-ui-table--sortable thead th[data-ts-ui-sort].ts-ui-th--sort-asc::after {
+  content: '▲';
+  opacity: 1 !important;
+  color: var(--ts-accent);
+}
+
+.ts-ui-table--sortable thead th[data-ts-ui-sort].ts-ui-th--sort-desc::after {
+  content: '▼';
+  opacity: 1 !important;
+  color: var(--ts-accent);
+}
+
+.ts-ui-table__select-all,
+.ts-ui-row-checkbox {
+  --ts-ui-control-size: 1.05rem;
+  vertical-align: middle;
+}
+
+.ts-ui-table--bulk input[type='checkbox'] {
+  border-color: color-mix(in srgb, var(--ts-accent), transparent 58%);
+}
+
+.ts-ui-checkbox-cell {
+  width: 2.75rem;
+  text-align: center;
+}
+
+.ts-ui-bulk-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ts-sp-2);
+  padding: var(--ts-sp-3) var(--ts-sp-4);
+  border-radius: var(--ts-radius-lg);
+  border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 20%);
+  background: color-mix(in srgb, var(--ts-bg-2), transparent 8%);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--ts-shadow-3);
+}
+
+.ts-ui-bulk-bar[hidden] {
+  display: none !important;
+}
+
+.ts-ui-bulk-bar__count {
+  font-size: var(--ts-fs-sm);
+  font-weight: 600;
+  color: var(--ts-text-primary);
+  margin-right: var(--ts-sp-2);
+  padding-right: var(--ts-sp-3);
+  border-right: 1px solid var(--ts-border-1);
+}
+
+.ts-ui-bulk-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ts-sp-1);
+}
+
+.ts-ui-bulk-bar__actions .ts-btn {
+  font-size: var(--ts-fs-xs);
+}
+
+.ts-ui-draggable-bounds {
+  position: relative;
+  min-height: 140px;
+  padding: var(--ts-sp-4);
+  border-radius: var(--ts-radius-sm);
+  border: 1px dashed var(--ts-border-0);
+  background: var(--ts-bg-0);
+}
+
+/* ── Masonry v2 ────────────────────────────────────────────────── */
+.ts-ui-masonry--v2 {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  /* Narrower default column min → more columns in typical side-by-side grids */
+  column-width: var(--ts-ui-masonry-column-width, min(200px, 100%));
+  column-gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  column-fill: balance;
+}
+
+.ts-ui-masonry--v2.ts-ui-masonry--dense {
+  --ts-ui-masonry-column-width: min(160px, 100%);
+  --ts-ui-masonry-gap: var(--ts-sp-3);
+}
+
+.ts-ui-masonry__item {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  break-inside: avoid;
+  margin-bottom: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+}
+
+.ts-ui-masonry__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ts-ui-masonry__item--flush {
+  padding: 0 !important;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: visible;
+}
+
+.ts-ui-masonry__item .ts-flip-card {
+  margin: 0;
+}
+
+.ts-ui-masonry__item .ts-flip-card__inner {
+  min-height: 0;
+}
+
+/* Grid Lanes — see https://webkit.org/blog/17660/introducing-css-grid-lanes/
+ * Uses display:grid-lanes only when @supports (display: grid-lanes) matches.
+ * Many Chrome stable builds do not match → fallback block below. Some Chromium forks
+ * (e.g. Brave) or flags may enable grid-lanes, so layout can differ from Chrome. */
+.ts-ui-masonry--lanes {
+  --ts-ui-masonry-lane-min: 14rem;
+  --ts-ui-photo-aspect: 4 / 3;
+  --ts-ui-masonry-item-flex-grow: 1;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item {
+  margin-bottom: 0;
+}
+
+/* Photo tiles: box + absolute img + object-fit cover (grid-lanes + flex fallback) */
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+  background: var(--ts-bg-1);
+  aspect-ratio: var(--ts-ui-photo-aspect, 4 / 3);
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@supports (display: grid-lanes) {
+  .ts-ui-masonry--lanes {
+    display: grid-lanes;
+    grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 14rem), 1fr));
+    gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+    min-height: 0;
+  }
+}
+
+/* No grid-lanes: flex-wrap + flexible flex-grow per tile (--ts-ui-masonry-item-flex-grow) */
+@supports not (display: grid-lanes) {
+  .ts-ui-masonry--lanes {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: stretch;
+    gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item {
+    box-sizing: border-box;
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+    flex: var(--ts-ui-masonry-item-flex-grow, 1) 1 var(--ts-ui-masonry-lane-min, 14rem);
+    min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+    max-width: 100%;
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item:not(.ts-ui-masonry__item--photo) {
+    flex: 1 1 var(--ts-ui-masonry-lane-min, 14rem);
+    min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+  }
+}
+
+/* Explicit uniform grid (multi-column everywhere; not “packed” masonry) */
+.ts-ui-masonry--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 12rem), 1fr));
+  gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ts-ui-masonry--grid .ts-ui-masonry__item {
+  margin-bottom: 0;
+  min-width: 0;
+}

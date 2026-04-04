@@ -64,26 +64,27 @@ class TSColorUtil {
     };
   }
 
-  /** Generate dark-mode palette from accent color */
+  /** Generate dark-mode palette from accent color (avoid pure #000 — reads harsh on OLED) */
   static darkPalette(accent) {
     const rgb = typeof accent === 'string' ? this.parse(accent) : accent;
+    const ink = '#0c0d12';
+    const ink2 = '#12141c';
     return [
-      // Circle 0: main accent gradient
-      [this.toHex(rgb), this.toHex(this.darken(rgb, 0.5)), this.toHex(this.darken(rgb, 0.85))],
-      // Circle 1: dark shadow circles
-      ['#000000', this.toHex(this.darken(rgb, 0.95)), this.toHex(this.darken(rgb, 0.9))],
-      // Circle 2: secondary accent gradient
-      [this.toHex(rgb), this.toHex(this.darken(rgb, 0.5)), this.toHex(this.darken(rgb, 0.85))],
+      [this.toHex(rgb), this.toHex(this.darken(rgb, 0.48)), this.toHex(this.darken(rgb, 0.78))],
+      [ink2, this.toHex(this.darken(rgb, 0.9)), ink],
+      [this.toHex(this.darken(rgb, 0.32)), this.toHex(this.darken(rgb, 0.62)), ink2],
     ];
   }
 
   /** Generate light-mode palette from accent color */
   static lightPalette(accent) {
     const rgb = typeof accent === 'string' ? this.parse(accent) : accent;
+    // Darken the accent by 20% for better contrast
+    const darker = this.darken(rgb, 0.2);
     return [
-      [this.toHex(this.lighten(rgb, 0.5)), this.toHex(this.lighten(rgb, 0.7)), '#FFFFFF'],
+      [this.toHex(rgb), this.toHex(darker), '#FFFFFF'],
       [this.toHex(this.lighten(rgb, 0.6)), '#CCCCCC', '#CCCCCC'],
-      [this.toHex(this.lighten(rgb, 0.5)), this.toHex(this.lighten(rgb, 0.5)), '#FFFFFF'],
+      [this.toHex(rgb), this.toHex(rgb), '#FFFFFF'],
     ];
   }
 }
@@ -245,6 +246,13 @@ class TSGradientCanvas {
     this.lastHeight = 0;
     this._resizeTimeout = null;
     this._running = false;
+    this._paused = false;
+    this._io = null;
+    this._resolvedBackground = null;
+    this._bgProbe = null;
+    this._accentListener = null;
+    this._readyListener = null;
+    this._visibilityListener = null;
 
     // Read accent color from Toolskin CSS variables
     this._accent = this._readAccent();
@@ -262,7 +270,30 @@ class TSGradientCanvas {
 
   _getBackground() {
     if (this.opts.background) return this.opts.background;
-    return this.opts.theme === 'dark' ? '#09090b' : '#ffffff';
+    if (this.opts.theme === 'light') return 'var(--ts-bg-1)'; // light gray
+    return '#09090b';
+  }
+
+  /** Resolved RGB for canvas fillRect (canvas cannot paint CSS var strings reliably) */
+  _getResolvedBackgroundColor() {
+    if (this._resolvedBackground) return this._resolvedBackground;
+    if (this.opts.background && !String(this.opts.background).includes('var(')) {
+      this._resolvedBackground = this.opts.background;
+      return this._resolvedBackground;
+    }
+    if (!this._bgProbe) {
+      this._bgProbe = document.createElement('div');
+      this._bgProbe.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;visibility:hidden';
+      document.body.appendChild(this._bgProbe);
+    }
+    this._bgProbe.style.background = this.opts.background || 'var(--ts-bg-body)';
+    const rgb = getComputedStyle(this._bgProbe).backgroundColor;
+    this._resolvedBackground = rgb && rgb !== 'rgba(0, 0, 0, 0)' ? rgb : '#09090b';
+    return this._resolvedBackground;
+  }
+
+  _invalidateResolvedBackground() {
+    this._resolvedBackground = null;
   }
 
   _getPalette() {
@@ -298,6 +329,17 @@ class TSGradientCanvas {
         pointerEvents: 'none',
       });
       container.insertBefore(this.canvas, container.firstChild);
+
+      if ('IntersectionObserver' in window) {
+        this._io = new IntersectionObserver(
+          ([entry]) => {
+            this._paused = !entry.isIntersecting || document.visibilityState !== 'visible';
+            if (!this._paused && this._running) this._render();
+          },
+          { root: null, rootMargin: '120px', threshold: 0 }
+        );
+        this._io.observe(container);
+      }
     } else {
       // Fixed full-viewport background
       Object.assign(this.canvas.style, {
@@ -354,28 +396,70 @@ class TSGradientCanvas {
 
     // Listen for Toolskin theme changes
     this._onThemeChange = this._onThemeChange.bind(this);
-    document.addEventListener('ts:theme', this._onThemeChange);
+    window.addEventListener('ts:theme-change', this._onThemeChange);
 
-    // Listen for Toolskin accent changes (custom event)
-    document.addEventListener('ts:accent', () => {
+    // Listen for Toolskin accent changes
+    // Reads color from event.detail.color (set by setAccentHex) or falls back to CSS var
+    this._accentListener = (e) => {
+      const color = e && e.detail && (e.detail.color || e.detail.hex || e.detail.accent);
+      this._accent = color || this._readAccent();
+      this._applyPalette();
+      this._invalidateResolvedBackground();
+      if (this._running) this._render();
+    };
+    document.addEventListener('ts:accent', this._accentListener);
+
+    // Listen for Toolskin ready event to sync initial accent
+    this._readyListener = () => {
       this._accent = this._readAccent();
       this._applyPalette();
+      this._invalidateResolvedBackground();
+      if (this._running) this._render();
+    };
+    document.addEventListener('ts:ready', this._readyListener);
+
+    // MutationObserver fallback: watch --ts-accent changes on :root inline style
+    // Covers cases where setAccentHex sets the CSS var but doesn't fire ts:accent
+    this._accentObserver = new MutationObserver(() => {
+      const current = this._readAccent();
+      if (current !== this._accent) {
+        this._accent = current;
+        this._applyPalette();
+        if (this._running) this._render();
+      }
     });
+    this._accentObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    });
+
+    this._visibilityListener = () => {
+      this._paused = document.visibilityState !== 'visible';
+      if (!this._paused && this._running) this._render();
+    };
+    document.addEventListener('visibilitychange', this._visibilityListener);
 
     // Start render loop
     this._running = true;
+    this._paused = document.visibilityState !== 'visible';
     this._render();
   }
 
   _onThemeChange(e) {
-    if (e && e.detail && e.detail.theme) {
-      this.opts.theme = e.detail.theme;
+    if (e && e.detail && e.detail.mode) {
+      this.opts.theme = e.detail.mode;
     } else {
-      // Detect from data-theme attribute
+      // Fallback: detect from data-theme attribute
       const theme = document.documentElement.getAttribute('data-theme');
       if (theme) this.opts.theme = theme;
     }
-    this._applyPalette();
+    this._accent = this._readAccent();   // re-read accent (in case theme affects it)
+    this._invalidateResolvedBackground();
+    this._applyPalette();                // regenerate circle colors
+    // Force immediate render
+    if (this._running) {
+      this._render();
+    }
   }
 
   _applyPalette() {
@@ -400,6 +484,7 @@ class TSGradientCanvas {
 
   _render() {
     if (!this._running || !this.ctx) return;
+    if (this._paused) return;
 
     if (!this.lowPower) {
       requestAnimationFrame(() => this._render());
@@ -410,8 +495,10 @@ class TSGradientCanvas {
     const w = this.canvas.width / this.dpi;
     const h = this.canvas.height / this.dpi;
 
+    if (w <= 0 || h <= 0) return;
+
     this.ctx.clearRect(0, 0, w, h);
-    this.ctx.fillStyle = this._getBackground();
+    this.ctx.fillStyle = this._getResolvedBackgroundColor();
     this.ctx.fillRect(0, 0, w, h);
 
     this.ctx.save();
@@ -442,6 +529,9 @@ class TSGradientCanvas {
     const w = container ? container.clientWidth : window.innerWidth;
     const h = container ? container.clientHeight : window.innerHeight;
 
+    // Skip if dimensions are invalid
+    if (w <= 0 || h <= 0) return;
+
     this.canvas.width = w * this.dpi;
     this.canvas.height = h * this.dpi;
     this.canvas.style.width = w + 'px';
@@ -451,9 +541,12 @@ class TSGradientCanvas {
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.scale(this.dpi, this.dpi);
     }
+    this._invalidateResolvedBackground();
 
     // Re-render once on low-power mode
-    if (this.lowPower) this._render();
+    if (this.lowPower && this._running) {
+      this._render();
+    }
   }
 
   /* ─── Public API ──────────────────────────────────────────────────── */
@@ -462,18 +555,27 @@ class TSGradientCanvas {
   setTheme(theme) {
     this.opts.theme = theme;
     this._applyPalette();
+    if (this._running) {
+      this._render();
+    }
   }
 
   /** Set a custom accent color */
   setAccent(color) {
     this._accent = color;
     this._applyPalette();
+    if (this._running) {
+      this._render();
+    }
   }
 
   /** Set custom color palette directly */
   setPalette(palette) {
     this.opts.accentColors = palette;
     this._applyPalette();
+    if (this._running) {
+      this._render();
+    }
   }
 
   /** Pause the animation */
@@ -495,15 +597,30 @@ class TSGradientCanvas {
     this._running = false;
     this.circles.forEach(c => c.stopAnimation());
     window.removeEventListener('resize', this._onResize);
-    document.removeEventListener('ts:theme', this._onThemeChange);
+    window.removeEventListener('ts:theme-change', this._onThemeChange);
+    document.removeEventListener('ts:accent', this._accentListener);
+    document.removeEventListener('ts:ready', this._readyListener);
+    if (this._accentObserver) this._accentObserver.disconnect();
+    if (this._io) this._io.disconnect();
+    if (this._visibilityListener) document.removeEventListener('visibilitychange', this._visibilityListener);
+    if (this._bgProbe && this._bgProbe.parentNode) this._bgProbe.parentNode.removeChild(this._bgProbe);
     if (this.canvas && this.canvas.parentNode) {
       this.canvas.parentNode.removeChild(this.canvas);
     }
+    this._bgProbe = null;
+    this._resolvedBackground = null;
     this.canvas = null;
     this.ctx = null;
   }
 }
-
+if (typeof Toolskin === 'undefined') {
+  window.addEventListener('ts:ready', () => {
+    // Toolskin is now ready, re-sync canvas
+    if (window.tsGradient) {
+      window.tsGradient.setAccent(window.tsGradient._readAccent());
+    }
+  });
+}
 /* ═══════════════════════════════════════════════════════════════════
    AUTO-INIT
    If a container with class "gradient-canvas" exists, auto-initialize.
@@ -513,14 +630,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const target = document.querySelector('.gradient-canvas');
   if (!target) return;
 
-  // Read theme from data-theme or default
-  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  const bootGradient = () => {
+    if (window.tsGradient) return;
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    window.tsGradient = new TSGradientCanvas({
+      containerId: target.id || null,
+      speed: 0.1,
+      theme: theme,
+      fadeIn: true,
+      fadeDuration: 2.5,
+    });
+  };
 
-  window.tsGradient = new TSGradientCanvas({
-    containerId: target.id || null,
-    speed: 0.1,
-    theme: theme,
-    fadeIn: true,
-    fadeDuration: 2.5,
-  });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0]?.isIntersecting) return;
+      io.disconnect();
+      bootGradient();
+    }, { root: null, rootMargin: '300px', threshold: 0.01 });
+    io.observe(target);
+    return;
+  }
+  bootGradient();
 });

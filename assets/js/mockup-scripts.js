@@ -20,6 +20,25 @@ function toggleSingleClass(id, className) {
  *    navigate → window.location.href
  * ═══════════════════════════════════════════════════════════════════════ */
 
+/**
+ * Shared header / chrome actions for both YSS Studio and Watch mockups.
+ * (Theme modal controls bind inside loadContent — those IDs are not in the page shell.)
+ */
+var YSS_HEADER_ACTIONS = [
+    // ── Header nav — modals ──
+    { sel: '.yss-help-button[title*="Help"]', action: 'modal', url: 'yss-toolpanel-modal_help.html' },
+    { sel: '.yss-help-button[title*="Readme"]', action: 'modal', url: 'yss-toolpanel-modal_readme.html' },
+    { sel: '#yss-theme-select-btn', action: 'modal', url: 'yss-toolpanel-modal_theme.html' },
+    // ── Header nav — panel chrome (synced with Theme modal toggles when open) ──
+    { sel: '#yss-icons-only-toggle-btn', action: 'yssIconOnly' },
+    { sel: '#yss-icons-only-toggle-btn-clone', action: 'yssIconOnly' },
+    { sel: '#yss-toggle-collapse', action: 'class', target: '#yss-panel', cls: 'collapsed' },
+    // ── Header nav — simulated / mock state ──
+    { sel: '#yss-sort-rows-btn', action: 'toast', msg: 'Videos sorted alphabetically A→Z' },
+    { sel: '#yss-tooltip-toggle-btn', action: 'yssTooltipsToggle' },
+    { sel: '#yss-transitions-toggle-btn', action: 'yssTransitionsToggle' },
+];
+
 var MOCKUP_ACTIONS = {
 
     /* ── YSS Studio Mode ────────────────────────────────────────────── */
@@ -32,18 +51,7 @@ var MOCKUP_ACTIONS = {
         actions: [
             // ── Page-level nav ──
             { sel: '#switch-mode', action: 'navigate', url: 'yss-toolpanel-watch-mockup.html' },
-            // ── Header nav — modals ──
-            { sel: '.yss-help-button[title*="Help"]', action: 'modal', url: 'yss-toolpanel-modal_help.html' },
-            { sel: '.yss-help-button[title*="Readme"]', action: 'modal', url: 'yss-toolpanel-modal_readme.html' },
-            // ── Header nav — toggles ──
-            { sel: '#yss-theme-select-btn', action: 'modal', url: 'yss-toolpanel-modal_themeselector.html' },
-            { sel: '#yss-icons-only-toggle-btn', action: 'class', target: '#yss-panel', cls: 'yss-buttons-notext' },
-            { sel: '#yss-icons-only-toggle-btn-clone', action: 'class', target: '#yss-panel', cls: 'yss-buttons-notext' },
-            { sel: '#yss-toggle-collapse', action: 'class', target: '#yss-panel', cls: 'collapsed' },
-            // ── Header nav — simulated ──
-            { sel: '#yss-sort-rows-btn', action: 'toast', msg: 'Videos sorted alphabetically A→Z' },
-            { sel: '#yss-tooltip-toggle-btn', action: 'toast', msg: 'Tooltips toggled' },
-            { sel: '#yss-transitions-toggle-btn', action: 'toast', msg: 'UI transitions toggled' },
+        ].concat(YSS_HEADER_ACTIONS, [
             // ── Controls row 1 ──
             { sel: '#yss-start-stop-btn', action: 'modal', url: 'yss-toolpanel-modal_scheduler_real.html' },
             { sel: '#yss-unlist-btn', action: 'toast', msg: 'Un-List: requires "Scheduled" visibility filter' },
@@ -63,7 +71,7 @@ var MOCKUP_ACTIONS = {
             { sel: '#yss-toggle-collapse-status-block', action: 'toggle', target: '#yss-status-block' },
             // ── Status / Log actions ──
             { sel: '#yss-csv-download-btn', action: 'toast', msg: 'CSV download would trigger here' },
-        ]
+        ])
     },
 
     /* ── YSS Watch Mode ─────────────────────────────────────────────── */
@@ -76,16 +84,7 @@ var MOCKUP_ACTIONS = {
         actions: [
             // ── Page-level nav ──
             { sel: '#switch-mode', action: 'navigate', url: 'yss-toolpanel-studio-mockup.html' },
-            // ── Header nav ──
-            { sel: '.yss-help-button[title*="Help"]', action: 'modal', url: 'yss-toolpanel-modal_help.html' },
-            { sel: '.yss-help-button[title*="Readme"]', action: 'modal', url: 'yss-toolpanel-modal_readme.html' },
-            { sel: '#yss-theme-select-btn', action: 'modal', url: 'yss-toolpanel-modal_themeselector.html' },
-            { sel: '#yss-icons-only-toggle-btn', action: 'class', target: '#yss-panel', cls: 'yss-buttons-notext' },
-            { sel: '#yss-icons-only-toggle-btn-clone', action: 'class', target: '#yss-panel', cls: 'yss-buttons-notext' },
-            { sel: '#yss-toggle-collapse', action: 'class', target: '#yss-panel', cls: 'collapsed' },
-            { sel: '#yss-sort-rows-btn', action: 'toast', msg: 'Videos sorted alphabetically A→Z' },
-            { sel: '#yss-tooltip-toggle-btn', action: 'toast', msg: 'Tooltips toggled' },
-            { sel: '#yss-transitions-toggle-btn', action: 'toast', msg: 'UI transitions toggled' },
+        ].concat(YSS_HEADER_ACTIONS, [
             // ── Transcript row ──
             { sel: '#yss-fetch-transcript-btn', action: 'toast', msg: 'Fetching transcript for current video…' },
             { sel: '#yss-batch-transcript-btn', action: 'toggle', target: '#yt-batch-controls-wrapper' },
@@ -94,7 +93,7 @@ var MOCKUP_ACTIONS = {
             { sel: '#yss-summarizer-toggle-btn', action: 'toggle', target: '#yt-sum-batch-controls-wrapper' },
             { sel: '#yss-summarizer-settings-btn', action: 'toast', msg: 'Summarizer settings would open here' },
             { sel: '#yss-summarizer-history-btn', action: 'modal', url: 'yss-toolpanel-modal_transcript_summary.html' },
-        ]
+        ])
     },
 
     /* ── Suno ────────────────────────────────────────────────────────── */
@@ -161,6 +160,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── Bind all configured actions ──
     _bindPageActions(pageConfig.actions);
+
+    // Toolskin hover tooltips for YSS mockups (script order: mockup-scripts → toolskin.js)
+    if ((pageKey === 'yss-studio' || pageKey === 'yss-watch') && typeof Toolskin !== 'undefined' && Toolskin.initTooltips) {
+        setTimeout(function () {
+            Toolskin.initTooltips({
+                enabled: true,
+                scopeSelector: '#yss-panel, #modal-container',
+            });
+        }, 0);
+    }
 });
 
 
@@ -205,6 +214,170 @@ function _initHamburger(cfg) {
 }
 
 
+/* ═══════════════════════════════════════════════════════════════════════
+ *  YSS showcase — Theme modal + header toggles (panel class sync)
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+function _yssGetPanel() {
+    return document.querySelector('#yss-panel');
+}
+
+/** Theme modal root inside the open modal container, if any */
+function _yssThemeModalRoot() {
+    var mc = document.getElementById('modal-container');
+    if (!mc || mc.style.display === 'none') return null;
+    return mc.querySelector('#yss-theme-modal');
+}
+
+function _yssSetNestedOptionsVisible(modalRoot, visible) {
+    var nest = modalRoot && modalRoot.querySelector('.yss-nested-options');
+    if (!nest) return;
+    nest.style.display = visible ? 'block' : 'none';
+}
+
+function _yssStripFlatNestedClasses(panel) {
+    panel.classList.remove('yss-gradient-btn', 'color-hover');
+}
+
+/**
+ * Apply #theme-default / #theme-flat selection to #yss-panel (delegated handlers call this).
+ */
+function _yssApplyThemeRadiosToPanel(modalRoot, panel) {
+    if (!modalRoot || !panel) return;
+    var flatR = modalRoot.querySelector('#theme-flat');
+    var defaultR = modalRoot.querySelector('#theme-default');
+    if (!flatR || !defaultR) return;
+
+    if (flatR.checked) {
+        panel.classList.add('flat-theme');
+        _yssSetNestedOptionsVisible(modalRoot, true);
+    } else {
+        panel.classList.remove('flat-theme');
+        _yssStripFlatNestedClasses(panel);
+        var g = modalRoot.querySelector('#gradient-buttons-toggle');
+        var c = modalRoot.querySelector('#color-hover-toggle');
+        if (g) g.checked = false;
+        if (c) c.checked = false;
+        _yssSetNestedOptionsVisible(modalRoot, false);
+    }
+    _yssSyncThemeModalFromPanel(modalRoot);
+}
+
+function _yssMockupTooltipsOn(panel) {
+    return panel.getAttribute('data-mockup-tooltips') !== 'off';
+}
+
+function _yssMockupSetTooltips(panel, on) {
+    if (on) panel.removeAttribute('data-mockup-tooltips');
+    else panel.setAttribute('data-mockup-tooltips', 'off');
+}
+
+/**
+ * @param {Element} [optModalRoot]  Pass when binding a freshly injected theme modal
+ */
+function _yssSyncThemeModalFromPanel(optModalRoot) {
+    var panel = _yssGetPanel();
+    var modalRoot = optModalRoot || _yssThemeModalRoot();
+    if (!panel || !modalRoot) return;
+
+    var defaultR = modalRoot.querySelector('#theme-default');
+    var flatR = modalRoot.querySelector('#theme-flat');
+    var isFlat = panel.classList.contains('flat-theme');
+    if (defaultR) defaultR.checked = !isFlat;
+    if (flatR) flatR.checked = isFlat;
+
+    _yssSetNestedOptionsVisible(modalRoot, isFlat);
+
+    var grad = modalRoot.querySelector('#gradient-buttons-toggle');
+    if (grad) {
+        grad.disabled = !isFlat;
+        grad.checked = isFlat && panel.classList.contains('yss-gradient-btn');
+    }
+    var ch = modalRoot.querySelector('#color-hover-toggle');
+    if (ch) {
+        ch.disabled = !isFlat;
+        ch.checked = isFlat && panel.classList.contains('color-hover');
+    }
+
+    var icons = modalRoot.querySelector('#icons-only-modal-toggle');
+    if (icons) icons.checked = panel.classList.contains('yss-buttons-notext');
+
+    var trans = modalRoot.querySelector('#transitions-modal-toggle');
+    if (trans) trans.checked = !panel.classList.contains('no-transitions');
+
+    var tips = modalRoot.querySelector('#tooltips-modal-toggle');
+    if (tips) tips.checked = _yssMockupTooltipsOn(panel);
+}
+
+/**
+ * Binds theme / appearance controls inside yss-toolpanel-modal_theme.html
+ */
+function _initYssThemeModal(container) {
+    var modalRoot = container.querySelector('#yss-theme-modal');
+    if (!modalRoot) return;
+
+    var panel = _yssGetPanel();
+    if (!panel) return;
+
+    _yssSyncThemeModalFromPanel(modalRoot);
+
+    /* Theme radios: listen on the overlay — change fires after the radio value commits. */
+    modalRoot.addEventListener('change', function (e) {
+        var t = e.target;
+        if (!t || (t.id !== 'theme-default' && t.id !== 'theme-flat')) return;
+        _yssApplyThemeRadiosToPanel(modalRoot, panel);
+    });
+
+    var grad = modalRoot.querySelector('#gradient-buttons-toggle');
+    if (grad) {
+        grad.addEventListener('change', function () {
+            if (!panel.classList.contains('flat-theme')) {
+                this.checked = false;
+                return;
+            }
+            if (this.checked) panel.classList.add('yss-gradient-btn');
+            else panel.classList.remove('yss-gradient-btn');
+        });
+    }
+
+    var colorHover = modalRoot.querySelector('#color-hover-toggle');
+    if (colorHover) {
+        colorHover.addEventListener('change', function () {
+            if (!panel.classList.contains('flat-theme')) {
+                this.checked = false;
+                return;
+            }
+            if (this.checked) panel.classList.add('color-hover');
+            else panel.classList.remove('color-hover');
+        });
+    }
+
+    var iconsOnly = modalRoot.querySelector('#icons-only-modal-toggle');
+    if (iconsOnly) {
+        iconsOnly.addEventListener('change', function () {
+            if (this.checked) panel.classList.add('yss-buttons-notext');
+            else panel.classList.remove('yss-buttons-notext');
+        });
+    }
+
+    var trans = modalRoot.querySelector('#transitions-modal-toggle');
+    if (trans) {
+        trans.addEventListener('change', function () {
+            if (this.checked) panel.classList.remove('no-transitions');
+            else panel.classList.add('no-transitions');
+        });
+    }
+
+    var tips = modalRoot.querySelector('#tooltips-modal-toggle');
+    if (tips) {
+        tips.addEventListener('change', function () {
+            _yssMockupSetTooltips(panel, this.checked);
+            _showToast('Tooltips toggled');
+        });
+    }
+}
+
+
 /**
  * Reads the action config array and binds click handlers.
  * Removes any inline onclick to avoid double-firing.
@@ -213,40 +386,70 @@ function _bindPageActions(actions) {
     if (!actions) return;
 
     actions.forEach(function (cfg) {
-        var el = document.querySelector(cfg.sel);
-        if (!el) return;
+        var els = document.querySelectorAll(cfg.sel);
+        if (!els.length) return;
 
-        // Remove legacy inline onclick (config is the single source of truth)
-        el.removeAttribute('onclick');
-        el.onclick = null;
+        els.forEach(function (el) {
+            el.removeAttribute('onclick');
+            el.onclick = null;
 
-        el.addEventListener('click', function (e) {
-            // Don't intercept direct clicks on form controls
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+            el.addEventListener('click', function (e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
-            switch (cfg.action) {
-                case 'modal':
-                    loadContent(cfg.url, 'modal-container');
-                    break;
+                switch (cfg.action) {
+                    case 'modal':
+                        loadContent(cfg.url, 'modal-container');
+                        break;
 
-                case 'toggle':
-                    var t = document.querySelector(cfg.target);
-                    if (t) t.style.display = (t.style.display === 'flex') ? 'none' : 'flex';
-                    break;
+                    case 'toggle':
+                        var t = document.querySelector(cfg.target);
+                        if (t) t.style.display = (t.style.display === 'flex') ? 'none' : 'flex';
+                        break;
 
-                case 'class':
-                    var t2 = document.querySelector(cfg.target);
-                    if (t2) t2.classList.toggle(cfg.cls);
-                    break;
+                    case 'class':
+                        var t2 = document.querySelector(cfg.target);
+                        if (t2) t2.classList.toggle(cfg.cls);
+                        break;
 
-                case 'toast':
-                    _showToast(cfg.msg);
-                    break;
+                    case 'toast':
+                        _showToast(cfg.msg);
+                        break;
 
-                case 'navigate':
-                    window.location.href = cfg.url;
-                    break;
-            }
+                    case 'navigate':
+                        window.location.href = cfg.url;
+                        break;
+
+                    case 'yssIconOnly': {
+                        var p = _yssGetPanel();
+                        if (p) p.classList.toggle('yss-buttons-notext');
+                        _yssSyncThemeModalFromPanel();
+                        break;
+                    }
+
+                    case 'yssTransitionsToggle': {
+                        var p2 = _yssGetPanel();
+                        if (p2) {
+                            p2.classList.toggle('no-transitions');
+                            _showToast('UI transitions toggled');
+                        }
+                        _yssSyncThemeModalFromPanel();
+                        break;
+                    }
+
+                    case 'yssTooltipsToggle': {
+                        var p3 = _yssGetPanel();
+                        if (p3) {
+                            _yssMockupSetTooltips(p3, !_yssMockupTooltipsOn(p3));
+                            _showToast('Tooltips toggled');
+                        }
+                        _yssSyncThemeModalFromPanel();
+                        break;
+                    }
+
+                    default:
+                        break;
+                }
+            });
         });
     });
 }
@@ -342,6 +545,7 @@ async function loadContent(url, targetId) {
         // No inline <script> needed in modal HTML — just add the right classes.
         _initDatepickers(target);
         _initFormToggles(target);
+        _initYssThemeModal(target);
         // --- AUTO-INIT UI WIDGETS END ---
 
     } catch (error) {
@@ -507,13 +711,15 @@ function _initFormToggles(container) {
     container.querySelectorAll('.yss-input-container-clickable').forEach(function (el) {
         el.style.cursor = 'pointer';
         el.addEventListener('click', function (e) {
-            // Don't re-toggle if the click was directly on the input
             if (e.target.tagName === 'INPUT') return;
             var input = el.querySelector('input[type="checkbox"], input[type="radio"]');
-            if (input) {
+            if (!input) return;
+            if (input.type === 'radio') {
+                input.checked = true;
+            } else {
                 input.checked = !input.checked;
-                input.dispatchEvent(new Event('change', { bubbles: true }));
             }
+            input.dispatchEvent(new Event('change', { bubbles: true }));
         });
     });
 

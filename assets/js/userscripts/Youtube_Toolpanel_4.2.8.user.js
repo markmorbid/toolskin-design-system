@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Youtube Studio Toolpanel Mega Rebuild 31
+// @name         Youtube Studio Toolpanel Mega Rebuild 32
 // @namespace    Violentmonkey Scripts
-// @version      4.2.8
+// @version      4.2.8.1
 // @description  A multi-tool panel for YouTube Studio and a sync bridge for the Calendar Viewer. Added the replace text on titles function. Disable all  Notifs Automation  and Bulk  Downloader
 // @author       SatoshiSea
 // @match        https://studio.youtube.com/*
@@ -14,7 +14,7 @@
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addValueChangeListener
-// @resource     IMPORTED_CSS https://satsea.io/toolskin-showcase/assets/css/Youtube_Toolpanel_4.2.7.user.css?v=4.2.8.16
+// @resource     IMPORTED_CSS https://satsea.io/toolskin-showcase/assets/css/Youtube_Toolpanel_4.2.7.user.css?v=4.2.8.17
 // @grant        GM_getResourceText
 // @grant        GM_addStyle
 // @grant        GM_info
@@ -7505,8 +7505,7 @@ body:not(:has(.summary)) h1:has(+ h1, + header > h1):first-child {
                                             className: 'yss-btn yss-btn-secondary',
                                             label: ' Settings',
                                             onClick: () => {
-                                                const summarizerWrapper = getOrCreateSummarizerPanel(true);
-                                                if (!summarizerWrapper) return;
+                                                const summarizerWrapper = getOrCreateSummarizerPanel();
                                                 if (summarizerWrapper.style.display === 'none') {
                                                     summarizerWrapper.style.display = 'flex';
                                                     GM_setValue(GM_KEYS.td_sum_batchWrapperVisible, true);
@@ -27391,24 +27390,24 @@ incomplete_video_ghi345jkl67.crdownload`;
     }
 
     /** Gets or creates the persistent batch panel UI. */
-    function getOrCreateTranscriptBatchPanel(force = false) {
+    function getOrCreateTranscriptBatchPanel() {
         // CHANGED: Only create panel on www.youtube.com, not on studio.youtube.com
         if (!isOnYouTubeWatchPage()) {
+            // If panel exists on studio, remove it
             const existingPanel = document.getElementById(TD_BUTTON_IDS.batchWrapper);
-            if (existingPanel) existingPanel.remove();
+            if (existingPanel) {
+                existingPanel.remove();
+            }
             return null;
         }
 
         let batchWrapper = document.getElementById(TD_BUTTON_IDS.batchWrapper);
         if (batchWrapper) return batchWrapper;
 
+        // Only create if visible or docked
         const shouldBeVisible = GM_getValue(GM_KEYS.td_batchWrapperVisible, false);
-        const isDocked = GM_getValue(GM_KEYS.isTranscriptPanelDocked, false);
-
-        // Create only when needed or explicitly forced by user action.
-        if (!force && !shouldBeVisible && !isDocked) {
-            return null;
-        }
+        const isDocked = GM_getValue('isTranscriptPanelDocked', false);
+        if (!shouldBeVisible && !isDocked) return null;
 
         return _buildTranscriptBatchPanel();
     }
@@ -31404,7 +31403,7 @@ incomplete_video_ghi345jkl67.crdownload`;
             return;
         }
 
-        const summarizerWrapper = getOrCreateSummarizerPanel(true);
+        const summarizerWrapper = getOrCreateSummarizerPanel();
         if (!summarizerWrapper) return;
 
         const isVisible = summarizerWrapper.style.display !== 'none';
@@ -31414,23 +31413,24 @@ incomplete_video_ghi345jkl67.crdownload`;
     }
 
     /** Gets or creates the persistent summarizer panel UI. */
-    function getOrCreateSummarizerPanel(force = false) {
+    function getOrCreateSummarizerPanel() {
         // CHANGED: Only create panel on www.youtube.com, not on studio.youtube.com
         if (!isOnYouTubeWatchPage()) {
+            // If panel exists on studio, remove it
             const existingPanel = document.getElementById(TD_SUM_BUTTON_IDS.sum_batchWrapper);
-            if (existingPanel) existingPanel.remove();
+            if (existingPanel) {
+                existingPanel.remove();
+            }
             return null;
         }
 
         let summarizerWrapper = document.getElementById(TD_SUM_BUTTON_IDS.sum_batchWrapper);
         if (summarizerWrapper) return summarizerWrapper;
 
+        // Only create if visible or docked
         const shouldBeVisible = GM_getValue(GM_KEYS.td_sum_batchWrapperVisible, false);
         const isDocked = GM_getValue(GM_KEYS.isSummarizePanelDocked, false);
-
-        if (!force && !shouldBeVisible && !isDocked) {
-            return null;
-        }
+        if (!shouldBeVisible && !isDocked) return null;
 
         return _buildSummarizerPanel();
     }
