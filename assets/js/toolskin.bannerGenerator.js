@@ -1999,6 +1999,17 @@ function runGeneratorInit() {
     bindAll();
     syncInputs();
     apply();
+    // Re-init range slider fills after syncInputs changed values
+    document.querySelectorAll('input[type="range"].ts-range').forEach(function (el) {
+        var min = parseFloat(el.min) || 0;
+        var max = parseFloat(el.max) || 100;
+        var val = parseFloat(el.value) || min;
+        var pct = max !== min ? ((val - min) / (max - min)) * 100 : 0;
+        el.style.setProperty('--ts-range-val', val);
+        el.style.setProperty('--ts-range-min', min);
+        el.style.setProperty('--ts-range-max', max);
+        el.style.setProperty('--ts-range-percent', pct + '%');
+    });
     const genRoot = document.getElementById('ts-app');
     if (window.ToolskinUIKit && typeof window.ToolskinUIKit.init === 'function') {
         window.ToolskinUIKit.init(genRoot || document);

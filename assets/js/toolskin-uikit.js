@@ -100,42 +100,55 @@
     const item = btn.closest('.ts-ui-accordion__item');
     const dual = root.classList.contains('ts-ui-accordion--dual-icon');
     const togglePlus = root.classList.contains('ts-ui-accordion--toggle-plus');
+
+    // ✅ PREVENT double enhancement
+    if (btn.hasAttribute('data-ts-accordion-enhanced')) return;
+    btn.setAttribute('data-ts-accordion-enhanced', 'true');
+
+    // ✅ PRESERVE original label content before manipulation
+    const existingLabel = btn.querySelector('.ts-ui-accordion__label');
+    let labelText = '';
+    if (existingLabel) {
+      labelText = existingLabel.textContent.trim();
+      // Remove existing label to prevent duplication
+      existingLabel.remove();
+    } else {
+      // Extract text from button, excluding any existing icons
+      labelText = Array.from(btn.childNodes)
+        .filter(n => n.nodeType === Node.TEXT_NODE)
+        .map(n => n.textContent.trim())
+        .join(' ') || btn.textContent.trim();
+    }
+
+    // ✅ CREATE or get header-main container
     let main = btn.querySelector('.ts-ui-accordion__header-main');
     if (!main) {
       main = document.createElement('span');
       main.className = 'ts-ui-accordion__header-main';
-      const ind = btn.querySelector('.ts-ui-accordion__indicator');
-      const frag = document.createDocumentFragment();
-      btn.childNodes.forEach((n) => {
-        if (n.nodeType === 1 && n.classList && n.classList.contains('ts-ui-accordion__indicator')) return;
-        frag.appendChild(n);
-      });
-      main.appendChild(frag);
-      if (ind) btn.insertBefore(main, ind);
-      else btn.appendChild(main);
+
+      // Clear existing content except indicators
+      const indicator = btn.querySelector('.ts-ui-accordion__indicator');
+      btn.innerHTML = '';
+      btn.appendChild(main);
+      if (indicator) btn.appendChild(indicator);
     }
 
+    // ✅ ADD icon if specified (only if not already present)
     const ic = btn.getAttribute('data-icon');
     if (ic && !main.querySelector('.ts-ui-accordion__icon')) {
-      const wrap = document.createElement('span');
-      wrap.className = 'ts-ui-accordion__icon';
-      wrap.setAttribute('aria-hidden', 'true');
-      wrap.innerHTML = accordionIconHtml(ic);
-      main.insertBefore(wrap, main.firstChild);
+      const iconWrap = document.createElement('span');
+      iconWrap.className = 'ts-ui-accordion__icon';
+      iconWrap.setAttribute('aria-hidden', 'true');
+      iconWrap.innerHTML = accordionIconHtml(ic);
+      main.appendChild(iconWrap);
     }
 
-    if (!main.querySelector('.ts-ui-accordion__label')) {
-      const skip = main.querySelector('.ts-ui-accordion__icon');
-      const rest = [];
-      main.childNodes.forEach((n) => {
-        if (n !== skip) rest.push(n);
-      });
-      if (rest.length) {
-        const label = document.createElement('span');
-        label.className = 'ts-ui-accordion__label';
-        rest.forEach((n) => label.appendChild(n));
-        main.appendChild(label);
-      }
+    // ✅ ADD label with preserved text (only if not already present)
+    if (labelText && !main.querySelector('.ts-ui-accordion__label')) {
+      const label = document.createElement('span');
+      label.className = 'ts-ui-accordion__label';
+      label.textContent = labelText;
+      main.appendChild(label);
     }
 
     if (togglePlus && !btn.querySelector('.ts-ui-accordion__indicator')) {
@@ -156,11 +169,8 @@
         catWrap.className = 'ts-ui-accordion__category-icon ts-accordion__category-icon';
         catWrap.setAttribute('aria-hidden', 'true');
         catWrap.innerHTML = accordionIconHtml(catIc);
-        const sep = document.createElement('span');
-        sep.className = 'ts-ui-accordion__category-sep ts-accordion__category-sep';
-        sep.setAttribute('aria-hidden', 'true');
-        btn.insertBefore(sep, main);
-        btn.insertBefore(catWrap, sep);
+        /* ✅ REMOVED: separator creation - using border instead */
+        btn.insertBefore(catWrap, main);
       }
     }
   }
@@ -642,125 +652,168 @@
       window.addEventListener('pointerup', up);
     });
   }
+/* ── Sortable list (pointer + ghost + FLIP displacement) ─ */
+function TSUISortable(el) {
+  if (!el || el.__tsUiSortable) return;
+  el.__tsUiSortable = true;
 
-  /* ── Sortable list (pointer + ghost + placeholder displacement) ─ */
-  function TSUISortable(el) {
-    if (!el || el.__tsUiSortable) return;
-    el.__tsUiSortable = true;
-    const handleOnly = el.hasAttribute('data-ts-ui-sort-handle-only');
-    const handleSel = el.getAttribute('data-ts-ui-sort-handle') || '.ts-ui-sortable__handle';
-    const dragSel = el.getAttribute('data-ts-ui-sort-drag');
+  const handleOnly = el.hasAttribute('data-ts-ui-sort-handle-only');
+  const handleSel  = el.getAttribute('data-ts-ui-sort-handle') || '.ts-ui-sortable__handle';
+  const dragSel    = el.getAttribute('data-ts-ui-sort-drag');
 
-    el.querySelectorAll(':scope > .ts-ui-sortable__item').forEach((item) => {
-      let dragHandle = item;
-      if (dragSel) {
-        dragHandle = item.querySelector(dragSel) || item;
-      } else if (handleOnly) {
-        dragHandle = item.querySelector(handleSel);
-      }
-      if (!dragHandle) return;
-
-      dragHandle.addEventListener('pointerdown', (e) => {
-        if (dragSel && !e.target.closest(dragSel)) return;
-        if (handleOnly && !dragSel && !e.target.closest(handleSel)) return;
-        if (e.button !== 0) return;
-        e.preventDefault();
-
-        const dragItem = item;
-        let pid = e.pointerId;
-        dragHandle.setPointerCapture(pid);
-
-        const rect = dragItem.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left;
-        const offsetY = e.clientY - rect.top;
-
-        const placeholder = document.createElement('div');
-        placeholder.className = 'ts-ui-sortable__placeholder';
-        placeholder.style.height = rect.height + 'px';
-        dragItem.parentNode.insertBefore(placeholder, dragItem);
-
-        const ghost = dragItem.cloneNode(true);
-        if (ghost.id) ghost.removeAttribute('id');
-        ghost.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
-        ghost.classList.add('ts-ui-sortable__ghost');
-        ghost.classList.remove('ts-ui-sortable__item--source');
-        Object.assign(ghost.style, {
-          position: 'fixed',
-          left: rect.left + 'px',
-          top: rect.top + 'px',
-          width: rect.width + 'px',
-          margin: '0',
-          zIndex: '100000',
-          pointerEvents: 'none',
-          boxSizing: 'border-box',
-        });
-        document.body.appendChild(ghost);
-
-        dragItem.classList.add('ts-ui-sortable__item--source');
-        dragItem.style.visibility = 'hidden';
-        dragItem.style.height = '0';
-        dragItem.style.overflow = 'hidden';
-        dragItem.style.marginBottom = '0';
-        dragItem.style.paddingTop = '0';
-        dragItem.style.paddingBottom = '0';
-        dragItem.style.border = 'none';
-
-        function movePlaceholder(clientY) {
-          const nodes = [...el.children].filter(
-            (n) =>
-              n !== dragItem &&
-              (n.classList.contains('ts-ui-sortable__item') || n.classList.contains('ts-ui-sortable__placeholder'))
-          );
-          let placed = false;
-          for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
-            const r = node.getBoundingClientRect();
-            const mid = r.top + r.height / 2;
-            if (clientY < mid) {
-              el.insertBefore(placeholder, node);
-              placed = true;
-              break;
-            }
-          }
-          if (!placed) el.appendChild(placeholder);
-        }
-
-        function move(ev) {
-          if (ev.pointerId !== pid) return;
-          ghost.style.left = ev.clientX - offsetX + 'px';
-          ghost.style.top = ev.clientY - offsetY + 'px';
-          movePlaceholder(ev.clientY);
-        }
-
-        function up(ev) {
-          if (ev.pointerId !== pid) return;
-          try {
-            dragHandle.releasePointerCapture(pid);
-          } catch (_) {}
-          window.removeEventListener('pointermove', move);
-          window.removeEventListener('pointerup', up);
-          ghost.remove();
-          if (placeholder && placeholder.parentNode) {
-            placeholder.parentNode.insertBefore(dragItem, placeholder);
-            placeholder.remove();
-          }
-          dragItem.style.visibility = '';
-          dragItem.style.height = '';
-          dragItem.style.overflow = '';
-          dragItem.style.marginBottom = '';
-          dragItem.style.paddingTop = '';
-          dragItem.style.paddingBottom = '';
-          dragItem.style.border = '';
-          dragItem.classList.remove('ts-ui-sortable__item--source');
-          el.dispatchEvent(new CustomEvent('ts-ui:sort-end', { bubbles: true }));
-        }
-
-        move(e);
-        window.addEventListener('pointermove', move);
-        window.addEventListener('pointerup', up);
-      });
-    });
+  /* ── FLIP helper ──
+     Snapshots every sibling's Y position before a DOM move,
+     then applies an inverse translateY that the CSS transition
+     animates back to 0 → smooth displacement. */
+  function flipSnapshot(container, exclude) {
+    const map = new Map();
+    for (const child of container.children) {
+      if (child === exclude) continue;
+      map.set(child, child.getBoundingClientRect().top);
+    }
+    return map;
   }
+
+  function flipAnimate(snapshot, container, exclude) {
+    for (const [child, oldTop] of snapshot) {
+      if (child === exclude || !child.isConnected) continue;
+      const newTop = child.getBoundingClientRect().top;
+      const delta  = oldTop - newTop;
+      if (Math.abs(delta) < 1) continue;
+      // Jump to old position, let CSS transition animate to 0
+      child.style.transform = `translateY(${delta}px)`;
+      // Force reflow so the browser registers the "from" position
+      child.offsetHeight; // eslint-disable-line no-unused-expressions
+      child.style.transform = '';
+    }
+  }
+
+  el.querySelectorAll(':scope > .ts-ui-sortable__item').forEach((item) => {
+    let dragHandle = item;
+    if (dragSel) {
+      dragHandle = item.querySelector(dragSel) || item;
+    } else if (handleOnly) {
+      dragHandle = item.querySelector(handleSel);
+    }
+    if (!dragHandle) return;
+
+    dragHandle.addEventListener('pointerdown', (e) => {
+      if (dragSel && !e.target.closest(dragSel)) return;
+      if (handleOnly && !dragSel && !e.target.closest(handleSel)) return;
+      if (e.button !== 0) return;
+      e.preventDefault();
+
+      const dragItem = item;
+      let pid = e.pointerId;
+      dragHandle.setPointerCapture(pid);
+
+      const rect = dragItem.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+
+      /* ── Sorting mode class: enables displacement transitions via CSS ── */
+      el.classList.add('ts-ui-sortable--sorting');
+
+      /* ── Placeholder ── */
+      const placeholder = document.createElement('div');
+      placeholder.className = 'ts-ui-sortable__placeholder';
+      placeholder.style.height = rect.height + 'px';
+      dragItem.parentNode.insertBefore(placeholder, dragItem);
+
+      /* ── Ghost clone ── */
+      const ghost = dragItem.cloneNode(true);
+      if (ghost.id) ghost.removeAttribute('id');
+      ghost.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+      ghost.classList.add('ts-ui-sortable__ghost');
+      ghost.classList.remove('ts-ui-sortable__item--source');
+      Object.assign(ghost.style, {
+        position: 'fixed',
+        left: rect.left + 'px',
+        top: rect.top + 'px',
+        width: rect.width + 'px',
+        margin: '0',
+        zIndex: '100000',
+        pointerEvents: 'none',
+        boxSizing: 'border-box',
+      });
+      document.body.appendChild(ghost);
+
+      /* ── Collapse source item (CSS handles the visual collapse via --source class) ── */
+      dragItem.classList.add('ts-ui-sortable__item--source');
+
+      /* ── Move placeholder with FLIP animation ── */
+      function movePlaceholder(clientY) {
+        const nodes = [...el.children].filter(
+          (n) =>
+            n !== dragItem &&
+            (n.classList.contains('ts-ui-sortable__item') ||
+             n.classList.contains('ts-ui-sortable__placeholder'))
+        );
+
+        // Find target position
+        let target = null;
+        for (let i = 0; i < nodes.length; i++) {
+          const node = nodes[i];
+          if (node === placeholder) continue;
+          const r   = node.getBoundingClientRect();
+          const mid = r.top + r.height / 2;
+          if (clientY < mid) { target = node; break; }
+        }
+
+        // Skip if placeholder is already in the right spot
+        const currentNext = placeholder.nextElementSibling;
+        if (target === currentNext) return;
+        if (!target && currentNext === null) return;
+
+        // FLIP: snapshot → DOM move → animate
+        const snap = flipSnapshot(el, dragItem);
+
+        if (target) {
+          el.insertBefore(placeholder, target);
+        } else {
+          el.appendChild(placeholder);
+        }
+
+        flipAnimate(snap, el, dragItem);
+      }
+
+      function move(ev) {
+        if (ev.pointerId !== pid) return;
+        ghost.style.left = ev.clientX - offsetX + 'px';
+        ghost.style.top  = ev.clientY - offsetY + 'px';
+        movePlaceholder(ev.clientY);
+      }
+
+      function up(ev) {
+        if (ev.pointerId !== pid) return;
+        try { dragHandle.releasePointerCapture(pid); } catch (_) {}
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+
+        ghost.remove();
+
+        if (placeholder && placeholder.parentNode) {
+          placeholder.parentNode.insertBefore(dragItem, placeholder);
+          placeholder.remove();
+        }
+
+        dragItem.classList.remove('ts-ui-sortable__item--source');
+        el.classList.remove('ts-ui-sortable--sorting');
+
+        // Clean up any lingering transforms from FLIP
+        for (const child of el.children) {
+          child.style.transform = '';
+        }
+
+        el.dispatchEvent(new CustomEvent('ts-ui:sort-end', { bubbles: true }));
+      }
+
+      move(e);
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    });
+  });
+}
 
   /* ── Table: bulk row selection + floating bar ─────────────────── */
   function TSUITableBulk(wrap) {

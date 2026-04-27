@@ -640,9 +640,9 @@ class ToolskinConfig {
       mode: 'simple',          // 'simple' | 'tooltip' — simple = circle only, tooltip = full featured
       size: 20,
       grow: 3,
-      easing: 1,            // Faster settle to reduce rAF churn and memory pressure
-      followerEasing: 0.78,    // Follower snaps quickly when enabled
-      follower: false,         // Default off for performance; opt-in per page
+      easing: 0.42,            // Cursor lerp speed (lower = more delay, 1 = instant)
+      followerEasing: 0.12,    // Follower lerp speed (much slower = visible trail delay)
+      follower: true,          // Show trailing follower circle
       label: true,             // Show labels on hover (tooltip mode only)
       arrow: true,             // Show directional arrow on active (tooltip mode only)
       smartPosition: true,     // Reposition near active elements (tooltip mode only)
@@ -744,12 +744,12 @@ class ToolskinConfig {
     const body = document.body;
     const has = (cls) => root.classList.contains(cls) || (body && body.classList.contains(cls));
 
-    if (has('ts-enable-cursor'))       this.current.cursor.enabled = true;
-    if (has('ts-disable-cursor'))      this.current.cursor.enabled = false;
-    if (has('ts-enable-lenis'))        this.current.smoothScroll.enabled = true;
-    if (has('ts-disable-lenis'))       this.current.smoothScroll.enabled = false;
-    if (has('ts-enable-locomotive'))   this.current.locomotiveScroll.enabled = true;
-    if (has('ts-disable-locomotive'))  this.current.locomotiveScroll.enabled = false;
+    if (has('ts-enable-cursor')) this.current.cursor.enabled = true;
+    if (has('ts-disable-cursor')) this.current.cursor.enabled = false;
+    if (has('ts-enable-lenis')) this.current.smoothScroll.enabled = true;
+    if (has('ts-disable-lenis')) this.current.smoothScroll.enabled = false;
+    if (has('ts-enable-locomotive')) this.current.locomotiveScroll.enabled = true;
+    if (has('ts-disable-locomotive')) this.current.locomotiveScroll.enabled = false;
 
     return this.current;
   }
@@ -975,7 +975,7 @@ const TOOLSKIN_SURFACE_PRESETS = {
         'ts-bg-5': '#c5c9ce',
         'ts-text-primary': '#0f1012',
         'ts-text-secondary': '#404347',
-        'ts-text-muted': '#6b6e72',
+        'ts-text-muted': '#5f6266',  /* WCAG AA: 4.77:1 vs bg-3 */
       },
     },
     {
@@ -1187,21 +1187,33 @@ class ToolskinTheme {
     };
   }
 
-  setMode(mode, save = true, opts = {}) {
+setMode(mode, save = true, opts = {}) {
     this.currentMode = mode;
     const theme = mode === 'light' ? this.lightTheme : this.darkTheme;
-
+    // Suppress transitions during theme swap to prevent FOUC / staggered animations.
+    // .ts-no-transition rule is defined in toolskin.css (transition-duration: 0s).
+    const root = this.root;
+    root.classList.add('ts-no-transition');
     this._applyRootFromTheme(theme);
-
     // Update data attribute for CSS targeting
-    this.root.setAttribute('data-theme', mode);
-    this.root.setAttribute('data-ts-theme', mode);
-
+    root.setAttribute('data-theme', mode);
+    root.setAttribute('data-ts-theme', mode);
+    // Force reflow so the no-transition rule takes effect synchronously before
+    // we remove the class in the next frame.
+    void root.offsetHeight;
+    // Re-enable transitions on the next frame — all style changes already applied.
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        root.classList.remove('ts-no-transition');
+      });
+    });
+    // Sync every registered theme toggle trigger to the new mode.
+    // data-theme is the single source of truth; all triggers reflect it.
+    this._syncTriggers(mode);
     // Save preference
     if (save && this.config.savePreference) {
       localStorage.setItem(this.config.storageKey, mode);
     }
-
     // Dispatch event (optionally skip e.g. programmatic refresh)
     if (!opts.suppressThemeChangeEvent) {
       window.dispatchEvent(
@@ -1212,12 +1224,36 @@ class ToolskinTheme {
     }
   }
 
+  /**
+   * Sync all [data-theme-toggle] triggers to the current mode.
+   * Convention: default state (no toggled class, checkbox unchecked) = DARK.
+   *             toggled state (class present, checkbox checked) = LIGHT.
+   * Works for: library labels with inner checkbox, plain buttons with
+   * light/dark icon spans, generic .ts-toggle checkbox switches.
+   */
+  _syncTriggers(mode) {
+    const isLight = mode === 'light';
+    const triggers = document.querySelectorAll('[data-theme-toggle]');
+    triggers.forEach((trigger) => {
+      // 1. Class state — drives library CSS animation + any :has/:is selectors
+      trigger.classList.toggle('theme-toggle--toggled', isLight);
+      // 2. Inner checkbox state — drives native :checked and any dependent CSS
+      const checkbox = trigger.querySelector('input[type="checkbox"]');
+      if (checkbox && checkbox.checked !== isLight) {
+        // Set silently; we don't want this to re-fire the change event
+        checkbox.checked = isLight;
+      }
+      // 3. ARIA state for assistive tech
+      trigger.setAttribute('aria-pressed', String(isLight));
+    });
+  }
+
   toggle() {
     const newMode = this.currentMode === 'dark' ? 'light' : 'dark';
     this.setMode(newMode, true, { userInitiated: true });
   }
 
-  _setupToggle() {
+  /* _setupToggle() {
     // Auto-bind theme toggle buttons
     document.addEventListener('click', e => {
       const btn = e.target.closest('[data-theme-toggle]');
@@ -1226,8 +1262,33 @@ class ToolskinTheme {
         this.toggle();
       }
     });
-  }
+  }*/
 
+  _setupToggle() {
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-theme-toggle]');
+      if (!trigger) return;
+      // --- Double-fire guard ---
+      // When the trigger is a <label> wrapping <input type="checkbox">, the browser
+      // fires click once on the label (user) and once on the input (synthesized).
+      // We handle the event on the label only; bail on the input's synthetic click.
+      if (
+        e.target.tagName === 'INPUT' &&
+        e.target.type === 'checkbox' &&
+        trigger.contains(e.target) &&
+        trigger !== e.target
+      ) {
+        return;
+      }
+      // Always prevent default. For label+checkbox triggers, the default would
+      // forward the click to the <input>, whose default flips checkbox.checked
+      // AFTER _syncTriggers() already set it — undoing the sync on the first
+      // click. _syncTriggers() is the single source of truth for class +
+      // checkbox.checked + aria-pressed, so suppress the browser's default.
+      e.preventDefault();
+      this.toggle();
+    });
+  }
   // Accent color controls
   static setAccent(h, s, l) {
     document.documentElement.style.setProperty('--ts-accent-h', h);
@@ -1388,12 +1449,15 @@ class ToolskinSmooth {
       gsap.ticker.add(this._gsapTicker);
       gsap.ticker.lagSmoothing(0);
     } else {
-      // Fallback: standard RAF loop when GSAP not available
+      // Fallback: standard RAF loop when GSAP not available.
+      // B23 R11 — capture handle so destroy() can cancel; guard in-flight tick
+      // against null this.lenis (RAF scheduled before destroy fires after).
       this._rafLoop = (time) => {
+        if (!this.lenis) return;
         this.lenis.raf(time);
-        requestAnimationFrame(this._rafLoop);
+        this._rafHandle = requestAnimationFrame(this._rafLoop);
       };
-      requestAnimationFrame(this._rafLoop);
+      this._rafHandle = requestAnimationFrame(this._rafLoop);
     }
 
     // Anchor link smooth scroll
@@ -1467,16 +1531,28 @@ class ToolskinSmooth {
       });
     };
     if ('IntersectionObserver' in window) {
+      // Track which sections are currently intersecting; pick the topmost one.
+      const visibleSections = new Map();
       this._scrollSpyIO = new IntersectionObserver((entries) => {
-        let best = null;
         entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          if (!best || entry.intersectionRatio > best.intersectionRatio) {
-            best = entry;
+          if (entry.isIntersecting) {
+            visibleSections.set(entry.target, entry.boundingClientRect.top);
+          } else {
+            visibleSections.delete(entry.target);
           }
         });
-        if (best) setActiveById(best.target.getAttribute('id'));
-      }, { threshold: [0.2, 0.4, 0.6], rootMargin: '-72px 0px -45% 0px' });
+        // Pick the section closest to the top of the viewport
+        let best = null;
+        let bestTop = Infinity;
+        visibleSections.forEach((top, section) => {
+          const currentTop = section.getBoundingClientRect().top;
+          if (currentTop < bestTop) {
+            bestTop = currentTop;
+            best = section;
+          }
+        });
+        if (best) setActiveById(best.getAttribute('id'));
+      }, { threshold: [0.05, 0.2, 0.5], rootMargin: '-72px 0px -35% 0px' });
       sections.forEach(section => this._scrollSpyIO.observe(section));
     } else {
       const firstId = sections[0]?.getAttribute('id');
@@ -1528,10 +1604,49 @@ class ToolskinSmooth {
       gsap.ticker.remove(this._gsapTicker);
       this._gsapTicker = null;
     }
+    // B23 R11 — cancel fallback RAF loop before nulling lenis to avoid
+    // null-deref on the next-scheduled tick (no-GSAP fallback path).
+    if (this._rafHandle) {
+      cancelAnimationFrame(this._rafHandle);
+      this._rafHandle = null;
+    }
+    this._rafLoop = null;
     if (this.lenis && typeof this.lenis.destroy === 'function') {
       this.lenis.destroy();
     }
     this.lenis = null;
+
+    // B23 R11 — Lenis disable trap fix.
+    // lenis injects classes (lenis, lenis-smooth, lenis-stopped, …) on <html>.
+    // CSS rule `.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }`
+    // would otherwise lock scroll after lenis is torn down.
+    // Defensively clean every `lenis*` class plus any inline overflow lenis may
+    // have set on <html>/<body>, so the page falls back to native scrolling.
+    try {
+      const html = document.documentElement;
+      if (html) {
+        Array.from(html.classList).forEach((c) => {
+          if (c === 'lenis' || c.indexOf('lenis-') === 0) {
+            html.classList.remove(c);
+          }
+        });
+        html.style.removeProperty('overflow');
+      }
+      if (document.body) {
+        Array.from(document.body.classList).forEach((c) => {
+          if (c === 'lenis' || c.indexOf('lenis-') === 0) {
+            document.body.classList.remove(c);
+          }
+        });
+        document.body.style.removeProperty('overflow');
+      }
+    } catch (_) { /* noop — defensive */ }
+
+    // Clear the global window.lenis pointer set in _init() so consumers
+    // (e.g. parallax module) don't keep referencing a destroyed instance.
+    if (typeof window !== 'undefined' && window.lenis) {
+      try { delete window.lenis; } catch (_) { window.lenis = null; }
+    }
   }
 }
 
@@ -1913,62 +2028,194 @@ class ToolskinModal {
    Programmatic toast notifications.
    ═══════════════════════════════════════════════════════════════════ */
 
+// Variant → default title fallback. Applied when caller passes a non-default
+// variant but no explicit title. Caller can suppress by passing title:'' or null.
+const TOAST_TITLE_FALLBACK = Object.freeze({
+  success: 'Success',
+  warning: 'Warning',
+  error:   'Error',
+  info:    'Info',
+});
+
 class ToolskinToast {
   constructor() {
     this._container = this._getOrCreateContainer();
   }
 
   _getOrCreateContainer() {
-    let c = document.querySelector('.ts-toast-container');
+    // Use the ts-ui-toast-stack system (better design with progress track + backdrop)
+    let c = document.querySelector('.ts-ui-toast-stack');
     if (!c) {
       c = document.createElement('div');
-      c.className = 'ts-toast-container';
+      c.className = 'ts-ui-toast-stack';
       document.body.appendChild(c);
     }
     return c;
   }
 
+  /**
+   * Resolve the host container for a single toast instance.
+   *
+   * Default host is the auto-managed `.ts-ui-toast-stack`. Callers may route a
+   * toast into a different container (for example `.ts-ui-toast-display`, the
+   * editor preview specimen host) by passing `opts.host` as a CSS selector or
+   * an Element reference. Whatever host is returned is used both as the
+   * insertion target AND as the source of truth for `--ts-toast-duration` —
+   * `_resolveToastDuration` reads computed style off this same element, so a
+   * display-container with its own `--ts-toast-duration` declaration is
+   * honored automatically.
+   */
+  _resolveHost(opts) {
+    const h = opts && opts.host;
+    if (h) {
+      if (typeof h === 'string') {
+        const el = document.querySelector(h);
+        if (el) return el;
+      } else if (h && h.nodeType === 1) {
+        // Duck-type element check to also accept hosts from iframe documents
+        // or DocumentFragment subtrees where `instanceof Element` would fail.
+        return h;
+      }
+    }
+    return this._container;
+  }
+
+  /**
+   * Render a toast.
+   *
+   * Animation timing — two-render-path contract:
+   *
+   *   Path A (programmatic / stack toasts):
+   *     element is constructed → appended to host → first paint shows the
+   *     toast without the `--animate` class on `.ts-ui-toast__track` → a
+   *     `requestAnimationFrame` callback adds `--animate` on the next frame
+   *     → progress-bar animation begins synchronously with the visible
+   *     entrance. This is the canonical path.
+   *
+   *   Path B (static / display-container specimens):
+   *     toast markup is authored in HTML inside `.ts-ui-toast-display` for
+   *     editor previews. The track exists in the DOM but the `--animate`
+   *     modifier class is intentionally absent until interaction (or an
+   *     explicit `Toolskin.showToast` call routed into the display host)
+   *     attaches it. This keeps the specimen visually stable on page load
+   *     and prevents the page-load `requestAnimationFrame` from forcing the
+   *     bar through a single 0→100% sweep before the user has a chance to
+   *     read it.
+   *
+   *   Both paths converge on the same `.ts-ui-toast__track--animate` rule
+   *   driven by `--ts-toast-duration`. The duration token is resolved per
+   *   host (see `_resolveHost`), so display containers that declare a
+   *   different `--ts-toast-duration` are respected without code changes.
+   */
   show(message, opts = {}) {
-    const {
-      type = 'default',
-      title = '',
-      duration = 4000,
-      icon = this._defaultIcon(type),
-    } = opts;
+    const type = opts.type || 'default';
+
+    // Variant → title fallback: if caller provided no `title` key at all and
+    // the variant is one of success/warning/error/info, supply the canonical
+    // title. Explicit empty-string or null suppresses the fallback.
+    const titleProvided = (opts.title !== undefined);
+    const title = titleProvided
+      ? (opts.title || '')
+      : (TOAST_TITLE_FALLBACK[type] || '');
+
+    const icon = (opts.icon !== undefined)
+      ? opts.icon
+      : this._defaultIcon(type);
+
+    // Resolve host (default: stack; opts.host may route to display-container).
+    const stackEl = this._resolveHost(opts);
+
+    // Resolve duration — CSS is the source of truth, read from the actual
+    // host element so each container's `--ts-toast-duration` is honored;
+    // opts.duration overrides.
+    const { ms, cssValue, persistent } = this._resolveToastDuration(stackEl, opts);
 
     const toast = document.createElement('div');
-    toast.className = `ts-toast ts-toast--${type}`;
+    toast.className = `ts-ui-toast ts-ui-toast--${type}`;
     toast.setAttribute('role', 'status');
     toast.setAttribute('aria-live', 'polite');
 
-    toast.innerHTML = `
-      ${icon ? `<span class="ts-toast__icon" aria-hidden="true"><i class="${icon}"></i></span>` : ''}
-      <div class="ts-toast__body">
-        ${title ? `<div class="ts-toast__title">${this._sanitize(title)}</div>` : ''}
-        <div class="ts-toast__msg">${this._sanitize(message)}</div>
-      </div>
-      <button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm" aria-label="Dismiss" style="font-size:0.75rem;color:var(--ts-text-muted)">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    `;
+    // Row: icon + body + close
+    const row = document.createElement('div');
+    row.className = 'ts-ui-toast__row';
 
-    const dismissBtn = toast.querySelector('button');
-    dismissBtn.addEventListener('click', () => this._dismiss(toast));
+    if (icon) {
+      const iconEl = document.createElement('span');
+      iconEl.className = 'ts-ui-toast__icon';
+      iconEl.setAttribute('aria-hidden', 'true');
+      iconEl.innerHTML = `<i class="${icon}"></i>`;
+      row.appendChild(iconEl);
+    }
 
-    this._container.appendChild(toast);
+    const body = document.createElement('div');
+    body.className = 'ts-ui-toast__body';
+    if (title) {
+      const titleEl = document.createElement('div');
+      titleEl.className = 'ts-ui-toast__title';
+      titleEl.textContent = title;
+      body.appendChild(titleEl);
+    }
+    const msgEl = document.createElement('div');
+    msgEl.className = 'ts-ui-toast__msg';
+    msgEl.textContent = message;
+    body.appendChild(msgEl);
+    row.appendChild(body);
 
-    if (duration > 0) {
-      setTimeout(() => this._dismiss(toast), duration);
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'ts-ui-toast__close';
+    closeBtn.setAttribute('aria-label', 'Dismiss');
+    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    closeBtn.addEventListener('click', () => this._dismiss(toast));
+    row.appendChild(closeBtn);
+
+    toast.appendChild(row);
+
+    // Progress track (auto-dismiss countdown)
+    // Persistent toasts (duration=0 or Infinity) still get a track so the
+    // layout is consistent; the bar is frozen via the overridden CSS duration.
+    const track = document.createElement('div');
+    track.className = 'ts-ui-toast__track';
+    toast.appendChild(track);
+
+    // Always write the resolved duration inline on the toast so the CSS
+    // animation matches the JS dismiss timer regardless of where the value
+    // came from. This is needed because the toast container declares
+    // `--ts-toast-duration` on `.ts-ui-toast-display *` and `.ts-ui-toast-stack *`
+    // (descendant scope), which would otherwise cascade onto the toast and
+    // override a per-host or opts.duration value the JS resolver picked up
+    // before insertion.
+    toast.style.setProperty('--ts-toast-duration', cssValue);
+
+    // Trigger CSS animation after paint (CSS animation owns the visual timing).
+    // Stash the rAF id and guard the callback against post-dismiss execution
+    // for very short durations (where setTimeout(_dismiss, n<frame) may race
+    // ahead of the queued rAF).
+    toast._rafId = requestAnimationFrame(() => {
+      toast._rafId = 0;
+      if (toast._dismissing) return;
+      if (!toast.isConnected) return;
+      track.classList.add('ts-ui-toast__track--animate');
+    });
+
+    stackEl.appendChild(toast);
+
+    // Schedule dismiss only for non-persistent toasts.
+    if (!persistent) {
+      setTimeout(() => this._dismiss(toast), ms);
     }
 
     return toast;
   }
 
   _dismiss(toast) {
-    toast.style.transition = 'opacity 200ms, transform 200ms';
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateX(16px)';
-    setTimeout(() => toast.remove(), 220);
+    if (toast._dismissing) return;
+    toast._dismissing = true;
+    if (toast._rafId) {
+      cancelAnimationFrame(toast._rafId);
+      toast._rafId = 0;
+    }
+    toast.classList.add('ts-ui-toast--out');
+    setTimeout(() => toast.remove(), 300);
   }
 
   _defaultIcon(type) {
@@ -1979,6 +2226,48 @@ class ToolskinToast {
       info: 'fa-solid fa-circle-info',
     };
     return icons[type] || '';
+  }
+
+  _resolveToastDuration(hostEl, opts) {
+    // Read CSS default from hostEl computed style. The host is whatever
+    // `_resolveHost` returned — usually `.ts-ui-toast-stack`, but may be a
+    // `.ts-ui-toast-display` (or any caller-supplied container) when
+    // `opts.host` is set. The parameter is named `hostEl` (not `stackEl`)
+    // for that reason.
+    const raw = getComputedStyle(hostEl).getPropertyValue('--ts-toast-duration').trim();
+    // Parse "4s" / "4000ms" / "0.5s" → ms. Fallback to 4000.
+    const match = raw.match(/^(\d*\.?\d+)(ms|s)?$/);
+    const cssMs = match
+        ? (match[2] === 'ms' ? parseFloat(match[1]) : parseFloat(match[1]) * 1000)
+        : 4000;
+
+    // Caller override path.
+    const override = opts && opts.duration;
+
+    // Persistent sentinels: 0 or Infinity → do not auto-dismiss; freeze animation.
+    // CSS doesn't accept `infinity * 1s` portably across all property contexts
+    // (`animation-duration` does, but `transition-duration` is finicky), so we
+    // use a multi-day finite duration as a practical "frozen" sentinel.
+    if (override === 0 || override === Infinity) {
+        return { ms: Infinity, cssValue: '999999s', persistent: true };
+    }
+
+    if (typeof override === 'number' && override > 0) {
+        const overrideCss = (override >= 1000 && override % 1000 === 0)
+            ? (override / 1000) + 's'
+            : override + 'ms';
+        return { ms: override, cssValue: overrideCss, persistent: false };
+    }
+
+    // Negative or NaN durations: warn (caller bug) and fall back to CSS default.
+    if (typeof override === 'number') {
+        if (typeof console !== 'undefined' && console.warn) {
+            console.warn('[Toolskin.toast] ignoring invalid duration:', override, '— using CSS default');
+        }
+    }
+
+    // No override (or invalid override) — use CSS default.
+    return { ms: cssMs, cssValue: raw || '4s', persistent: false };
   }
 
   _sanitize(str) {
@@ -2622,57 +2911,6 @@ class ToolskinParallaxFallback {
    Renders icons from data-icon attributes.
    ═══════════════════════════════════════════════════════════════════ */
 
-/* 
-class ToolskinIcons {
-  static inject(root = document) {
-    root.querySelectorAll('[data-icon], [data-ts-icon]').forEach(el => {
-      if (el.dataset.iconInjected) return;
-      // getAttribute is reliable for data-ts-icon across browsers; dataset.tsIcon can be flaky
-      let raw = (
-        el.getAttribute('data-icon') ||
-        el.getAttribute('data-ts-icon') ||
-        el.dataset.icon ||
-        el.dataset.tsIcon ||
-        ''
-      ).trim();
-      if (!raw) return;
-
-      let type = '';
-      let value = '';
-      if (/^[\w-]+:/.test(raw)) {
-        const idx = raw.indexOf(':');
-        type = raw.slice(0, idx);
-        value = raw.slice(idx + 1).trim();
-      } else if (/^(fa-solid|fa-regular|fa-brands)\s/i.test(raw)) {
-        type = 'fa';
-        value = raw;
-      } else {
-        type = '';
-        value = raw;
-      }
-
-      if (type === 'fa' || type === 'fas' || type === 'far' || type === 'fab') {
-        const i = document.createElement('i');
-        i.className = value || raw;
-        i.setAttribute('aria-hidden', 'true');
-        el.appendChild(i);
-      } else if (type === 'ion') {
-        const ion = document.createElement('ion-icon');
-        ion.setAttribute('name', value);
-        ion.setAttribute('aria-hidden', 'true');
-        el.appendChild(ion);
-      } else {
-        const i = document.createElement('i');
-        i.className = raw;
-        i.setAttribute('aria-hidden', 'true');
-        el.appendChild(i);
-      }
-
-      el.dataset.iconInjected = '1';
-    });
-  }
-}
- */
 
 /**
  * Injects icon elements based on data-icon / data-ts-icon attributes.
@@ -2710,8 +2948,30 @@ class ToolskinIcons {
     const elements = root.querySelectorAll('[data-icon], [data-ts-icon]');
 
     elements.forEach(el => {
+      // Debug logging for Surfaces Lab button
+      if (el.textContent && el.textContent.includes('Surfaces Lab')) {
+        console.log('🔧 Icon injection check for Surfaces Lab:', {
+          alreadyInjected: el.dataset.iconInjected,
+          dataIcon: el.getAttribute('data-icon'),
+          existingIcons: el.querySelectorAll('i, ion-icon, svg, .ts-icon').length
+        });
+      }
+
       // Skip already processed elements
-      if (el.dataset.iconInjected) return;
+      if (el.dataset.iconInjected) {
+        if (el.textContent && el.textContent.includes('Surfaces Lab')) {
+          console.log('⚠️ SKIPPING Surfaces Lab - already injected');
+        }
+        return;
+      }
+
+      // B13/Bug-1: bail if a manually-authored icon descendant already exists.
+      // Prevents duplicate injection when the author wrote <i>/<ion-icon>/.ts-icon
+      // alongside data-icon. Mark as processed so later passes respect the author.
+      if (el.querySelector(':scope > i, :scope > ion-icon, :scope > svg, :scope > .ts-icon, :scope > .ts-menu-text > i, :scope > .ts-menu-text > ion-icon, :scope > .ts-menu-text > .ts-icon')) {
+        el.dataset.iconInjected = '1';
+        return;
+      }
 
       // Get the raw icon string
       let raw = (
@@ -2788,6 +3048,15 @@ class ToolskinIcons {
 
       // Mark as processed
       el.dataset.iconInjected = '1';
+
+      // Debug logging for successful injection
+      if (el.textContent && el.textContent.includes('Surfaces Lab')) {
+        console.log('✅ Icon injection completed for Surfaces Lab:', {
+          iconType: type,
+          iconValue: value,
+          totalIconsNow: el.querySelectorAll('i, ion-icon, svg, .ts-icon').length
+        });
+      }
     });
   }
 }
@@ -2797,6 +3066,303 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => ToolskinIcons.inject());
 } else {
   ToolskinIcons.inject();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   AUTO ICON ASSIGNMENT
+   Intelligently assigns icons to elements based on their text content.
+   ═══════════════════════════════════════════════════════════════════ */
+
+class ToolskinAutoIcons {
+  /**
+   * Keyword to icon mapping (Ionicons and Font Awesome)
+   */
+  static iconMap = {
+    // Navigation & Structure
+    'home': 'ion:home-outline',
+    'house': 'fa:fa-solid fa-house',
+    'dashboard': 'ion:grid-outline',
+    'menu': 'ion:menu-outline',
+    'nav': 'ion:compass-outline',
+    'breadcrumb': 'ion:trail-sign-outline',
+
+    // Content & Media
+    'type': 'ion:text-outline',
+    'typography': 'fa:fa-solid fa-font',
+    'text': 'ion:document-text-outline',
+    'content': 'ion:document-outline',
+    'media': 'ion:image-outline',
+    'gallery': 'ion:images-outline',
+    'portfolio': 'ion:folder-open-outline',
+    'blog': 'ion:newspaper-outline',
+    'news': 'ion:newspaper-outline',
+
+    // Interface Elements
+    'button': 'ion:radio-button-on-outline',
+    'buttons': 'ion:radio-button-on-outline',
+    'card': 'ion:card-outline',
+    'cards': 'ion:card-outline',
+    'panel': 'ion:albums-outline',
+    'panels': 'ion:albums-outline',
+    'modal': 'ion:browsers-outline',
+    'form': 'ion:create-outline',
+    'forms': 'ion:create-outline',
+    'input': 'ion:text-outline',
+    'table': 'ion:grid-outline',
+    'list': 'ion:list-outline',
+
+    // Tools & Actions
+    'tool': 'ion:construct-outline',
+    'tools': 'ion:construct-outline',
+    'setting': 'ion:settings-outline',
+    'settings': 'ion:settings-outline',
+    'config': 'ion:cog-outline',
+    'preference': 'ion:options-outline',
+    'edit': 'ion:create-outline',
+    'delete': 'ion:trash-outline',
+    'save': 'ion:save-outline',
+    'download': 'ion:download-outline',
+    'upload': 'ion:cloud-upload-outline',
+    'export': 'ion:share-outline',
+    'import': 'ion:enter-outline',
+    'copy': 'ion:copy-outline',
+    'cut': 'ion:cut-outline',
+    'paste': 'ion:clipboard-outline',
+
+    // Design & Creative
+    'color': 'ion:color-palette-outline',
+    'colours': 'ion:color-palette-outline',
+    'palette': 'ion:color-palette-outline',
+    'theme': 'ion:color-fill-outline',
+    'design': 'ion:brush-outline',
+    'art': 'ion:brush-outline',
+    'creative': 'ion:color-wand-outline',
+    'style': 'fa:fa-solid fa-paintbrush',
+    'css': 'fa:fa-brands fa-css3-alt',
+    'generator': 'ion:build-outline',
+    'builder': 'ion:construct-outline',
+    'mockup': 'ion:phone-portrait-outline',
+    'mockups': 'ion:phone-portrait-outline',
+    'surface': 'ion:layers-outline',
+    'surfaces': 'ion:layers-outline',
+    'lab': 'ion:flask-outline',
+
+    // Data & Analytics
+    'chart': 'ion:bar-chart-outline',
+    'graph': 'ion:analytics-outline',
+    'analytics': 'ion:analytics-outline',
+    'data': 'ion:bar-chart-outline',
+    'report': 'ion:document-text-outline',
+    'metric': 'ion:pulse-outline',
+
+    // Communication
+    'mail': 'ion:mail-outline',
+    'email': 'ion:mail-outline',
+    'message': 'ion:chatbubble-outline',
+    'chat': 'ion:chatbubbles-outline',
+    'comment': 'ion:chatbubble-ellipses-outline',
+    'notification': 'ion:notifications-outline',
+    'alert': 'ion:alert-circle-outline',
+    'warning': 'ion:warning-outline',
+
+    // System & Tech
+    'api': 'ion:code-slash-outline',
+    'code': 'ion:code-outline',
+    'dev': 'ion:terminal-outline',
+    'debug': 'ion:bug-outline',
+    'test': 'ion:flask-outline',
+    'component': 'ion:extension-puzzle-outline',
+    'components': 'ion:extension-puzzle-outline',
+    'plugin': 'ion:plug-outline',
+    'module': 'ion:cube-outline',
+    'package': 'ion:archive-outline',
+
+    // Navigation Actions
+    'back': 'ion:arrow-back-outline',
+    'forward': 'ion:arrow-forward-outline',
+    'next': 'ion:chevron-forward-outline',
+    'previous': 'ion:chevron-back-outline',
+    'close': 'ion:close-outline',
+    'cancel': 'ion:close-circle-outline',
+    'confirm': 'ion:checkmark-circle-outline',
+    'submit': 'ion:send-outline',
+
+    // File & Storage
+    'file': 'ion:document-outline',
+    'folder': 'ion:folder-outline',
+    'archive': 'ion:archive-outline',
+    'backup': 'ion:cloud-outline',
+    'storage': 'ion:server-outline',
+
+    // User & Account
+    'user': 'ion:person-outline',
+    'profile': 'ion:person-circle-outline',
+    'account': 'ion:person-outline',
+    'login': 'ion:log-in-outline',
+    'logout': 'ion:log-out-outline',
+    'signup': 'ion:person-add-outline',
+
+    // E-commerce
+    'shop': 'ion:storefront-outline',
+    'cart': 'ion:cart-outline',
+    'product': 'ion:cube-outline',
+    'price': 'ion:pricetag-outline',
+    'payment': 'ion:card-outline',
+
+    // Time & Calendar
+    'calendar': 'ion:calendar-outline',
+    'date': 'ion:calendar-number-outline',
+    'time': 'ion:time-outline',
+    'clock': 'ion:alarm-outline',
+    'schedule': 'ion:calendar-clear-outline',
+
+    // Location & Map
+    'location': 'ion:location-outline',
+    'map': 'ion:map-outline',
+    'pin': 'ion:pin-outline',
+    'address': 'ion:location-outline',
+
+    // Status & State
+    'active': 'ion:radio-button-on-outline',
+    'inactive': 'ion:radio-button-off-outline',
+    'enabled': 'ion:checkmark-circle-outline',
+    'disabled': 'ion:remove-circle-outline',
+    'online': 'ion:wifi-outline',
+    'offline': 'ion:wifi-outline',
+
+    // Misc
+    'help': 'ion:help-circle-outline',
+    'info': 'ion:information-circle-outline',
+    'search': 'ion:search-outline',
+    'filter': 'ion:filter-outline',
+    'sort': 'ion:swap-vertical-outline',
+    'refresh': 'ion:refresh-outline',
+    'sync': 'ion:sync-outline',
+    'link': 'ion:link-outline',
+    'share': 'ion:share-social-outline',
+    'tag': 'ion:pricetag-outline',
+    'star': 'ion:star-outline',
+    'favorite': 'ion:heart-outline',
+    'bookmark': 'ion:bookmark-outline',
+    'flag': 'ion:flag-outline',
+    'lock': 'ion:lock-closed-outline',
+    'unlock': 'ion:lock-open-outline',
+    'key': 'ion:key-outline',
+    'secure': 'ion:shield-checkmark-outline',
+    'security': 'ion:shield-outline'
+  };
+
+  /**
+   * Automatically assigns icons to elements with .ts-auto-icon class
+   * @param {HTMLElement|Document} [root=document] - Container to scan
+   */
+  static inject(root = document) {
+    const containers = root.querySelectorAll('.ts-auto-icon');
+
+    containers.forEach(container => {
+      // Process all anchor links in this container
+      const links = container.querySelectorAll('a');
+
+      links.forEach(link => {
+        // Debug logging for the button
+        if (link.textContent.includes('Surfaces Lab')) {
+          console.log('🔍 Surfaces Lab button check:', {
+            hasBtn: link.classList.contains('ts-btn'),
+            hasDataIcon: link.hasAttribute('data-icon'),
+            dataIcon: link.getAttribute('data-icon'),
+            processed: link.dataset.autoIconProcessed,
+            iconElements: link.querySelectorAll('i, ion-icon, .ts-icon, svg').length
+          });
+        }
+
+        // Skip if already processed or is a button
+        if (link.dataset.autoIconProcessed || link.classList.contains('ts-btn')) {
+          if (link.textContent.includes('Surfaces Lab')) {
+            console.log('✅ Skipping Surfaces Lab button (correct behavior)');
+          }
+          return;
+        }
+
+        // Check if link already has an icon (comprehensive check)
+        const hasIcon = link.hasAttribute('data-icon') ||
+                       link.hasAttribute('data-ts-icon') ||
+                       link.hasAttribute('data-icon-injected') ||
+                       link.querySelector(':scope > .ts-icon, :scope > i[class*="fa"], :scope > ion-icon, :scope > span.ts-icon, :scope > svg');
+
+        if (!hasIcon) {
+          // Get text content for matching
+          const text = link.textContent.trim().toLowerCase();
+          const icon = this.findBestIcon(text);
+
+          if (icon) {
+            console.log('🎯 Auto-assigning icon:', text, '→', icon);
+            link.setAttribute('data-icon', icon);
+
+            // Clear injection flag and trigger re-injection
+            delete link.dataset.iconInjected;
+
+            // Trigger icon injection on this specific link
+            if (typeof ToolskinIcons !== 'undefined' && ToolskinIcons.inject) {
+              ToolskinIcons.inject(link);
+            }
+          }
+        }
+
+        // Mark as processed
+        link.dataset.autoIconProcessed = '1';
+      });
+    });
+  }
+
+  /**
+   * Finds the best icon match for given text
+   * @param {string} text - Text to analyze
+   * @returns {string|null} - Icon string or null if no match
+   */
+  static findBestIcon(text) {
+    const words = text.split(/\s+/).map(w => w.toLowerCase());
+
+    // Direct keyword match
+    for (const word of words) {
+      if (this.iconMap[word]) {
+        return this.iconMap[word];
+      }
+    }
+
+    // Partial match (contains keyword)
+    for (const [keyword, icon] of Object.entries(this.iconMap)) {
+      if (text.includes(keyword)) {
+        return icon;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Process navigation items specifically (for menu auto-icons)
+   * @param {HTMLElement} navContainer - Navigation container
+   */
+  static processNavigation(navContainer) {
+    const links = navContainer.querySelectorAll('a:not([data-icon]):not([data-ts-icon]):not(.ts-btn)');
+
+    links.forEach(link => {
+      // Skip if already has icon or is a button
+      if (link.querySelector('i, ion-icon, svg')) return;
+
+      const text = link.textContent.trim().toLowerCase();
+      const icon = this.findBestIcon(text);
+
+      if (icon) {
+        link.setAttribute('data-icon', icon);
+
+        // Trigger icon injection
+        if (typeof ToolskinIcons !== 'undefined' && ToolskinIcons.inject) {
+          ToolskinIcons.inject(link);
+        }
+      }
+    });
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2821,26 +3387,87 @@ class ToolskinRange {
   updateSlider(rangeInput) {
     const min = parseFloat(rangeInput.min) || 0;
     const max = parseFloat(rangeInput.max) || 100;
-    const value = parseFloat(rangeInput.value) || 0;
-    const percent = ((value - min) / (max - min)) * 100;
+    const value = parseFloat(rangeInput.value) || min;
+    const percent = max !== min ? ((value - min) / (max - min)) * 100 : 0;
 
-    // Update CSS variables
+    // Update CSS variables for gradient fill
     rangeInput.style.setProperty('--ts-range-val', value);
     rangeInput.style.setProperty('--ts-range-min', min);
     rangeInput.style.setProperty('--ts-range-max', max);
     rangeInput.style.setProperty('--ts-range-percent', percent + '%');
 
-    // Update display value
-    const valueDisplay = rangeInput.nextElementSibling;
-    if (valueDisplay && valueDisplay.classList.contains('ts-range-val')) {
-      const unit = rangeInput.dataset.unit || '';
-      valueDisplay.textContent = value + unit;
+    // Update display value with proper unit detection
+    const valueDisplay = rangeInput.parentNode.querySelector('.ts-range-val');
+    if (valueDisplay) {
+      let unit = rangeInput.dataset.unit || '';
+
+      // Auto-detect unit from ID or context if not specified
+      if (!unit) {
+        if (rangeInput.id.includes('radius') || rangeInput.id.includes('size')) {
+          unit = 'px';
+        } else if (rangeInput.id.includes('scale') || rangeInput.id.includes('zoom')) {
+          unit = '%';
+        } else if (rangeInput.id.includes('opacity') || rangeInput.id.includes('alpha')) {
+          unit = '';
+        }
+      }
+
+      // Format display value
+      let displayValue = value;
+      if (unit === '%' && rangeInput.step && parseFloat(rangeInput.step) < 1) {
+        displayValue = Math.round(value * 100);
+      } else if (unit === 'px') {
+        displayValue = Math.round(value);
+      }
+
+      valueDisplay.textContent = displayValue + unit;
     }
   }
 
   refresh() {
     this._init();
   }
+}
+
+
+/**
+ * ToolskinColorRow — Auto-init for all .ts-color-row components.
+ * Syncs the color picker input → swatch preview + hex text input.
+ * Makes showcase color demos interactive without manual JS wiring.
+ */
+class ToolskinColorRow {
+  constructor() {
+    this._init();
+  }
+
+  _init() {
+    document.querySelectorAll('.ts-color-row').forEach(row => {
+      const pick = row.querySelector('input[type="color"]');
+      const hex = row.querySelector('input[type="text"]');
+      const sw = row.querySelector('.ts-sw');
+      if (!pick) return;
+      // Skip if already wired (by the offcanvas editor or other JS)
+      if (pick.dataset.tsColorRowInit) return;
+      pick.dataset.tsColorRowInit = '1';
+
+      function sync(val) {
+        if (sw) sw.style.background = val;
+        if (hex) hex.value = val;
+        if (pick) pick.value = val;
+      }
+
+      pick.addEventListener('input', function () { sync(this.value); });
+      pick.addEventListener('change', function () { sync(this.value); });
+      if (hex) hex.addEventListener('input', function () {
+        if (/^#[0-9a-fA-F]{6}$/.test(this.value.trim())) sync(this.value.trim());
+      });
+
+      // Init swatch from current picker value
+      if (sw && pick.value) sw.style.background = pick.value;
+    });
+  }
+
+  refresh() { this._init(); }
 }
 
 
@@ -2952,7 +3579,10 @@ class ToolskinCursor {
   _startLoop() {
     if (this._loopActive) return;
     this._loopActive = true;
-    this._rafId = requestAnimationFrame(() => this._tick());
+    // Pre-bound tick (created once) avoids allocating a new arrow fn every frame.
+    // This is a significant GC pressure reduction on high-refresh displays.
+    if (!this._boundTick) this._boundTick = this._tick.bind(this);
+    this._rafId = requestAnimationFrame(this._boundTick);
   }
 
   _tick() {
@@ -2961,7 +3591,8 @@ class ToolskinCursor {
       this._loopActive = false;
       return;
     }
-    const mode = this.config.mode || 'simple';
+    const mode = this._mode || (this._mode = this.config.mode || 'simple');
+    const hasFollower = this.config.follower;
 
     /* Snap when close — avoids dozens of rAF frames tailing tiny lerp errors */
     const dx = this.mouseX - this.cursorX;
@@ -2974,7 +3605,7 @@ class ToolskinCursor {
       this.cursorY += dy * this.easing;
     }
 
-    if (this.config.follower) {
+    if (hasFollower) {
       const fdx = this.cursorX - this.followerX;
       const fdy = this.cursorY - this.followerY;
       if (Math.abs(fdx) + Math.abs(fdy) < 2) {
@@ -2986,20 +3617,22 @@ class ToolskinCursor {
       }
     }
 
+    // Build transform string once, assign once (avoid template literal allocations where possible)
+    const style = this.cursor.style;
     if (mode === 'simple') {
-      this.cursor.style.transform = `translate3d(${this.cursorX}px, ${this.cursorY}px, 0) translate(-50%, -50%)`;
+      style.transform = 'translate3d(' + this.cursorX + 'px,' + this.cursorY + 'px,0) translate(-50%,-50%)';
     } else {
-      this.cursor.style.transform = `translate3d(${this.cursorX + this.cursorOffset.x}px, ${this.cursorY + this.cursorOffset.y}px, 0)`;
+      style.transform = 'translate3d(' + (this.cursorX + this.cursorOffset.x) + 'px,' + (this.cursorY + this.cursorOffset.y) + 'px,0)';
     }
 
-    if (this.config.follower) {
+    if (hasFollower) {
       const relativeX = this.followerX - this.cursorX;
       const relativeY = this.followerY - this.cursorY;
-      this.cursor.style.setProperty('--follower-transform', `translate3d(${relativeX}px, ${relativeY}px, 0)`);
+      style.setProperty('--follower-transform', 'translate3d(' + relativeX + 'px,' + relativeY + 'px,0)');
     }
 
     const curErr = Math.abs(this.mouseX - this.cursorX) + Math.abs(this.mouseY - this.cursorY);
-    const folErr = this.config.follower
+    const folErr = hasFollower
       ? Math.abs(this.cursorX - this.followerX) + Math.abs(this.cursorY - this.followerY)
       : 0;
     const epsilon = 0.85;
@@ -3007,24 +3640,24 @@ class ToolskinCursor {
     if (curErr < epsilon && folErr < epsilon) {
       this.cursorX = this.mouseX;
       this.cursorY = this.mouseY;
-      if (this.config.follower) {
+      if (hasFollower) {
         this.followerX = this.cursorX;
         this.followerY = this.cursorY;
       }
       if (mode === 'simple') {
-        this.cursor.style.transform = `translate3d(${this.cursorX}px, ${this.cursorY}px, 0) translate(-50%, -50%)`;
+        style.transform = 'translate3d(' + this.cursorX + 'px,' + this.cursorY + 'px,0) translate(-50%,-50%)';
       } else {
-        this.cursor.style.transform = `translate3d(${this.cursorX + this.cursorOffset.x}px, ${this.cursorY + this.cursorOffset.y}px, 0)`;
+        style.transform = 'translate3d(' + (this.cursorX + this.cursorOffset.x) + 'px,' + (this.cursorY + this.cursorOffset.y) + 'px,0)';
       }
-      if (this.config.follower) {
-        this.cursor.style.setProperty('--follower-transform', 'translate3d(0,0,0)');
+      if (hasFollower) {
+        style.setProperty('--follower-transform', 'translate3d(0,0,0)');
       }
       this._rafId = 0;
       this._loopActive = false;
       return;
     }
 
-    this._rafId = requestAnimationFrame(() => this._tick());
+    this._rafId = requestAnimationFrame(this._boundTick);
   }
 
   _updateSmartPosition(event) {
@@ -3108,6 +3741,7 @@ class ToolskinCursor {
 }
 
 
+
 /* ═══════════════════════════════════════════════════════════════════
    LAYOUT MODULE
    Applies layout configurations (container widths, noise, fullpage, etc.)
@@ -3178,9 +3812,22 @@ class ToolskinDynamicNav {
     this.primaryNav = primaryNav;
     this.extendNav = extendNav;
     this.navCollapse = navCollapse;
+    this.toTopBtn = document.querySelector('#ts-top-btn');
+    this._scrollTicking = false;
+    this._boundOnScroll = () => this._onScroll();
     this.allLinks = Array.from(primaryNav.querySelectorAll('a'));
     this._ro = null;
     this._debounce = null;
+    this.htmlEl = document.documentElement;
+
+    this.scrollThreshold = 80; // px (configurable)
+
+    this._isAtTop = true;
+
+    this._callbacks = {
+      onEnterTop: null,
+      onLeaveTop: null
+    };
     this._boundSchedule = () => this.scheduleUpdate();
     this._bind();
   }
@@ -3210,13 +3857,167 @@ class ToolskinDynamicNav {
     const inst = primaryNav && primaryNav.__tsDynamicNav;
     if (inst instanceof ToolskinDynamicNav) inst.destroy();
   }
+  /**
+   * Formats a menu item link: wraps text in .ts-menu-text, adds variant classes,
+   * and injects icons. Idempotent - safe to call multiple times.
+   * @param {HTMLElement} linkEl - The anchor element to format
+   */
+  _formatMenuItem(linkEl) {
+    if (!linkEl || linkEl.tagName !== 'A') return;
+
+    // Add base class
+    linkEl.classList.add('ts-nav-item');
+
+    // Handle variant schema - detect if link already has icon attributes or elements
+    const hasIcon = linkEl.hasAttribute('data-icon') ||
+                   linkEl.hasAttribute('data-ts-icon') ||
+                   linkEl.hasAttribute('data-icon-injected') ||
+                   linkEl.querySelector(':scope > .ts-icon, :scope > i[class*="fa-"], :scope > i[class*="fas-"], :scope > i.fa-solid, :scope > i.fa-regular, :scope > i.fa-brands, :scope > ion-icon, :scope > span.ts-icon');
+
+    const explicitVariant = linkEl.getAttribute('data-ts-nav-variant');
+    let variant;
+
+    if (explicitVariant) {
+      variant = explicitVariant;
+    } else {
+      // Auto-detect based on classes and icon presence
+      if (linkEl.classList.contains('ts-btn')) {
+        variant = 'button';
+      } else if (hasIcon) {
+        variant = 'icon';
+      } else {
+        variant = 'text'; // default for text-only links
+      }
+    }
+
+    const variantClass = `ts-nav-item--${variant}`;
+
+    // Remove any existing variant classes first
+    linkEl.classList.forEach(cls => {
+      if (cls.startsWith('ts-nav-item--')) {
+        linkEl.classList.remove(cls);
+      }
+    });
+
+    // Add current variant class
+    linkEl.classList.add(variantClass);
+
+    // Check if .ts-menu-text already exists
+    let textSpan = linkEl.querySelector('.ts-menu-text');
+
+    if (!textSpan) {
+      // Create text span and wrap existing text content
+      textSpan = document.createElement('span');
+      textSpan.className = 'ts-menu-text';
+
+      // Move text nodes to the span (preserve other elements like icons)
+      const childNodes = Array.from(linkEl.childNodes);
+      const textNodes = childNodes.filter(node =>
+        node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+      );
+
+      // Combine all text content
+      const textContent = textNodes.map(node => node.textContent).join(' ').trim();
+
+      if (textContent) {
+        textSpan.textContent = textContent;
+
+        // Remove original text nodes
+        textNodes.forEach(node => node.remove());
+
+        // Append text span to the link
+        linkEl.appendChild(textSpan);
+      }
+    }
+
+    // Re-check variant after potential auto-icon assignment
+    const finalHasIcon = linkEl.hasAttribute('data-icon') ||
+                        linkEl.hasAttribute('data-ts-icon') ||
+                        linkEl.hasAttribute('data-icon-injected') ||
+                        linkEl.querySelector(':scope > .ts-icon, :scope > i[class*="fa"], :scope > ion-icon, :scope > span.ts-icon, :scope > svg');
+
+    if (finalHasIcon && variant === 'text') {
+      variant = 'icon';
+      // Update variant class
+      linkEl.classList.forEach(cls => {
+        if (cls.startsWith('ts-nav-item--')) {
+          linkEl.classList.remove(cls);
+        }
+      });
+      linkEl.classList.add(`ts-nav-item--${variant}`);
+    }
+
+    // Run icon injection on this link (clear flag first if icon attributes exist)
+    if (typeof ToolskinIcons !== 'undefined' && ToolskinIcons.inject) {
+      if (linkEl.hasAttribute('data-icon') || linkEl.hasAttribute('data-ts-icon')) {
+        delete linkEl.dataset.iconInjected;
+      }
+      ToolskinIcons.inject(linkEl);
+    }
+  }
+
+  /**
+   * Static version for external use (e.g., mobile menu)
+   * @param {HTMLElement} linkEl - The anchor element to format
+   */
+  static formatMenuItem(linkEl) {
+    // Create a temporary instance just to access the formatting logic
+    const temp = Object.create(ToolskinDynamicNav.prototype);
+    temp._formatMenuItem(linkEl);
+  }
 
   _bind() {
     this._ro = new ResizeObserver(this._boundSchedule);
     this._ro.observe(this.primaryNav);
-    this.scheduleUpdate();
-  }
 
+    window.addEventListener('scroll', this._boundOnScroll, { passive: true });
+
+    // Format all existing menu items on initial bind
+    this.allLinks.forEach(link => this._formatMenuItem(link));
+
+    this.scheduleUpdate();
+    this._onScroll(); // initial state
+  }
+  _onScroll() {
+    if (this._scrollTicking) return;
+
+    this._scrollTicking = true;
+
+    requestAnimationFrame(() => {
+      const y = window.scrollY || window.pageYOffset;
+      const isNowAtTop = y <= this.scrollThreshold;
+
+      // --- STATE CHANGE DETECTION ---
+      if (isNowAtTop !== this._isAtTop) {
+        this._isAtTop = isNowAtTop;
+
+        if (isNowAtTop) {
+          this.htmlEl.classList.add('is-at-top');
+          this.htmlEl.classList.remove('has-scrolled');
+          this.htmlEl.setAttribute('data-scroll-state', 'top');
+
+          if (this._callbacks.onEnterTop) {
+            this._callbacks.onEnterTop();
+          }
+        } else {
+          this.htmlEl.classList.remove('is-at-top');
+          this.htmlEl.classList.add('has-scrolled');
+          this.htmlEl.setAttribute('data-scroll-state', 'scrolled');
+
+          if (this._callbacks.onLeaveTop) {
+            this._callbacks.onLeaveTop();
+          }
+        }
+      }
+
+      // --- TO-TOP BUTTON ---
+      if (this.toTopBtn) {
+        this.toTopBtn.classList.toggle('is-visible', y > this.scrollThreshold);
+      }
+
+      this._scrollTicking = false;
+    });
+  }
   scheduleUpdate() {
     clearTimeout(this._debounce);
     this._debounce = setTimeout(() => requestAnimationFrame(() => this._updateNav()), 100);
@@ -3226,6 +4027,8 @@ class ToolskinDynamicNav {
     const { primaryNav, extendNav, navCollapse, allLinks } = this;
 
     allLinks.forEach((link) => {
+      // Format the link before moving it
+      this._formatMenuItem(link);
       primaryNav.appendChild(link);
     });
 
@@ -3243,8 +4046,17 @@ class ToolskinDynamicNav {
       }
     });
   }
+  setScrollCallbacks({ onEnterTop, onLeaveTop } = {}) {
+    if (typeof onEnterTop === 'function') {
+      this._callbacks.onEnterTop = onEnterTop;
+    }
+    if (typeof onLeaveTop === 'function') {
+      this._callbacks.onLeaveTop = onLeaveTop;
+    }
+  }
 
   destroy() {
+    window.removeEventListener('scroll', this._boundOnScroll);
     clearTimeout(this._debounce);
     if (this._ro) {
       this._ro.disconnect();
@@ -3327,10 +4139,21 @@ class ToolskinMobileMenu {
     const menuItems = document.createElement('div');
     menuItems.className = 'ts-mobile-menu-items';
 
+    // If original container has auto-icon enabled, enable it for mobile too
+    if (container.classList.contains('ts-auto-icon')) {
+      menuItems.classList.add('ts-auto-icon');
+    }
+
     // Clone all child items (preserve structure)
     const items = container.querySelectorAll('a, li > a, [href]');
     items.forEach(item => {
       const clone = item.cloneNode(true);
+
+      // Apply same formatting as desktop nav (text wrap, variant classes, icon injection)
+      if (clone.tagName === 'A' && typeof ToolskinDynamicNav !== 'undefined' && ToolskinDynamicNav.formatMenuItem) {
+        ToolskinDynamicNav.formatMenuItem(clone);
+      }
+
       menuItems.appendChild(clone);
     });
 
@@ -3430,7 +4253,7 @@ class ToolskinMobileMenu {
     burger.classList.add('active');
     overlay.classList.add('active');
     sidebar.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    // Don't lock body scroll — page stays scrollable while overlay is open (compact mode)
   }
 
   close(burger, overlay, sidebar) {
@@ -3438,7 +4261,6 @@ class ToolskinMobileMenu {
     burger.classList.remove('active');
     overlay.classList.remove('active');
     sidebar.classList.remove('active');
-    document.body.style.overflow = '';
   }
 
   /** Close every auto-generated mobile drawer (e.g. after in-page anchor navigation). */
@@ -3566,7 +4388,9 @@ class ToolskinGridBg {
   _startLoop() {
     if (this._running) return;
     this._running = true;
-    this._rafId = requestAnimationFrame(() => this._tick());
+    // Pre-bound tick (created once in constructor) avoids allocating an arrow fn each frame
+    if (!this._boundTick) this._boundTick = this._tick.bind(this);
+    this._rafId = requestAnimationFrame(this._boundTick);
   }
 
   _stopLoop() {
@@ -3580,24 +4404,34 @@ class ToolskinGridBg {
   _onMove(ctx, e) {
     if (!ctx.visible) return; // Skip if off-screen
 
-    ctx.inside = true;
-    const rect = ctx.el.getBoundingClientRect();
-    const dx = e.clientX - (rect.left + rect.width * 0.5);
-    const dy = e.clientY - (rect.top + rect.height * 0.5);
+    // Throttle: only update target once per animation frame to avoid thrashing
+    // when mousemove fires at >60Hz (gaming mice, high-refresh displays)
+    if (ctx._moveScheduled) return;
+    ctx._moveScheduled = true;
+    ctx._lastMoveEvent = e;
 
-    ctx.targetX1 = dx / this.config.impactLayer1;
-    ctx.targetY1 = dy / this.config.impactLayer1;
-    ctx.targetX2 = dx / this.config.impactLayer2;
-    ctx.targetY2 = dy / this.config.impactLayer2;
-    ctx.dirty = true;
-
-    this._startLoop();
+    requestAnimationFrame(() => {
+      ctx._moveScheduled = false;
+      var evt = ctx._lastMoveEvent;
+      if (!evt || !ctx.visible) return;
+      ctx.inside = true;
+      const rect = ctx.el.getBoundingClientRect();
+      const dx = evt.clientX - (rect.left + rect.width * 0.5);
+      const dy = evt.clientY - (rect.top + rect.height * 0.5);
+      ctx.targetX1 = dx / this.config.impactLayer1;
+      ctx.targetY1 = dy / this.config.impactLayer1;
+      ctx.targetX2 = dx / this.config.impactLayer2;
+      ctx.targetY2 = dy / this.config.impactLayer2;
+      ctx.dirty = true;
+      this._startLoop();
+    });
   }
 
   _onLeave(ctx) {
     ctx.inside = false;
     ctx.targetX1 = ctx.targetY1 = ctx.targetX2 = ctx.targetY2 = 0;
     ctx.dirty = true;
+    this._startLoop();
   }
 
   _tick() {
@@ -3612,12 +4446,21 @@ class ToolskinGridBg {
       ctx.currentX2 += (ctx.targetX2 - ctx.currentX2) * ease;
       ctx.currentY2 += (ctx.targetY2 - ctx.currentY2) * ease;
 
-      const settled = !ctx.inside &&
-        Math.abs(ctx.currentX1) < 0.05 && Math.abs(ctx.currentY1) < 0.05 &&
-        Math.abs(ctx.currentX2) < 0.05 && Math.abs(ctx.currentY2) < 0.05;
+      // Converged to target: stop this ctx's animation regardless of inside/outside.
+      // On next mousemove, _onMove sets new targets and re-starts the loop.
+      const epsilon = 0.15;
+      const converged =
+        Math.abs(ctx.currentX1 - ctx.targetX1) < epsilon &&
+        Math.abs(ctx.currentY1 - ctx.targetY1) < epsilon &&
+        Math.abs(ctx.currentX2 - ctx.targetX2) < epsilon &&
+        Math.abs(ctx.currentY2 - ctx.targetY2) < epsilon;
 
-      if (settled) {
-        ctx.currentX1 = ctx.currentY1 = ctx.currentX2 = ctx.currentY2 = 0;
+      if (converged) {
+        // Snap to final target and mark clean
+        ctx.currentX1 = ctx.targetX1;
+        ctx.currentY1 = ctx.targetY1;
+        ctx.currentX2 = ctx.targetX2;
+        ctx.currentY2 = ctx.targetY2;
         ctx.dirty = false;
       } else {
         anyActive = true;
@@ -3631,10 +4474,19 @@ class ToolskinGridBg {
     }
 
     if (anyActive) {
-      this._rafId = requestAnimationFrame(() => this._tick());
+      this._rafId = requestAnimationFrame(this._boundTick);
     } else {
       this._stopLoop();
     }
+  }
+
+  /** Re-scan the DOM for new grid-bg elements (call after toggling classes) */
+  reinit() {
+    this.destroy();
+    this.sections = [];
+    this._rafId = null;
+    this._running = false;
+    this._init();
   }
 
   /** Clean up observers on destroy */
@@ -3668,14 +4520,14 @@ class ToolskinTooltip {
     this._positionRaf = null;
 
     this.CONFIG = {
-      MAX_WIDTH: this.config.maxWidth != null ? this.config.maxWidth : 300,
-      MIN_WIDTH: this.config.minWidth != null ? this.config.minWidth : 80,
-      ARROW_SIZE: this.config.arrowSize != null ? this.config.arrowSize : 8,
-      SPACING: this.config.spacing != null ? this.config.spacing : 10,
-      PADDING: this.config.padding != null ? this.config.padding : 10,
-      SHOW_DELAY: this.config.showDelay != null ? this.config.showDelay : 30,
+      MAX_WIDTH: this.config.maxWidth != null ? this.config.maxWidth : 260,
+      MIN_WIDTH: this.config.minWidth != null ? this.config.minWidth : 40,
+      ARROW_SIZE: this.config.arrowSize != null ? this.config.arrowSize : 6,
+      SPACING: this.config.spacing != null ? this.config.spacing : 8,
+      PADDING: this.config.padding != null ? this.config.padding : 6,
+      SHOW_DELAY: this.config.showDelay != null ? this.config.showDelay : 80,
       HIDE_DELAY: this.config.hideDelay != null ? this.config.hideDelay : 0,
-      ANIM_MS: this.config.animMs != null ? this.config.animMs : 70,
+      ANIM_MS: this.config.animMs != null ? this.config.animMs : 120,
     };
 
     this._handleMouseEnter = this._handleMouseEnter.bind(this);
@@ -3866,6 +4718,11 @@ class ToolskinTooltip {
     const content = this._getContent(target);
     if (!content) return;
 
+    // Immediately dismiss previous tooltip if target changed (prevents ghost lingering)
+    if (this.currentTarget && this.currentTarget !== target && this.isVisible) {
+      this._hide();
+    }
+
     if (this.hideTimeout) {
       clearTimeout(this.hideTimeout);
       this.hideTimeout = null;
@@ -3878,23 +4735,13 @@ class ToolskinTooltip {
   }
 
   _handleMouseLeave(e) {
-    const host = this._tooltipHost(e.target);
-    if (!this.currentTarget || !host || host !== this.currentTarget) return;
-    const to = e.relatedTarget;
-    if (to && (host.contains(to) || (this.el && this.el.contains(to)))) {
-      return;
-    }
+    // Always hide on mouseleave — don't try to be clever about relatedTarget.
+    // The old logic checked if relatedTarget was inside the host, but this caused
+    // sticky tooltips when events fired from nested children or recomposed DOM.
+    if (!this.currentTarget) return;
     this._clearShow();
-    if (this.hideTimeout) clearTimeout(this.hideTimeout);
-    const delay = this.CONFIG.HIDE_DELAY;
-    if (delay <= 0) {
-      this._hide();
-      return;
-    }
-    this.hideTimeout = setTimeout(() => {
-      this._hide();
-      this.hideTimeout = null;
-    }, delay);
+    // Immediate hide — no delay. Tooltip should disappear the instant the mouse leaves.
+    this._hide();
   }
 
   _handleFocus(e) {
@@ -3935,18 +4782,9 @@ class ToolskinTooltip {
   }
 
   _finishHideCleanup() {
-    if (!this.el) return;
-    this.el.style.transform = '';
-    this.el.classList.remove(
-      'ts-placement-top',
-      'ts-placement-bottom',
-      'ts-placement-left',
-      'ts-placement-right'
-    );
-    if (this.arrowEl) {
-      this.arrowEl.style.left = '';
-      this.arrowEl.style.top = '';
-    }
+    // Do NOT clear transform, placement classes, or arrow position.
+    // They persist harmlessly and are overwritten on next _show() → _position().
+    // Clearing them causes FOUC: arrow flashes at wrong position before new placement is set.
   }
 
   _onTooltipHideTransitionEnd(e) {
@@ -3990,7 +4828,12 @@ class ToolskinTooltip {
     this._position(target);
 
     requestAnimationFrame(() => {
-      this.el.style.pointerEvents = 'auto';
+      // Safety: verify target is still in the document and mouse is still near it
+      if (!this.currentTarget || !this.currentTarget.isConnected) {
+        this._hide();
+        return;
+      }
+      this.el.style.pointerEvents = 'none'; /* tooltips should never intercept clicks */
       this.el.classList.add('ts-tooltip--visible');
       this.isVisible = true;
     });
@@ -4012,7 +4855,7 @@ class ToolskinTooltip {
     this.isVisible = false;
 
     this.el.addEventListener('transitionend', this._onTooltipHideTransitionEnd);
-    const ms = (this.CONFIG.ANIM_MS != null ? this.CONFIG.ANIM_MS : 70) + 100;
+    const ms = Math.max((this.CONFIG.ANIM_MS || 70) + 50, 150);
     this._hideClearTimer = setTimeout(() => {
       this._hideClearTimer = null;
       if (!this.el) return;
@@ -4022,11 +4865,13 @@ class ToolskinTooltip {
   }
 
   _position(target) {
-    this.el.style.transform = 'translate(0px, 0px)';
-    void this.el.offsetWidth;
-
+    // Get tooltip natural dimensions without moving it — use offsetWidth/Height
+    // which don't depend on transform position
+    const ttW = this.el.offsetWidth;
+    const ttH = this.el.offsetHeight;
     const tRect = target.getBoundingClientRect();
-    const ttRect = this.el.getBoundingClientRect();
+    // Create a synthetic rect with just width/height (all _calculatePosition needs)
+    const ttRect = { width: ttW, height: ttH, top: 0, left: 0, right: ttW, bottom: ttH };
     const obstacles = this._getInteractiveObstacles(target);
 
     const space = {
@@ -4036,7 +4881,11 @@ class ToolskinTooltip {
       right: window.innerWidth - tRect.right - this.CONFIG.PADDING,
     };
 
-    const placement = this._findBestPlacement(tRect, ttRect, space, obstacles);
+    // Respect data-tooltip-pos if explicitly set (user override)
+    const forcedPos = target.getAttribute('data-tooltip-pos');
+    const placement = (forcedPos && /^(top|bottom|left|right)$/.test(forcedPos))
+      ? forcedPos
+      : this._findBestPlacement(tRect, ttRect, space, obstacles);
     let pos = this._calculatePosition(placement, tRect, ttRect);
     pos = this._avoidCollisions(pos, ttRect, obstacles);
 
@@ -4089,6 +4938,10 @@ class ToolskinTooltip {
       const spaceScore = this._getSpaceScore(placement, space);
       scores[placement] = spaceScore - collisionPenalty;
     }
+
+    // Bias toward vertical placements (more natural reading flow)
+    if (scores.top > -1000) scores.top += 20;
+    if (scores.bottom > -1000) scores.bottom += 15;
 
     let bestPlacement = 'top';
     let bestScore = scores.top;
@@ -4298,6 +5151,7 @@ class ToolskinPreloader {
     this._fontsWaitStarted = false;
     this._minVisTimer = null;
     this._ariaBusySet = false;
+    this._assetsReady = false;
     this._init();
   }
 
@@ -4307,8 +5161,12 @@ class ToolskinPreloader {
     if (next < this._progress) return;
     this._progress = next;
     this.barEl.style.width = `${this._progress}%`;
+    this.el.style.setProperty('--ts-preloader-progress', `${this._progress}%`);
     if (this.wrapEl) {
       this.wrapEl.setAttribute('aria-valuenow', String(Math.round(this._progress)));
+    }
+    if (this.pctEl) {
+      this.pctEl.textContent = `${Math.round(this._progress)}%`;
     }
   }
 
@@ -4359,7 +5217,7 @@ class ToolskinPreloader {
       this.el.setAttribute('aria-hidden', 'true');
       this.el.innerHTML =
         '<div class="ts-preloader__brand">' +
-        '<div class="ts-preloader__logo"><span class="ts-icon" data-ts-icon="fa-solid fa-bolt" aria-hidden="true"></span>TOOL<em>SKIN</em></div>' +
+        '<div class="ts-preloader__logo"><svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>TOOL<em>SKIN</em></div>' +
         '<div class="ts-preloader__bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Page load progress">' +
         '<span class="ts-preloader__bar"></span></div>' +
         '<div class="ts-preloader__hint">Initializing design system</div>' +
@@ -4369,6 +5227,15 @@ class ToolskinPreloader {
     }
     this.wrapEl = this.el.querySelector('.ts-preloader__bar-wrap');
     this.barEl = this.el.querySelector('.ts-preloader__bar');
+    // Ensure __percent element exists for all variants (CSS makes it visible per variant)
+    this.pctEl = this.el.querySelector('.ts-preloader__percent');
+    if (!this.pctEl) {
+      this.pctEl = document.createElement('span');
+      this.pctEl.className = 'ts-preloader__percent';
+      this.pctEl.textContent = '0%';
+      const brand = this.el.querySelector('.ts-preloader__brand');
+      if (brand) brand.appendChild(this.pctEl);
+    }
     if (this.wrapEl && !this.wrapEl.getAttribute('role')) {
       this.wrapEl.setAttribute('role', 'progressbar');
       this.wrapEl.setAttribute('aria-valuemin', '0');
@@ -4399,7 +5266,7 @@ class ToolskinPreloader {
     this._loadHandler = () => {
       this._loadComplete = true;
       this._setProgress(Math.max(this._progress, 86));
-      requestAnimationFrame(() => this._tryDismissAfterReady());
+      setTimeout(() => this._tryDismissAfterReady(), 0);
     };
     this._visHandler = () => {
       if (document.visibilityState !== 'visible') this.dismiss();
@@ -4412,6 +5279,28 @@ class ToolskinPreloader {
     document.addEventListener('visibilitychange', this._visHandler, { passive: true });
     const cap = this.config.maxVisibleMs || 60000;
     this._timer = window.setTimeout(() => this.dismiss(), cap);
+
+    // ── ToolskinAssets integration: feed real asset progress into preloader bar ──
+    if (typeof window.ToolskinAssets !== 'undefined') {
+      const self = this;
+      // Map asset progress (0–1) into the 20–80% range of the bar
+      // (images/fonts fill 80–100% via existing logic)
+      window.ToolskinAssets.onProgress(function (ratio) {
+        const assetProgress = 20 + ratio * 60; // 20–80%
+        self._setProgress(Math.max(self._progress, assetProgress));
+      });
+      window.ToolskinAssets.onReady(function () {
+        self._assetsReady = true;
+        self._setProgress(Math.max(self._progress, 80));
+        self._tryDismissAfterReady();
+        // Defensive: if _loadComplete was set by a microtask that hasn't run yet,
+        // schedule a follow-up check to close the race window.
+        setTimeout(function () { self._tryDismissAfterReady(); }, 50);
+      });
+    } else {
+      this._assetsReady = true; // no asset loader — skip wait
+    }
+
     const debugHold =
       this.config.debug === true ||
       (typeof window !== 'undefined' && window.TS_DEBUG_PRELOADER === true);
@@ -4427,7 +5316,7 @@ class ToolskinPreloader {
           document.removeEventListener('keydown', this._debugEsc);
           this._debugEsc = null;
           this._setProgress(100);
-          requestAnimationFrame(() => this.dismiss());
+          setTimeout(() => this.dismiss(), 0);
         }
       };
       document.addEventListener('keydown', this._debugEsc);
@@ -4441,6 +5330,8 @@ class ToolskinPreloader {
       (typeof window !== 'undefined' && window.TS_DEBUG_PRELOADER === true);
     if (debugHold) return;
     if (!this._loadComplete) return;
+    // Wait for ToolskinAssets pipeline to finish
+    if (!this._assetsReady) return;
     const needFonts = this.config.waitForFonts !== false && document.fonts;
     if (needFonts && !this._fontsReady) {
       this._attachFontsWait();
@@ -4463,7 +5354,9 @@ class ToolskinPreloader {
       return;
     }
     this._setProgress(100);
-    requestAnimationFrame(() => this.dismiss());
+    // Use setTimeout(0) instead of rAF — rAF doesn't fire in background/hidden tabs
+    // which would leave the preloader stuck until the tab becomes visible.
+    setTimeout(() => this.dismiss(), 0);
   }
 
   _attachFontsWait() {
@@ -4495,20 +5388,33 @@ class ToolskinPreloader {
       document.documentElement.removeAttribute('aria-busy');
       this._ariaBusySet = false;
     }
-    document.documentElement.classList.remove('ts-preloader-lock');
     this._imageListeners.forEach(({ img, onDone }) => {
       img.removeEventListener('load', onDone);
       img.removeEventListener('error', onDone);
     });
     this._imageListeners = [];
+
+    // Smooth exit transition: fade-out via CSS .is-exiting, then unlock
     this.el.classList.remove('is-visible');
-    this.el.classList.add('is-done');
+    this.el.classList.add('is-exiting');
+
+    // Unlock page scroll after the fade-out transition (450ms)
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('ts-preloader-lock');
+      if (this.el) {
+        this.el.classList.remove('is-exiting');
+        this.el.classList.add('is-done');
+      }
+    }, 450);
+
+    // Clean up DOM after transition completes
     window.setTimeout(() => {
       if (this.autoCreated && this.el?.parentNode) this.el.parentNode.removeChild(this.el);
       this.el = null;
       this.barEl = null;
       this.wrapEl = null;
-    }, 260);
+      this.pctEl = null;
+    }, 520);
   }
 
   destroy() {
@@ -4612,10 +5518,19 @@ const Toolskin = {
       this.gridBg = new ToolskinGridBg(this.config.gridBg);
     }
 
+
     // Initialize mobile menu
     this.mobileMenu = new ToolskinMobileMenu();
     // After mobile clones desktop links, compute primary-nav overflow ("More").
     ToolskinDynamicNav.init(document);
+
+    // Process auto-icons for both desktop and mobile (after both are ready)
+    if (typeof ToolskinAutoIcons !== 'undefined') {
+      ToolskinAutoIcons.inject(document);
+    }
+
+    // Final icon injection pass to catch any auto-assigned icons
+    ToolskinIcons.inject();
     this._initPromoBanner();
 
     const docOff =
@@ -4625,9 +5540,81 @@ const Toolskin = {
     if (docOff) ttCfg.enabled = false;
     this.initTooltips(ttCfg);
 
+    // Deferred smooth scroll: if Lenis wasn't available at init time (loaded async by
+    // ToolskinAssets), retry initialization once assets are ready.
+    if (this.smooth && !this.smooth.lenis && this.config.smoothScroll.enabled) {
+      const self = this;
+      if (typeof window.ToolskinAssets !== 'undefined') {
+        window.ToolskinAssets.onReady(function () {
+          if (typeof Lenis !== 'undefined' && !self.smooth.lenis) {
+            self.smooth._init();
+          }
+        });
+      }
+    }
+
+    // ── Subtle scroll-end snap correction ──
+    this._initScrollSnap();
+
     // Dispatch ready event
     window.dispatchEvent(new CustomEvent('ts:ready', { detail: { config: this.config } }));
     this._initialized = true;
+  },
+
+
+  /**
+   * Subtle scroll-end snap correction.
+   * After user stops scrolling (500ms idle), if viewport top is within threshold
+   * of a section boundary, gently scroll to align. Does NOT fight manual scrolling.
+   */
+  _initScrollSnap() {
+    let scrollTimer = null;
+    let programmaticScroll = false;
+    const THRESHOLD = 100; // px — only snap if within this distance of a section top
+    const DEBOUNCE = 500;  // ms — wait this long after last scroll event
+
+    // Mark programmatic scrolls so we don't re-snap them
+    const originalScrollTo = this.smooth && this.smooth.lenis
+      ? (target, opts) => { programmaticScroll = true; this.smooth.lenis.scrollTo(target, opts); }
+      : null;
+
+    const getHeaderHeight = () => {
+      const h = document.querySelector('.ts-nav-fixed, [data-fixed-header]');
+      return h ? h.offsetHeight : 0;
+    };
+
+    const sections = () => document.querySelectorAll('section[id]');
+
+    const checkSnap = () => {
+      if (programmaticScroll) { programmaticScroll = false; return; }
+      const scrollY = window.scrollY;
+      const headerH = getHeaderHeight();
+      const viewTop = scrollY + headerH;
+      let closest = null;
+      let closestDist = Infinity;
+      sections().forEach(section => {
+        const sTop = section.offsetTop;
+        const dist = Math.abs(viewTop - sTop);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = section;
+        }
+      });
+      if (closest && closestDist <= THRESHOLD && closestDist > 2) {
+        programmaticScroll = true;
+        const target = closest.offsetTop - headerH;
+        if (this.smooth && this.smooth.lenis) {
+          this.smooth.lenis.scrollTo(target, { duration: 0.6 });
+        } else {
+          window.scrollTo({ top: target, behavior: 'smooth' });
+        }
+      }
+    };
+
+    window.addEventListener('scroll', () => {
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(checkSnap, DEBOUNCE);
+    }, { passive: true });
   },
 
   _initPromoBanner() {
@@ -4682,6 +5669,9 @@ const Toolskin = {
       this.range = new ToolskinRange();
     }
 
+    // Color row components (swatch ↔ picker ↔ hex auto-sync)
+    this.colorRows = new ToolskinColorRow();
+
     // Viewport manager for performance optimization
     this.viewportManager = new ToolskinViewportManager();
 
@@ -4699,11 +5689,19 @@ const Toolskin = {
   },
 
   /**
-   * Show a toast notification
+   * Show a toast notification.
+   * Supports two call signatures:
+   *   showToast(message, opts)                        — original form
+   *   showToast(message, variant, opts)               — positional variant (Bug 2 + 3 fix)
+   * When the second argument is a string it is treated as the variant name
+   * and merged into opts as { type: variant, ...opts }.
    */
-  showToast(message, opts = {}) {
+  showToast(message, variantOrOpts = {}, opts = {}) {
     if (!this.toast) this.toast = new ToolskinToast();
-    return this.toast.show(message, opts);
+    const resolvedOpts = (typeof variantOrOpts === 'string')
+      ? Object.assign({ type: variantOrOpts }, opts)
+      : variantOrOpts;
+    return this.toast.show(message, resolvedOpts);
   },
 
   /**
@@ -4811,6 +5809,37 @@ const Toolskin = {
     ToolskinIcons.inject();
   },
 
+  /** Enable/disable tooltips at runtime. When off, removes container from DOM. */
+  enableTooltips(on) {
+    if (on) {
+      if (!this.tooltips) {
+        this.initTooltips({ enabled: true });
+      }
+    } else {
+      if (this.tooltips && typeof this.tooltips.destroy === 'function') {
+        this.tooltips.destroy();
+      }
+      this.tooltips = null;
+      // Remove container from DOM
+      const el = document.getElementById('ts-tooltip-container');
+      if (el) el.remove();
+    }
+  },
+
+  /** Enable/disable custom cursor at runtime (creates instance if needed). */
+  enableCursor(on) {
+    if (on) {
+      if (!this.cursor) {
+        this.config.cursor.enabled = true;
+        this.cursor = new ToolskinCursor(this.config.cursor);
+      }
+    } else {
+      if (this.cursor && typeof this.cursor.destroy === 'function') this.cursor.destroy();
+      this.cursor = null;
+      this.config.cursor.enabled = false;
+    }
+  },
+
   destroy() {
     ToolskinDynamicNav.destroy(document);
     ToolskinSlider.destroyAll(document);
@@ -4842,6 +5871,10 @@ const Toolskin = {
   const el = document.querySelector('#ts-preloader, [data-ts-preloader]');
   if (el && !el.classList.contains('is-done')) {
     el.classList.add('is-visible');
+  }
+  // Kick off dynamic asset loading pipeline immediately (non-blocking)
+  if (typeof window.ToolskinAssets !== 'undefined' && typeof window.ToolskinAssets.loadAll === 'function') {
+    window.ToolskinAssets.loadAll();
   }
 })();
 
@@ -6224,3 +7257,6 @@ const initPhantomGallery = async () => {
 
   window.initTSResizable = initTSResizable;
 })();
+
+
+

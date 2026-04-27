@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const theme = document.documentElement.getAttribute('data-theme') || 'dark';
     window.tsGradient = new TSGradientCanvas({
       containerId: target.id || null,
-      speed: 0.1,
+      speed: 0.15,
       theme: theme,
       fadeIn: true,
       fadeDuration: 2.5,

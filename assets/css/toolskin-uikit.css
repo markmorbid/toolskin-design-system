@@ -12,13 +12,21 @@
 :root {
   --ts-ui-control-size: 1.125rem;
   --ts-ui-control-mark-inset: 22%;
+
+  /* Enhanced select styling */
+  --ts-ui-select-bg: var(--ts-bg-2);
+  --ts-ui-select-bg-hover: var(--ts-bg-3);
+  --ts-ui-select-border: var(--ts-border-1);
+  --ts-ui-select-border-hover: var(--ts-border-2);
+  --ts-ui-select-border-focus: var(--ts-accent-border);
+  --ts-ui-select-shadow-focus: 0 0 0 2px var(--ts-accent-dim-2);
 }
 
 /* ── Accordion ─────────────────────────────────────────────────── */
 .ts-ui-accordion,
 .ts-accordion {
   --ts-ui-accordion-header-pad: var(--ts-sp-3) var(--ts-sp-4);
-  --ts-ui-accordion-header-fs: var(--ts-fs-sm);
+  --ts-ui-accordion-header-fs: var(--ts-fs-2xl);  /* ✅ H3-like hierarchy */
   --ts-ui-accordion-header-min-h: 0;
   --ts-ui-accordion-header-bg: var(--ts-bg-1);
   --ts-ui-accordion-header-bg-hover: var(--ts-bg-3);
@@ -67,7 +75,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* ✅ LEFT-ALIGN content instead of space-between */
   gap: var(--ts-sp-3);
   min-height: var(--ts-ui-accordion-header-min-h);
   padding: var(--ts-ui-accordion-header-pad);
@@ -90,9 +98,37 @@
   border-bottom: 1px solid var(--ts-border-1);
 }
 
+/* ✅ CLEAN: Remove bottom border on last accordion item */
+.ts-ui-accordion__item:last-child .ts-ui-accordion__header,
+.ts-accordion__item:last-child .ts-accordion__header {
+  border-bottom: none;
+}
+
+.ts-ui-accordion--separated .ts-ui-accordion__item:last-child .ts-ui-accordion__header,
+.ts-accordion.ts-ui-accordion--separated .ts-accordion__item:last-child .ts-accordion__header {
+  border-bottom: none;
+}
+
 .ts-ui-accordion__header:hover,
 .ts-accordion__header:hover {
   background: var(--ts-ui-accordion-header-bg-hover);
+}
+
+/* ✅ ENHANCED: Icon hover states for better interaction feedback */
+.ts-ui-accordion__header:hover .ts-ui-accordion__icon,
+.ts-accordion__header:hover .ts-accordion__icon {
+  color: var(--ts-text-secondary);
+  transform: scale(1.05);
+  transition: color var(--ts-dur-fast) var(--ts-ease-out),
+              transform var(--ts-dur-fast) var(--ts-ease-out);
+}
+
+.ts-ui-accordion__header:hover .ts-ui-accordion__category-icon,
+.ts-accordion__header:hover .ts-accordion__category-icon {
+  color: var(--ts-accent);
+  transform: scale(1.05);
+  transition: color var(--ts-dur-fast) var(--ts-ease-out),
+              transform var(--ts-dur-fast) var(--ts-ease-out);
 }
 
 .ts-ui-accordion__header--active,
@@ -104,9 +140,9 @@
 .ts-accordion__header-main {
   display: flex;
   align-items: center;
-  gap: var(--ts-sp-2);
+  gap: var(--ts-sp-3);  /* ✅ SLIGHTLY larger gap for better balance */
   min-width: 0;
-  flex: 1;
+  flex: 1; /* ✅ Takes available space, pushes toggle to right */
 }
 
 .ts-ui-accordion__icon,
@@ -114,8 +150,11 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* ✅ LEFT-ALIGN instead of center */
+  width: 1.125rem; /* ✅ CONSISTENT icon size */
+  height: 1.125rem;
   color: var(--ts-text-muted);
+  font-size: 0.875rem; /* ✅ CONSISTENT font size for icons */
 }
 
 .ts-ui-accordion__label,
@@ -123,6 +162,7 @@
   min-width: 0;
   flex: 1;
   text-align: left;
+  line-height: 1.4; /* ✅ BETTER text spacing for multi-line labels */
 }
 
 /* Dual icon: category column + separator + header-main (item icon + label) */
@@ -140,23 +180,17 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* ✅ Category icons can stay centered in their container */
   width: var(--ts-ui-accordion-category-icon-size);
   height: var(--ts-ui-accordion-category-icon-size);
-  margin-right: var(--ts-ui-accordion-category-gap);
+  margin-right: var(--ts-sp-3);  /* ✅ CLOSER spacing */
+  padding-right: var(--ts-sp-3); /* ✅ PADDING for border */
+  border-right: 1px solid var(--ts-border-1); /* ✅ RIGHT border instead of separator */
   color: color-mix(in srgb, var(--ts-accent), var(--ts-text-muted) 35%);
-  font-size: var(--ts-ui-accordion-category-icon-size);
+  font-size: 0.875rem; /* ✅ CONSISTENT font size matching regular icons */
 }
 
-.ts-ui-accordion--dual-icon .ts-ui-accordion__category-sep,
-.ts-ui-accordion--dual-icon .ts-accordion__category-sep {
-  flex-shrink: 0;
-  width: var(--ts-ui-accordion-category-sep-width);
-  height: var(--ts-ui-accordion-category-sep-height);
-  margin-right: var(--ts-ui-accordion-category-gap);
-  border-radius: 1px;
-  background: var(--ts-border-1);
-  align-self: center;
+/* ✅ REMOVED: separator completely - now using icon border */
 }
 
 .ts-ui-accordion--dual-icon.ts-ui-accordion--separated .ts-ui-accordion__item,
@@ -171,6 +205,7 @@
   flex-shrink: 0;
   width: 0.5rem;
   height: 0.5rem;
+  margin-left: auto; /* ✅ PUSH chevron to the right */
   border-right: 2px solid var(--ts-text-muted);
   border-bottom: 2px solid var(--ts-text-muted);
   transform: rotate(45deg);
@@ -193,6 +228,7 @@
 .ts-accordion__indicator {
   position: relative;
   flex-shrink: 0;
+  margin-left: auto; /* ✅ PUSH plus/minus indicator to the right */
   width: calc(1.25rem + var(--ts-ui-accordion-toggle-pad) * 2);
   height: calc(1.25rem + var(--ts-ui-accordion-toggle-pad) * 2);
   box-sizing: border-box;
@@ -297,21 +333,26 @@
   padding: var(--ts-sp-2) var(--ts-sp-3);
   box-sizing: border-box;
   border-radius: var(--ts-radius-md);
-  border: 1px solid var(--ts-border-1);
-  background: var(--ts-bg-1);
+  border: 1px solid var(--ts-ui-select-border);
+  background: var(--ts-ui-select-bg);
   color: var(--ts-text-primary);
   font-size: var(--ts-fs-sm);
   cursor: pointer;
-  transition: border-color var(--ts-dur-fast), box-shadow var(--ts-dur-fast);
+  transition: all var(--ts-dur-fast) var(--ts-ease-out);
 }
 
 .ts-ui-select__trigger:hover {
-  border-color: var(--ts-border-0);
+  border-color: var(--ts-ui-select-border-hover);
+  background: var(--ts-ui-select-bg-hover);
+  transform: translateY(-1px);
 }
 
-.ts-ui-select--open .ts-ui-select__trigger {
-  border-color: var(--ts-accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ts-accent), transparent 70%);
+.ts-ui-select--open .ts-ui-select__trigger,
+.ts-ui-select__trigger:focus {
+  border-color: var(--ts-ui-select-border-focus);
+  background: var(--ts-ui-select-bg-hover);
+  box-shadow: var(--ts-ui-select-shadow-focus);
+  outline: none;
 }
 
 .ts-ui-select__value {
@@ -340,11 +381,13 @@
   top: calc(100% + 4px);
   z-index: 2000;
   border-radius: var(--ts-radius-md);
-  border: 1px solid var(--ts-border-1);
-  background: var(--ts-bg-1);
-  box-shadow: var(--ts-shadow-3);
+  border: 1px solid var(--ts-ui-select-border);
+  background: var(--ts-ui-select-bg);
+  box-shadow: var(--ts-shadow-3), 0 8px 25px color-mix(in srgb, var(--ts-bg-body), transparent 20%);
   max-height: 280px;
   flex-direction: column;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* [hidden] must win over display:flex (otherwise panel stays visible) */
@@ -471,12 +514,20 @@ html.ts-env-moz .ts-ui-scrollbar--moz .ts-ui-select__list {
 
 .ts-ui-select__option:hover,
 .ts-ui-select__option:focus {
-  background: var(--ts-bg-3);
+  background: var(--ts-ui-select-bg-hover);
   outline: none;
+  transform: translateX(2px);
+  transition: all var(--ts-dur-fast) var(--ts-ease-out);
 }
 
 .ts-ui-select__option--selected {
   background: color-mix(in srgb, var(--ts-accent), transparent 88%);
+  color: var(--ts-accent);
+  font-weight: 500;
+}
+
+.ts-ui-select__option--selected:hover {
+  background: color-mix(in srgb, var(--ts-accent), transparent 82%);
 }
 
 .ts-ui-select__option-inner {
