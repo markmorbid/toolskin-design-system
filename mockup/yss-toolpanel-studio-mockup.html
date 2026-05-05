@@ -1,54 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" data-theme="dark" data-ts-theme="dark" style="--ts-container-max: 1400px; --ts-content-max: 1400px; --ts-bg-body: #0c0d0f; --ts-bg-0: #111214; --ts-bg-1: #17181b; --ts-bg-2: #1f2024; --ts-bg-3: #28292e; --ts-bg-4: #323439; --ts-bg-5: #3e4045; --ts-text-primary: #e8e9ea; --ts-text-secondary: #9ea0a5; --ts-text-muted: #6d6f74;">
+<head >
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>YSS Toolpanel Mockup</title>
-	<!-- 	<link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/Youtube_Toolpanel_4.2.7.user.css"> -->
-	<link rel="stylesheet" href="../assets/css/Youtube_Toolpanel_4.2.7.user.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<link rel="stylesheet" href="../assets/css/extra-styles.css">
-	<link rel="stylesheet" href="../assets/css/toolskin.css">
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" sizes="any">
+    <link rel="icon" href="../assets/img/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+
+
+
+	
 	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-		rel="stylesheet">
-	<!-- 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
- -->
-	<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
-	<script type="text/javascript" src="../assets/js/mockup-scripts.js"></script>
-	<script type="text/javascript" src="../assets/js/toolskin.js"></script>
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+	<link rel="stylesheet" href="../assets/css/toolskin-merged-3.2.6._4.2.css" />
+	<link rel="stylesheet" href="../assets/css/extra-styles.css">
+	<link rel="stylesheet" href="../assets/css/Youtube_Toolpanel_4.2.7.user.css">
+
+
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+
+    <script src="../assets/js/toolskin-assets.js" defer></script>
+    <script src="../assets/js/toolskin.js" defer></script>
+    <script src="../assets/js/toolskin-uikit.js" defer></script>	
+    <script type="text/javascript" src="../assets/js/mockup-scripts.js"></script>
+
 	<style>
 		body {
-			background-image: url(../assets/img/bg_yt_s.jpg);
+			/*background-image: url(../assets/img/bg_yt_s.jpg);
 			background-repeat: no-repeat;
 			background-size: cover;
-			background-position: left center;
+			background-position: left center;*/
+			--ts-accent: var(--yss-accent);
+			--yss-accent: var(--yss-btn-purple-bg);
 		}
+		:root, :root *{
+			--ts-accent: var(--yss-accent);
+		}
+
+
 	</style>
 	<script>
-		// Datepicker / timepicker init is centralised in scripts.js (_initDatepickers).
-		// Just add .yss-datepicker or .yss-monthpicker to inputs in modal HTML.
-		// Nothing to init on page load — inputs live inside AJAX-loaded modals.
+
+		window.addEventListener('DOMContentLoaded', () => {
+			Toolskin.config.cursor = {
+			enabled: false
+			};
+		});
 	</script>
 </head>
-
 <body>
-	<div class="container" id="main">
+	<div class="container ts-container ts-sandbox-isolate" id="main">
 
 
-		<header class="yss-header-wrapper yss-page-header" id="header">
-			<h1 class="yss-header">YSS Toolpanel Mockup <strong>// Youtube Studio Mode</strong>
-				<button id="switch-mode" class="yss-btn yss-btn-purple yss-btn-header"><i
-						class="fa-solid fa-chevron-right"></i><span>Change to Watch Mode</span></button>
-				<a href="index.html" class="yss-btn yss-btn-secondary yss-btn-header yss-btn-index">
+
+		<header class="ts-nav-static ts-header" id="ts-header">
+			<h1 class="ts-title ts-header-title">YSS Toolpanel Mockup <strong  style="--ts-accent: var(--yss-btn-purple-bg);">// Youtube Studio Mode</strong>
+				<button id="switch-mode" class="ts-btn ts-btn--purple ts-btn-header ts-btn--md" style="--ts-accent: var(--yss-btn-purple-bg);"><i class="fa-solid fa-chevron-right"></i><span>Change to watch Mode</span></button>
+				<a href="index.html" class="ts-btn ts-btn-secondary ts-btn--secondary ts-btn-header ts-btn-index ts-btn--md">
 					<i class="fa-solid fa-arrow-left"></i><span>Index</span>
 				</a>
 			</h1>
+			<button class="ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
+	          <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" aria-hidden="true"></span>
+	          <span class="ts-icon ts-theme-icon-dark" data-ts-icon="fa-solid fa-moon" aria-hidden="true"></span>
+	        </button>
 		</header>
 		<div id="yss-panel" class="yss-panel"
 			style="will-change: auto;height: 100vh;inset: 50% auto auto 50%;transform: translate(-50%, -50%);max-height: round(calc(90vh - 10%)/2, 680px);">

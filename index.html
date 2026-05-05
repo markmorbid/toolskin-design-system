@@ -30,10 +30,10 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
     <link rel="dns-prefetch" href="https://api.cdnjs.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
     <!-- Other CDN assets (FA, Ionicons, Lenis, GSAP, etc.) loaded dynamically by toolskin-assets.js -->
     <noscript>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
     </noscript>
     <link rel="icon" href="assets/img/favicon.ico" sizes="any">
     <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
@@ -99,8 +99,9 @@
     <!-- <link rel="stylesheet" href="assets/css/toolskin-merged-2.css" /> -->
     <!-- <link rel="stylesheet" href="assets/css/toolskin-merged-3.2.css" /> -->
 
-    <link rel="stylesheet" href="assets/css/toolskin-merged-3.2.6._4.2.css" />
-
+   <!--  <link rel="stylesheet" href="assets/css/toolskin-merged-3.2.6._4.2.css" /> -->
+    <link rel="stylesheet" href="assets/css/toolskin.css" />
+    <!-- <link rel="stylesheet" href="assets/css/toolskin.css" /> -->
     <!-- ToolskinAssets — dynamic asset pipeline (must load before toolskin.js early boot) -->
     <script src="assets/js/toolskin-assets.js" defer></script>
     <!-- Toolskin Framework — early boot IIFE kicks off ToolskinAssets.loadAll() -->
@@ -175,17 +176,18 @@
           <a href="#top">Home</a>
           <a href="#typography">Type</a>
           <a href="#components">Components</a>
+          <a href="#ui-kit">Enhanced UI</a>
           <a href="#forms">Forms</a>
           <a href="#cards">Cards</a>
           <a href="#panels">Panels</a>
           <a href="#mockups">Mockups</a>
-          <a href="generator/" class="ts-nav-link ts-btn ts-btn--outline" data-icon="ion:options-outline" data-tooltip="Check the Banner generator, a branded interface fully built with toolksin design system that  lets you  design your own brand banner for simple   featured images or  covers. a sample of this  system power.">Banner UI</a>
-          <a href="surface-lab.html" class="ts-nav-link ts-btn ts-btn--primary" data-icon="ion:color-palette-outline" data-tooltip="Navigate to the Tokens and Surfaces Color Lab from the Design System.">Surfaces Lab</a>
-
+          <a href="generator/" class="ts-nav-link ts-btn ts-btn--outline" data-icon="ion:options-outline" data-tooltip="Check the Banner generator, a branded interface fully built with toolksin design system.">Generator</a>
+          <a href="toolskin-lab.html" class="ts-nav-link ts-btn ts-btn--primary" data-icon="ion:color-palette-outline" data-tooltip="Navigate to the Tokens and Surfaces Color Lab from the Design System.">UI Lab</a>
+          <a href="surface-lab.html" class="ts-nav-link ts-btn ts-btn--ghost" data-icon="ion:color-palette-outline" data-tooltip="Navigate to the Tokens and Surfaces Color Lab from the Design System.">Surfaces Lab</a>
         </div>
         <!-- The "More" Button -->
         <div id="navbar-collapse" class="ts-nav-more">
-          <button class="ts-more-trigger">•••</button>
+          <button class="ts-more-trigger" data-icon="fa-solid fa-ellipsis"><span class="sr-only">•••</span></button>
           <div id="navbar-extend" class="ts-nav-dropdown"></div>
         </div>
         <!-- Theme Toggle (right side of menu) -->
@@ -305,7 +307,7 @@
 
 
       <!--  SECTION: TYPOGRAPHY ─────────────────────────────────────── -->
-      <section class="ts-section ts-section--alt ts-bg-grad-surface-radial-soft" id="typography">
+      <section class="ts-section ts-bg-grad-surface-radial-soft" id="typography">
         <div class="ts-container">
           <div class="ts-section-divider rounded">
             <h2>§3 — Typography</h2>
@@ -627,26 +629,31 @@
                         <th data-sort-key="title" scope="col" style="cursor: pointer;">
                           <span class="ts-flex ts-items-center ts-gap-2">
                             Video Title
+                            <span class="ts-icon" data-ts-icon="fa-solid fa-sort" style="font-size: 0.75rem; opacity: 0.6;"></span>
                           </span>
                         </th>
                         <th data-sort-key="status" scope="col" style="cursor: pointer;">
                           <span class="ts-flex ts-items-center ts-gap-2">
                             Status
+                            <span class="ts-icon" data-ts-icon="fa-solid fa-sort" style="font-size: 0.75rem; opacity: 0.6;"></span>
                           </span>
                         </th>
                         <th data-sort-key="views" scope="col" style="cursor: pointer;">
                           <span class="ts-flex ts-items-center ts-gap-2">
                             Views
+                            <span class="ts-icon" data-ts-icon="fa-solid fa-sort" style="font-size: 0.75rem; opacity: 0.6;"></span>
                           </span>
                         </th>
                         <th data-sort-key="published" scope="col" style="cursor: pointer;">
                           <span class="ts-flex ts-items-center ts-gap-2">
                             Published
+                            <span class="ts-icon" data-ts-icon="fa-solid fa-sort" style="font-size: 0.75rem; opacity: 0.6;"></span>
                           </span>
                         </th>
                         <th data-sort-key="rating" scope="col" style="cursor: pointer;">
                           <span class="ts-flex ts-items-center ts-gap-2">
                             Rating
+                            <span class="ts-icon" data-ts-icon="fa-solid fa-sort" style="font-size: 0.75rem; opacity: 0.6;"></span>
                           </span>
                         </th>
                         <th scope="col">Actions</th>
@@ -1030,7 +1037,7 @@
       </section>
 
       <!-- Enhanced UIKit Components -->
-      <section class="ts-section ts-section--alt" id="enhanced-components">
+      <section class="ts-section" id="ui-kit">
         <div class="ts-container">
           <div class="ts-section-divider rounded">
             <h2>§6x — Enhanced UI Kit Components</h2>
@@ -1450,7 +1457,7 @@
 
 
       <!--  SECTION: FORMS ── -->
-      <section class="ts-section ts-section--alt" id="forms">
+      <section class="ts-section" id="forms">
         <div class="ts-container">
           <div class="ts-section-divider rounded">
             <h2>§6d–6f — Forms, Toggles, Sliders</h2>
@@ -1869,7 +1876,7 @@
 
 
       <!--  SECTION: CARDS ── -->
-      <section class="ts-section ts-section--alt" id="cards">
+      <section class="ts-section" id="cards">
         <div class="ts-container">
           <div class="ts-section-divider rounded ts-zoom-in">
             <h2>§6b — Cards</h2>
@@ -2007,7 +2014,7 @@
             <div class="ts-flip-card">
               <div class="ts-flip-card__inner">
                 <div class="ts-flip-card__front">
-                  <div class="ts-label">01</div>
+                  <div class="ts-label ts-number">01</div>
                   <div class="ts-h2 ts-text-accent">DYNAMICS</div>
                   <p class="ts-caption">Hover to inspect</p>
                 </div>
@@ -2021,7 +2028,7 @@
             <div class="ts-flip-card">
               <div class="ts-flip-card__inner">
                 <div class="ts-flip-card__front">
-                  <div class="ts-label">02</div>
+                  <div class="ts-label ts-number">02</div>
                   <div class="ts-h2 ts-text-accent">VISUALS</div>
                   <p class="ts-caption">Hover to inspect</p>
                 </div>
@@ -2035,7 +2042,7 @@
             <div class="ts-flip-card">
               <div class="ts-flip-card__inner">
                 <div class="ts-flip-card__front">
-                  <div class="ts-label">03</div>
+                  <div class="ts-label ts-number">03</div>
                   <div class="ts-h2 ts-text-accent">SPEED</div>
                   <p class="ts-caption">Hover to inspect</p>
                 </div>
@@ -2047,6 +2054,55 @@
               </div>
             </div>
           </div>
+          <!-- NEW swipe Cards variant implemented -->
+          <div class="ts-section-divider rounded ts-zoom-in">
+            <h2>Swipe Cards (hover)</h2>
+          </div>
+          <div class="ts-grid ts-grid--3">
+          <div class="ts-swipe-card">
+            <div class="ts-swipe-card__inner">
+              <div class="ts-swipe-card__front">
+                <div class="ts-label ts-number">01</div>
+                <div class="ts-h2 ts-text-accent">DYNAMICS</div>
+                <p class="ts-caption">Hover to inspect</p>
+              </div>
+              <div class="ts-swipe-card__back">
+                <div class="ts-h3">Precision Logic</div>
+                <p class="ts-text-secondary ts-caption">Calculated interactions with micro-feedback loops.</p>
+                <button class="ts-btn ts-btn--primary ts-btn--sm">View Specs</button>
+              </div>
+            </div>
+          </div>
+          <div class="ts-swipe-card">
+            <div class="ts-swipe-card__inner">
+              <div class="ts-swipe-card__front">
+                <div class="ts-label ts-number">02</div>
+                <div class="ts-h2 ts-text-accent">VISUALS</div>
+                <p class="ts-caption">Hover to inspect</p>
+              </div>
+              <div class="ts-swipe-card__back">
+                <div class="ts-h3">Aesthetic Depth</div>
+                <p class="ts-text-secondary ts-caption">Multi-layer SVG noise grain architecture.</p>
+                <button class="ts-btn ts-btn--primary ts-btn--sm">View Specs</button>
+              </div>
+            </div>
+          </div>
+          <div class="ts-swipe-card">
+            <div class="ts-swipe-card__inner">
+              <div class="ts-swipe-card__front">
+                <div class="ts-label ts-number">03</div>
+                <div class="ts-h2 ts-text-accent">SPEED</div>
+                <p class="ts-caption">Hover to inspect</p>
+              </div>
+              <div class="ts-swipe-card__back">
+                <div class="ts-h3">Runtime Flux</div>
+                <p class="ts-text-secondary ts-caption">Zero external dependencies. Minimal footprint.</p>
+                <button class="ts-btn ts-btn--primary ts-btn--sm">View Specs</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         </div>
       </section>
 
@@ -2157,8 +2213,8 @@
               <span class="ts-label">App Topbar</span>
               <div class="ts-topbar ts-mb-5 ts-topbar-static">
                 <div class="ts-topbar__logo">
-                  TOOL<em>SKIN</em>
-                  <span>Design System</span>
+                 <div class="ts-logo-brand"> TOOL<em>SKIN</em></div>
+                  <span  class="ts-logo-sub">Design System</span>
                 </div>
                 <div class="ts-topbar__sep"></div>
                 <nav class="ts-nav">
@@ -2172,7 +2228,56 @@
                 </div>
               </div>
 
+              <!-- ODN-D2: Nav variant matrix (resolves ODN-D2 acceptance bullet 5) -->
+              <span class="ts-label">Nav variant: default (.ts-nav)</span>
+              <div class="ts-card ts-p-2 ts-mb-3" data-odnd2-case="default">
+                <nav class="ts-nav">
+                  <a class="ts-nav__item ts-nav__item--active" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-house" aria-hidden="true"></span> <span class="ts-menu-text">Dashboard</span></a>
+                  <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-chart-bar" aria-hidden="true"></span> <span class="ts-menu-text">Analytics</span></a>
+                  <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-gear" aria-hidden="true"></span> <span class="ts-menu-text">Settings</span></a>
+                </nav>
+              </div>
 
+              <span class="ts-label">Nav variant: .ts-nav--spaced (no dividers, gap-driven)</span>
+              <div class="ts-card ts-p-2 ts-mb-3" data-odnd2-case="spaced">
+                <nav class="ts-nav ts-nav--spaced">
+                  <a class="ts-nav__item ts-nav__item--active" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-house" aria-hidden="true"></span> <span class="ts-menu-text">Dashboard</span></a>
+                  <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-chart-bar" aria-hidden="true"></span> <span class="ts-menu-text">Analytics</span></a>
+                  <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-gear" aria-hidden="true"></span> <span class="ts-menu-text">Settings</span></a>
+                </nav>
+              </div>
+
+              <span class="ts-label">Nav variant: .ts-nav--icon-only (no dividers, label hidden)</span>
+              <div class="ts-card ts-p-2 ts-mb-3" data-odnd2-case="icon-only">
+                <nav class="ts-nav ts-nav--icon-only">
+                  <a class="ts-nav__item ts-nav__item--active" href="#" data-tooltip="Dashboard"><span class="ts-icon" data-ts-icon="fa-solid fa-house" aria-hidden="true"></span> <span class="ts-menu-text">Dashboard</span></a>
+                  <a class="ts-nav__item" href="#" data-tooltip="Analytics"><span class="ts-icon" data-ts-icon="fa-solid fa-chart-bar" aria-hidden="true"></span> <span class="ts-menu-text">Analytics</span></a>
+                  <a class="ts-nav__item" href="#" data-tooltip="Settings"><span class="ts-icon" data-ts-icon="fa-solid fa-gear" aria-hidden="true"></span> <span class="ts-menu-text">Settings</span></a>
+                </nav>
+              </div>
+
+              <span class="ts-label">Nav variant: .ts-nav--spaced.ts-nav--icon-only (combined; no dividers)</span>
+              <div class="ts-card ts-p-2 ts-mb-3" data-odnd2-case="spaced-icon-only">
+                <nav class="ts-nav ts-nav--spaced ts-nav--icon-only">
+                  <a class="ts-nav__item ts-nav__item--active" href="#" data-tooltip="Dashboard"><span class="ts-icon" data-ts-icon="fa-solid fa-house" aria-hidden="true"></span> <span class="ts-menu-text">Dashboard</span></a>
+                  <a class="ts-nav__item" href="#" data-tooltip="Analytics"><span class="ts-icon" data-ts-icon="fa-solid fa-chart-bar" aria-hidden="true"></span> <span class="ts-menu-text">Analytics</span></a>
+                  <a class="ts-nav__item" href="#" data-tooltip="Settings"><span class="ts-icon" data-ts-icon="fa-solid fa-gear" aria-hidden="true"></span> <span class="ts-menu-text">Settings</span></a>
+                </nav>
+              </div>
+
+              <span class="ts-label">Nav variant: dropdown separators preserved (acceptance bullet 4)</span>
+              <div class="ts-card ts-p-2 ts-mb-3" data-odnd2-case="dropdown-keeps-sep">
+                <nav class="ts-nav ts-nav--spaced">
+                  <div class="ts-nav-more hasItems">
+                    <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-bars" aria-hidden="true"></span> <span class="ts-menu-text">More</span></a>
+                    <div class="ts-nav-dropdown">
+                      <a href="#">First link</a>
+                      <a href="#">Second link</a>
+                      <a href="#">Third link</a>
+                    </div>
+                  </div>
+                </nav>
+              </div>
 
             </div>
           </div>
@@ -2230,7 +2335,7 @@
 
 
       <!-- SOCIAL LINKS SHOWCASE -->
-      <section class="ts-section ts-section--alt ts-bg-grad-surface-radial-soft" id="social-links">
+      <section class="ts-section ts-bg-grad-surface-radial-soft" id="social-links">
         <div class="ts-container">
           <h2 class="ts-section-title ts-fade-up">Social Links</h2>
           <p class="ts-lead ts-fade-up ts-delay-1">Flexible social media icon components with multiple style variants.</p>
@@ -2326,7 +2431,7 @@
       </section>
 
       <!-- FOOTER SHOWCASE -->
-      <section class="ts-section ts-grain" id="footer-showcase">
+      <section class="ts-section" id="footer-showcase">
         <div class="ts-container">
           <h2 class="ts-section-title ts-fade-up">Footer Components</h2>
           <p class="ts-lead ts-fade-up ts-delay-1">Comprehensive footer system with widgets, menus, newsletter, and social
@@ -2635,7 +2740,9 @@
           <div class="ts-footer-row">
             <!-- Brand Column -->
             <div class="ts-footer-column">
-              <div class="ts-topbar__logo ts-fs-base ts-mb-4">TOOL<em>SKIN</em></div>
+              <div class="ts-topbar__logo ts-fs-base ts-mb-4">
+                TOOL<em>SKIN</em>
+              </div>
               <p class="ts-caption ts-mb-4">A framework-independent design system. Built for
                 real products.</p>
 

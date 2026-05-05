@@ -113,6 +113,7 @@ All color variations are derived dynamically from three primitives:
 	--ts-accent-dim-3: color-mix(in srgb, var(--ts-accent), transparent 90%);
 /* OWNER FIXES: NEW VALUES ADDED:  the  numbers re not in order. bt the values needed are these.*/
 	--ts-accent-dim-1: color-mix(in srgb, var(--ts-accent), transparent 50%);
+
 	--ts-accent-dim-4: color-mix(in srgb, var(--ts-accent), transparent 70%);
 	--ts-accent-dim-5: color-mix(in srgb, var(--ts-accent), transparent 88%);
 	--ts-accent-dim-6: color-mix(in srgb, var(--ts-accent), transparent 95%);
@@ -421,6 +422,7 @@ Action:
 The current values are not practical for layout spacing and should be deprecated.
 
 */
+
 	--ts-sp-17:  calc(var(--ts-sp-base) * 12 * var(--ts-sp-rhythm) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio));   /* 229px */
 	--ts-sp-18:  calc(var(--ts-sp-base) * 12 * var(--ts-sp-rhythm) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio));   /* 286px */
 	--ts-sp-19:  calc(var(--ts-sp-base) * 12 * var(--ts-sp-rhythm) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio) * var(--ts-sp-ratio));   /* 358px */
@@ -557,8 +559,8 @@ inputs. No need to override per-element bg/border/color/transitions
 	--ts-input-pad-y: calc(var(--ts-input-pad-x)*.7);
 	--ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-x) var(--ts-input-pad-y) var(--ts-input-pad-left);
 	--ts-input-pad-left: calc(var(--ts-input-h) + var(--ts-input-pad-y));
-	--ts-input-radius: var(--ts-radius-sm);
-	--ts-input-fs: var(--ts-fs-body-sm);
+	--ts-input-radius: var(--ts-radius-md);
+	--ts-input-fs: var(--ts-fs-md);
 
 	/* Surfaces — derived from --ts-this-bg. Override --ts-this-bg on a parent to recolor. */
 	--ts-input-bg: var(--ts-this-bg-dim-3);
@@ -592,7 +594,7 @@ inputs. No need to override per-element bg/border/color/transitions
 		color var(--ts-dur-fast) var(--ts-ease-out),
 		background-color var(--ts-dur-fast) var(--ts-ease-out),
 		box-shadow var(--ts-dur-fast) var(--ts-ease-out);
-	--ts-card-transitions: border-color var(--ts-dur-fast) var(--ts-ease-out),
+--ts-card-transitions: border-color var(--ts-dur-fast) var(--ts-ease-out),
 		outline-color var(--ts-dur-fast) var(--ts-ease-out),
 		transform var(--ts-dur-fast) var(--ts-ease-out),
 		color var(--ts-dur-fast) var(--ts-ease-out),
@@ -4669,7 +4671,7 @@ NO MODIFICATIONS allowed unless part of full button system refactor.
 		position: relative;
 
 
-}
+	}
 
 
 }
@@ -4951,7 +4953,7 @@ via SmartButton system and global theming layer.
 	line-height: 1;
 	/* vertical-align: middle; */
 	place-content: center;
- }
+	}
 
 .ts-icon:not(.ts-icon-dot):not(.ts-icon-tiny) > i {
 	font-size: 1em;
@@ -6268,10 +6270,10 @@ html.ts-env-moz .ts-ui-scrollbar--moz .ts-ui-select__list {
 
 	.ts-btn.ts-input-btn.ts-btn--primary:not(:hover, :active, :focus) {
 		filter: none;
-		--_input-bg: var();
 		--_input-bg: transparent;
+		background: var(--_input-bg);
 		--ts-this-bg: var(--ts-input-bg);
-		/* --_btn-color: var(--ts-text-primary-dim-2); */
+		--_btn-color: var(--ts-text-primary-dim-2);
 	}
 
 	.ts-btn:not(:hover, :active, :focus) {
@@ -7637,7 +7639,7 @@ html:not(.ts-banner-generator-app) .ts-chip:not(.ts-align-anchor-btn, .ts-chip--
 }
 
 #ts-main .ts-section:not(.ts-hero, .ts-section--fullbleed) > .ts-container > *:not(.ts-section-divider, .ts-label) {
-	 margin: 0; 
+	/* margin: 0 !important; */
 }
 
 .ts-card.ts-tab-wrap:not(:has(> .ts-tabs--pill, > .ts-tabs--pill-rounded)) .ts-tab {
@@ -13751,8 +13753,8 @@ We need to simplify the structure. The calculations themselves represent the cor
 		box-shadow: none !important;
 		outline: none !important;
 		transition: right var(--ts-dur-base, 300ms) var(--ts-panel-ease-in, linear),
-			var(--ts-btn-base-transitions),
-			transform var(--ts-dur-base, 300ms) linear .2s !important;
+		var(--ts-btn-base-transitions),
+		transform var(--ts-dur-base, 300ms) linear .2s !important;
 		filter: none;
 		backdrop-filter: none !important;
 		padding-inline: 0;
@@ -15786,7 +15788,7 @@ Move out to wider scope if you find other components consuming them.
 		outline-color 300ms ease,
 		border-color 300ms ease,
 		color 300ms ease;
---ts-this-bg-border: color-mix(in srgb, var(--ts-this-bg), var(--ts-text-primary) var(--ts-mix-perc));
+	--ts-this-bg-border: color-mix(in srgb, var(--ts-this-bg), var(--ts-text-primary) var(--ts-mix-perc));
 --ts-mix-perc: 11%;
 --ts-this-bg-grad-bright-pct: 1%;  }
 
@@ -16071,6 +16073,11 @@ position: relative;
 	--ts-feat-border: var(--ts-feat-border-hover);
 }
 
+.ts-feat-cards:not(.ts-feat-icon-big) .ts-feat-item,
+.ts-feat-icon-big .ts-feat-item > .ts-icon {
+	
+
+}
 /* ═══════════════════════════════════════════════════════════════════════
 	VARIANT  —  .hover-accent
 	Accent-tinted hover background. Applies to cards items and big-icon tiles.
@@ -16125,12 +16132,12 @@ position: relative;
 	opacity:1;
 }
 
-/* .ts-lush-mode,
+.ts-lush-mode,
 .ts-gradient-ui,
 [data-ts-mode="lush"],
 [data-ts-mode="ts-gradtient-ui"] {
 	
-} */
+}
 /* Cards — accent hover */
 .ts-feat-cards .ts-feat-item.hover-accent:hover {
 	--ts-this-bg: var(--ts-accent-dim);
@@ -21560,7 +21567,7 @@ NEW Refactor Note: remove all default gradient backgrounds from inputs. gradient
 		font-family: var(--ts-font-mono);
 		font-size: var(--ts-input-fs);
 	}
-
+/*@ts-component-consolidate */
 	/* Select */
 
 	.ts-select-wrap {
@@ -21835,7 +21842,7 @@ STATUS:
 		line-height: var(--ts-chip-lh);
 		text-transform: none;
 		min-width: var(--ts-grid-clamp);
-				flex: 1 1 auto;
+		flex: 1 1 auto;
 		max-height: var(--ts-chip-size);
 		--ts-this-bg: var(--ts-bg-2-t);
 		/* background-image: var(--ts-this-bg-grad); */
@@ -21847,7 +21854,7 @@ STATUS:
 
 
 /*#LOCAL_NOTE: grid + flex dual behavior confirmed → must be preserved as variant, not split logic */
-
+	
 	.ts-align-anchor-grid {
 		align-content: space-between;
 		align-items: stretch;
@@ -21919,37 +21926,53 @@ STATUS:
 
 	.ts-chip:hover,
 	.ts-align-anchor-btn:hover {
-		background-color: var(--ts-this-bg-dim-2);
-		/* background-image: var(--ts-this-bg-grad-2); */
-		border-color: var(--ts-this-bg-border);
-		outline-color: var(--ts-this-bg-border);
-		--ts-on-accent: var(--ts-accent-bright);
-		--ts-this-bg: var(--ts-accent-dim-2);
-		color: var(--ts-on-accent);
+		--ts-chip-bg: var(--ts-chip-bg-hover);
+		--ts-chip-border: var(--ts-this-bg-border-focus);
+		--ts-chip-color: var(--ts-chip-color-hover);
+		
 	}
 
-	.ts-chip:not(.ts-align-anchor-btn).active {
-		background-color: var(--ts-this-bg-dim);
-		background-image: var(--ts-accent-glow-bg-2);
-		border-color: var(--ts-this-bg-border-hover);
-		outline-color: var(--ts-this-bg-border-hover);
-		--ts-on-accent: var(--ts-accent);
-		--ts-this-bg: var(--ts-accent-dim-0);
-		opacity: 1;
-	}
-
-	.ts-align-anchor-btn.active {
-		background-color: var(--ts-this-bg-dim);
-		background-image: var(--ts-accent-glow-bg-2);
-		border-color: var(--ts-this-bg-border-hover);
-		outline-color: var(--ts-this-bg-border-hover);
-		/* --ts-on-accent: var(--ts-accent-bright); */
+	.ts-chip.active, .ts-chip.ts-active,
+	.ts-align-anchor-btn.active, .ts-align-anchor-btn.ts-active {
+		--ts-chip-bg: var(--ts-this-bg-dim-2);
+		background-image: var(--ts-chip-active-bg);
+		--ts-chip-border: var(--ts-this-bg-border-focus);
 		--ts-this-bg: var(--ts-accent-dim);
-		color: var(--ts-accent-bright-2);
+		opacity: 1;
+		--ts-chip-color: var(--ts-chip-color-active);
+		color: var(--ts-this-color-bright);
+
 	}
 
-	/* ─── GRADIENT SWATCHES ───────────────────────────── */
+/*#LOCAL_NOTE: boxed variant unused but valid → preserve + move to main scope as optional modifier */
+	.ts-align-anchor-grid.boxed {
+		align-content: space-between;
+		align-items: stretch;
+		display: grid;
+		justify-items: stretch;
+		justify-content: space-between;
+		grid-template-columns: repeat(var(--ts-anchor-cols), 1fr);
+		grid-auto-flow: row dense;
+		gap: var(--ts-anchor-gap);
+		padding: var(--ts-card-pad);
+		max-width: calc((var(--ts-anchor-size) * var(--ts-anchor-cols)) + var(--ts-anchor-gap)*var(--count-gaps) + var(--ts-card-pad)*var(--count-gaps));
+		background: var(--ts-card-bg-2);
+		font-size: var(--ts-icon);
+		border-radius: var(--ts-chip-radius);
+		border: 1px solid var(--ts-anchor-border);
+		position: relative;
+		grid-template-columns: repeat(var(--ts-anchor-cols), minmax(var(--ts-anchor-size), 1fr));
 
+		flex: 1;
+		--ts-btn-h: 20px;
+			--ts-anchor-size: var(--ts-chip-size);
+		--ts-icon: 1.5rem;
+			--ts-icon: calc(var(--ts-anchor-pad)*.39);
+	}
+
+	
+	/* ─── GRADIENT SWATCHES ───────────────────────────── */
+/*@ts-component-consolidate */
 	.ts-grad-swatches {
 		display: grid;
 		flex-wrap: wrap;
@@ -22066,7 +22089,7 @@ STATUS:
 
 
 	}
-
+/*@ts-component-consolidate this should be migrated to main scope, a sit only exists here as a variant. is a swatch that holds images instead of colors. */
 	.ts-img-swatches .ts-field,
 	.ts-img-swatches.ts-grad-swatches .ts-field {
 		display: flex;
@@ -22100,7 +22123,7 @@ STATUS:
 		height: auto;
 		filter: grayscale(100%);
 	}
-
+/*@ts-component-consolidate */
 	.ts-img-swatches .ts-img-swatch.video,
 	.ts-grad-swatches:has(.ts-img-swatch) .ts-img-swatch.video,
 	.ts-img-swatches.ts-grad-swatches .ts-grad-swatch.ts-img-swatch.video,
@@ -22110,7 +22133,7 @@ STATUS:
 		height: calc(var(--ts-grid-thumbs-size)*.54);
 
 	}
-
+/*@ts-component-consolidate */
 	.ts-img-swatches .ts-img-swatch.video:after,
 	.ts-grad-swatches:has(.ts-img-swatch) .ts-img-swatch.video:after,
 	.ts-img-swatches.ts-grad-swatches .ts-grad-swatch.ts-img-swatch.video:after,
@@ -22131,7 +22154,7 @@ STATUS:
 		opacity: 0;
 	}
 
-
+/*@ts-component-consolidate */
 	.ts-img-swatches:has(.ts-img-swatch.video) .ts-grad-swatches:has(.ts-img-swatch.video) {
 		display: grid !important;
 		gap: var(--ts-grid-gap);
@@ -22188,20 +22211,46 @@ STATUS:
 		filter: grayscale(0%);
 	}
 
+/* OWNER NOTES: component duplication cleanup (ts-ui-select)
+NEW Refactor Note: multiple re-declarations of the same component exist across different scoped integrations (e.g. icon dropdown). this creates unnecessary overrides, increases bundle size, and weakens design consistency. ts-ui-select must be unified into a single base component with variant modifiers instead of rewritten per context. shared styles should live in one source, with scoped contexts only extending via tokens or minimal overrides. preserve visual consistency while eliminating duplication and cascade conflicts. */
 
+/* ─────────────────────────────────────────────────────────────────────
+   ts-ui-select — unification + variant architecture (v1)
 
+   Why: current implementation duplicates the component across scopes,
+   introducing conflicting rules, redundancy, and maintenance overhead.
+
+   v1 fix: define a single canonical ts-ui-select base.
+   implement variants (e.g. icon, compact, header, panel) via modifiers
+   or data-attributes, not full rewrites.
+
+   Strategy:
+   - centralize base styles (layout, sizing, interaction)
+   - use tokens for context adaptation (spacing, colors, radius)
+   - apply minimal scoped overrides only when strictly required
+   - remove redundant declarations across integrations
+
+   Result: one component, multiple controlled variants, consistent UI,
+   reduced CSS size, predictable cascade behavior.
+
+   Hard rules:
+   - no component rewrites per scope
+   - no duplicate style blocks
+   - no override chains to fix previous overrides
+   - variants must extend base, not replace it
+   ───────────────────────────────────────────────────────────────────── */
 
 	/* ─── ICON DROPDOWN ───────────────────────────────── */
 
-
+/*@ts-component-consolidate */
 	.ts-icon-dd-wrap {
 		position: relative;
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-search-input {
 		width: 100%;
-		background: var(--ts-bg-2);
-		border: 1px solid var(--ts-border-1);
+		--ts-this-bg: var(--ts-bg-2);
+		border: 1px solid var(--ts-this-bg-border);
 		color: var(--ts-text-secondary);
 		border-radius: var(--ts-input-radius);
 		height: var(--ts-input-h);
@@ -22212,13 +22261,15 @@ STATUS:
 		transition: border-color 0.15s;
 		box-sizing: border-box;
 		cursor: text;
-	}
+		background-color: var(--ts-this-bg-dim-2);
 
+	}
+/*@ts-component-consolidate */
 	.ts-icon-search-input:focus {
 		border-color: var(--ts-accent);
-		background: var(--ts-accent-dim-2);
+		--ts-this-bg: var(--ts-accent-dim-2);
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-search-icon {
 		position: absolute;
 		left: var(--ts-input-pad-y);
@@ -22230,99 +22281,137 @@ STATUS:
 		display: flex;
 	}
 
-
+/*@ts-component-consolidate */
 	.ts-ui-select__dropdown {
-		/* display: none; */
 		position: absolute;
 		top: calc(100% + 4px);
 		left: 0;
 		right: 0;
-		--ts-this-bg: var(--ts-bg-1-t);
+		--ts-this-bg: var(--ts-bg-1);
 		/* REFACTOR NOTES AND HIGHLIGHTS: Tokens that needs to be centralized*/
-		border: 1px solid var(--ts-border-2);
 		/* REFACTOR NOTES AND HIGHLIGHTS: Tokens that needs to be centralized*/
-		/* border-radius: var(--ts-radius-md); */
-		max-height: clamp(40vh, 80vw, 220px) ;
 		overflow-y: auto;
 		z-index: 99999;
-		/*scrollbar-width: thin;
-		scrollbar-gutter: unset;
-		scrollbar-color: var(--ts-text-primary-dim) rgba(0, 0, 0, 0.01);*/
-		backdrop-filter: blur(var(--ts-backdrop-blur)) saturate(1.5);
-/* @refactor:backdrop-critical */
-/* @refactor:glass-dependent */
-/* @refactor:needs-solid-fallback */
-/* @refactor:token-dependency */
-			background: var(--ts-this-bg-dim-4);
-
+		/* backdrop-filter: blur(var(--ts-backdrop-blur)) saturate(1.5); */
+		/* background: var(--ts-this-bg-dim-4); */
 	}
-
+/*@ts-component-consolidate
+	this specific variant of dropdown selecxtor is  a sepcific one that is used on the banner generator ui onyl for now byt should eb  enabled eberywhere as an asset. and should use the same schema and  structure as every drodpown ands styles inheriticn  the same  styles  and tokens, so we have to unify this with the normal dripdown and options  classes and structure, same gfopr the forn t selector. */
 	.ts-icon-dd-list {
 		/*background: var(--ts-bg-1-t);*/
-		/* REFACTOR NOTES AND HIGHLIGHTS: Tokens that needs to be centralized*/
-		outline: 1px solid var(--ts-border-1);
-		/* REFACTOR NOTES AND HIGHLIGHTS: Tokens that needs to be centralized*/
 		/*border-radius: var(--ts-radius-md);*/
-		max-height: clamp(40vh, 80vw, 220px) ;
 		overflow-y: auto;
 		z-index: 99999;
-		/*box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);*/
-		/*scrollbar-width: thin;*/
 		/*backdrop-filter: blur(6px) saturate(1.5);*/
-		/* position: fixed; */
 		outline-offset: -1px;
 		position: absolute;
-		left: 0 !important;
-		top: calc(var(--ts-input-h) + var(--ts-sp-0, -1px)) !important;
+		right: 0 ;
+		left: 0 ;
+		top: calc(var(--ts-input-h) - 1px);
+		bottom: auto;
 		border-top-right-radius: 0;
 		border-top-left-radius: 0;
 	}
 
-	.ts-icon-dd-list.open,
-	.ts-ui-select__dropdown:not([hidden]) {
-		display: block;
-	}
-
+/*@ts-component-consolidate CHECK IF IS APPLIYING OR REDUDNANTOR DEPRECATED  */
 	.ts-icon-dd-list:not(.open),
 	.ts-ui-select__dropdown:not([hidden]) {
 		display: none;
 	}
-
+/*@ts-component-consolidate CHECK IF IS APPLIYING OR REDUDNANTOR DEPRECATED */
+	.ts-icon-dd-list.open,
 	.ts-ui-select__dropdown:not([hidden]) {
 		display: flex !important;
 	}
 
 
 
+/* @ts-component-consolidate
+OWNER NOTE: dropdown surface + options styling integration
+NEW Refactor Note: this scoped rule affects font selectors in the OCE panel and other dropdowns globally. it must be integrated into the core dropdown system. remove backdrop-filter and alpha layering from dropdown containers and delegate that behavior to the global "glass/lush" styling modes. dropdown containers must use a plain surface background only (no dim/blur), while the list/options layer remains independent. option color rules defined here are currently effective on the frontend with no overrides—these must be preserved, tokenized, and moved to the main scope with high priority. */
 
+/* ─────────────────────────────────────────────────────────────────────
+   ts-ui-select — surface normalization + option tokenization (v1)
+
+   Why: dropdown styling is inconsistently scoped and relies on
+   contextual overrides, including unwanted blur/alpha effects.
+
+   v1 fix: normalize dropdown container surface and extract
+   effective option styles into global tokens.
+
+   Strategy:
+   - remove backdrop-filter and alpha from dropdown container
+   - enforce plain surface background via global tokens
+   - delegate glass/blur effects to global modes only
+   - preserve and extract option color rules (no overrides exist)
+   - tokenize option states (default, hover, active, selected)
+   - move all stable rules to global ts-ui-select base
+
+   Result: consistent dropdown surfaces, preserved visual behavior,
+   centralized token control, no scope leakage.
+
+   Hard rules:
+   - no backdrop-filter in dropdown components
+   - no alpha/blur at component level
+   - container = plain surface only
+   - option styles must be tokenized, not hardcoded
+   - no loss of current effective frontend behavior
+   ───────────────────────────────────────────────────────────────────── */
+
+
+	
+	/* OWNER NOTE: gradient background delegation (inputs)
+NEW Refactor Note: remove all default gradient background-image usage from inputs. gradients must not be hardcoded at component level. delegate this behavior to a global styling mode "Lush Mode", which enables background images for inputs and buttons that already define --ts-this-bg. Lush Mode should toggle gradient application via a global flag/class and support hover/active states consistently. components must remain neutral by default and only consume the gradient when the mode is enabled. */
+
+/* ─────────────────────────────────────────────────────────────────────
+   inputs/buttons — lush mode gradient system (v1)
+
+   Why: gradients are currently embedded per component, creating
+   duplication and inconsistent behavior across states.
+
+   v1 fix: introduce a global "Lush Mode" that conditionally applies
+   background-image using existing --ts-this-bg tokens.
+
+   Strategy:
+   - remove all inline/component gradient declarations
+   - define gradient logic once at global level
+   - activate via root flag/class (e.g. [data-ts-mode="lush"])
+   - ensure hover/active states inherit and adjust correctly
+
+   Result: centralized gradient control, consistent visuals,
+   zero duplication, and optional activation.
+
+   Hard rules:
+   - no component-level gradient definitions
+   - no duplicated gradient logic
+   - gradients only applied via global mode
+   - components must work without gradients by default
+   ───────────────────────────────────────────────────────────────────── */
+	
 	.ts-ui-select[data-ts-ui-select-placeholder*="fonts"] li.ts-ui-select__option {
 		font-family: attr(data-value);
-		font-size: var(--ts-fs-h3);
+		font-size: var(--ts-fs-h4);
 		font-weight: 400;
 		padding: calc(var(--ts-input-pad-y)*1) !important;
 		border-bottom: 1px solid var(--ts-this-bg-border-0)!important;
 		white-space: nowrap;
 		line-height: 1;
 		background-color: var(--ts-this-bg-dim-4);
-	
-		/* background-image: var(--ts-this-bg-grad); */
-		/*#NEW REFACTOR NOTES:  All the inputs that has gradients  by default must be removed and be delegated globally to a  global button and input styling mode "Lush Mode". WHICH SHOULD NABLE THE BACKGRUND IMAGES FOR THE INPUTS that has already the ts-this-bg built and only needs the image  set to work. the hover state should support it too. */
 
+/*@ts-component-consolidate */
 		min-height: unset;
-		--ts-this-bg: #47474720;
+		/* this hardcoded value should not be used like this. should be a dynamic token value. but thios one is aplliying on the global element and is visible on all the scopes. so treat with care and select a this bg surface value that is usavbble and non-default  dimmed,.*/
+
 		color: var(--ts-text-primary-dim-2);
 
 	}
-
-	.ts-banner-generator-app .ts-card:has(.ts-ui-select--open) {
+/* this rule is consolidated but it is a fix that males possible  that the card cotnaining the drodpown is never beneath the   following card in a grid or     pile of  cards  ui set,.*/
+	.ts-banner-generator-app .ts-card:has(.ts-ui-select--open),
+	.ts-card:has(.ts-ui-select--open)  {
 		z-index: 200 !important;
 		backdrop-filter: none !important;
 	}
-
-	.ts-card:has(.ts-ui-select--open) {
-		z-index: 200 !important;
-		backdrop-filter: none !important;
-	}
+/*@ts-component-consolidate */
 
 	.ts-ui-select[data-ts-ui-select-placeholder*="fonts"] li.ts-ui-select__option .ts-ui-select__option-inner {
 		display: -webkit-box;
@@ -22334,25 +22423,17 @@ STATUS:
 		font-weight: inherit !important;
 
 	}
-
+/*@ts-component-consolidate */
 	.ts-ui-select[data-ts-ui-select-placeholder*="fonts"] li.ts-ui-select__option:hover {
 
 		/*background: var(--ts-this-bg-grad-3);*/
-			background: var(--ts-this-bg-dim);
+			background: var(--ts-this-bg);
+		--ts-this-bg: var(--ts-bg-0);
 
 		color: var(--ts-text-primary);
 
 	}
 
-	.ts-ui-select[data-ts-ui-select-placeholder*="fonts"] li.ts-ui-select__option.ts-ui-select__option--selected {
-
-		background: var(--ts-this-bg-dim-7)!important;
-		border-color: transparent!important;
-		color: var(--ts-accent-bright-2);
-		color: var(--ts-on-accent);
-			color: var(--ts-text-primary);
-
-	}
 
 	/*OWNER FIXES & AUDIT: NOW I MADE SOME TRICKS TO MAKE THE SELECT DROPDOWN COLORS DYNAMIC WITH ON ACCENT METHOD AND TRANSPARENCY USNG BOTH ACCENT AND THIS BG METHOD.  */
 
@@ -22360,7 +22441,7 @@ STATUS:
 		--ts-input-border: var(--ts-accent-border);
 		border-color: var(--ts-input-border);
 		outline-color: var(--ts-input-border);
-		/*box-shadow: 0 0 7px -2px var(--ts-accent), inset 0 3px -2px var(--ts-accent), inset 0 0 20px -2px color-mix(in srgb, var(--ts-accent), transparent 91%);*/
+	box-shadow: 0 0 7px -2px var(--ts-accent), inset 0 3px -2px var(--ts-accent), inset 0 0 20px -2px color-mix(in srgb, var(--ts-accent), transparent 91%);
 		color: var(--ts-text-primary) !important;
 		/* background-color: var(--ts-accent-dim-2) !important; */
 		background-image: var(--ts-accent-glow-bg-3) !important; 
@@ -22368,25 +22449,29 @@ STATUS:
 		background-color: var(--ts-this-bg-dim-6)!important;
 
 	}
-
+/*@ts-component-consolidate */
 	.ts-ui-select li.ts-ui-select__option, 
 	.ts-card .ts-field .ts-ui-select .ts-ui-select__option {
     font-weight: normal;
     padding: calc(var(--ts-input-pad-y)*.65) var(--ts-input-pad-x);
     border-bottom: 1px solid var(--ts-input-border);
-    --ts-input-border: var(--ts-this-bg-border-0);
+    --ts-input-border: var(--ts-this-bg-border);
     --ts-input-color: var(--ts-text-primary-dim-2);
     color: var(--ts-input-color);
 }
+/*@ts-component-consolidate */
+		.ts-ui-select[data-ts-ui-select-placeholder*="fonts"] li.ts-ui-select__option.ts-ui-select__option--selected ,
 	.ts-ui-select li.ts-ui-select__option.ts-ui-select__option--selected,
 	.ts-card .ts-field .ts-ui-select .ts-ui-select__option.ts-ui-select__option--selected {
-		background: var(--ts-this-bg-dim-7)!important;
-		--ts-input-border: var(--ts-this-bg-dim-6);
+		background: var(--ts-this-bg-dim-5)!important;
 		--ts-input-color: var(--ts-on-accent);
+	    border-color: transparent!important;
+		color: var(--ts-on-accent);
 --ts-this-bg: var(--ts-text-accent-dim-2);
 	}
 
-
+/*@ts-component-consolidate 
+	this needs to be grouped wioth the icon selector variant of the drodpown. and dedupe what is not neccesary to style. inheriting whta already is styled from the main drodpown component, or refactoring the drodpown to sghare the same classes and  reusing the same elements as possible. there's nor eal need of using another dom. thsi comoponent is used on the banner generator, not the oce-panel. ,*/
 	.ts-icon-option {
 		display: flex;
 		align-items: center;
@@ -22402,25 +22487,25 @@ STATUS:
 		--ts-this-bg: transparent;
 		--ts-this-bg-border: var(--ts-input-border);
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-option ion-icon {
 		color: var(--ts-text-primary);
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-option:hover,
 	.ts-icon-option:hover ion-icon {
 		--ts-this-bg: var(--ts-accent-dim-3);
 		color: var(--ts-text-primary);
 		--ts-input-border: var(--ts-accent-dim-2);
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-option.sel,
 	.ts-icon-option.sel ion-icon {
 		--ts-this-bg: var(--ts-accent-dim);
 		color: var(--ts-accent-bright-2);
 		--ts-this-bg-border: var(--ts-accent-dim);
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-option.disabled {
 		opacity: 0.45;
 		cursor: not-allowed;
@@ -22432,7 +22517,7 @@ STATUS:
 		font-size: 150%;
 		flex-shrink: 0;
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-selected-row {
 		display: flex;
 		align-items: center;
@@ -22444,7 +22529,7 @@ STATUS:
 		font-size: var(--ts-fs-sm);
 		color: var(--ts-text-secondary);
 	}
-
+/*@ts-component-consolidate */
 	.ts-icon-selected-row {
 		display: flex;
 		align-items: center;
@@ -22466,7 +22551,7 @@ STATUS:
 	}
 
 	/* ─── DROPZONE ────────────────────────────────────── */
-
+/*@ts-component-consolidate */
 	.ts-dropzone {
 		border: 2px dashed var(--ts-border-1);
 		border-radius: var(--ts-card-radius);
@@ -22490,7 +22575,7 @@ STATUS:
 		gap: var(--ts-sp);
 		margin-bottom: var(--ts-sp-3);
 	}
-
+/*@ts-component-consolidate */
 	#ts-bg-dropzone:has(img) *:not(img, input[type="file"]) {
 		z-index: 1;
 		position: relative;
@@ -22498,20 +22583,20 @@ STATUS:
 		transition: opacity 300ms, color 300ms;
 		--ts-btn-icon-size: calc(var(--ts-btn-fs)*2);
 	}
-
+/*@ts-component-consolidate */
 	.ts-dropzone:hover,
 	.ts-dropzone.drag {
 		border-color: var(--ts-accent);
 		color: var(--ts-text-primary);
 	}
 
-
+/*@ts-component-consolidate */
 	.ts-dropzone ion-icon {
 		font-size: 22px;
 		display: block;
 		margin: 0 auto calc(var(--ts-sp-2)) auto;
 	}
-
+/*@ts-component-consolidate */
 	.ts-dropzone input[type="file"] {
 		position: absolute;
 		inset: 0;
@@ -22535,11 +22620,11 @@ STATUS:
 		transition: opacity 300ms;
 		pointer-events: none;
 	}
-
+/*@ts-component-consolidate */
 	.ts-dropzone:hover .ts-dz-preview {
 		opacity: 1;
 	}
-
+/*@ts-component-consolidate */
 	#ts-bg-dropzone:has(img[style*="display: block;"]) *:not(img, input[type="file"]) {
 		opacity: 0;
 		color: var(--ts-text-primary);
@@ -22561,7 +22646,7 @@ STATUS:
 	}
 
 	/* ─── HINT TEXT ───────────────────────────────────── */
-
+/*@ts-component-consolidate */
 	.ts-hint {
 		font-size: var(--ts-fs-sm);
 		color: var(--ts-text-muted);
@@ -22569,7 +22654,7 @@ STATUS:
 	}
 
 	/* ─── SPINNER ─────────────────────────────────────── */
-
+/*@ts-component-consolidate */
 	.ts-spinner {
 		width: 13px;
 		height: 13px;
@@ -22579,7 +22664,7 @@ STATUS:
 		animation: spin 0.7s linear infinite;
 		display: none;
 	}
-
+/*@ts-component-consolidate */
 	@keyframes spin {
 		to {
 			transform: rotate(360deg);
@@ -22587,7 +22672,34 @@ STATUS:
 	}
 
 	/* ─── TOAST ───────────────────────────────────────── */
+/* @ts-component-consolidate
+OWNER NOTE: toast component deprecation audit
+NEW Refactor Note: this toast component is marked as deprecated. verify if it still has any variant usage or references in the javascript codebase. if no active usage (including variants, triggers, or dynamic injections) is found, it must be safely removed after audit. if variants exist, consolidate into the unified notification system before removal. */
 
+/* ─────────────────────────────────────────────────────────────────────
+   ts-ui-toast — deprecation + usage validation (v1)
+
+   Why: deprecated components may still be referenced indirectly,
+   causing hidden dependencies or regressions if removed blindly.
+
+   v1 process:
+   - search entire JS codebase for toast references (init, trigger, variants)
+   - check for dynamic usage (injected UI, async feedback, alerts)
+   - verify CSS selectors tied to toast variants
+   - confirm no runtime dependency exists
+
+   Decision:
+   - if unused → mark for removal after full validation
+   - if partially used → migrate into unified notification system
+   - if active → refactor and integrate properly (no deprecation)
+
+   Result: no orphaned styles, no dead code, clean system integrity.
+
+   Hard rules:
+   - no removal without full codebase verification
+   - no breaking existing runtime behavior
+   - deprecated ≠ safe to delete without audit
+   ───────────────────────────────────────────────────────────────────── */
 	#ts-toast {
 		position: fixed;
 		bottom: var(--ts-sp-5);
@@ -22612,7 +22724,34 @@ STATUS:
 		transform: translateX(-50%) translateY(0);
 	}
 
-	/* ─── SCROLLBAR ───────────────────────────────────── */
+	/* @ts-component-consolidate
+OWNER NOTE: scrollbar placement + tokenization audit
+NEW Refactor Note: scrollbar styles are currently defined in an incorrect/loose location. they must be relocated to the root settings layer (or banner generator root settings if scoped intentionally). current implementation is not tokenized and may not be consistently applied. requires validation, normalization, and proper system integration. */
+
+/* ─────────────────────────────────────────────────────────────────────
+   scrollbar — root integration + tokenization (v1)
+
+   Why: misplaced scrollbar rules break consistency and prevent
+   proper inheritance and theming control.
+
+   v1 fix: relocate and normalize scrollbar styling at system level.
+
+   Strategy:
+   - move scrollbar rules to root/global settings layer
+   - optionally scope to banner generator root if context-specific
+   - tokenize all properties (track, thumb, radius, colors, states)
+   - verify cross-browser support and actual frontend application
+   - remove if not effectively applied or redundant
+
+   Result: consistent scrollbar styling, centralized control,
+   proper theming integration.
+
+   Hard rules:
+   - no loose/isolated scrollbar definitions
+   - no non-tokenized values
+   - must be defined at root or clearly scoped root
+   - remove only after confirming no visual/runtime impact
+   ───────────────────────────────────────────────────────────────────── */
 
 	::-webkit-scrollbar {
 		width: 4px;
@@ -22664,7 +22803,7 @@ STATUS:
 	}
 
 }
-
+/*@ts-component-consolidate */
 .ts-banner-generator-app .ts-range-row {
 	width: 100%;
 	display: flex;
@@ -22675,7 +22814,7 @@ STATUS:
 	border-block: 0px solid var(--ts-range-border);
 	padding-block: calc(var(--ts-range-h)*0);
 }
-
+/*@ts-component-consolidate */
 .ts-range-row {
 	width: 100%;
 	display: flex;
@@ -22687,7 +22826,7 @@ STATUS:
 	border-block: 0px solid var(--ts-range-border);
 	padding-block: calc(var(--ts-range-h)*0);
 }
-
+/*@ts-component-consolidate */
 .ts-banner-generator-app .ts-range-row input[type="range"],
 .ts-range-row input[type="range"] {
 	width: 100%;
@@ -22703,7 +22842,7 @@ STATUS:
 }
 
 
-
+/*@ts-component-consolidate */
 .ts-banner-generator-app .ts-range-row input[type="range"]::-moz-range-thumb,
 .ts-range-row input[type="range"]::-moz-range-thumb {
 	width: var(--ts-range-thumb);
@@ -22712,7 +22851,7 @@ STATUS:
 	margin-top: var(--ts-range-thumb-offset);
 
 }
-
+/*@ts-component-consolidate */
 .ts-banner-generator-app .ts-range-row input[type="range"]::-webkit-slider-thumb,
 .ts-range-row input[type="range"]::-webkit-slider-thumb {
 	width: var(--ts-range-thumb);
@@ -22723,7 +22862,7 @@ STATUS:
 }
 
 /* Unscoped duplicate removed — was overriding input.ts-range for Pattern Generator; use §6f slider + .ts-range-row from forms */
-
+/*@ts-component-consolidate */
 .ts-banner-generator-app .ts-range-val,
 .ts-range-val {
 	display: inline-flex;
@@ -22745,7 +22884,7 @@ STATUS:
 	--ts-range-label: color-mix(in srgb, var(--ts-range-bg), transparent 10%);
 	font-size: 87%;
 }
-
+/*@ts-component-consolidate */
 .ts-banner-generator-app .ts-range-val:after,
 .ts-range-val:after {
 	position: absolute;
@@ -22760,7 +22899,7 @@ STATUS:
 	content: "";
 
 }
-
+/*@ts-component-consolidate */
 .ts-card-col-half .ts-range-row {
 	width: 100%;
 	display: flex;
@@ -22773,7 +22912,7 @@ STATUS:
 	padding-block: calc(var(--ts-range-h)*0);
 }
 
-
+/*@ts-component-consolidate : also dedupe as ts-hginf haas been declared previously, as tagged*/
 .ts-banner-generator-app .ts-card .ts-hint,
 .ts-card .ts-hint,
 .ts-hint {
@@ -22821,7 +22960,7 @@ STATUS:
 .ts-banner-generator-app .ts-range-row input[type="range"] {
 	border: 1px solid var(--ts-input-border);
 }
-
+/*@ts-component-consolidate */
 /* Icon using ::before */
 .ts-banner-generator-app .ts-card .ts-hint::before,
 .ts-card .ts-hint::before,
@@ -22837,7 +22976,7 @@ STATUS:
 	color: var(--ts-accent);
 	margin: 0px;
 }
-
+/*@ts-component-consolidate */
 .ts-hint::before {
 	content: "\f0eb";
 	/* FontAwesome Unicode (User Icon) */
@@ -22901,27 +23040,6 @@ STATUS:
 	flex-wrap: wrap;
 }
 
-/*  #CRAZY_CODE_FIX: DUPLICATE DELETED #1
-	.ts-banner-generator-app .ts-card>.ts-card-header.absolute,
-	.ts-banner-generator-app .ts-card>.ts-card-header:has(.ts-card-title) {
-		display: flex;
-		position: absolute;
-		inset: 0 0 auto 0;
-		font-size: var(--ts-fs-sm);
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: var(--ts-letter-spacing-wider);
-		color: var(--ts-text-secondary);
-		padding-inline: var(--ts-sp-2);
-		gap: var(--ts-card-sp);
-		flex-direction: row;
-		flex-wrap: nowrap;
-		align-items: center;
-		justify-content: flex-start;
-		height: var(--ts-card-header-h) !important;
-		background: var(--ts-bg-0) ;
-
-	}*/
 
 .ts-banner-generator-app .ts-card:has(> .ts-card-header.absolute),
 .ts-banner-generator-app .ts-card:has(> .ts-card-header > .ts-card-title) {
@@ -23012,31 +23130,6 @@ STATUS:
 	position: relative;
 }
 
-/* DUPLICATE DELETED #2
-	.ts-banner-generator-app .ts-card>.ts-card-header.absolute,
-	.ts-banner-generator-app .ts-card>.ts-card-header:has(.ts-card-title) {
-		display: flex;
-		position: absolute;
-		inset: 0 0 auto 0;
-		font-size: var(--ts-fs-sm);
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: var(--ts-letter-spacing-wider);
-		color: var(--ts-text-secondary);
-		padding: var(--ts-sp-2) var(--ts-sp-3) var(--ts-sp-2) var(--ts-sp-2);
-		gap: var(--ts-card-sp);
-		flex-direction: row;
-		flex-wrap: nowrap;
-		align-items: center;
-		justify-content: space-between;
-		height: var(--ts-card-header-h) !important;
-		background: var(--ts-bg-0);
-		margin: 0;
-		border: 0px solid var(--ts-card-border);
-		border-bottom-width: 1px;
-		border-radius: var(--ts-card-radius) var(--ts-card-radius) 0 0;
-		line-height: 1rem;
-	} */
 
 .ts-banner-generator-app .ts-card:has(> .ts-card-header.absolute),
 .ts-banner-generator-app .ts-card:has(> .ts-card-header > .ts-card-title) {
@@ -23070,6 +23163,7 @@ STATUS:
 	border-block: 0px solid var(--ts-range-border);
 	padding-block: calc(var(--ts-range-h)*0);
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-range-row input[type="range"] {
 	width: 100%;
@@ -23081,6 +23175,7 @@ STATUS:
 	margin: 0;
 	border-radius: var(--ts-range-rad);
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-range-row input[type="range"]::-webkit-slider-thumb {
 	width: var(--ts-range-thumb);
@@ -23093,6 +23188,7 @@ STATUS:
 	outline: 2px solid var(--ts-accent-border);
 	outline-offset: -2px;
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-range-row input[type="range"]::-moz-range-thumb {
 	width: var(--ts-range-thumb);
@@ -23111,6 +23207,7 @@ STATUS:
 
 
 
+/*@ts-component-consolidate thius is probably redudnant or duplicated */
 
 .ts-card .ts-hint {
 	width: auto;
@@ -23128,6 +23225,7 @@ STATUS:
 	gap: var(--ts-card-sp);
 	--ts-text-secondary: color-mix(in srgb, var(--ts-accent), var(--ts-range-text) 28%);
 }
+/*@ts-component-consolidate: this si too probably duplicated */
 
 /* Icon using ::before */
 .ts-card .ts-hint::before {
@@ -23170,6 +23268,7 @@ STATUS:
 	margin-top: 6px;
 }
 
+/*@ts-component-consolidate */
 
 .ts-row-2 {
 	gap: var(--ts-card-sp);
@@ -23248,6 +23347,7 @@ STATUS:
 	padding-inline: var(--ts-card-gap);
 	margin: 0;
 }
+/*@ts-component-consolidate #select element loose .ts-ui-select */
 
 .ts-banner-generator-app .ts-ui-select__filter {
 
@@ -23262,12 +23362,14 @@ STATUS:
 	box-shadow: none !important;
 }
 
+/*@ts-component-consolidate #select element loose .ts-ui-select */
 
 .ts-banner-generator-app .ts-icon-selected-row {
 
 	padding: var(--ts-sp) var(--ts-sp-2);
 }
 
+/*@ts-component-consolidate #select element loose .ts-ui-select */
 
 .ts-banner-generator-app .ts-icon-search-input,
 .ts-banner-generator-app .ts-icon-selected-row,
@@ -23302,12 +23404,14 @@ STATUS:
 	--ts-this-bg-border: color-mix(in srgb, var(--ts-this-bg), var(--ts-text-primary) var(--ts-mix-perc));
 	--ts-mix-perc: 7%;
 }
+/*@ts-component-consolidate #select element loose .ts-ui-select */
 
 .ts-banner-generator-app .ts-card .ts-field .ts-ui-select .ts-ui-select__trigger {
 	padding: var(--ts-input-pad-y) !important;
 
 
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-card .ts-toggle-row {
 	--ts-this-bg: var(--ts-input-bg-2);
@@ -23320,6 +23424,7 @@ STATUS:
 
 
 
+/*@ts-component-consolidate */
 
 
 
@@ -23390,16 +23495,12 @@ STATUS:
 	row-gap: 0;
 }
 
-/* .ts-card-row:not(:last-child) {
-		margin-bottom: var(--ts-card-sp);
-		border-radius: 1px solid var(--ts-border-1);
-	}
-	*/
+
 .ts-card-row:last-child {
 	margin-bottom: 0;
 }
 
-
+/*@ts-component-consolidate */
 .ts-banner-generator-app .ts-range-row input[type="range"] {
 	flex: 1;
 	appearance: none;
@@ -23425,17 +23526,6 @@ STATUS:
 	width: fit-content;
 }
 
-/* .ts-card-row>*:not(.ts-chips:not(.ts-align-anchor-grid), .ts-toggle-row, .ts-hint, .ts-icon-selected-row) {
-		gap: var(--ts-sp-3);
-		display: flex;
-	}
-
-	.ts-card-row>*:not(.ts-chips:not(.ts-align-anchor-grid), .ts-toggle-row, .ts-hint, .ts-row-2, .ts-icon-selected-row) {
-		flex-direction: column;
-		justify-content: center;
-		align-items: stretch;
-	}
-	*/
 
 
 #ts-panel .ts-card > .ts-card-header:has(.ts-card-title) {
@@ -23557,21 +23647,45 @@ STATUS:
 	aspect-ratio: 1;
 	border: 0px solid var(--ts-card-border);
 }
+/* ─────────────────────────────────────────────────────────────────────
+   color states — token-driven dynamic system (v1)
 
+   Why: static color declarations reduce flexibility and break
+   consistency across themes and states.
+
+   v1 fix: use alpha tokens and derived values to compute
+   state-based backgrounds and effects.
+
+   Strategy:
+   - replace static colors with alpha/computed tokens
+   - define reusable gradient tokens for recurring patterns
+   - ensure tokens adapt to parent scope variables (inheritance)
+   - apply consistently across selectors without layout impact
+
+   Result: dynamic, scalable color system with clean,
+   maintainable state handling and full theme adaptability.
+
+   Hard rules:
+   - no static color values for state backgrounds
+   - no duplicated gradient definitions
+   - all state visuals must derive from tokens
+   - tokens must adapt to higher-scope parameters
+   ───────────────────────────────────────────────────────────────────── */
 #ts-panel .ts-card > .ts-card-header.ts-accordion.open {
 	--ts-this-bg: var(--ts-bg-2);
-	/* REFACTOR NOTES AND HIGHLIGHTS:  refactoring needs the tokenization to  prevent repeated  declarations and make the color smart and responsive  on childs*/
 	opacity: 1;
 	--ts-card-border-alpha: 20%;
 	--ts-card-bg-alpha: 50%;
-	/* REFACTOR NOTES AND HIGHLIGHTS:  Using the alpha tokens or  token variables on states or smart values somewhere else we can avoid using static color background declarations and make this more dynamic  on several  selectros without breaking any layout  using celean and maintainable color schemes and systems. in another implementation i  turned the gradient token   vaklue in another token that  is recurrently used on this state  allways on as a pAATTERN RULE OF DESIGN  AND SHPOUD ADDAPT TO THE OTHER PARAMERTERS DECLARED ON  SUPERIOR  scopes. */
 	background-color: var(--ts-card-preset-1);
+	/* @ color states — token-driven dynamic system (v1)*/
 }
 
 #ts-panel .ts-card > .ts-card-header.ts-accordion.open .ts-card-title ion-icon {
 	--ts-this-bg: var(--ts-bg-2);
-	/* REFACTOR NOTES AND HIGHLIGHTS:  refactoring needs the tokenization to  prevent repeated  declarations and make the color smart and responsive  on childs*/
 	--ts-card-border-alpha: 20%;
+
+	/* @ color states — token-driven dynamic system (v1)*/
+
 }
 
 #ts-panel .ts-card > .ts-card-header.ts-accordion.open:after {
@@ -23594,6 +23708,8 @@ STATUS:
 	--ts-this-bg: var(--ts-bg-2);
 	--ts-card-preset-1: var(--ts-this-bg-dim-2);
 	--ts-card-preset-2: var(--ts-this-bg-dim-3);
+	/* @ color states — token-driven dynamic system (v1)*/
+
 }
 
 #ts-panel .ts-card > .ts-card-header.ts-accordion .ts-card-title ion-icon,
@@ -23602,6 +23718,7 @@ STATUS:
 	--ts-card-header-icon: var(--ts-accent);
 	color: var(--ts-card-header-icon);
 	color: inherit;
+	/* @ color states — token-driven dynamic system (v1)*/
 
 
 }
@@ -23610,12 +23727,16 @@ STATUS:
 #ts-panel .ts-card {
 	color: var(--ts-card-header-text);
 	border-color: var(--ts-card-border);
+	/* @ color states — token-driven dynamic system (v1)*/
+
 }
 
 #ts-panel .ts-card > .ts-card-header.ts-accordion {
 	cursor: pointer;
 	--ts-card-header-text: var(--ts-text-secondary);
 	background: var(--ts-ui-accordion-panel-bg);
+	/* @ color states — token-driven dynamic system (v1)*/
+
 }
 
 
@@ -23624,6 +23745,8 @@ STATUS:
 	background-color: var(--ts-card-preset-2);
 	--ts-card-border-alpha: 5%;
 	--ts-card-bg-alpha: 50%;
+	/* @ color states — token-driven dynamic system (v1)*/
+
 }
 
 #ts-panel .ts-card > .ts-card-header.ts-accordion.open ion-icon {
@@ -23631,6 +23754,8 @@ STATUS:
 	--ts-card-border-alpha: 5%;
 
 	color: var(--ts-card-header-icon);
+	/* @ color states — token-driven dynamic system (v1)*/
+
 
 }
 
@@ -23712,7 +23837,7 @@ STATUS:
 	--ts-btn-ls: 0.01rem;
 	--ts-btn-fw: 600;
 	flex: 1 1 auto;
-	--ts-btn-scale: 0.9;
+	/* --ts-btn-scale: 0.9; */
 	gap: 4px;
 }
 
@@ -23781,6 +23906,7 @@ STATUS:
 		}
 
 	================================================================== */
+/*@ts-component-consolidate */
 
 /* Panel grid: .ts-card > .ts-card-rows (stack) > .ts-card-row (columns) > .ts-card-col-* */
 .ts-banner-generator-app .ts-card > .ts-card-rows,
@@ -23874,6 +24000,8 @@ STATUS:
 		}
 
 		/* #CRAZY_FIX_RULES this si redefined several  times., so pelase extratc this adn  comapre it to keept he best version. only extratc the structural styles and thg ebest ones. to keep the ones thta are build qwith proportional  calculation based and token using based styles. not static ones. then we must delegate the coloring patterns to another rule set inclduign this asset.   */
+		
+/*@ts-component-consolidate */
 
 		.ts-range-row {
 			width: 100%;
@@ -23895,6 +24023,7 @@ STATUS:
 			--ts-range-label-fs: calc(var(--ts-range-label-h)*.4);
 
 		}
+/*@ts-component-consolidate */
 
 		.ts-range-row .ts-range-val {
 			display: inline-flex;
@@ -23932,6 +24061,7 @@ STATUS:
 			border-bottom: var(--ts-range-arrow) solid transparent;
 			content: "";
 		}
+/*@ts-component-consolidate */
 
 		.ts-range-stack .ts-label,
 		.ts-range-stack .ts-field label,
@@ -23962,17 +24092,19 @@ STATUS:
 	gap: var(--ts-sp-1);
 	width: 100%;
 	min-width: 0;
+	flex-direction: row;
 }
 
 .ts-banner-generator-app .ts-chips.ts-chips--badge-style,
 .ts-chips.ts-chips--badge-style {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
 	gap: var(--ts-sp-1);
 	width: 100%;
 }
 
-.ts-banner-generator-app .ts-card-rows .ts-field,
+/*@ts-component-consolidate */
+
 .ts-banner-generator-app .ts-card-rows .ts-toggle-row,
 .ts-banner-generator-app .ts-card-rows .ts-hint,
 .ts-banner-generator-app .ts-card-rows .ts-icon-selected-row,
@@ -23981,6 +24113,7 @@ STATUS:
 	min-width: 0;
 	box-sizing: border-box;
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-card-rows .ts-field,
 .ts-field {
@@ -23989,10 +24122,12 @@ STATUS:
 	gap: var(--ts-sp-1);
 	align-items: stretch;
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-card-rows .ts-field.ts-range-stack {
 	gap: 0;
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-card-rows .ts-field.ts-range-stack > label {
 	margin-bottom: -1px;
@@ -24030,6 +24165,7 @@ STATUS:
 	margin-top: var(--ts-sp-2);
 	gap: var(--ts-sp-1);
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-card-rows .ts-toggle-row,
 .ts-card-rows .ts-toggle-row,
@@ -24044,15 +24180,15 @@ STATUS:
 	/* color: var(--ts-text-secondary); */
 	border-radius: var(--ts-input-radius);
 	padding: 0;
-	padding-right: var(--ts-input-pad-x);
+	padding-right: var(--ts-input-pad-y);
 	min-height: var(--ts-input-h);
 	max-height: var(--ts-input-h);
 	font-size: var(--ts-input-fs);
 	font-family: inherit;
 	transition: border-color 0.15s;
 	outline: none;
-	--ts-input-pad-x: calc(var(--ts-input-h)*.2);
-/*	--ts-input-pad-y: calc(var(--ts-input-pad-x)*.1);*/
+	--ts-input-pad-x: calc(var(--ts-input-h)*.25);
+	--ts-input-pad-y: calc(var(--ts-btn-icon-size,var(--ts-input-pad-x))*.66);
 
 	line-height: calc(var(--ts-input-h)*.24);
 	--ts-input-fs: calc(var(--ts-input-h)*.21);
@@ -24064,14 +24200,14 @@ STATUS:
 	background-color: var(--ts-input-bg);
 	--ts-mix-perc-bg: 50%;
 }
+/*@ts-component-consolidate */
 
 .ts-banner-generator-app .ts-card-rows .ts-toggle-row:has(.ts-toggle--xl, .ts-toggle--lg),
 .ts-card-rows .ts-toggle-row:has(.ts-toggle--xl, .ts-toggle--lg),
 .ts-toggle-row:has(.ts-toggle--xl, .ts-toggle--lg) {
-	padding-block: var(--ts-input-pad-x);
+	padding-block: var(--ts-input-pad-y);
 	min-height: var(--ts-input-h);
 	max-height: unset !important;
-	--ts-input-pad-x: calc(var(--ts-input-h)*.22);
 	--ts-input-fs: calc(var(--ts-input-h)*.3);
 }
 
@@ -24079,35 +24215,7 @@ STATUS:
 .ts-card-rows .ts-toggle-row .ts-toggle:not(.ts-toggle--lg, .ts-toggle--sm, .ts-toggle--xl) {
 	--ts-toggle-size: 22px !important;
 }
-/* Docs: toggle-row spacing reconciliation (B23 Wave 2 / R12).
-   Three failure modes addressed across three contexts (A standalone, B `.ts-oce-panel`, C banner-generator).
-   Safety contract = TWO LAYERS: row-level padding split (R12, this block) + pre-existing label-level constraints.
 
-   Failure modes 1 + 2 are addressed by R12's row-level padding split:
-   1. No-icon labels were left-flush in context A because the no-icon padding rule was scoped to
-      `.ts-banner-generator-app` only. Selector list below now also includes UNscoped variants so
-      standalone `.ts-toggle-row` no-icon labels get the same `padding-left: var(--ts-input-pad-y)`
-      affordance as the banner-generator scope.
-   2. OCE-panel two-column over-padding: `.ts-oce-panel .ts-card-col-half/.ts-card-col-third` rows
-      now reduce `--ts-input-pad-x` so the inline padding tightens in narrow columns (separate rule
-      below the no-icon block).
-
-   Failure mode 3 (label-wrap collision) is PREVENTED by pre-existing label-level constraints —
-   NOT by a new R12 rule. The no-icon label selector group below (≈L22839–L22853 post-A3) already
-   carries `flex: 1; min-width: 0; overflow: hidden; -webkit-line-clamp: 2; line-clamp: 2;
-   text-overflow: ellipsis;` (see body of `.ts-toggle-row .ts-toggle-label:not(:has(...))` rule).
-   Those properties cap the label box and clamp text vertically, so the row-level inline padding
-   added by failure-mode-1 can never push the label into the toggle column. R12 relies on this
-   pre-existing label-level layer; it does not introduce new label constraints.
-
-   Full safety contract therefore = (row-level R12 padding split) + (pre-existing label-level
-   flex/min-width/line-clamp). Both layers must remain. Removing either breaks one of the three
-   failure modes.
-
-   Rule count delta: was 1 selector-group (3 selectors, banner-generator only); now 1 selector-group
-   (6 selectors) + 1 OCE two-column tightening rule. Total contexts covered: A + B + C. */
-/* #CRAZY_FIX_RULES superseded by R12 consolidation: original rule scoped only to .ts-banner-generator-app.
-   Now generalized to cover standalone (.ts-toggle-row) without losing banner-generator coverage. */
 .ts-banner-generator-app .ts-card-rows .ts-toggle-row .ts-toggle-label:not(:has(>.ts-icon, > ion-icon)),
 .ts-banner-generator-app  .ts-toggle-row .ts-toggle-label:not(:has(>.ts-icon, > ion-icon)),
 .ts-banner-generator-app  .ts-toggle-row > label:not(.ts-toggle):not(:has(>.ts-icon, > ion-icon)),
@@ -24125,11 +24233,10 @@ STATUS:
 	line-clamp: 2;
 	text-overflow: ellipsis;
 	padding-right: 0;
-	padding-left: var(--ts-input-pad-y) !important;
+	padding-left: var(--ts-input-pad-x) !important;
 	gap: var(--ts-input-pad-y) !important;
-	max-height: fit-content;
-	--ts-input-pad-y: calc(var(--ts-input-pad-x)*.65);
-	--ts-input-pad-x: calc(var(--ts-input-h)*.5)!important;
+		max-height: fit-content;
+
 }
 
 /* R12 — OCE-panel two-column toggle-row inline-padding tightening.
@@ -24138,7 +24245,7 @@ STATUS:
    breaks rhythm. Reduce by ~30% so columns retain proportional padding. */
 .ts-oce-panel .ts-card-col-half .ts-toggle-row,
 .ts-oce-panel .ts-card-col-third .ts-toggle-row {
-	--ts-input-pad-x: calc(var(--ts-input-h)*.14);
+	--ts-input-pad-x: calc(var(--ts-input-h)*.2);
 }
 
 .ts-banner-generator-app .ts-card-rows .ts-toggle-row .ts-toggle-label .ts-icon,
@@ -24165,8 +24272,9 @@ STATUS:
 }
 .ts-card .ts-toggle-label:not(:has(>.ts-icon, > ion-icon)),
 .ts-card label:has(>.ts-icon, > ion-icon) {
+
 	padding-left: var(--ts-input-pad-y);
-	 --ts-input-pad-y: calc(var(--ts-input-fs)*1.1);
+
 }
 .ts-card label:not(.ts-toggle-label):has(>.ts-icon, > ion-icon) {
 	padding-left: 0;
@@ -25473,8 +25581,8 @@ EXPECTED RESULT
 
 		flex-direction: column;
 		/*backdrop-filter: blur(var(--ts-backdrop-blur-2)) saturate(0.8);*/
-/* @refactor:glass-dependent */
-/* @refactor:token-dependency */
+		/* @refactor:glass-dependent */
+		/* @refactor:token-dependency */
 		--ts-shadow-accent: inset 0 0 0px 1px var(--ts-accent-border),  0 4px 15px color-mix(in srgb, var(--ts-accent-border-hover), transparent 79%);
 		--ts-input-color: var(--ts-text-primary-dim-2);
 		--ts-input-color-hover: var(--ts-text-primary);
@@ -25738,7 +25846,7 @@ button.ts-btn[data-ts-oce-theme] {
 --ts-input-radius: calc(var(--ts-card-radius)*.78);
 --ts-card-gap: var(--ts-sp-3);
 --ts-card-pad: var(--ts-sp-3);
---ts-input-pad: calc(var(--ts-card-pad)*.78) calc(var(--ts-card-pad)*.9);
+	--ts-input-pad: calc(var(--ts-card-pad)*.78) calc(var(--ts-card-pad)*.9);
  --ts-input-gap: calc(var(--ts-card-gap, var(--ts-sp-3))*.5);
 
 
@@ -26403,7 +26511,7 @@ NEW Refactor Note URGENT: remove all hardcoded color patches and delegate color 
 }
 
 /* ─── Surfaces ────────── */
-/*[data-theme="light"] .ts-surface-0,
+[data-theme="light"] .ts-surface-0,
 [data-theme="light"] .ts-surface-1,
 [data-theme="light"] .ts-surface-2,
 [data-theme="light"] .ts-surface-3,
@@ -26412,16 +26520,16 @@ NEW Refactor Note URGENT: remove all hardcoded color patches and delegate color 
 	border: 1px solid var(--ts-border-1) !important;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
-*/
+
 
 
 /* ─── Inputs ──────────── */
-/*[data-theme="light"] .ts-input:not(.ts-resizable),
+[data-theme="light"] .ts-input:not(.ts-resizable),
 [data-theme="light"] .ts-select,
 [data-theme="light"] .ts-textarea:not(.ts-resizable) {
 	background-color: var(--ts-input-bg);
 	border-color: var(--ts-input-border);
-	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04); 
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="light"] .ts-input:not(.ts-resizable):focus,
@@ -26431,7 +26539,7 @@ NEW Refactor Note URGENT: remove all hardcoded color patches and delegate color 
 	box-shadow: 0 0 3px color-mix(in srgb, var(--ts-accent) 15%, transparent);
 	box-shadow: none;
 }
-*/
+
 /* ─── Buttons ─────────── */
 [data-theme="light"] .ts-btn:not(.ts-btn--primary, .ts-btn--ghost, .ts-btn--success, .ts-btn--warning, .ts-btn--info, .ts-btn--error, .ts-btn--outline, .ts-btn--glass, .ts-btn--icon, .ts-btn--danger, .ts-btn-primary, .ts-btn--alt, :disabled) {
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
@@ -27206,9 +27314,9 @@ MOVE TO MAIN ROOT  VARS AND GROPU WIOTH COMPONENT SELECT   ASSET VARS.  DO THE S
    (0,2,0) beats > * (0,1,0) so any rule scoped to it wins
    automatically — modifiers below rely on this.
    ============================================================ */
-/* .ts-masonry > .ts-masonry-item {
-    // baseline pass-through — no overrides 
-}*/
+.ts-masonry > .ts-masonry-item {
+    /* baseline pass-through — no overrides */
+}
 
 
 /* ============================================================

@@ -1,26 +1,29 @@
-/* ─── Root font-size ──────────────────────────────────────────────────
+@charset "UTF-8";
+/* ------------------ Root font-size ---------------------------------------
    Set to 16px so 1rem = 16px (browser default).
    The userscript CSS uses px-based custom props (--yss-font-size-base: 13px)
    scoped to #yss-panel, so the panel itself is NOT affected by this value.
    Change this single line if you ever need a different rem scale.            */
-html{
+html {
     color-scheme: dark;
     background: #101010;
     color: white;
-    padding:0;
-    margin:0;
-    font-size: 15px;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
     font-size: 0.866025rem;
+    
 
-    /* 
+}
+:root, :root *{
+	    /* 
      * TOOLSKIN DESIGN SYSTEM — Custom Showcase Root Variables
      * For mockup preview context only. Uses TOOLSKIN as the main base system:
      * @import url("@_TOOLSKIN_DESIGN_YSTEM_FRAMEWORK/toolskin.css");
      *
      * All design tokens are set on :root/html, with smart, scalable, flexible variants.
-     * Only showcase/preview variables allowed here, refer to toolskin for all structure/layout/utility.
     */
-    /* font-sizes using clamp for ultimate flexibility — covers xxs/xxl/giant cases */
+    /* font-sizes using clamp for ultimate flexibility â€” covers xxs/xxl/giant cases */
     --mockup-fs-xxs: clamp(0.5rem, 0.6vw + 0.55rem, 0.6875rem);      /* ~8-11px */
     --mockup-fs-xs:  clamp(0.6875rem, 0.85vw + 0.72rem, 0.8rem);     /* ~11-13px */
     --mockup-fs-sm:  clamp(0.75rem, 1vw + 0.75rem, 0.925rem);        /* ~12-15px */
@@ -32,11 +35,11 @@ html{
     --mockup-fs-giant: clamp(2.25rem, 6vw + 1.8rem, 5rem);           /* ~36-80px */
     --mockup-font-sans: var(--ts-font-sans, 'Inter', system-ui, sans-serif);
     --mockup-font-mono: var(--ts-font-mono, 'JetBrains Mono', 'SFMono-Regular', monospace);
-    --mockup-radius-xs: 2px;
-    --mockup-radius-sm: 4px;
-    --mockup-radius-md: 8px;
-    --mockup-radius-lg: 16px;
-    --mockup-radius-xl: 32px;
+    --mockup-radius-xs: 4px;
+    --mockup-radius-sm: 6px;
+    --mockup-radius-md: 6px;
+    --mockup-radius-lg: 12px;
+    --mockup-radius-xl: 16px;
     --mockup-border-radius: var(--mockup-radius-md, 8px);
 
     /* Palette (overridable in context, but by default depends on toolskin) */
@@ -127,7 +130,18 @@ canvas, caption, center, cite, code, dd, del, dfn, div, dl, dt, em, embed, field
 [class*="suno-"], [id*="suno-"],[class*="yss-"], [id*="yss-"],[class*="hf-"], [id*="hf-"],[class*="suno-"]{
     box-sizing: border-box;
 }
-#header .suno-panel-header-right {
+/* START OF MOCKUPS SHARED HEADER GENERAL STYLES*/
+
+
+.container > header h1 > strong{
+
+    font-weight: 700;
+    color: var(--mockup-color-red);
+    margin-left: auto;
+    order:0;
+}
+
+#ts-header .suno-panel-header-right {
 	display: inline-flex;
 	gap: 10px;
 	align-items: center;
@@ -140,7 +154,240 @@ canvas, caption, center, cite, code, dd, del, dfn, div, dl, dt, em, embed, field
 	position: relative;
 	margin-inline: 10px!important;
 }
-    
+
+#main.container > #ts-header h1 .ts-btn.ts-btn-index, 
+#main.container > #ts-header a[href="index.html"], 
+#main.container > #ts-header  button[id="switch-mode"], 
+#hf-ui-root.container > #ts-header h1 .ts-btn.ts-btn-index, 
+#hf-ui-root.container > #ts-header a[href="index.html"], 
+.container > #ts-header  button[id="switch-mode"] {
+    text-decoration: none;
+    box-sizing: border-box !important;
+    order: 1;
+    color: var(--mockup-text-primary);
+    flex: 0 1 !important;
+    min-width: fit-content !important;
+}
+#main.container > #ts-header h1 .ts-btn, 
+#main.container > #ts-header .ts-btn, 
+#hf-ui-root.container > #ts-header .hf-btn {
+text-decoration: none;
+	margin-left: 0;
+	display: inline-flex;
+	flex-direction: row-reverse;
+    min-width: fit-content !important;
+
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
+	border-radius: calc(var(--mockup-radius-md));
+	background: var(--mockup-accent-bg);
+	outline-color: var(--mockup-accent-border); 
+	border-color: var(--mockup-accent-border);
+	line-height: 1.1;
+	box-sizing: border-box!important;
+font-weight: var(--ts-font-weight-thin);
+	letter-spacing: var(--ts-letter-spacing-wide);
+	border: 1px solid var(--ts-this-bg-border-hover);
+	background: var(--ts-this-bg-grad-2);
+
+	--mockup-text-primary: var(--ts-on-accent);
+
+	--ts-this-bg: var(--ts-accent);
+
+	--ts-this-bg: var(--ts-accent);
+	--ts-this-bg-dark: color-mix(in srgb, var(--ts-this-bg), #000000 12%);
+}
+#main.container > #ts-header  button[id="switch-mode"],
+.container > #ts-header button[id="switch-mode"] {
+	--ts-accent: var(--mockup-color-red);
+
+}
+#yss-icons-only-toggle-btn-clone {
+    flex: 0;
+}
+#ts-header .ts-btn.ts-btn-index,
+.container > header h1 .ts-btn.ts-btn-index {
+	--ts-accent: var(--yss-log-success);
+	order: -4!important;
+	margin-left: calc(var(--mockup-padding-sm)*-1)!important;
+}
+/* ─── Theme Toggle Button (Always Visible) ───────────────────────────── */
+
+#ts-header  .ts-theme-toggle,
+#ts-header .theme-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--ts-btn-h);
+	max-width: var(--ts-btn-h);
+	max-height: var(--ts-btn-h);
+	height: var(--ts-btn-h);
+
+	/* margin-left: auto; */
+	margin-right: 0;
+	border: 1px solid var(--ts-this-bg-border)!important;
+	background: var(--ts-this-bg) !important;
+	cursor: pointer;
+	position: relative;
+	transition: all 0.3s ease;
+	padding: 0 ;
+	gap: 0 ;
+	font-size: calc(var(--ts-btn-h)*.4)!important;
+--ts-btn-icon: calc(var(--ts-btn-h)*.4)!important;
+	color: var(--ts-navlink-color);
+
+	--ts-navlink-color: var(--ts-text-secondary);
+	--ts-this-bg: var(--ts-bg-2)!important;
+
+}
+
+
+
+#ts-header .theme-toggle:hover {
+
+	--ts-navlink-color: var(--ts-text-accent);
+}
+
+#ts-header  .ts-theme-toggle:hover, 
+#ts-header  .theme-toggle:hover {
+	--ts-this-bg: var(--ts-accent)!important;
+	--ts-this-bg-border: var(--ts-this-bg-border-active)!important;
+	color: var(--ts-accent-bright-2)!important;
+	background: var(--ts-this-bg-dim-4) !important;
+    --ts-accent: var(--ts-orange);
+
+}
+
+#ts-header .ts-theme-toggle i.ts-theme-icon-light,
+#ts-header .ts-theme-toggle i.ts-theme-icon-dark,
+#ts-header .ts-theme-toggle i{
+	font-size: var(--ts-fs-base-val);
+	transition: transform 0.3s ease,
+				opacity 300ms ease;
+	position: absolute;
+	transform: rotate(0deg) scale(1);
+	opacity:1;
+}
+
+html:not([data-theme="light"]) .ts-theme-icon-dark {
+	opacity: 1;
+	transform: rotate(0deg) scale(1);
+	color: inherit;
+	transition:  transform 0.3s ease,
+				opacity 300ms ease;
+}
+
+html:not([data-theme="light"]) .ts-theme-icon-light {
+	opacity: 0;
+	transform: rotate(180deg) scale(0);
+	color: inherit;
+	transition:  transform 0.3s ease,
+				opacity 300ms ease;
+}
+
+/* Light mode icons */
+[data-theme="light"] .ts-theme-icon-dark {
+	opacity: 0;
+	transform: rotate(-180deg) scale(0);
+	color: inherit;
+	transition:  transform 0.3s ease,
+				opacity 300ms ease;
+}
+[data-theme="light"] #yss-panel h1{
+	color: white;
+}
+
+[data-theme="light"] .ts-theme-icon-light {
+	opacity: 1;
+	transform: rotate(0deg) scale(1);
+	color: inherit;
+transition:  transform 0.3s ease,
+				opacity 300ms ease;
+}
+
+.container #ts-header h1 > strong ,
+.container > header h1 > strong {
+	font-weight: 900!important;
+	--ts-accent: var(--mockup-color-red);
+	margin-left: auto;
+	margin-right: var(--mockup-padding-sm);
+	order: 0;
+	font-size: var(--ts-fs-2xl);
+	background: var(--ts-accent-grad-comp);
+text-transform: uppercase;
+	background-clip: text;
+	color: transparent;
+}
+
+.content > header, #ts-header {
+    background: var(--ts-this-bg);
+    cursor: default;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: calc(var(--mockup-radius-md)*1)!important;
+    overflow: hidden;
+    height: auto;
+    min-height: unset;
+    transition: height 300ms, 
+		min-height 300ms, 
+		max-height 300ms, 
+		background-color 300ms, 
+		border-color 300ms;
+    border: 1px solid var(--ts-this-bg-border);
+    width: stretch;
+    position: fixed;
+    top: var(--mockup-padding-md);
+    left: var(--mockup-padding-md);
+    right: var(--mockup-padding-md);
+    z-index: 99999;
+    padding: 0 var(--mockup-padding-sm);
+    width: auto;
+    --ts-this-bg: var(--ts-bg-1);
+	
+}
+
+.content > header > h1, 
+#ts-header > h1 {
+
+		display: flex!important;
+
+	flex: 1;
+
+	font-size: 1rem!important;
+
+	font-weight: 600;
+
+	pointer-events: all!important;
+
+    color: var(--mockup-text-primary);
+
+	background: transparent;
+	cursor: default;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius:0!important;
+	height: 100%%;
+	min-height: 100%%;
+	transition: height 300ms, min-height 300ms, max-height 300ms, background-color 300ms, border-color 300ms;
+	border: none;
+	/* width: 100vw; */
+	position: relative;
+	padding: 0px;
+	flex: 1;
+	flex-direction: row;
+	gap: var(--mockup-gap-sm);
+	padding: calc(var(--mockup-padding-sm)*1.1);
+	padding: var(--mockup-gap-sm);
+	padding-right: calc(var(--mockup-padding-sm)*1);
+	margin-right: calc(var(--mockup-padding-sm)*1);
+	border-right: 1px solid var(--ts-this-bg-border)!important;
+
+}
+
+/* END OF HEADER GENERAL STYLES*/
 #yss-panel.yss-watch-mode:not(.collapsed, .yss-buttons-notext) {
     max-width: 680px !important;
     max-height: calc(100vh - 20px);
@@ -369,29 +616,6 @@ align-items: center;
     right:0;
     border: none;
 }
-.container > header h1 {
-	display: flex!important;
-	flex-direction: row;
-	justify-content: flex-start;
-	padding: 10px 20px;
-	flex: 1;
-	font-size: 1rem!important;
-	font-weight: 400;
-	margin: 0;
-	gap: 10px;
-	padding: 0px 0px 0px 20px;
-	box-sizing: border-box;
-	pointer-events: all!important;
-    color: var(--mockup-text-primary);
-
-}
-.container > header h1 > strong{
-
-    font-weight: 700;
-    color: var(--mockup-color-red);
-    margin-left: auto;
-    order:0;
-}
 
 div#yss-log-area {
     max-height: unset;
@@ -449,7 +673,7 @@ div#yss-log-area .yss-log-entry {
 
 
 
-/* ─── jQuery UI Datepicker Theme ──────────────────────────────────────── */
+/* --- jQuery UI Datepicker Theme ---------------------------------------- */
 
 #ui-datepicker-div {
 	display: none;
@@ -595,7 +819,7 @@ div#yss-log-area .yss-log-entry {
 	border: 1px solid var(--yss-border-default);
 	box-sizing: border-box;
 }
-/* CSS-only chevron arrows — theme-adaptive, no base64 SVGs */
+/* CSS-only chevron arrows â€” theme-adaptive, no base64 SVGs */
 .ui-datepicker-header a.ui-corner-all::after {
 	content: '';
 	display: block;
@@ -662,7 +886,7 @@ div#yss-log-area .yss-log-entry {
 	display: none;
 }
 
-/* ─── Suppress native HTML5 picker dropdowns when jQuery UI handles them ─── */
+/* --- Suppress native HTML5 picker dropdowns when jQuery UI handles them --- */
 /* Targets any .yss-form-group whose child is a .yss-datepicker or .yss-monthpicker */
 .yss-form-group:has(> .yss-datepicker),
 .yss-form-group:has(> .yss-monthpicker) {
@@ -682,7 +906,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 }
 
 
-/* ─── Timepicker Addon Theme ─────────────────────────────────────────── */
+/* --- Timepicker Addon Theme ------------------------------------------- */
 
 /* Override the addon's default styles to match our dark theme */
 #ui-datepicker-div .ui-timepicker-div {
@@ -841,7 +1065,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 }
 
 
-/* ═══ Two-Column Datepicker Layout ═══════════════════════════════════ */
+/* ═════════ Two-Column Datepicker Layout ═════════════════════════════════════════════════════════════════════════════════════════════════════════ */
 /* Wraps the calendar (left) and simple time picker (right) side-by-side */
 
 .yss-dp-two-col {
@@ -861,7 +1085,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 	padding-left: 12px;
 }
 
-/* ── Advanced / Simple toggle row ── */
+/* -- Advanced / Simple toggle row -- */
 .yss-dp-adv-row {
 	padding-top: 8px;
 	margin-top: 4px;
@@ -896,7 +1120,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 .yss-dp-adv-visible { display: block !important; }
 
 
-/* ═══ Simple Scrollable Time Picker (.yss-stp) ═══════════════════════ */
+/* ═════════ Simple Scrollable Time Picker (.yss-stp) ═════════════════════════════════════════════════════════════════════ */
 
 .yss-stp {
 	display: flex;
@@ -905,7 +1129,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 	height: 100%;
 }
 
-/* ── Current-time display ── */
+/* -- Current-time display -- */
 .yss-stp-display {
 	text-align: center;
 	font-size: 1.25rem;
@@ -926,7 +1150,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 	50% { opacity: 0.3; }
 }
 
-/* ── Columns wrapper ── */
+/* -- Columns wrapper -- */
 .yss-stp-cols {
 	display: flex;
 	gap: 4px;
@@ -941,7 +1165,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 	min-width: 0;
 }
 
-/* ── Column label ── */
+/* -- Column label -- */
 .yss-stp-lbl {
 	text-align: center;
 	font-size: 0.625rem;
@@ -952,7 +1176,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 	letter-spacing: 0.08em;
 }
 
-/* ── Scrollable list ── */
+/* -- Scrollable list -- */
 .yss-stp-list {
 	flex: 1;
 	overflow-y: auto;
@@ -964,7 +1188,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 	background: var(--yss-bg-secondary);
 }
 
-/* ── Individual time item ── */
+/* -- Individual time item -- */
 .yss-stp-item {
 	padding: 3px 6px;
 	text-align: center;
@@ -991,7 +1215,7 @@ input[type="time"].yss-datepicker::-webkit-calendar-picker-indicator {
 	font-weight: 600;
 }
 
-/* ── Time-only pickers: wider columns when no calendar is shown ── */
+/* -- Time-only pickers: wider columns when no calendar is shown -- */
 #ui-datepicker-div:has(.yss-dp-cal-col[style*="display: none"]) .yss-dp-time-col {
 	border-left: none;
 	padding-left: 0;
@@ -1202,15 +1426,12 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	box-shadow: 0em 1em 2rem 2px rgba(0, 0, 0, 0.45);
 	margin-top: 0;
 	margin-left: -1px;
-	border-radius: var(
-	--yss-border-radius);
+	border-radius: var(--yss-border-radius);
 	padding: 1.15rem;
 	z-index: 100001!important;
 	font-family: inherit;
-	font-family: var(
-	--yss-font-family);
-	border: 1px solid var(
-	--yss-border-default);
+	font-family: var(--yss-font-family);
+	border: 1px solid var(--yss-border-default);
 	font-size: 1rem;
 	accent-color: var(--mockup-accent-color);
 	
@@ -1243,102 +1464,6 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	outline-offset: -2px;
 }
 
-#main.container > #header h1 .yss-btn.yss-btn-index, #main.container > #header a[href="index.html"], #main.container > #header > button[id="switch-mode"], #hf-ui-root.container > #header h1 .yss-btn.yss-btn-index, #hf-ui-root.container > #header a[href="index.html"], #hf-ui-root.container > #header > button[id="switch-mode"] {
-    text-decoration: none;
-    margin-inline: 5px;
-    padding-block: 8px;
-    height: calc(100% + 2px);
-    max-height: unset;
-    box-sizing: border-box !important;
-    order: 1;
-    --yss-accent-color: var(--yss-log-success);
-    color: var(--mockup-text-primary);
-    flex: 0 1 !important;
-    min-width: fit-content !important;
-}
-#main.container > #header h1 .yss-btn, #hf-ui-root.container > #header .hf-btn {
-	max-height: 43px !important;
-	height: -webkit-fill-available;
-	min-height: unset;
-	/* outline: none; */
-	margin-inline: 5px;
-	/* border: none; */
-	/* max-height: unset; */
-	height: -webkit-fill-available;
-	display: inline-flex;
-	flex-direction: row-reverse;
-	font-size: 14px;
-	/* background-image: none; */
-	order: -2;
-	flex-wrap: nowrap;
-	align-items: center;
-	justify-content: center;
-	border-radius: calc(var(--mockup-border-radius)/1.6);
-	background: var(--mockup-accent-bg);
-	outline-color: var(--mockup-accent-border) !important;
-	flex: 0;
-	border-color: var(--mockup-accent-border) !important;
-	line-height: 1.5;
-}
-#yss-icons-only-toggle-btn-clone {
-    flex: 0;
-}
-
-.container > header h1 > strong {
-	font-weight: 700;
-	color: var(--mockup-color-red);
-	margin-left: auto;
-	order: -1;
-}
-.container > header h1 .yss-btn.yss-btn-index {
-	text-decoration: none;
-	margin-left: 0;
-	padding-block: 8px;
-	height: calc(100% + 2px);
-	max-height: unset;
-	box-sizing: border-box!important;
-	order: 1;
-	--yss-accent-color: var(--mockup-color-green);
-}
-.content > header, #header {
-    background: #101010c9;
-    cursor: default;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: calc(var(--mockup-border-radius)*1.6)!important;
-    overflow: hidden;
-    height: auto;
-    min-height: unset;
-    transition: height 300ms, min-height 300ms, max-height 300ms, background-color 300ms, border-color 300ms;
-    border: 1px solid #ffffff26;
-    width: stretch;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    z-index: 99999;
-    padding: 5px!important;
-    width: auto;
-}
-
-.content > header, #header > h1 {
-	background: transparent!important;
-    cursor: default;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* border-radius: 0; */
-    height: 50px;
-    min-height: 50px;
-    transition: height 300ms, min-height 300ms, max-height 300ms, background-color 300ms, border-color 300ms;
-    border: none;
-    /* width: 100vw; */
-    position: relative;
-    padding: 0px;
-    flex: 1;
-    flex-direction: row-reverse;
-}
 
 
 .ts-range-row {
@@ -1384,7 +1509,7 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	background: var(--ts-accent);
 	cursor: pointer;
   }
-  /* â”€â”€â”€ Â§6f.1  ADVANCED RANGE SLIDER (with gradient fill) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ══════ §6f.1  ADVANCED RANGE SLIDER (with gradient fill) ════════════════════════════ */
   
   /* CSS Property for value tracking */
   @property --ts-range-val {
@@ -1397,7 +1522,7 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	/* Reset default appearance */
 	-webkit-appearance: none;
 	appearance: none;
-	background: transparent;
+	background: var(--ts-slider-bg)!important;
 	cursor: pointer;
 	
 	/* Layout */
@@ -1417,17 +1542,17 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	--ts-slider-bg: var(--ts-border-0);
 	--ts-slider-border: var(--ts-input-border);
 	--ts-slider-grad: linear-gradient(-135deg, var(--ts-slider-accent-darker), var(--ts-slider-accent));
-	
+	--ts-accent: var(--yss-accent);
+
 	/* Value tracking for gradient fill */
 	--ts-range-val: 50;
 	--ts-range-min: 0;
 	--ts-range-max: 100;
 	--ts-range-percent: calc((var(--ts-range-val) - var(--ts-range-min)) / (var(--ts-range-max) - var(--ts-range-min)) * 100%);
-	
 	height: var(--ts-slider-height);
 	border: 1px solid var(--ts-slider-border);
 	border-radius: var(--ts-slider-radius);
-  }
+	}
   .fa-solid, .fas {
 	  line-height: normal;
   }
@@ -1440,20 +1565,19 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
   input[type="range"].ts-range::-webkit-slider-runnable-track {
 	width: 100%;
 	height: var(--ts-slider-height);
-	border-radius: var(--ts-slider-radius);
+	/* border-radius: var(--ts-slider-radius); */
 	background: 
 	  linear-gradient(to right, var(--ts-slider-accent), var(--ts-slider-accent-darker)) 
 	  0 0 / var(--ts-range-percent) 100% no-repeat,
 	  var(--ts-slider-bg);
 	border: 0;
-  }
+	}
   
   /* Firefox track styling */
   input[type="range"].ts-range::-moz-range-track {
 	width: 100%;
 	height: var(--ts-slider-height);
 	border-radius: var(--ts-slider-radius);
-	background: var(--ts-slider-bg);
 	border: 0;
   }
   
@@ -1470,13 +1594,14 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	  width: var(--ts-slider-thumb-size);
 	  height: var(--ts-slider-thumb-size);
 	  margin-top: var(--ts-slider-thumb-offset);
-	  border-radius: 50%;
-	  background: var(--ts-slider-grad);
-	  /* border: 2px solid var(--ts-bg-0); */
-	  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); */
+	  border-radius: 100px;
+	  background: var(--ts-slider-grad)!important;
+	  outline: 1px solid var(--ts-this-bg-hover)!important;
+	  outline: none;
+	  box-shadow: 0 0px 4px rgba(0, 0, 0, 0);
 	  cursor: pointer;
 	  transition: all var(--ts-dur-fast) var(--ts-ease-out);
-  }
+	 }
   
   input[type="range"].ts-range::-webkit-slider-thumb:hover {
 	transform: scale(1.15);
@@ -1493,10 +1618,9 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
   input[type="range"].ts-range::-moz-range-thumb {
 	width: var(--ts-slider-thumb-size);
 	height: var(--ts-slider-thumb-size);
-	border-radius: 50%;
+	border-radius: 100px;
 	background: var(--ts-slider-grad);
-	border: 2px solid var(--ts-bg-0);
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+	border: 0px solid var(--ts-bg-0);
 	cursor: pointer;
 	transition: all var(--ts-dur-fast) var(--ts-ease-out);
   }
@@ -1532,42 +1656,47 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	--ts-slider-height: 16px;
   }
   .yss-modal-content.yss-batch .yss-form-block input[type="range"].ts-range {
-	-webkit-appearance: none!important;
+	/*-webkit-appearance: none!important;
 	appearance: none!important;
 	background: transparent!important;
 	cursor: pointer!important;
 	flex: 1 1 !important;
 	min-width: 80px!important;
 	box-sizing: border-box!important;
-	--ts-slider-height: 16px!important;
-	--ts-slider-thumb-size: calc(var(--ts-slider-height) * 1.5);
+	--ts-slider-height: 18px!important;
+	--ts-slider-thumb-size: calc(var(--ts-slider-height) * 1.1);
 	--ts-slider-radius: calc(var(--ts-slider-height) * 2);
 	--ts-slider-thumb-offset: calc((var(--ts-slider-height) - var(--ts-slider-thumb-size)*1)/ 2 - 1px);
 	--ts-slider-accent: var(--ts-accent);
+	--ts-slider-accent-darker: color-mix(in srgb, var(--ts-slider-accent), #000000 5%);*/
 	--ts-slider-accent-darker: color-mix(in srgb, var(--ts-slider-accent), #000000 25%);
 	--ts-slider-bg: var(--ts-border-0);
-	--ts-slider-border: var(--ts-input-border);
+	--ts-slider-border: var(--ts-slider-accent-darker);
 	--ts-slider-grad: linear-gradient(-135deg, var(--ts-slider-accent-darker), var(--ts-slider-accent));
 	--ts-range-val: 50;
 	--ts-range-min: 0;
 	--ts-range-max: 100;
+
 	--ts-range-percent: calc((var(--ts-range-val) - var(--ts-range-min)) / (var(--ts-range-max) - var(--ts-range-min)) * 100%);
 	height: var(--ts-slider-height);
-	border: 0px solid var(--ts-slider-border);
+	border: 1px solid var(--ts-slider-border);
 	border-radius: var(--ts-slider-radius);
-	/* outline: 1px solid var(--ts-slider-border); */
-	/* outline-offset: -1px; */
+	outline:0px solid var(--ts-slider-border);
+	outline-offset: -1px;
+	--ts-slider-accent: var(--ts-accent);
+	--ts-accent: var(--yss-accent);
+
+
 }
 .yss-modal-content.yss-batch .yss-form-block input[type="range"].ts-range::-webkit-slider-runnable-track {
 	width: 100%;
 	height: var(--ts-slider-height);
 	border-radius: var(--ts-slider-radius);
-	background: linear-gradient(to right, var(--ts-slider-accent), var(--ts-slider-accent-darker)) 
-    0 0 / var(--ts-range-percent) 100% no-repeat,
-    var(--ts-slider-bg)!important;
-	border: 1px solid var(--ts-slider-border);
-	/* outline: 1px solid var(--ts-slider-border); */
-	/* outline-offset: -1px; */
+
+	border: 0px solid var(--ts-slider-border);
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: var(--yss-log-bg);
 }
 .yss-modal-content.yss-batch .yss-form-block input[type="range"].ts-range::-webkit-slider-thumb {
 	-webkit-appearance: none;
@@ -1577,10 +1706,15 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	margin-top: var(--ts-slider-thumb-offset)!important;
 	border-radius: 50%!important;
 	background: var(--ts-slider-grad)!important;
-	/* border: 2px solid var(--ts-bg-0); */
-	/* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); */
+	/* border: 2px solid var(--ts-slider-accent-darker); */
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.23); 
+	border: 1px solid var(--ts-slider-accent-darker)!important;
+	transform: translatex(calc(var(--ts-slider-thumb-size)*.1 + .5dvw));
 	cursor: pointer!important;
 	transition: all var(--ts-dur-fast) var(--ts-ease-out);
+	--ts-slider-accent-darker: color-mix(in srgb, var(--ts-slider-accent), #000000 5%);
+	--ts-slider-accent: var(--ts-accent);
+	--ts-accent: var(--yss-accent);
 }
 #yt-batch-download-delay-slider-container.yss-form-block {
 	font-size: var(--yss-font-size);
@@ -1613,3 +1747,63 @@ div#ui-datepicker-div:has(.ui-timepicker-div.yss-dp-adv-visible) > .yss-dp-two-c
 	min-width: 55px!important;
 	order: 1;
 }
+.yss-modal-content.yss-batch .yss-form-block:has(input[type="range"].ts-range) > span:after {
+display: none;
+}
+
+
+
+:root:has(div[id*="-panel"], div[id*="yss-"], div[id*="suno-"], div[id*="hf-"], #main,.ts-sandbox-isolate),
+:root:has(div[id*="-panel"], div[id*="yss-"], div[id*="suno-"], div[id*="hf-"], #main,.ts-sandbox-isolate) *{
+	--ts-backdrop-blur: 1px;
+	--ts-bg-alpha: 12%;
+	--ts-overlay-bg: color-mix(in srgb, 
+					var(--ts-bg-body),transparent 
+					var(--ts-bg-alpha));
+	--ts-accent: var(--yss-accent);
+	--ts-image-yss-panel-bg-watch: url(/assets/img/bg_yt.jpg);
+--ts-image-yss-panel-bg-studio: url(/assets/img/bg_yt_s.jpg);
+	}
+body:has(div[id*="-panel"],div[id*="yss-"], div[id*="suno-"],div[id*="hf-"],#main, .ts-sandbox-isolate):after{
+		content:"";
+		position: absolute;
+		inset:0;
+		background: var(--ts-overlay-bg);
+		z-index:0;
+		backdrop-filter: 
+			blur(var(--ts-backdrop-blur)) 
+			saturate(1.4);
+	
+	}
+
+html:has(div[id*="-panel"],div[id*="yss-"], div[id*="suno-"],div[id*="hf-"],#main, .ts-sandbox-isolate){
+		body:has(#yss-panel:not(.yss-watch-mode)){
+
+		background-image: var(--ts-image-yss-panel-bg-studio)!important;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: left center;
+	
+	}
+	body:has(#yss-panel.yss-watch-mode){
+
+		background-image: var(--ts-image-yss-panel-bg-watch)!important;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: left center;
+		
+	            
+	}
+	
+
+}
+
+[data-theme="light"] body:has(div[id*="-panel"],div[id*="yss-"], div[id*="suno-"],div[id*="hf-"],#main, .ts-sandbox-isolate):after{
+		--ts-backdrop-blur: 0px;
+	--ts-bg-alpha: 95%;
+	--ts-overlay-bg: color-mix(in srgb, 
+					var(--ts-bg-body),transparent 
+					var(--ts-bg-alpha));
+			background: var(--ts-overlay-bg);
+
+	}

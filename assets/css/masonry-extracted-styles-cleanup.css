@@ -1,0 +1,576 @@
+/*NNOTE: the classes names and variants must be kept previously analyzing the  index.html and the labs and ba interfaces already existent qhere masonty has been used and analyzing ponderaating which classes has been used. the idea is to keep ts-masonry as legacy base classnaME after cleanup. and aDDING EXTRA CLASSES TO EACH VARIANT AND FEATURE, NOT ISOLATING EVERY ONE. SO THE COMPONENT INHERITS PROPERTIES. . WE GOT TO WIPE OFF ALL REDUDNANT AND UNUSED COMPONENT MASONRY FROM THE SYSTEM AND MAKE USABLE ASSETS FROM THIS, AS EFFICIENT AND INHERITABLE. AND SAHREABLE WITH OTHER LAYOU  COMPONENT THAT CAN HOLD    */
+
+/* Grid Lanes — see https://webkit.org/blog/17660/introducing-css-grid-lanes/
+this version must be removed because is not compatible with some browsers. BUT GOT SOME  PROGRESSES AS RECORDS. 
+IS ONLY ON LABS SHOWCASE.  REPLACE QWITR THE NEW ONE. this one has been replaced with the  ts-ui-masonry--gallery class type and the image type gallery holder.  but it will be overrided with the new   version.
+	* Uses display:grid-lanes only when @supports (display: grid-lanes) matches.
+	* Many Chrome stable builds do not match → fallback block below. Some Chromium forks
+	* (e.g. Brave) or flags may enable grid-lanes, so layout can differ from Chrome. */
+.ts-ui-masonry--lanes {
+	--ts-ui-masonry-lane-min: 14rem;
+	--ts-ui-photo-aspect: 4 / 3;
+	--ts-ui-masonry-item-flex-grow: 1;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item {
+	margin-bottom: 0;
+}
+
+/* Photo tiles: box + absolute img + object-fit cover (grid-lanes + flex fallback) */
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+	position: relative;
+	overflow: hidden;
+	border-radius: var(--ts-radius-md);
+	border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+	background: var(--ts-bg-1);
+	aspect-ratio: var(--ts-ui-photo-aspect, 4 / 3);
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+@supports (display: grid-lanes) {
+	.ts-ui-masonry--lanes {
+		display: grid-lanes;
+		grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 14rem), 1fr));
+		gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+		min-height: 0;
+	}
+}
+
+/* No grid-lanes: flex-wrap + flexible flex-grow per tile (--ts-ui-masonry-item-flex-grow) */
+@supports not (display: grid-lanes) {
+	.ts-ui-masonry--lanes {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: stretch;
+		gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item {
+		box-sizing: border-box;
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+		flex: var(--ts-ui-masonry-item-flex-grow, 1) 1 var(--ts-ui-masonry-lane-min, 14rem);
+		min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+		max-width: 100%;
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item:not(.ts-ui-masonry__item--photo) {
+		flex: 1 1 var(--ts-ui-masonry-lane-min, 14rem);
+		min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+	}
+}
+
+
+
+/*this is the most accurate grid gallery implemented and the one submitted to migrate the image  and interactive featurtes*/
+
+
+		.ts-ui-masonry--gallery .ts-ui-masonry__item {
+			margin-bottom: 0;
+		}
+
+		/* image tiles: box + absolute img + object-fit cover (grid-gallery + flex fallback) */
+		.ts-ui-masonry--gallery .ts-ui-masonry__item--image {
+			position: relative;
+			overflow: hidden;
+			border-radius: var(--ts-radius-md);
+			border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+			background: var(--ts-bg-1);
+			aspect-ratio: var(--ts-ui-image-aspect, 4 / 3);
+			--ts-ui-image-aspect: 1!important;
+		}
+
+		.ts-ui-masonry--gallery .ts-ui-masonry__item--image img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}	
+
+
+	.ts-ui-masonry--gallery {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: stretch;
+		gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+
+		
+		--ts-ui-masonry-column-size: 9rem;
+		--ts-ui-masonry-column-max-w: clamp(calc(var(--ts-ui-masonry-column-size)*.65), var(--ts-ui-masonry-column-size), calc(var(--ts-ui-masonry-column-size)*1.5));
+		--ts-ui-masonry-column-max-w: clamp(calc(var(--ts-ui-masonry-column-size)*2 ), 100% ,50%);
+
+		--ts-ui-masonry-column-width: min(var(--ts-ui-masonry-column-size), var(--ts-ui-masonry-column-max-w));
+
+		--ts-ui-masonry-gap: var(--ts-sp-3);
+
+		--ts-ui-image-aspect: 1!important;
+		--ts-ui-masonry-gal-min: var(--ts-ui-masonry-column-width)!important;
+		--ts-ui-masonry-item-flex-grow: 1!important;
+
+	}
+
+	.ts-ui-masonry--gallery .ts-ui-masonry__item {
+		box-sizing: border-box;
+		position: relative;
+		overflow: hidden;
+		border-radius: var(--ts-radius-md);
+		border: 1px solid var(--ts-this-bg-border);
+		background: var(--ts-this-bg);
+		
+		flex: var(--ts-ui-masonry-item-flex-grow) 1 
+				var(--ts-ui-masonry-gal-min);
+		min-width: min(var(--ts-ui-masonry-column-max-w), var(--ts-ui-masonry-gal-min));
+		max-width:var(--ts-ui-masonry-column-max-w);
+		aspect-ratio: var(--ts-ui-image-aspect)!important;
+		--ts-ui-masonry-item-flex-grow: 1!important;
+		--ts-this-bg: var(--ts-bg-1);
+	
+	}
+	.ts-ui-masonry--gallery .ts-ui-masonry__item:not(.ts-ui-masonry__item--image,:has(img)) {
+			flex: var(--ts-ui-masonry-item-flex-grow) 1 var(--ts-ui-masonry-gal-min);
+			min-width: min(100%, var(--ts-ui-masonry-gal-min));
+	}
+	.ts-ui-masonry--gallery .ts-ui-masonry__item:has(img) > img,
+	.ts-ui-masonry--gallery .ts-ui-masonry__item--image img {
+		position: absolute!important;
+		inset: 0!important;
+		width: 100%!important;
+		height: 100%!important;
+		object-fit: cover!important;
+		display: block;
+	}
+	.ts-ui-masonry--gallery > img,
+	.ts-ui-masonry--gallery .ts-ui-masonry__item--image,
+	.ts-ui-masonry--gallery .ts-ui-masonry__item:has(img){
+		flex: var(--ts-ui-masonry-item-flex-grow) 1 
+			var(--ts-ui-masonry-gal-min);
+		min-width: min(var(--ts-ui-masonry-column-max-w), var(--ts-ui-masonry-gal-min));
+		max-width: var(--ts-ui-masonry-column-max-w);
+	}
+
+	
+/* Explicit uniform grid (multi-column everywhere; not “packed” masonry) */
+.ts-ui-masonry--grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 12rem), 1fr));
+	gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
+.ts-ui-masonry--grid .ts-ui-masonry__item {
+	margin-bottom: 0;
+	min-width: 0;
+}
+
+/*#CRAZY_FIX_RULES */
+
+
+/*REFACTOR NOTES: tis is one of the most fristrating aseset and siystem we got on the design system. is totally unpredictable and diffficult to manage. unreliable and   impossible to maintain. this element needs to be either to be removed  or refactored. as there's no sue for a layout masonry that is not a real masonry. so we may  delet this feature for good. and use  flexbox  layouts and grid  bootstrapping systems properly built with dynamic automatic layout  smart systems., not abusing on classes. only content and general  grid and calc   container-layout-columns based design low media queries and block smart design capable of   aming good layout excell without using hard grids that breaks over resizing and breaks content.  this masorny doesnrt even serve for image gallery... they are impossbile to addapt anywgere.  the ionly place is  good and is  cool how it looks is on the marquee section where i randomly managed to make the main marquee display screen horizontally... but fd¿dont knwo how.   i need to be capable of that without doing random guess.  and not using this kind of element for that putpose. 
+masonry shoudl be other thing and maybe we dont need something like this here. we do need a simple automatic grid   smart system. either using an isotope like system, or a flex based  css column based system.  grid with clamp anfdd automated  column suystems and few javascript or somethign smart and  super usbale and lightweight. not absolute positiong or anuthing unreliable.  something modern and solid. i think flexbox is the best    way to choos. as is the best way of desigining layouts that can be iminal or  resturcutresdd. via rows and columns.  */
+
+/* ─── §4d.1  MASONRY GRID SYSTEM ────────────────────────────────────── */
+
+/* 
+	* Responsive Masonry Grid
+	* Uses CSS Grid with auto-fill for true responsive behavior
+	* Columns adjust based on viewport with min/max constraints
+	*/
+
+.ts-masonry {
+	/* Grid configuration */
+	--ts-masonry-min-col: 200px;
+	/* Minimum column width */
+	--ts-masonry-row-h: 180px;
+	/* Base row height */
+	--ts-masonry-gap: var(--ts-sp-4);
+	/* Gap between items */
+	--ts-masonry-cols: auto-fill;
+	/* auto-fill or auto-fit */
+
+	display: grid !important;
+	grid-template-columns: repeat(var(--ts-masonry-cols),
+			minmax(var(--ts-masonry-min-col), 1fr));
+	grid-auto-rows: var(--ts-masonry-row-h);
+	/*  grid-auto-flow: dense;                 fill holes left by row/column spans */
+	gap: var(--ts-masonry-gap);
+	align-items: stretch;
+	justify-items: stretch;
+}
+
+.ts-masonry {
+	--ts-masonry-min-col: clamp(300px, 16rem, 780px);
+	--ts-masonry-row-h: 16rem;
+	--ts-masonry-gap: var(--ts-sp-4);
+	--ts-masonry-cols: auto-fill;
+	--ts-masonry-cols: auto-fit;
+	display: grid !important;
+	grid-template-columns: repeat(var(--ts-masonry-cols),
+			minmax(var(--ts-masonry-min-col), 1fr));
+	grid-auto-rows: var(--ts-masonry-row-h);
+	gap: var(--ts-masonry-gap);
+	align-items: stretch;
+	justify-items: stretch;
+	align-content: stretch;
+	grid-auto-flow: dense;
+}
+
+/* Masonry item base */
+.ts-masonry-item {
+	display: flex;
+	/* text-align: center; */
+	min-height: var(--ts-masonry-row-h);
+	position: relative;
+	flex-direction: column;
+	justify-content: center;
+	align-content: stretch;
+	align-items: stretch;
+	flex-wrap: wrap;
+}
+
+.ts-masonry-item > .ts-masonry-item-text {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+}
+
+.ts-masonry-item-text {
+	text-transform: uppercase;
+	color: var(--ts-text-muted);
+}
+
+/* Spanning modifiers - Smart responsive behavior */
+
+/* Tall: 2 rows */
+.ts-masonry--tall {
+	grid-row: span 2;
+}
+
+/* Wide: 2 columns (but respects grid) */
+.ts-masonry--wide {
+	grid-column: span 2;
+}
+
+/* Tall Full: 3 rows (prominent vertical) */
+.ts-masonry--tall-full {
+	grid-row: span 3;
+}
+
+/* Wide Full: 3+ columns (takes more horizontal space) */
+.ts-masonry--wide-full {
+	grid-column: 1 / -1;
+	text-align: center;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
+}
+.ts-masonry--wide-full:has(.ts-marquee) {
+margin-block: var(--ts-sp-6);
+}
+/* Extra tall: 4 rows (hero vertical) */
+.ts-masonry--xtall {
+	grid-row: span 4;
+}
+
+/* Extra wide: 4+ columns (hero horizontal) */
+.ts-masonry--xwide {
+	grid-column: span 4;
+}
+
+/* Large: Both wide and tall (2x2 block) */
+.ts-masonry--large {
+	grid-column: span 2;
+	grid-row: span 2;
+}
+
+/* Hero: Maximum size (3x3+ block) */
+.ts-masonry--hero {
+	grid-column: span 3;
+	grid-row: span 3;
+	order: -1;
+}
+
+/* Responsive breakpoints for masonry */
+@media (max-width: 1400px) {
+	.ts-masonry {
+		--ts-masonry-min-col: clamp(200px, 15rem, 800px);
+	}
+
+	.ts-masonry--wide-full,
+	.ts-masonry--xwide {
+		grid-column: span 2;
+	}
+
+	.ts-masonry--hero {
+		grid-column: span 2;
+	}
+}
+
+@media (max-width: 1024px) {
+	.ts-masonry {
+		--ts-masonry-min-col: clamp(260px, 15rem, 760px);
+	}
+
+	.ts-masonry--wide-full {
+		grid-column: span 2;
+	}
+
+	.ts-masonry--xwide,
+	.ts-masonry--hero {
+		grid-column: span 2;
+	}
+}
+
+@media (max-width: 768px) {
+	.ts-masonry {
+		--ts-masonry-min-col: 6rem;
+		--ts-masonry-row-h: auto;
+		display: flex !important;
+		flex-direction: column;
+		align-items: stretch;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-content: stretch;
+	}
+
+	.ts-masonry--wide,
+	.ts-masonry--wide-full,
+	.ts-masonry--xwide {
+		grid-column: span 2;
+	}
+
+	.ts-masonry--hero {
+		grid-column: span 2;
+		grid-row: span 2;
+	}
+}
+
+@media (max-width: 480px) {
+	.ts-masonry {
+		--ts-masonry-min-col: 120px;
+		--ts-masonry-row-h: 120px;
+	}
+
+	.ts-masonry {
+		--ts-masonry-min-col: 15rem;
+		--ts-masonry-row-h: 9rem;
+		--ts-masonry-cols: 1 !important;
+		grid-template-columns: 1fr;
+		grid-auto-flow: unset;
+		display: flex !important;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: stretch;
+	}
+
+	/* All wide items become single column on mobile */
+	.ts-masonry--wide,
+	.ts-masonry--wide-full,
+	.ts-masonry--xwide,
+	.ts-masonry--hero {
+		grid-column: span 1;
+	}
+
+	/* Keep tall items but reduce span */
+	.ts-masonry--tall-full,
+	.ts-masonry--xtall {
+		grid-row: span 2;
+	}
+}
+
+/* Masonry variants for different use cases */
+
+/* Compact masonry (smaller gaps, more items) */
+.ts-masonry--compact {
+	--ts-masonry-min-col: 150px;
+	--ts-masonry-row-h: 150px;
+	--ts-masonry-gap: var(--ts-sp-2);
+}
+
+.ts-masonry--compact {
+	--ts-masonry-min-col: 12rem;
+	--ts-masonry-row-h: 15rem;
+	--ts-masonry-gap: var(--ts-sp-2);
+	/* grid-auto-flow: row dense; */
+	/* grid-auto-rows: 1fr 1fr; */
+	/* --ts-masonry-cols: 4; */
+}
+
+/* Loose masonry (larger gaps, more breathing room) */
+.ts-masonry--loose {
+	--ts-masonry-gap: var(--ts-sp-6);
+}
+
+/* Square cells (equal width/height ratio) */
+.ts-masonry--square {
+	--ts-masonry-row-h: var(--ts-masonry-min-col);
+}
+
+/* Auto-fit variant (fills available space) */
+.ts-masonry--fit {
+	--ts-masonry-cols: auto-fit;
+}
+
+/* ── Masonry v2 ────── */
+.ts-ui-masonry--v2 {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	/* Narrower default column min → more columns in typical side-by-side grids */
+	column-width: var(--ts-ui-masonry-column-width, min(200px, 100%));
+	column-gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+	column-fill: balance;
+}
+
+.ts-ui-masonry--v2.ts-ui-masonry--dense {
+	--ts-ui-masonry-column-width: min(160px, 100%);
+	--ts-ui-masonry-gap: var(--ts-sp-3);
+}
+
+.ts-ui-masonry__item {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	break-inside: avoid;
+	margin-bottom: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+}
+
+.ts-ui-masonry__item img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+.ts-ui-masonry__item--flush {
+	padding: 0 !important;
+	margin-left: 0;
+	margin-right: 0;
+	overflow: visible;
+}
+
+.ts-ui-masonry__item .ts-flip-card {
+	margin: 0;
+}
+
+.ts-ui-masonry__item .ts-flip-card__inner {
+	min-height: 0;
+}
+
+/* Grid Lanes — see https://webkit.org/blog/17660/introducing-css-grid-lanes/
+	* Uses display:grid-lanes only when @supports (display: grid-lanes) matches.
+	* Many Chrome stable builds do not match → fallback block below. Some Chromium forks
+	* (e.g. Brave) or flags may enable grid-lanes, so layout can differ from Chrome. */
+.ts-ui-masonry--lanes {
+	--ts-ui-masonry-lane-min: 14rem;
+	--ts-ui-photo-aspect: 4 / 3;
+	--ts-ui-masonry-item-flex-grow: 1;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item {
+	margin-bottom: 0;
+}
+
+/* Photo tiles: box + absolute img + object-fit cover (grid-lanes + flex fallback) */
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+	position: relative;
+	overflow: hidden;
+	border-radius: var(--ts-radius-md);
+	border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+	background: var(--ts-bg-1);
+	aspect-ratio: var(--ts-ui-photo-aspect, 4 / 3);
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+@supports (display: grid-lanes) {
+	.ts-ui-masonry--lanes {
+		display: grid-lanes;
+		grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 14rem), 1fr));
+		gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+		min-height: 0;
+	}
+}
+
+/* No grid-lanes: flex-wrap + flexible flex-grow per tile (--ts-ui-masonry-item-flex-grow) */
+@supports not (display: grid-lanes) {
+	.ts-ui-masonry--lanes {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		align-items: stretch;
+		gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item {
+		box-sizing: border-box;
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+		flex: var(--ts-ui-masonry-item-flex-grow, 1) 1 var(--ts-ui-masonry-lane-min, 14rem);
+		min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+		max-width: 100%;
+	}
+
+	.ts-ui-masonry--lanes .ts-ui-masonry__item:not(.ts-ui-masonry__item--photo) {
+		flex: 1 1 var(--ts-ui-masonry-lane-min, 14rem);
+		min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+	}
+}
+
+/* Explicit uniform grid (multi-column everywhere; not “packed” masonry) */
+.ts-ui-masonry--grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 12rem), 1fr));
+	gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
+.ts-ui-masonry--grid .ts-ui-masonry__item {
+	margin-bottom: 0;
+	min-width: 0;
+}
