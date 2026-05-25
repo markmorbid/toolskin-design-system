@@ -20,6 +20,7 @@
       } catch (e) { /* ignore */ }
     })();
   </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Toolskin · Design System Showcase</title>
 
@@ -69,10 +70,10 @@
   <!-- Toolskin System (local — render-critical) -->
  <script>
       document.documentElement.classList.add('ts-preloader-lock');
-      window.__TOOLSKIN_CONFIG__ = {
+     window.__TOOLSKIN_CONFIG__ = {
         cursor: { mode: 'simple', follower: true, easing: 0.42, followerEasing: 0.12 },
-        reveal: { useGSAP: true, stagger: 0.05, rootMargin: '0px 0px -40px 0px' },
-        smoothScroll: { enabled: true, duration: 1.2 },
+        reveal: { enabled: false, useGSAP: false, stagger: 0.05, rootMargin: '0px 0px -40px 0px' },
+        smoothScroll: { enabled: false, duration: 1.2 },
       };
       // Font-gate: reveal preloader text only after the two fonts it uses are loaded.
       // Uses document.fonts.load() for specific families (resolves fast, doesn't wait for FA).
@@ -85,8 +86,7 @@
     </script>
   <!-- <link rel="stylesheet" href="assets/css/toolskin-merged-2.css" /> -->
   <!-- <link rel="stylesheet" href="assets/css/toolskin-merged-3.2.css" /> -->
-    <link rel="stylesheet" href="assets/css/toolskin-merged-3.2.6._4.2.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/expand.min.css">
+    <link rel="stylesheet" href="assets/css/toolskin.css" />
 
   <!-- ToolskinAssets — dynamic asset pipeline (must load before toolskin.js early boot) -->
   <script src="assets/js/toolskin-assets.js" defer></script>
@@ -120,10 +120,10 @@
        The deferred toolskin.js IIFE is a safety net, not the primary mechanism. -->
 
 
-  <div id="ts-preloader" class="ts-preloader" aria-hidden="true">
+  <div id="ts-preloader" class="ts-preloader" >
     <div class="ts-preloader__brand">
       <div class="ts-preloader__logo">
-        <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>
+        <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" ><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>
         TOOL<em>SKIN</em>
       </div>
       <div class="ts-preloader__bar-wrap"><span class="ts-preloader__bar"></span></div>
@@ -157,11 +157,11 @@
         </div>
         <!-- Theme Toggle (right side of menu) -->
         <!-- <button class="ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
-          <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" aria-hidden="true"></span>
-          <span class="ts-icon ts-theme-icon-dark" data-ts-icon="fa-solid fa-moon" aria-hidden="true"></span>
+          <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" ></span>
+          <span class="ts-icon ts-theme-icon-dark" data-ts-icon="fa-solid fa-moon" ></span>
         </button> 
         <button class="theme-toggle theme-toggle--force-motion" type="button" data-theme-toggle title="Toggle theme" aria-label="Toggle theme">
-          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" fill="currentColor" class="theme-toggle__expand" viewBox="0 0 32 32">
+          <svg xmlns="http://www.w3.org/2000/svg"  width="1em" height="1em" fill="currentColor" class="theme-toggle__expand" viewBox="0 0 32 32">
             <clipPath id="theme-toggle__expand__cutout">
               <path d="M0-11h25a1 1 0 0017 13v30H0Z"></path>
             </clipPath>
@@ -171,10 +171,10 @@
             </g>
           </svg>
         </button>-->
-        <label class="ts-theme-toggle theme-toggle theme-toggle--force-motion theme-toggle--toggled" data-theme-toggle title="Toggle theme">
+        <label class=" theme-toggle theme-toggle--force-motion theme-toggle--toggled" data-theme-toggle title="Toggle theme">
           <input type="checkbox" />
           <span class="theme-toggle-sr">Toggle theme</span>
-          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" fill="currentColor" class="theme-toggle__expand" viewBox="0 0 32 32">
+          <svg xmlns="http://www.w3.org/2000/svg"  width="1em" height="1em" fill="currentColor" class="theme-toggle__expand" viewBox="0 0 32 32">
             <clipPath id="theme-toggle__expand__cutout">
               <path d="M0-11h25a1 1 0 0017 13v30H0Z" />
             </clipPath>
@@ -204,36 +204,36 @@
       <!-- Layer stack: canvas(0) → grid-lines(1) → color-overlay(2) → dots(3) → content(5) → grain(7)
            Dot grid: classes on SECTION so ToolskinGridBg receives mouse events.
            Overlay element is direct child so CSS vars cascade from section inline styles. -->
-      <div class="ts-effects-layer ba-grid" aria-hidden="true"></div>
+      <div class="ts-effects-layer ba-grid" ></div>
       <div class="ts-color-overlay-layer" style="background: color-mix(in srgb, var(--ts-bg-0) 80%, transparent);">
       </div>
-      <div class="ts-section-color-overlay" aria-hidden="true"></div>
+      <div class="ts-section-color-overlay" ></div>
       <div class="ts-container ts-relative ts-z-1 ts-flex-row  ts-center ts-fullwidth" style="z-index: 5;">
         <div class="ts-hero-content ts-flex-col">
-          <div class="ts-hero__badge ts-fade-up">
-            <span class="ts-icon ts-icon-dot" data-ts-icon="fa-solid fa-circle" aria-hidden="true"></span>
+          <div class="ts-hero__badge">
+            <span class="ts-icon ts-icon-dot" data-ts-icon="fa-solid fa-circle" ></span>
             Design System · v1.0.0 · 2026
           </div>
 
-          <h1 class="ts-hero-title ts-fade-up ts-delay-1">
+          <h1 class="ts-hero-title ">
             TOOL<span class="ts-gradient-text">SKIN</span>
           </h1>
 
-          <p class="ts-lead ts-hero-lead ts-fade-up ts-delay-1">
+          <p class="ts-lead ts-hero-lead ">
             A token-driven CSS design system built for WordPress, web applications, and UI toolkits. One stylesheet.
             Infinite control.
           </p>
 
-          <div class="ts-hero__actions ts-fade-up ts-delay-2">
+          <div class="ts-hero__actions ">
             <button class="ts-btn ts-btn--primary ts-btn--lg" data-modal-open="modal-demo">
-              <span class="ts-icon" data-ts-icon="fa-solid fa-bolt" aria-hidden="true"></span> View Components
+              <span class="ts-icon" data-ts-icon="fa-solid fa-bolt" ></span> View Components
             </button>
             <a href="#tokens" class="ts-btn ts-btn--outline ts-btn--lg">
-              <span class="ts-icon" data-ts-icon="fa-solid fa-code" aria-hidden="true"></span> Design Tokens
+              <span class="ts-icon" data-ts-icon="fa-solid fa-code" ></span> Design Tokens
             </a>
           </div>
 
-          <div class="theme-swatches ts-delay-2 ts-fade-up">
+          <div class="theme-swatches ">
             <span class="ts-accent-label">Accent</span>
             <div class="theme-swatch" data-color="#ff5500" onclick="Toolskin.setAccentHex('#ff5500')" data-tooltip="Orange">
             </div>
@@ -253,7 +253,7 @@
       </div>
 
       <!-- Grain layer: TOPMOST — texturizes everything via mix-blend-mode -->
-      <div class="ts-grain-layer ts-grain ts-grain--flickered" aria-hidden="true"></div>
+      <div class="ts-grain-layer ts-grain ts-grain--flickered" ></div>
 
       <!-- decorative accent glow blob -->
       <div class="glow-bulb-2" id="ts-hero-glow" style="display:none"></div>
@@ -283,8 +283,8 @@
         </div>
 
         <!-- Color palette -->
-        <span class="ts-label ts-fade-up ts-delay-1">Surfaces — ts-surface-0 through ts-surface-5</span>
-        <div class="ts-row  ts-fade-up ts-delay-2">
+        <span class="ts-label ">Surfaces — ts-surface-0 through ts-surface-5</span>
+        <div class="ts-row  ">
           <div class="ts-flex-col ts-gap-1">
             <div class="ts-surface-0 ts-rounded ts-border ts-swatch"></div>
             <span class="ts-caption">bg-0</span>
@@ -350,7 +350,7 @@
             text colors stay local to the preview card until you apply an accent swatch.</p>
 
           <p class="ts-label ts-mb-3"><span class="ts-icon" data-ts-icon="fa-solid fa-sliders"
-              aria-hidden="true"></span>
+              ></span>
             Accent &amp; surface preview</p>
           <div class="ts-grid ts-grid--2 ts-gap-3  ts-align-start">
             <div class="ts-p-8 ts-card ts-surface-1 ts-mb-0">
@@ -453,7 +453,7 @@
         <div class="ts-grid ts-grid--2  ts-gap-4">
           <div class="ts-card ts-card--accent-bar">
             <div class="ts-card__title"><span class="ts-icon" data-ts-icon="fa-solid fa-palette"
-                aria-hidden="true"></span> &nbsp;Color Engine (HSL)</div>
+                ></span> &nbsp;Color Engine (HSL)</div>
             <code class="ts-mono ts-code-block">
             --ts-accent-h: 18;<br>
             --ts-accent-s: 100%;<br>
@@ -465,7 +465,7 @@
           </div>
           <div class="ts-card ts-card--accent-bar">
             <div class="ts-card__title"><span class="ts-icon" data-ts-icon="fa-solid fa-ruler"
-                aria-hidden="true"></span>
+                ></span>
               &nbsp;Radius (Global)</div>
             <code class="ts-mono ts-code-block">
             --ts-radius-base: 10px; ← master<br>
@@ -615,7 +615,7 @@
           <div class="ts-topbar__logo ts-fs-lg">TOOL<em>SKIN</em></div>
           <div class="ts-modal__title">Modal — Full Demo</div>
           <button class="ts-modal__close" data-modal-close aria-label="Close">
-            <span class="ts-icon" data-ts-icon="fa-solid fa-xmark" aria-hidden="true"></span>
+            <span class="ts-icon" data-ts-icon="fa-solid fa-xmark" ></span>
           </button>
         </div>
         <div class="ts-modal__body">
@@ -649,7 +649,7 @@
         <div class="ts-modal__footer">
           <button class="ts-btn ts-btn--danger" data-modal-close>Cancel</button>
           <button class="ts-btn ts-btn--primary"><span class="ts-icon" data-ts-icon="fa-solid fa-floppy-disk"
-              aria-hidden="true"></span> Save Changes</button>
+              ></span> Save Changes</button>
         </div>
       </div>
     </div>
@@ -659,10 +659,10 @@
       <div class="ts-modal ts-modal--sm">
         <div class="ts-modal__header">
           <div class="ts-modal__title"><span class="ts-icon ts-text-warning"
-              data-ts-icon="fa-solid fa-triangle-exclamation" aria-hidden="true"></span>
+              data-ts-icon="fa-solid fa-triangle-exclamation" ></span>
             &nbsp;Confirm Action</div>
           <button class="ts-modal__close" data-modal-close><span class="ts-icon" data-ts-icon="fa-solid fa-xmark"
-              aria-hidden="true"></span></button>
+              ></span></button>
         </div>
         <div class="ts-modal__body">
           <p class="ts-text-secondary">Are you sure you want to proceed? This action cannot be undone.</p>
@@ -670,7 +670,7 @@
         <div class="ts-modal__footer">
           <button class="ts-btn ts-btn--secondary" data-modal-close>Cancel</button>
           <button class="ts-btn ts-btn--danger"><span class="ts-icon" data-ts-icon="fa-solid fa-trash"
-              aria-hidden="true"></span> Delete</button>
+              ></span> Delete</button>
         </div>
       </div>
     </div>

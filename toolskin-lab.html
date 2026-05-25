@@ -12,10 +12,20 @@
   <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </noscript>
-    <link rel="stylesheet" href="assets/css/toolskin-merged-3.2.6._4.2.css" />
+    <link rel="stylesheet" href="assets/css/toolskin.css" />
   <script src="assets/js/toolskin-assets.js" defer></script>
   <script src="assets/js/toolskin.js" defer></script>
   <script src="assets/js/toolskin-uikit.js" defer></script>
+   <!-- Toolskin System (local — render-critical) -->
+    <script>
+      document.documentElement.classList.add('ts-preloader-lock');
+      window.__TOOLSKIN_CONFIG__ = {
+        cursor: { mode: 'simple', follower: true, easing: 0.42, followerEasing: 0.12 },
+        reveal: { enabled: false, useGSAP: false, stagger: 0.05, rootMargin: '0px 0px -40px 0px' },
+        smoothScroll: { enabled: false, duration: 1.2 },
+      };
+      
+    </script>
   <style>
     body { font-family: var(--ts-font-body, 'Space Grotesk', system-ui, sans-serif); }
     .lab-section--wide { max-width: none; }
@@ -63,7 +73,7 @@
       font-size: var(--ts-fs-2xl);
       font-weight: 700;
     }
-    .lab-masonry-flip.ts-masonry .ts-masonry-item {
+    .lab-masonry-flip.ts-masonry-lab .ts-masonry-item {
       min-height: 0;
     }
     .lab-masonry-flip .ts-flip-card {
@@ -100,10 +110,586 @@
       color: var(--ts-text-muted);
       max-width: 72ch;
     }
+    /*NNOTE: the classes names and variants must be kept previously analyzing the  index.html and the labs and ba interfaces already existent qhere masonty has been used and analyzing ponderaating which classes has been used. the idea is to keep ts-masonry-lab as legacy base classnaME after cleanup. and aDDING EXTRA CLASSES TO EACH VARIANT AND FEATURE, NOT ISOLATING EVERY ONE. SO THE COMPONENT INHERITS PROPERTIES. . WE GOT TO WIPE OFF ALL REDUDNANT AND UNUSED COMPONENT MASONRY FROM THE SYSTEM AND MAKE USABLE ASSETS FROM THIS, AS EFFICIENT AND INHERITABLE. AND SAHREABLE WITH OTHER LAYOU  COMPONENT THAT CAN HOLD    */
+
+/* Grid Lanes — see https://webkit.org/blog/17660/introducing-css-grid-lanes/
+this version must be removed because is not compatible with some browsers. BUT GOT SOME  PROGRESSES AS RECORDS. 
+IS ONLY ON LABS SHOWCASE.  REPLACE QWITR THE NEW ONE. this one has been replaced with the  ts-ui-masonry--gallery class type and the image type gallery holder.  but it will be overrided with the new   version.
+  * Uses display:grid-lanes only when @supports (display: grid-lanes) matches.
+  * Many Chrome stable builds do not match → fallback block below. Some Chromium forks
+  * (e.g. Brave) or flags may enable grid-lanes, so layout can differ from Chrome. */
+.ts-ui-masonry--lanes {
+  --ts-ui-masonry-lane-min: 14rem;
+  --ts-ui-photo-aspect: 4 / 3;
+  --ts-ui-masonry-item-flex-grow: 1;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item {
+  margin-bottom: 0;
+}
+
+/* Photo tiles: box + absolute img + object-fit cover (grid-lanes + flex fallback) */
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+  background: var(--ts-bg-1);
+  aspect-ratio: var(--ts-ui-photo-aspect, 4 / 3);
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@supports (display: grid-lanes) {
+  .ts-ui-masonry--lanes {
+    display: grid-lanes;
+    grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 14rem), 1fr));
+    gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+    min-height: 0;
+  }
+}
+
+/* No grid-lanes: flex-wrap + flexible flex-grow per tile (--ts-ui-masonry-item-flex-grow) */
+@supports not (display: grid-lanes) {
+  .ts-ui-masonry--lanes {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: stretch;
+    gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item {
+    box-sizing: border-box;
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+    flex: var(--ts-ui-masonry-item-flex-grow, 1) 1 var(--ts-ui-masonry-lane-min, 14rem);
+    min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+    max-width: 100%;
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item:not(.ts-ui-masonry__item--photo) {
+    flex: 1 1 var(--ts-ui-masonry-lane-min, 14rem);
+    min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+  }
+}
+
+
+
+/*this is the most accurate grid gallery implemented and the one submitted to migrate the image  and interactive featurtes*/
+
+
+    .ts-ui-masonry--gallery .ts-ui-masonry__item {
+      margin-bottom: 0;
+    }
+
+    /* image tiles: box + absolute img + object-fit cover (grid-gallery + flex fallback) */
+    .ts-ui-masonry--gallery .ts-ui-masonry__item--image {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--ts-radius-md);
+      border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+      background: var(--ts-bg-1);
+      aspect-ratio: var(--ts-ui-image-aspect, 4 / 3);
+      --ts-ui-image-aspect: 1!important;
+    }
+
+    .ts-ui-masonry--gallery .ts-ui-masonry__item--image img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    } 
+
+
+  .ts-ui-masonry--gallery {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: stretch;
+    gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+
+    
+    --ts-ui-masonry-column-size: 9rem;
+    --ts-ui-masonry-column-max-w: clamp(calc(var(--ts-ui-masonry-column-size)*.65), var(--ts-ui-masonry-column-size), calc(var(--ts-ui-masonry-column-size)*1.5));
+    --ts-ui-masonry-column-max-w: clamp(calc(var(--ts-ui-masonry-column-size)*2 ), 100% ,50%);
+
+    --ts-ui-masonry-column-width: min(var(--ts-ui-masonry-column-size), var(--ts-ui-masonry-column-max-w));
+
+    --ts-ui-masonry-gap: var(--ts-sp-3);
+
+    --ts-ui-image-aspect: 1!important;
+    --ts-ui-masonry-gal-min: var(--ts-ui-masonry-column-width)!important;
+    --ts-ui-masonry-item-flex-grow: 1!important;
+
+  }
+
+  .ts-ui-masonry--gallery .ts-ui-masonry__item {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--ts-radius-md);
+    border: 1px solid var(--ts-this-bg-border);
+    background: var(--ts-this-bg);
+    
+    flex: var(--ts-ui-masonry-item-flex-grow) 1 
+        var(--ts-ui-masonry-gal-min);
+    min-width: min(var(--ts-ui-masonry-column-max-w), var(--ts-ui-masonry-gal-min));
+    max-width:var(--ts-ui-masonry-column-max-w);
+    aspect-ratio: var(--ts-ui-image-aspect)!important;
+    --ts-ui-masonry-item-flex-grow: 1!important;
+    --ts-this-bg: var(--ts-bg-1);
+  
+  }
+  .ts-ui-masonry--gallery .ts-ui-masonry__item:not(.ts-ui-masonry__item--image,:has(img)) {
+      flex: var(--ts-ui-masonry-item-flex-grow) 1 var(--ts-ui-masonry-gal-min);
+      min-width: min(100%, var(--ts-ui-masonry-gal-min));
+  }
+  .ts-ui-masonry--gallery .ts-ui-masonry__item:has(img) > img,
+  .ts-ui-masonry--gallery .ts-ui-masonry__item--image img {
+    position: absolute!important;
+    inset: 0!important;
+    width: 100%!important;
+    height: 100%!important;
+    object-fit: cover!important;
+    display: block;
+  }
+  .ts-ui-masonry--gallery > img,
+  .ts-ui-masonry--gallery .ts-ui-masonry__item--image,
+  .ts-ui-masonry--gallery .ts-ui-masonry__item:has(img){
+    flex: var(--ts-ui-masonry-item-flex-grow) 1 
+      var(--ts-ui-masonry-gal-min);
+    min-width: min(var(--ts-ui-masonry-column-max-w), var(--ts-ui-masonry-gal-min));
+    max-width: var(--ts-ui-masonry-column-max-w);
+  }
+
+  
+/* Explicit uniform grid (multi-column everywhere; not “packed” masonry) */
+.ts-ui-masonry--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 12rem), 1fr));
+  gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ts-ui-masonry--grid .ts-ui-masonry__item {
+  margin-bottom: 0;
+  min-width: 0;
+}
+
+/*#CRAZY_FIX_RULES */
+
+
+/*REFACTOR NOTES: tis is one of the most fristrating aseset and siystem we got on the design system. is totally unpredictable and diffficult to manage. unreliable and   impossible to maintain. this element needs to be either to be removed  or refactored. as there's no sue for a layout masonry that is not a real masonry. so we may  delet this feature for good. and use  flexbox  layouts and grid  bootstrapping systems properly built with dynamic automatic layout  smart systems., not abusing on classes. only content and general  grid and calc   container-layout-columns based design low media queries and block smart design capable of   aming good layout excell without using hard grids that breaks over resizing and breaks content.  this masorny doesnrt even serve for image gallery... they are impossbile to addapt anywgere.  the ionly place is  good and is  cool how it looks is on the marquee section where i randomly managed to make the main marquee display screen horizontally... but fd¿dont knwo how.   i need to be capable of that without doing random guess.  and not using this kind of element for that putpose. 
+masonry shoudl be other thing and maybe we dont need something like this here. we do need a simple automatic grid   smart system. either using an isotope like system, or a flex based  css column based system.  grid with clamp anfdd automated  column suystems and few javascript or somethign smart and  super usbale and lightweight. not absolute positiong or anuthing unreliable.  something modern and solid. i think flexbox is the best    way to choos. as is the best way of desigining layouts that can be iminal or  resturcutresdd. via rows and columns.  */
+
+/* ─── §4d.1  MASONRY GRID SYSTEM ────────────────────────────────────── */
+
+/* 
+  * Responsive Masonry Grid
+  * Uses CSS Grid with auto-fill for true responsive behavior
+  * Columns adjust based on viewport with min/max constraints
+  */
+
+.ts-masonry-lab {
+  /* Grid configuration */
+  --ts-masonry-min-col: 200px;
+  /* Minimum column width */
+  --ts-masonry-row-h: 180px;
+  /* Base row height */
+  --ts-masonry-gap: var(--ts-sp-4);
+  /* Gap between items */
+  --ts-masonry-cols: auto-fill;
+  /* auto-fill or auto-fit */
+
+  display: grid !important;
+  grid-template-columns: repeat(var(--ts-masonry-cols),
+      minmax(var(--ts-masonry-min-col), 1fr));
+  grid-auto-rows: var(--ts-masonry-row-h);
+  /*  grid-auto-flow: dense;                 fill holes left by row/column spans */
+  gap: var(--ts-masonry-gap);
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+.ts-masonry-lab {
+  --ts-masonry-min-col: clamp(300px, 16rem, 780px);
+  --ts-masonry-row-h: 16rem;
+  --ts-masonry-gap: var(--ts-sp-4);
+  --ts-masonry-cols: auto-fill;
+  --ts-masonry-cols: auto-fit;
+  display: grid !important;
+  grid-template-columns: repeat(var(--ts-masonry-cols),
+      minmax(var(--ts-masonry-min-col), 1fr));
+  grid-auto-rows: var(--ts-masonry-row-h);
+  gap: var(--ts-masonry-gap);
+  align-items: stretch;
+  justify-items: stretch;
+  align-content: stretch;
+  grid-auto-flow: dense;
+}
+
+/* Masonry item base */
+.ts-masonry-item {
+  display: flex;
+  /* text-align: center; */
+  min-height: var(--ts-masonry-row-h);
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-content: stretch;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.ts-masonry-item > .ts-masonry-item-text {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.ts-masonry-item-text {
+  text-transform: uppercase;
+  color: var(--ts-text-muted);
+}
+
+/* Spanning modifiers - Smart responsive behavior */
+
+/* Tall: 2 rows */
+.ts-masonry--tall {
+  grid-row: span 2;
+}
+
+/* Wide: 2 columns (but respects grid) */
+.ts-masonry--wide {
+  grid-column: span 2;
+}
+
+/* Tall Full: 3 rows (prominent vertical) */
+.ts-masonry--tall-full {
+  grid-row: span 3;
+}
+
+/* Wide Full: 3+ columns (takes more horizontal space) */
+.ts-masonry--wide-full {
+  grid-column: 1 / -1;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+.ts-masonry--wide-full:has(.ts-marquee) {
+margin-block: var(--ts-sp-6);
+}
+/* Extra tall: 4 rows (hero vertical) */
+.ts-masonry--xtall {
+  grid-row: span 4;
+}
+
+/* Extra wide: 4+ columns (hero horizontal) */
+.ts-masonry--xwide {
+  grid-column: span 4;
+}
+
+/* Large: Both wide and tall (2x2 block) */
+.ts-masonry--large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Hero: Maximum size (3x3+ block) */
+.ts-masonry--hero {
+  grid-column: span 3;
+  grid-row: span 3;
+  order: -1;
+}
+
+/* Responsive breakpoints for masonry */
+@media (max-width: 1400px) {
+  .ts-masonry-lab {
+    --ts-masonry-min-col: clamp(200px, 15rem, 800px);
+  }
+
+  .ts-masonry--wide-full,
+  .ts-masonry--xwide {
+    grid-column: span 2;
+  }
+
+  .ts-masonry--hero {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 1024px) {
+  .ts-masonry-lab {
+    --ts-masonry-min-col: clamp(260px, 15rem, 760px);
+  }
+
+  .ts-masonry--wide-full {
+    grid-column: span 2;
+  }
+
+  .ts-masonry--xwide,
+  .ts-masonry--hero {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .ts-masonry-lab {
+    --ts-masonry-min-col: 6rem;
+    --ts-masonry-row-h: auto;
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: stretch;
+  }
+
+  .ts-masonry--wide,
+  .ts-masonry--wide-full,
+  .ts-masonry--xwide {
+    grid-column: span 2;
+  }
+
+  .ts-masonry--hero {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .ts-masonry-lab {
+    --ts-masonry-min-col: 120px;
+    --ts-masonry-row-h: 120px;
+  }
+
+  .ts-masonry-lab {
+    --ts-masonry-min-col: 15rem;
+    --ts-masonry-row-h: 9rem;
+    --ts-masonry-cols: 1 !important;
+    grid-template-columns: 1fr;
+    grid-auto-flow: unset;
+    display: flex !important;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  /* All wide items become single column on mobile */
+  .ts-masonry--wide,
+  .ts-masonry--wide-full,
+  .ts-masonry--xwide,
+  .ts-masonry--hero {
+    grid-column: span 1;
+  }
+
+  /* Keep tall items but reduce span */
+  .ts-masonry--tall-full,
+  .ts-masonry--xtall {
+    grid-row: span 2;
+  }
+}
+
+/* Masonry variants for different use cases */
+
+/* Compact masonry (smaller gaps, more items) */
+.ts-masonry--compact {
+  --ts-masonry-min-col: 150px;
+  --ts-masonry-row-h: 150px;
+  --ts-masonry-gap: var(--ts-sp-2);
+}
+
+.ts-masonry--compact {
+  --ts-masonry-min-col: 12rem;
+  --ts-masonry-row-h: 15rem;
+  --ts-masonry-gap: var(--ts-sp-2);
+  /* grid-auto-flow: row dense; */
+  /* grid-auto-rows: 1fr 1fr; */
+  /* --ts-masonry-cols: 4; */
+}
+
+/* Loose masonry (larger gaps, more breathing room) */
+.ts-masonry--loose {
+  --ts-masonry-gap: var(--ts-sp-6);
+}
+
+/* Square cells (equal width/height ratio) */
+.ts-masonry--square {
+  --ts-masonry-row-h: var(--ts-masonry-min-col);
+}
+
+/* Auto-fit variant (fills available space) */
+.ts-masonry--fit {
+  --ts-masonry-cols: auto-fit;
+}
+
+/* ── Masonry v2 ────── */
+.ts-ui-masonry--v2 {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  /* Narrower default column min → more columns in typical side-by-side grids */
+  column-width: var(--ts-ui-masonry-column-width, min(200px, 100%));
+  column-gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  column-fill: balance;
+}
+
+.ts-ui-masonry--v2.ts-ui-masonry--dense {
+  --ts-ui-masonry-column-width: min(160px, 100%);
+  --ts-ui-masonry-gap: var(--ts-sp-3);
+}
+
+.ts-ui-masonry__item {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  break-inside: avoid;
+  margin-bottom: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+}
+
+.ts-ui-masonry__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ts-ui-masonry__item--flush {
+  padding: 0 !important;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: visible;
+}
+
+.ts-ui-masonry__item .ts-flip-card {
+  margin: 0;
+}
+
+.ts-ui-masonry__item .ts-flip-card__inner {
+  min-height: 0;
+}
+
+/* Grid Lanes — see https://webkit.org/blog/17660/introducing-css-grid-lanes/
+  * Uses display:grid-lanes only when @supports (display: grid-lanes) matches.
+  * Many Chrome stable builds do not match → fallback block below. Some Chromium forks
+  * (e.g. Brave) or flags may enable grid-lanes, so layout can differ from Chrome. */
+.ts-ui-masonry--lanes {
+  --ts-ui-masonry-lane-min: 14rem;
+  --ts-ui-photo-aspect: 4 / 3;
+  --ts-ui-masonry-item-flex-grow: 1;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item {
+  margin-bottom: 0;
+}
+
+/* Photo tiles: box + absolute img + object-fit cover (grid-lanes + flex fallback) */
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ts-radius-md);
+  border: 1px solid color-mix(in srgb, var(--ts-border-1), transparent 35%);
+  background: var(--ts-bg-1);
+  aspect-ratio: var(--ts-ui-photo-aspect, 4 / 3);
+}
+
+.ts-ui-masonry--lanes .ts-ui-masonry__item--photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@supports (display: grid-lanes) {
+  .ts-ui-masonry--lanes {
+    display: grid-lanes;
+    grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 14rem), 1fr));
+    gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+    min-height: 0;
+  }
+}
+
+/* No grid-lanes: flex-wrap + flexible flex-grow per tile (--ts-ui-masonry-item-flex-grow) */
+@supports not (display: grid-lanes) {
+  .ts-ui-masonry--lanes {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: stretch;
+    gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item {
+    box-sizing: border-box;
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item--photo {
+    flex: var(--ts-ui-masonry-item-flex-grow, 1) 1 var(--ts-ui-masonry-lane-min, 14rem);
+    min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+    max-width: 100%;
+  }
+
+  .ts-ui-masonry--lanes .ts-ui-masonry__item:not(.ts-ui-masonry__item--photo) {
+    flex: 1 1 var(--ts-ui-masonry-lane-min, 14rem);
+    min-width: min(100%, var(--ts-ui-masonry-lane-min, 14rem));
+  }
+}
+
+/* Explicit uniform grid (multi-column everywhere; not “packed” masonry) */
+.ts-ui-masonry--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ts-ui-masonry-lane-min, 12rem), 1fr));
+  gap: var(--ts-ui-masonry-gap, var(--ts-sp-4));
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ts-ui-masonry--grid .ts-ui-masonry__item {
+  margin-bottom: 0;
+  min-width: 0;
+}
   </style>
 </head>
 <body class="ts-bg-body">
-  <nav class="ts-nav-fixed">
+  <!-- <nav class="ts-nav-fixed">
     <div class="ts-topbar__logo">
       TOOL<em>SKIN</em>
       <span>UI Kit Lab v1.0</span>
@@ -122,17 +708,62 @@
       <a href="#masonry">Masonry</a>
       <a href="#api">API</a>
     </div>
-    <!-- The "More" Button -->
     <div id="navbar-collapse" class="ts-nav-more">
       <button class="ts-more-trigger">•••</button>
       <div id="navbar-extend" class="ts-nav-dropdown"></div>
     </div>
-    <!-- Theme Toggle (right side of menu) -->
-    <button class="ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
-      <i class="fa-solid fa-sun ts-theme-icon-light"></i>
-      <i class="fa-solid fa-moon ts-theme-icon-dark"></i>
-    </button>
-  </nav>
+   <label class=" theme-toggle theme-toggle--force-motion theme-toggle--toggled" data-theme-toggle title="Toggle theme">
+          <input type="checkbox" />
+          <span class="theme-toggle-sr">Toggle theme</span>
+          <svg xmlns="http://www.w3.org/2000/svg"  width="1em" height="1em" fill="currentColor" class="theme-toggle__expand" viewBox="0 0 32 32">
+            <clipPath id="theme-toggle__expand__cutout">
+              <path d="M0-11h25a1 1 0 0017 13v30H0Z" />
+            </clipPath>
+            <g clip-path="url(#theme-toggle__expand__cutout)">
+              <circle cx="16" cy="16" r="8.4" />
+              <path d="M18.3 3.2c0 1.3-1 2.3-2.3 2.3s-2.3-1-2.3-2.3S14.7.9 16 .9s2.3 1 2.3 2.3zm-4.6 25.6c0-1.3 1-2.3 2.3-2.3s2.3 1 2.3 2.3-1 2.3-2.3 2.3-2.3-1-2.3-2.3zm15.1-10.5c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zM3.2 13.7c1.3 0 2.3 1 2.3 2.3s-1 2.3-2.3 2.3S.9 17.3.9 16s1-2.3 2.3-2.3zm5.8-7C9 7.9 7.9 9 6.7 9S4.4 8 4.4 6.7s1-2.3 2.3-2.3S9 5.4 9 6.7zm16.3 21c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zm2.4-21c0 1.3-1 2.3-2.3 2.3S23 7.9 23 6.7s1-2.3 2.3-2.3 2.4 1 2.4 2.3zM6.7 23C8 23 9 24 9 25.3s-1 2.3-2.3 2.3-2.3-1-2.3-2.3 1-2.3 2.3-2.3z" />
+            </g>
+          </svg>
+        </label>
+  </nav> -->
+  <aside class="ts-h-full ts-items-stretch ts-justify-center ts-sidebar-menu ts-ui-panel">
+        <div class="ts-mb-3 ts-p-4 ts-topbar__logo">
+           <div class="ts-logo-brand">Tool<em>skin</em></div>
+            <span class="ts-logo-sub">Wireframes Lab</span>
+        </div>
+         <nav class="ts-sidenav ts-p-0">
+            <span class="ts-sidenav__group-label">Main</span>
+            <a class="ts-nav__item ts-nav__item--active" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-house"></span> Dashboard</a>
+            <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-chart-line"></span> Analytics</a>
+            <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-folder"></span> Projects</a>
+            <span class="ts-sidenav__group-label">Settings</span>
+            <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-palette"></span> Appearance</a>
+            <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-chart-line"></span> Analytics</a>
+            <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-shield"></span> Security</a>
+            <a class="ts-nav__item" href="#"><span class="ts-icon" data-ts-icon="fa-solid fa-folder"></span> Projects</a>
+          </nav>
+          <div class="ts-sidenav__btn-row">
+            <a href="generator/" class="ts-nav-link ts-btn ts-btn--outline" data-icon="ion:options-outline">Banner UI</a>
+            <a href="surface-lab.html" class="ts-nav-link ts-btn ts-btn--primary" data-icon="ion:color-palette-outline">Surfaces Lab</a>
+          </div>
+      
+          <label class="theme-toggle theme-toggle--force-motion theme-toggle--toggled" data-theme-toggle aria-label="Dark/Light Mode" data-tooltip="Switch Dark/Light Mode" data-tooltip-pos="bottom">
+            <input type="checkbox" /> <span class="theme-toggle-sr">Switch Dark/Light Mode</span> 
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="theme-toggle__expand ts-icon ts-btn-icon" viewBox="0 0 32 32" style="pointer-events: none;"> <clipPath id="theme-toggle__expand__cutout"> <path d="M0-11h25a1 1 0 0017 13v30H0Z" /> </clipPath> <g clip-path="url(#theme-toggle__expand__cutout)"> <circle cx="16" cy="16" r="8.4" /> <path d="M18.3 3.2c0 1.3-1 2.3-2.3 2.3s-2.3-1-2.3-2.3S14.7.9 16 .9s2.3 1 2.3 2.3zm-4.6 25.6c0-1.3 1-2.3 2.3-2.3s2.3 1 2.3 2.3-1 2.3-2.3 2.3-2.3-1-2.3-2.3zm15.1-10.5c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zM3.2 13.7c1.3 0 2.3 1 2.3 2.3s-1 2.3-2.3 2.3S.9 17.3.9 16s1-2.3 2.3-2.3zm5.8-7C9 7.9 7.9 9 6.7 9S4.4 8 4.4 6.7s1-2.3 2.3-2.3S9 5.4 9 6.7zm16.3 21c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zm2.4-21c0 1.3-1 2.3-2.3 2.3S23 7.9 23 6.7s1-2.3 2.3-2.3 2.4 1 2.4 2.3zM6.7 23C8 23 9 24 9 25.3s-1 2.3-2.3 2.3-2.3-1-2.3-2.3 1-2.3 2.3-2.3z" /> </g> 
+            </svg>
+          </label>
+
+          <div class="ts-ui-select" data-ts-ui-select-placeholder="Select nav Style" id="ts-topnav-selector">
+            <select class="ts-ui-select__native">
+              <option value="default" data-icon="fa-solid fa-bolt">Default</option>
+              <option value="auto-icons" data-icon="fa-solid fa-icons">Auto-Icons</option>
+              <option value="spaced" data-icon="fa-solid fa-expand">Spaced</option>
+              <option value="icons" data-icon="fa-solid fa-image">Icons-Only</option>
+              <option value="mobile" data-icon="fa-solid fa-window-maximize">Mobile-Only</option>
+              <option value="sidebar" data-icon="fa-solid fa-xmark" disabled>Sidebar (soon)</option>
+            </select>
+          </div>
+    </aside>
   <div class="lab-wrap ts-container" style="max-width: min(1200px, 100%); margin: 0 auto; padding: calc(var(--ts-sp-10) + var(--ts-topbar-h)) var(--ts-sp-4) var(--ts-sp-20);">
     <header class="lab-hero">
       <h1>Toolskin UI Kit Lab</h1>
@@ -253,7 +884,7 @@
         <div>
           <span class="ts-fs-xs ts-text-muted lab-field-label">With search</span>
           <div class="ts-ui-select" data-ts-ui-scrollbar-moz="">
-            <select class="ts-ui-select__native">
+            <select class="ts-ui-select__native ts-ui-select">
               <option value="one" data-icon="fa-solid fa-star">Alpha</option>
               <option value="two" data-icon="fa-solid fa-bolt" selected>Beta</option>
               <option value="three" data-icon="fa-solid fa-heart">Gamma</option>
@@ -264,7 +895,7 @@
         <div>
           <span class="ts-fs-xs ts-text-muted lab-field-label">No search</span>
           <div class="ts-ui-select" data-ts-ui-select-search="false">
-            <select class="ts-ui-select__native">
+            <select class="ts-ui-select__native ts-ui-select">
               <option value="a">Compact</option>
               <option value="b" selected>Medium</option>
               <option value="c">Wide option label for overflow test</option>
@@ -274,7 +905,7 @@
         <div>
           <span class="ts-fs-xs ts-text-muted lab-field-label">Compact width</span>
           <div class="ts-ui-select" style="min-width: 160px; max-width: 200px;">
-            <select class="ts-ui-select__native">
+            <select class="ts-ui-select__native ts-ui-select">
               <option value="1">One</option>
               <option value="2" selected>Two</option>
               <option value="3">Three</option>
@@ -377,9 +1008,9 @@
       <p class="ts-fs-sm ts-text-secondary" style="margin:0 0 var(--ts-sp-3);">Handle-only: only the grip starts a drag; the row uses <code>cursor: default</code>. Full-row: drag anywhere on the item (<code>cursor: grab</code>). Optional <code>data-ts-ui-sort-drag=".selector"</code> limits drag start to a sub-region (e.g. title bar).</p>
       <p class="ts-fs-xs ts-text-muted" style="margin:0 0 var(--ts-sp-2);">A — Handle only</p>
       <ul class="ts-ui-sortable" data-ts-ui-sort-handle-only>
-        <li class="ts-ui-sortable__item"><span class="ts-ui-sortable__handle" aria-hidden="true"><i class="fa-solid fa-arrows-up-down"></i></span> Item 1</li>
-        <li class="ts-ui-sortable__item"><span class="ts-ui-sortable__handle" aria-hidden="true"><i class="fa-solid fa-arrows-up-down"></i></span> Item 2</li>
-        <li class="ts-ui-sortable__item"><span class="ts-ui-sortable__handle" aria-hidden="true"><i class="fa-solid fa-arrows-up-down"></i></span> Item 3</li>
+        <li class="ts-ui-sortable__item"><span class="ts-ui-sortable__handle" ><i class="fa-solid fa-arrows-up-down"></i></span> Item 1</li>
+        <li class="ts-ui-sortable__item"><span class="ts-ui-sortable__handle" ><i class="fa-solid fa-arrows-up-down"></i></span> Item 2</li>
+        <li class="ts-ui-sortable__item"><span class="ts-ui-sortable__handle" ><i class="fa-solid fa-arrows-up-down"></i></span> Item 3</li>
       </ul>
       <p class="ts-fs-xs ts-text-muted" style="margin:var(--ts-sp-4) 0 var(--ts-sp-2);">B — Whole row draggable</p>
       <ul class="ts-ui-sortable">
@@ -718,7 +1349,7 @@
       <h3 class="lab-masonry-section-title">Compact (<code>.ts-masonry--compact</code>)</h3>
       <p class="lab-masonry-section-lead">Smaller gaps and row height; same dense grid. Shown inside a padded panel for clarity.</p>
       <div class="lab-masonry-panel">
-      <div class="ts-masonry ts-masonry--compact lab-masonry-compact">
+      <div class="ts-masonry-lab ts-masonry--compact lab-masonry-compact">
         <div class="ts-surface-2 ts-rounded ts-border ts-masonry-item">
           <span class="ts-caption ts-masonry-item-text">1</span>
         </div>
@@ -750,7 +1381,7 @@
       <div>
       <h3 class="lab-masonry-section-title">3D flip cards (<code>.ts-masonry</code>)</h3>
       <p class="lab-masonry-section-lead">Three equal-height cells (<code>ts-masonry--tall</code> × 3) so the row reads as one band; hover each card.</p>
-      <div class="ts-masonry lab-masonry-flip" style="--ts-masonry-min-col: min(240px, 100%);">
+      <div class="ts-masonry-lab lab-masonry-flip" style="--ts-masonry-min-col: min(240px, 100%);">
         <div class="ts-masonry-item ts-masonry--tall">
           <div class="ts-flip-card ts-flip-card--depth-sm">
             <div class="ts-flip-card__inner">
