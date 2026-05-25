@@ -603,7 +603,7 @@ class ToolskinConfig {
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      smoothTouch: false,
+      smoothTouch: true,
       touchMultiplier: 2,
       allowNestedScroll: true,  // Auto-detect inner scrollable elements
     },
@@ -630,7 +630,7 @@ class ToolskinConfig {
       contentMaxWidth: '1400px', // Max width for content-focused layouts
       enableNoise: true, // Global grain/noise overlay
       noiseOpacity: 1, // 0-1
-      fullpage: true, // Fullpage snap scrolling
+      fullpage: false, // Fullpage snap scrolling
       elasticMode: false, // Brutalist full-width mode
     },
 
@@ -686,9 +686,9 @@ class ToolskinConfig {
 
     // Scroll reveal animations
     reveal: {
-      enabled: true,
+      enabled: false,
       useGSAP: true,              // Use GSAP ScrollTrigger if available (falls back to IntersectionObserver)
-      autoReveal: true,           // Auto-apply animations to matched selectors
+      autoReveal: false,           // Auto-apply animations to matched selectors
       selectors: '.ts-card, .ts-panel, .demo-card, .ts-pricing-card',
       defaultAnimation: 'ts-fade-up',
       stagger: 0.06,              // GSAP stagger delay between auto-revealed siblings
@@ -701,7 +701,7 @@ class ToolskinConfig {
       enabled: true,
       scopeSelector: 'body',
       attribute: 'data-tooltip',
-      showDelay: 30,
+      showDelay: 10,
       hideDelay: 0,
       minWidth: 80,
       maxWidth: 300,
@@ -6128,7 +6128,7 @@ if (typeof window !== 'undefined') {
         '#ts-debug-root [data-ts-panel]{pointer-events:auto;background:#1a1c20;color:#e8eaed;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px;min-width:280px;}',
         '#ts-debug-root [data-ts-panel][hidden]{display:none;}',
         '#ts-debug-root .ts-ui-select__native{pointer-events:auto;}',
-        '#ts-debug-banner-host .ts-banner{display:flex !important;}',
+        '#ts-debug-banner-host .ts-banner{display:flex;}',
       ].join('\n');
       document.head.appendChild(s);
     }
