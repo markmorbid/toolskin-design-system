@@ -1,0 +1,572 @@
+:root {
+
+            /* Layout & Panel */
+            --ts-panel-w: 280px;
+            --ts-topbar-h: 65px;
+
+            /* Card component (Merged) */
+            --ts-card-pad: var(--ts-sp-5);
+            --ts-card-gap: var(--ts-sp-2);
+            --ts-card-sp: var(--ts-sp-3);
+            --ts-card-radius: var(--ts-radius-md);
+            --ts-card-header-h: 45px;
+
+            --ts-card-bg: var(--ts-bg-1-t);
+            --ts-card-bg-2: var(--ts-bg-2);
+            --ts-card-border: var(--ts-border-1);
+
+            /* Input component (Merged) */
+            --ts-input-h: 50px;
+            --ts-input-fs: var(--ts-fs-md);
+            --ts-input-pad-y: calc(var(--ts-input-h)*.3);
+            --ts-input-pad-left: calc(var(--ts-input-h) - var(--ts-input-pad-y));
+            --ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-x) var(--ts-input-pad-y) var(--ts-input-pad-left);
+            --ts-input-radius: var(--ts-radius-md);
+
+
+
+            /* Button (Merged) */
+            --ts-btn-h: 50px;
+            --ts-btn-pad-x: var(--ts-sp-3);
+            --ts-btn-radius: var(--ts-radius-md);
+            --ts-btn-fs: var(--ts-fs-sm);
+
+            /* Range component (Added) */
+            --ts-range-h: 10px;
+            --ts-range-thumb: calc(var(--ts-range-h) * 2);
+            --ts-range-bg: var(--ts-bg-3);
+            --ts-range-bg-2: var(--ts-bg-0);
+            --ts-range-border: var(--ts-border-1);
+            --ts-range-accent: var(--ts-accent);
+            --ts-range-label: var(--ts-bg-4);
+            --ts-range-text: var(--ts-text-primary);
+            --ts-range-rad: var(--ts-radius-base);
+            --ts-range-arrow: 5px;
+            --ts-toggle-knob-bg: var(--ts-text-muted);
+            --ts-toggle-knob-bg-active: #ffffffe9;
+
+            /* Toggle (Added) */
+            --ts-toggle-size: 30px;
+
+            /* Banner & Canvas */
+            --ts-title-color: #ffffff;
+            --ts-badge-radius: 7px;
+            --ts-badge-opacity: 1;
+            --ts-icon-size: 60px;
+            --ts-icon-top: 0px;
+            --ts-icon-right: 0px;
+            --ts-canvas-grid-size: 35px;
+            --ts-canvas-grid-opacity: 93%;
+            --ts-canvas-grid-color: color-mix(in srgb, var(--ts-text-primary), var(--ts-bg-body) var(--ts-canvas-grid-opacity));
+            --ts-bg-grid-pattern: repeating-linear-gradient(0deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size)), repeating-linear-gradient(90deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size));
+
+        }
+ :root {
+
+            /* Layout & Panel */
+            --ts-panel-w: 280px;
+            --ts-topbar-h: 65px;
+
+            /* Card component (Merged) */
+            --ts-card-pad: var(--ts-sp-5);
+            --ts-card-gap: var(--ts-sp-2);
+            --ts-card-sp: var(--ts-sp-3);
+            --ts-card-radius: var(--ts-radius-md);
+            --ts-card-header-h: 45px;
+
+            --ts-card-bg: var(--ts-bg-1-t);
+            --ts-card-bg-2: var(--ts-bg-2);
+            --ts-card-border: var(--ts-border-1);
+
+            /* Input component (Merged) */
+            --ts-input-h: 50px;
+            --ts-input-fs: var(--ts-fs-md);
+            --ts-input-pad-y: calc(var(--ts-input-h)*.3);
+            --ts-input-pad-left: calc(var(--ts-input-h) - var(--ts-input-pad-y));
+            --ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-left) var(--ts-input-pad-y) var(--ts-input-pad-x);
+            --ts-input-radius: var(--ts-radius-md);
+
+
+
+            /* Button (Merged) */
+            --ts-btn-h: 50px;
+            --ts-btn-pad-x: var(--ts-sp-3);
+            --ts-btn-radius: var(--ts-radius-md);
+            --ts-btn-fs: var(--ts-fs-sm);
+
+            /* Range component (Added) */
+            --ts-range-h: 10px;
+            --ts-range-thumb: calc(var(--ts-range-h) * 2);
+            --ts-range-bg: var(--ts-bg-3);
+            --ts-range-bg-2: var(--ts-bg-0);
+            --ts-range-border: var(--ts-border-1);
+            --ts-range-accent: var(--ts-accent);
+            --ts-range-label: var(--ts-bg-4);
+            --ts-range-text: var(--ts-text-primary);
+            --ts-range-rad: var(--ts-radius-base);
+            --ts-range-arrow: 5px;
+            --ts-toggle-knob-bg: var(--ts-text-muted);
+            --ts-toggle-knob-bg-active: #ffffffe9;
+
+            /* Toggle (Added) */
+            --ts-toggle-size: 30px;
+
+            /* Banner & Canvas */
+            --ts-title-color: #ffffff;
+            --ts-badge-radius: 7px;
+            --ts-badge-opacity: 1;
+            --ts-icon-size: 60px;
+            --ts-icon-top: 0px;
+            --ts-icon-right: 0px;
+            --ts-canvas-grid-size: 35px;
+            --ts-canvas-grid-opacity: 93%;
+            --ts-canvas-grid-color: color-mix(in srgb, var(--ts-text-primary), var(--ts-bg-body) var(--ts-canvas-grid-opacity));
+            --ts-bg-grid-pattern: repeating-linear-gradient(0deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size)), repeating-linear-gradient(90deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size));
+/* dedupe this style that is from  decorative tile backgroudn to be usable  tile backgrudn that matches the grid   structure using the  tokens if neccesary */
+        }
+   :root{
+           
+            --ts-input-h: var(--ts-btn-h);
+            --ts-input-fs: var(--ts-btn-fs);
+            --ts-input-pad-y: calc(var(--ts-input-h)*.3);
+            --ts-input-pad-left: calc(var(--ts-input-h) - var(--ts-input-pad-y));
+            --ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-x) var(--ts-input-pad-y) var(--ts-input-pad-left);
+            --ts-input-radius: var(--ts-radius-md);
+            --ts-toggle-size: 30px;
+            --ts-badge-radius: 7px;
+            --ts-badge-opacity: 1;
+            --ts-icon-size: 60px;
+            --ts-icon-top: 0px;
+            --ts-icon-right: 0px;
+
+            /* if  the final version is  rmeoving thi  chevron  version, ´pelase keep the  light, and hover instances , as the final version delviered hass only one poor verisin  attached and is a regressive deliver. if possible keep these ones that aRE SAFE AND  MAKE  HVOER   RULES APPLICABLE. */
+            --ts-svg-chevron-down: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 50%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+            --ts-svg-chevron-down-hover: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 100%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+            --ts-svg-chevron-down-light: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 20%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+            --ts-svg-chevron-down-light-hover: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 0%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+
+            --ts-svg-chev: var(--ts-svg-chevron-down);/* THIS SI JUST AN ALIAS TOKEN APLLIED TO OVERRIDE THE  SVG PROVIDED ON THE LAST SUBMISSION.   TO AVOID MAKING  CSS RULE WRITING. THE CHEBVVRON ABOVE SHOULD BE THE ONES WORKING.  */
+        }
+
+        /* THIS SI A MUST KEEP RULESET that can be simplified  and  sintethised if the visual reuslt is the same.  the goal of this  ruleset is to    scale down the button component using the  button system token sxaling   andf then usign the button   token as unit to size the inoputs all along on this  topbar speciifc  variant globally, yto handle all along the  ts-select, the ts-.ui-select, the ts-ui-select_trigger and all that is related to inpout fields on the topbar.  (to keep the same consistent height,  backgroudn, broders,  spacign, padding,s  border radius, and  hover states).  ig is possible to make a more  syntetic and simpler   ruleset to   apply and normaluize the  tokens and  rules of this  childs on the topbar variant,  apply it without destroying this wothout backup.  once confirmed is  workign then we   clean up. */
+        #ts-topbar:is(.ts-toolbar, .ts-topbar) * {
+            --ts-input-h: var(--ts-btn-h);
+            --ts-navlink-fs: var(--ts-btn-fs);
+            /*  --ts-btn-scale: .85;
+           --ts-btn-h: calc((var(--ts-topbar-h) * var(--ts-btn-scale)) - var(--ts-topbar-pad-y)*.65);*/ 
+
+        }
+        #ts-topbar:not(.ts-nav-fixed), .ts-banner-generator-app :is(.ts-toolbar, .ts-topbar) {
+            padding-block:  0px;
+            & .ts-btn-group:has(.ts-ls-select,.ts-select) {
+                display: inline-flex;
+                flex-wrap: nowrap;
+                gap: var(--ts-input-gap, var(--ts-sp-2));
+                align-items: stretch;
+                isolation: isolate;
+                padding: 0 var(--ts-input-pad-x, var(--ts-sp-5));
+                flex: 0 1 auto;
+                justify-content: end;
+                line-height: 1;
+                padding-block: 0px; max-height: var(--ts-input-h);
+                & .ts-ls-select, & .ts-input-label {
+                    text-transform: uppercase;
+                    font-weight: var(--ts-navlink-fw, 500);
+                    text-decoration: none;
+                    max-height: var(--ts-input-h);
+                    font-size: var(--ts-navlink-fs);
+                    padding-block: 0px; color: var(--ts-navlink-color);
+                    &:hover {
+                        --ts-navlink-color: var(--ts-text-primary);
+                    }
+                }
+            }
+
+            & .ts-btn:not(.ts-btn--icon), & .ts-ls-select,& .ts-select, & .ts-btn-group:has(.ts-ls-select,.ts-select) {
+                --ts-btn-h: calc(var(--ts-topbar-h) - var(--ts-topbar-pad-y));
+                padding-inline: 12px;
+                flex: 0 1 auto;
+                --ts-btn-fs: calc(var(--ts-btn-size) * var(--ts-btn-fs-ratio) * 1px);
+                --ts-navlink-fs: var(--ts-btn-fs);
+                width: fit-content;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                padding-inline: var(--ts-btn-pad-x);
+            
+                &:not(:hover) {
+                }
+            }
+
+            & .ts-btn.ts-theme-toggle {
+                    max-height: var(--ts-btn-h) !important;
+                    max-width: var(--ts-btn-h) !important;
+                    min-width: var(--ts-btn-h) !important;
+
+            }
+        }
+
+        /* main key  clarifying:  the ts-select class is a   average normal helper class for styling normals elects when the   ui enhancements ar enot applyed on the ui components correclty ,   the ui elements  on the design system usually are not  rendered  as a default unstyled ,  they should be rendered  enhanced  type like the ts.-ui.-select wrapped element  hiding the native select like on this html (currently i forced it becasue the js wass not   auto.wrapping the select automatically). ts.-ui-select is the class applied whent he component is automatically ehnaced  adn wrapped.  and the st-ui-select__trigger is a button attached on the ui inside it to  replace the select interactive element and serve as    clickable  element to open the dropdown replacement.  */
+        .ts-select:not(.ts-ui-select),
+        .ts-ls-select:not(.ts-ui-select) {
+            appearance: none;
+            background-position: right var(--ts-input-pad-y) center;
+            border-radius: var(--ts-input-radius);
+            outline: none;
+            padding: var(--ts-select-padding)!important;
+            font-size: var(--ts-input-fs);
+            color: var(--ts-input-color);
+            background-repeat: no-repeat;
+            background-image: var(--ts-svg-chevron-down);
+            background-size: 1.2em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            hyphens: auto;
+            white-space: nowrap;
+            field-sizing: content;
+            color: var(--ts-bento-text-2);
+
+            max-width: var(--ts-select-max-width, 200px);
+            min-inline-size: 18ch;
+            max-height: var(--ts-input-h) !important;
+        }
+
+
+       #ts-topbar  .ts-ui-select__trigger {
+            border-color: var(--ts-input-border)!important;
+            outline-color: var(--ts-input-border)!important;
+            --ts-input-border: var(--ts-this-bg-border);
+
+            border-width: 1px;
+            border-style: solid;
+        }
+       #ts-topbar .ts-ui-select{
+        min-width:  unset!important ;
+        }
+  :root{
+           /**these a re hardcoded   topkens i added in roder to fixz   in browser the deisgn so they must be filtered and deduped  ato get the current same visual result, so audit before remmovbing.  the reuslt expected is the  curent top navbigation with the currenr buttons set, expecting no mroe overrdide.s the topolskin.css  core system shoudl handle the rest technically. but  these overrides  as reference are  what shows the way to avoid  this  styles to crash the current setup.   */
+            --ts-input-h: var(--ts-btn-h);
+            --ts-input-fs: var(--ts-btn-fs);
+            --ts-input-pad-y: calc(var(--ts-input-h)*.3);
+            --ts-input-pad-left: calc(var(--ts-input-h) - var(--ts-input-pad-y));
+            --ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-left) var(--ts-input-pad-y) var(--ts-input-pad-x);
+            --ts-select-padding: var(--ts-input-pad-y) var(--ts-input-pad-left) var(--ts-input-pad-y) var(--ts-input-pad-x);
+
+            --ts-input-radius: var(--ts-radius-md);
+            --ts-toggle-size: 30px;
+            --ts-title-color: #ffffff;
+            --ts-badge-radius: 7px;
+            --ts-badge-opacity: 1;
+            --ts-icon-size: 60px;
+            --ts-icon-top: 0px;
+            --ts-icon-right: 0px;
+            --ts-svg-chevron-down: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 50%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+            --ts-svg-chevron-down-hover: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 100%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+            --ts-svg-chevron-down-light: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 20%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+            --ts-svg-chevron-down-light-hover: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20class%3D'ionicon'%20viewBox%3D'0%200%20512%20512'%3E%3Cpath%20fill%3D'none'%20stroke%3D'hsl(0, 0%, 0%)'%20stroke-linecap%3D'square'%20stroke-miterlimit%3D'10'%20stroke-width%3D'48'%20d%3D'M112%20184l144%20144%20144-144'%2F%3E%3C%2Fsvg%3E");
+
+            --ts-svg-chev: var(--ts-svg-chevron-down);
+        }
+
+         /* ── TOOLBAR ───────────────────────────────────────────────────── */
+        .ts-toolbar {
+          grid-column: 1 / -1;
+          grid-row: 1;
+          display: flex;
+          align-items: center;
+          gap: var(--ts-sp-2, 8px);
+          padding: 0 var(--ts-sp-4, 16px);
+          height: var(--ts-ls-topbar-h);
+          background: var(--ts-bg-0, #14161a);
+          border-bottom: 1px solid var(--ts-border-0, rgba(255,255,255,.07));
+          z-index: 200;
+        }
+        .ts-toolbar .ts-badge {
+          flex-shrink: 0;
+          background: var(--ts-accent-grad-comp, var(--ts-accent, #ff5500));
+          color: var(--ts-on-accent, #fff);
+          padding: .4em .95em;
+          border-radius: 999px !important;
+          font-size: .7rem;
+          font-weight: 700;
+          letter-spacing: .03em;
+          white-space: nowrap;
+        }
+        .ts-toolbar-right {
+          margin-left: auto;
+          display: flex;
+          align-items: center;
+          gap: var(--ts-sp-2, 8px);
+          flex-shrink: 0;
+        }
+        .ts-ls-label {
+          font-size: 11px;
+          color: var(--ts-text-muted, rgba(232,233,234,.45));
+          text-transform: uppercase;
+          letter-spacing: .05em;
+          white-space: nowrap;
+        }
+        .ts-ls-select {
+          appearance: none;
+          background-color: var(--ts-bg-1, #1c1e24);
+          background-image: var(--ts-svg-chev);
+          background-repeat: no-repeat;
+          background-position: right .5em center;
+          background-size: 1.05em;
+          border: 1px solid var(--ts-border-0, rgba(255,255,255,.07));
+          border-radius: var(--ts-radius-md, 6px);
+          color: var(--ts-text-secondary, rgba(232,233,234,.65));
+          font-family: var(--ts-font-body, sans-serif);
+          font-size: 12px;
+          padding: .3em 1.7em .3em .6em;
+          cursor: pointer;
+          outline: none;
+          transition: border-color .1s;
+        }
+        .ts-ls-select:hover { border-color: var(--ts-border-1, rgba(255,255,255,.12)); }
+        .ts-btn[data-active="true"] {
+          background: color-mix(in srgb, var(--ts-info, #3b82f6) 18%, var(--ts-bg-1, #1c1e24)) !important;
+          color: color-mix(in srgb, var(--ts-info, #3b82f6) 90%, #fff) !important;
+          border-color: color-mix(in srgb, var(--ts-info, #3b82f6) 40%, transparent) !important;
+        }
+
+        /* Toolskin banner-app btn scale fix */
+        .ts-banner-generator-app :is(.ts-toolbar, .ts-topbar) * {
+         --ts-btn-h: calc(var(--ts-topbar-h) * var(--ts-btn-scale) - var(--ts-input-pad-y));
+          --ts-input-h: var(--ts-btn-h);
+          --ts-navlink-fs: var(--ts-btn-fs);
+        }
+        #ts-topbar:is(.ts-toolbar, .ts-topbar) * {
+            --ts-input-h: var(--ts-btn-h);
+            --ts-navlink-fs: var(--ts-btn-fs);
+
+        }
+        #ts-topbar:not(.ts-nav-fixed), .ts-banner-generator-app :is(.ts-toolbar, .ts-topbar) {
+            & .ts-btn-group:has(.ts-ls-select,.ts-ui-select) {
+                display: inline-flex;
+                flex-wrap: nowrap;
+                gap: var(--ts-input-gap, var(--ts-sp-2));
+                align-items: stretch;
+                isolation: isolate;
+                padding: 0 var(--ts-input-pad-x, var(--ts-sp-5));
+                flex: 0 1 auto;
+                justify-content: end;
+                line-height: 1;
+                padding-block: 0px; max-height: var(--ts-input-h);
+                & .ts-ls-select, & .ts-input-label {
+                    text-transform: uppercase;
+                    font-weight: var(--ts-navlink-fw, 500);
+                    text-decoration: none;
+                    max-height: var(--ts-input-h);
+                    font-size: var(--ts-navlink-fs);
+                    padding-block: 0px; color: var(--ts-navlink-color);
+                    &:hover {
+                        --ts-navlink-color: var(--ts-text-primary);
+                    }
+                }
+            }
+
+            & .ts-btn:not(.ts-btn--icon), & .ts-ls-select, & .ts-btn-group:has(.ts-ls-select,.ts-ui-select) {
+                --ts-btn-h: calc(var(--ts-topbar-h) - var(--ts-topbar-pad-y));
+                padding-inline: 12px;
+                flex: 0 1 auto;
+                --ts-btn-fs: calc(var(--ts-btn-size) * var(--ts-btn-fs-ratio) * 1px);
+                --ts-navlink-fs: var(--ts-btn-fs);
+                width: fit-content;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                padding-inline: var(--ts-btn-pad-x);
+            
+               
+            }
+
+            & .ts-btn.ts-theme-toggle {
+                    max-height: var(--ts-btn-h) !important;
+                    max-width: var(--ts-btn-h) !important;
+                    min-width: var(--ts-btn-h) !important;
+
+            }
+        }
+
+        .ts-select:not(.ts-ui-select),
+        .ts-ls-select:not(.ts-ui-select) {
+            appearance: none;
+            background-position: right var(--ts-input-pad-y) center;
+            border-radius: var(--ts-input-radius);
+            outline: none;
+            padding: var(--ts-input-padding);
+            font-size: var(--ts-input-fs);
+            color: var(--ts-input-color);
+            background-repeat: no-repeat;
+            background-image: var(--ts-svg-chevron-down);
+            background-size: 1.2em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            hyphens: auto;
+            --ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-left) var(--ts-input-pad-y) var(--ts-input-pad-x);
+            white-space: nowrap;
+            field-sizing: content;
+            color: var(--ts-bento-text-2);
+
+            max-width: var(--ts-select-max-width, 200px);
+            min-inline-size: 18ch;
+            max-height: var(--ts-input-h) !important;
+        }
+
+
+
+          /* special styles ovewrrides for makinf the topnav   special styles and select   dedicated styling dor this specific page */
+
+
+
+        .ts-banner-generator-app{
+            #ts-topbar:is(.ts-toolbar, .ts-topbar) *,
+            #ts-topbar:not(.ts-nav-fixed), 
+            #ts-topbar:is(.ts-toolbar, .ts-topbar) {
+                   --ts-header-logo-fs-adjust: 0.566;
+                    --ts-header-logo-subtext-fs-adjust: calc(var(--ts-header-logo-fs-adjust)*.67);
+                    --ts-btn-radius: 5px;
+                    --ts-input-h: var(--ts-btn-h);
+                    --ts-navlink-fs: var(--ts-btn-fs);
+                    --ts-btn-scale: .8;
+                    --ts-btn-h: calc(var(--ts-topbar-h, 65px) - var(--ts-topbar-pad-y, 20px) * 1.1) !important;
+                    --ts-btn-fs: calc((var(--ts-btn-size) * var(--ts-btn-fs-ratio)) * var(--ts-btn-scale)* 1px);
+                    --ts-btn-fs-ratio: .33;
+
+
+                .ts-topbar__logo:has(.ts-logo-brand) {
+                    display: grid;
+                    grid-template-columns: max-content;
+                    align-content: center;
+                    justify-items: start;
+                    width: fit-content;
+                    height: fit-content;
+                    font-family: var(--ts-font-display);
+                    font-weight: 700;
+                    font-size: var(--ts-header-logo-fs) !important;
+
+                    .ts-logo-sub {
+                        grid-column: span 2;
+                        grid-column: 1 / -1;
+                        display: -webkit-box;
+                        font-size: inherit !important;
+                        letter-spacing: var(--ts-letter-spacing-wide) !important;
+                        color: var(--ts-header-logo-subtext-color) !important;
+                        font-weight: var(--ts-font-weight-normal) !important;
+                        flex: 1 1 var(--ts-header-logo-max-w) !important;
+                        font-size-adjust: var(--ts-header-logo-subtext-fs-adjust) !important;
+                        line-height: 2ch;
+                        max-height: unset;
+                        overflow: hidden;
+                        -webkit-line-clamp: 1;
+                        text-overflow: ellipsis;
+                        white-space: normal;
+                        -webkit-box-orient: vertical;
+                        max-inline-size: 100%;
+                        width: 100%;
+                        font-family: var(--ts-font-mono);
+
+                        text-transform: uppercase;
+                    }
+                   
+                }
+
+                .ts-ui-select{
+                    min-width: 0;
+                    --ts-placeholder-select: attr(data-ts-ui-select-placeholder);
+                        font-size-adjust: var(--ts-header-logo-fs-adjust) ;
+
+                    .ts-ui-select__trigger{
+                        padding-block: 0px!important;
+                        padding-right: var(--ts-input-pad-left);
+                             gap:0;
+                        padding-left: var(--ts-input-pad-x);
+
+                         &:before{
+                                content: var(--ts-placeholder-select);
+                             font-size: 74%;
+                             text-align: left;
+                                 flex: 1 1 auto;
+                             -webkit-line-clamp: 2;
+                             margin-right: auto;
+                             margin-left: -3px;
+                             display:-webkit-inline-box;
+                             -webkit-box-orient: vertical;
+                             overflow: hidden;
+                             text-overflow: ellipsis;
+                             max-width: 9ch;
+                             line-height: 1;
+                          font-family: var(--ts-font-mono);
+                        color: var(--ts-text-primary-dim-2);
+                        text-transform: uppercase;    
+                             padding-right: 5px;
+                             border-right: 1px solid var(--ts-border-1);
+                            }
+                        .ts-ui-select__value{
+                           flex: 1 1 3ch;
+                            min-width: 3ch;
+                             font-size: 1.2em;
+                            text-align: center;
+                            font-weight: bold;
+                             line-height: 1em;
+                            justify-content: center;
+                        font-size-adjust: var(--ts-header-logo-fs-adjust) ;
+                            margin-right: 5px;
+                        }
+                        .ts-ui-select__chevron {
+                            opacity: 1;
+                            transform: none!important;
+                            color: var(--ts-input-color) !important;
+                            --ts-input-color: var(--ts-text-primary-dim);
+                            font-size: var(--ts-btn-icon-size, 0.7rem);
+                            position: absolute;
+                            right: 0;
+                            top:0;
+                            bottom:0;
+                            min-width: var(--ts-input-pad-left);
+                            border-left: 1px solid;
+                            min-height: 100%;
+                            border-color: inherit;
+                            
+                        }
+                    }
+                }
+            }
+            
+        }
+
+        .ts-banner-generator-app #ts-panel .ts-generator-code-export {
+          background: var(--ts-bg-1-t);
+        padding: var(--ts-sp-5);
+        font-family: var(--ts-font-mono);
+        font-size: 10px;
+        color: var(--ts-text-primary);
+        white-space: pre;
+        word-break: normal;
+        max-height: 60dvh;
+        overflow-y: auto;
+        line-height: 1.6;
+        border-style: solid;
+        border-width: 0;
+        width: 100%;
+        field-sizing: content;
+        flex: 1 1 auto;
+        border-bottom-width: 0px;
+        border-color: var(--ts-border-1);
+        --ts-sb-border: 0;
+        scrollbar-width: none;
+        /* resize: none; */
+        
+
+            &:not(textarea){
+                display: none;
+            }
+    }
+
+
+  /*fix to add to main core toolskin.css:  ON BYUTTON GROUPS HOVER    GROWS THE XZ INDEX SO THE BORDER OVERLAP KEEPS VBISDIBLE ON THE HOVERED BUTTON. */
+        .ts-banner-generator-app .ts-btn:hover {
+            background-color: var(--ts-this-bg-active);
+            border-color: var(--ts-this-bg-border-hover);
+            --ts-btn-color: var(--ts-text-primary);
+            z-index: 1;
+        }

@@ -606,7 +606,6 @@ inputs. No need to override per-element bg/border/color/transitions
 	--ts-input-pad-y: calc(var(--ts-input-pad-x)*.7);
 	--ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-x) var(--ts-input-pad-y) var(--ts-input-pad-left);
 	--ts-input-pad-left: calc(var(--ts-input-h) + var(--ts-input-pad-y));
-	--ts-input-pad-left: calc(var(--ts-input-h) - var(--ts-input-pad-y));
 	--ts-input-radius: var(--ts-radius-sm);
 	--ts-input-fs: var(--ts-fs-body-sm);
 
@@ -13680,7 +13679,7 @@ Check yhe REFACTOR NOTE crucial form the root variable declared forthis.  we nee
 
 
 	.ts-ui-select__dropdown {
-		border-radius: var(--ts-header-ui-rad);
+		border-radius: var(--ts-header-ui-rad) !important;
 		min-width: var(--ts-navlink-select-max-w);
 		max-width: var(--ts-navlink-select-max-w);
 		top: calc(100% - var(--ts-navlink-pad-y-mult)*.5 + var(--ts-navlink-gap)*2) !important;
@@ -21332,7 +21331,7 @@ NEW Refactor Note: tagged elements must NOT be deleted or rolled back. all tagge
 	--ts-card-pad: var(--ts-sp-4);
 	--ts-card-gap: var(--ts-sp-3);
 	--ts-card-sp: var(--ts-sp-2);
-	--ts-card-radius: 5px;
+	--ts-card-radius: var(--ts-radius-sm);
 	--ts-card-header-h: 45px;
 	--ts-card-bg: var(--ts-bg-1-t);
 	--ts-card-bg-2: var(--ts-bg-2);
@@ -21440,7 +21439,7 @@ NEW Refactor Note: tagged elements must NOT be deleted or rolled back. all tagge
 .ts-oce-panel.ts-banner-generator-app .ts-tab-pane {
 	display: none;
 	flex-direction: column;
-	/* gap: var(--ts-card-gap); */
+	gap: var(--ts-card-gap);
 }
 
 /* Prevent text selection on draggable/interactive areas */
@@ -22539,7 +22538,7 @@ html.ts-banner-generator-app,
 	.ts-tab-pane {
 		display: none;
 		flex-direction: column;
-		gap: var(--ts-sp-2);
+		gap: var(--ts-sp-3);
 	}
 
 	.ts-tab-pane.active {
@@ -23830,7 +23829,11 @@ STATUS:
 
 	}*/
 
-
+.ts-banner-generator-app .ts-card:has(> .ts-card-header.absolute),
+.ts-banner-generator-app .ts-card:has(> .ts-card-header > .ts-card-title) {
+	padding-top: calc(var(--ts-card-pad) + var(--ts-card-header-h)) !important;
+	overflow: visible;
+}
 
 
 .ts-banner-generator-app .ts-row-2 {
@@ -23941,6 +23944,15 @@ STATUS:
 		line-height: 1rem;
 	} */
 
+.ts-banner-generator-app .ts-card:has(> .ts-card-header.absolute),
+.ts-banner-generator-app .ts-card:has(> .ts-card-header > .ts-card-title) {
+	padding-top: calc(var(--ts-card-pad) + var(--ts-card-header-h)) !important;
+	overflow: visible;
+	border: 1px solid var(--ts-card-border);
+	background: var(--ts-card-bg);
+
+	gap: var(--ts-card-gap);
+}
 
 .ts-banner-generator-app .ts-range-row input[type="range"] {
 	flex: 1;
@@ -24151,7 +24163,6 @@ STATUS:
 	--ts-input-border: var(--ts-this-bg-border);
 	--ts-this-bg-border: color-mix(in srgb, var(--ts-this-bg), var(--ts-text-primary) var(--ts-mix-perc));
 	--ts-mix-perc: 7%;
-	transition: none;
 }
 
 
@@ -24196,18 +24207,16 @@ STATUS:
 	border-radius: var(--ts-card-radius) var(--ts-card-radius) 0 0;
 	line-height: 1rem;
 }
-#ts-panel .ts-card:has(> .ts-card-header.ts-accordion.open),
-#ts-panel .ts-card:has(> .ts-card-header.ts-accordion.open),
-.ts-banner-generator-app .ts-card:has(> .ts-card-header.absolute),
-.ts-banner-generator-app .ts-card:has(> .ts-card-header > .ts-card-title){
-	padding-top: calc(var(--ts-card-pad) + var(--ts-card-header-h)) ;
-	overflow: visible;
-	overflow: visible;
-	border: 1px solid var(--ts-card-border);
-	background: var(--ts-card-bg);
-	gap: var(--ts-card-gap);
-}
 
+.ts-banner-generator-app .ts-card:has(> .ts-card-header.absolute),
+.ts-banner-generator-app .ts-card:has(> .ts-card-header > .ts-card-title) {
+	padding-top: calc(var(--ts-card-pad) + var(--ts-card-header-h)) !important;
+	overflow: visible;
+
+	gap: var(--ts-card-gap);
+
+
+}
 
 .ts-card-row {
 	display: flex;
@@ -24346,7 +24355,12 @@ STATUS:
 	line-height: 1.3;
 }
 
+#ts-panel .ts-card:has(> .ts-card-header.ts-accordion.open),
+#ts-panel .ts-card:has(> .ts-card-header.ts-accordion.open) {
+	padding-top: calc(var(--ts-card-pad) + var(--ts-card-header-h)) !important;
+	overflow: visible;
 
+}
 
 #ts-panel .ts-card:has(> .ts-card-header.ts-accordion:not(.open)),
 .ts-banner-generator-app #ts-panel .ts-card:has(> .ts-card-header.ts-accordion:not(.open)) {
@@ -24883,7 +24897,7 @@ STATUS:
 	/*	--ts-input-pad-y: calc(var(--ts-input-pad-x)*.1);*/
 
 	line-height: calc(var(--ts-input-h)*.24);
-	--ts-input-fs: calc(var(--ts-input-h)*.25);
+	--ts-input-fs: calc(var(--ts-input-h)*.21);
 	--ts-this-bg: var(--ts-bg-2);
 	--ts-input-border: var(--ts-this-bg-border);
 	--ts-this-bg-border: color-mix(in srgb, var(--ts-this-bg), var(--ts-text-primary) var(--ts-mix-perc-border));
@@ -25484,16 +25498,10 @@ html.ts-banner-generator-app,
 .ts-card.ts-tab-wrap {
 
 
-	--ts-radius-base: 4px ;
-	--ts-radius-scale: 1 ;
-	--ts-radius: calc(var(--ts-radius-base) * var(--ts-radius-scale)) ;
-	--ts-card-radius: var(--ts-radius) ;
-	& *{
-	--ts-radius-base: 4px ;
-
-			--ts-card-radius: var(--ts-radius);
-
-	}
+	--ts-radius-base: 8px !important;
+	--ts-radius-scale: 1 !important;
+	--ts-radius: calc(var(--ts-radius-base) * var(--ts-radius-scale)) !important;
+	--ts-card-radius: var(--ts-radius) !important;
 }
 
 
@@ -25517,7 +25525,7 @@ textarea,
 .ts-ui-table-bulk-wrap,
 .ts-card-rows,
 .ts-oce-panel .ts-card .ts-ui-select--open {
-	--ts-radius-base: 6px !important;
+	--ts-radius-base: 8px !important;
 	--ts-radius-scale: 1 !important;
 	--ts-radius: calc(var(--ts-radius-base) * var(--ts-radius-scale)) !important;
 	--ts-card-radius: var(--ts-radius) !important;
@@ -26056,7 +26064,6 @@ button.ts-btn[data-ts-oce-theme] {
 	html:has(.ts-oce-panel.ts-oce--open) {
 
 		#ts-main,
-		#ts-debug-root,
 		.ts-nav-fixed,
 		.ts-promo-banner,
 		.ts-preloader,
@@ -28996,15 +29003,10 @@ configuration model, consistent with the overall system approach. */
 #ts-debug-root {
 	position: fixed !important;
 	bottom: var(--ts--debug-root-offset-y) !important;
-	left: var(--ts--btn-fixed-offset) !important;
+	right: var(--ts--btn-fixed-offset) !important;
+	--ts--debug-root-offset-y: calc(var(--ts--btn-fixed-offset) + var(--ts-sp-2) + var(--ts-btn-h, 45px));
 	overflow: visible !important;
 	--ts--btn-fixed-offset: var(--ts-sp-5);
-	right: auto!important;
-	margin: 0px!important;
-	--ts-oce-width: 0;
-		--ts--debug-root-offset-y: calc(var(--ts--btn-fixed-offset) + var(--ts-sp-2) + var(--ts-btn-h, 45px));
-	--ts--debug-root-offset-y: calc(var(--ts--btn-fixed-offset) - var(--ts-sp-1));
-
 }
 
 #ts-debug-root>.ts-btn {
@@ -29336,7 +29338,6 @@ configuration model, consistent with the overall system approach. */
 	--ts-panel-pad-small: calc(var(--ts-panel-pad)*.5);
 	--ts-panel-pad-small: calc(var(--ts-panel-pad)*.5);
 
-	transform: translatex(calc(var(--ts-btn-h)*-1 - var(--ts-sp-4))) translatey(calc(var(--ts--debug-root-offset-y) + var(--ts-btn-h)));
 	backdrop-filter: blur(var(--ts-backdrop-blur));
 	font-size: var(--ts-fs-base);
 	color: var(--ts-text-primary-dim-2);
@@ -29346,25 +29347,7 @@ configuration model, consistent with the overall system approach. */
 	padding: 0 !important;
 	gap: var(--ts-panel-gap);
 	box-shadow: var(--ts-shadow-accent-sm);
-	transform: translatex(var(--ts-debug-root-inner-panel-offset-x)) translatey(var(--ts-debug-root-inner-panel-offset-y));
-	left:0;
-	right: auto;
 
---ts-debug-root-inner-panel-offset-x: calc(var(--ts-btn-h)*-1 - var(--ts-sp-4));
---ts-debug-root-inner-panel-offset-y: calc(var(--ts--debug-root-offset-y) + var(--ts-btn-h));
-
-	--ts-debug-root-inner-panel-offset-x: calc(var(--ts-btn-h)*1 + var(--ts-sp-5));
---ts-debug-root-inner-panel-offset-y: calc(var(--ts--debug-root-offset-y) + var(--ts-btn-h)  + var(--ts-sp-2));
-	.ts-icon{
-		    display: inline-block!important;
-		    align-items: center;
-		    justify-content: center;
-		    line-height: 1!important;
-		    vertical-align: middle!important;
-		    place-content: center;
-		font-size: inherit!important;
-		pointer-events: none!important;
-		}
 	.ts-ui-panel__header {
 		--ts-this-bg: var(--ts-on-surface);
 		--ts-on-surface: var(--ts-bg-3);
@@ -29380,10 +29363,6 @@ configuration model, consistent with the overall system approach. */
 		* {
 			color: inherit;
 			/* font-weight: 300; */
-		}
-
-		.ts-icon{
-			margin-right: 5px;
 		}
 
 		.ts-btn {
@@ -29425,36 +29404,34 @@ configuration model, consistent with the overall system approach. */
 
 		>.ts-tab {
 			padding-block: 0;
-			height: 40px;
+			height: 38px;
 			flex: 1;
 			--ts-this-bg: var(--ts-panel-bg);
 			background: var(--ts-this-bg-dim-7);
-			border-color: var(--ts-panel-border);
+			border-color: var(--ts-border-0);
 			margin-top: 0;
 			border-radius: 0;
-
-			.ts-icon{
-				margin-right: 5px;
-			}
-
-			&:not(:last-child) {
-				border-right-width: 1px;
-				border-right-style: solid;
-				margin-right: -1px;
-			}
-
-			&:is(.active, .is-active, .ts-active) {
-				color: var(--ts-accent);
-				border-bottom-color: currentcolor;
-				border-bottom-width: 2px;
-				--ts-this-bg: currentcolor;
-			}
-			&:not(.active, .is-active, .ts-active) {
-				border-bottom-width: 1px !important;
-			}
 		}
 
-	
+		.ts-tab:not(:last-child) {
+			border-right-width: 1px;
+			border-right-style: solid;
+			margin-right: -1px;
+		}
+
+		.ts-tab.active,
+		.ts-tab.is-active,
+		.ts-tab.ts-active {
+			color: var(--ts-accent);
+			border-bottom-color: currentcolor;
+			border-bottom-width: 2px;
+			--ts-this-bg: currentcolor;
+		}
+
+		.ts-tab:not(.active,
+			.is-active, .ts-active) {
+			border-bottom-width: 1px !important;
+		}
 	}
 
 	.ts-debug-diff-selects:not([hidden]) {
@@ -29494,7 +29471,7 @@ configuration model, consistent with the overall system approach. */
 		flex: 1 1 100%;
 		display: flex;
 		flex-wrap: wrap;
-		flex-direction: column;
+		flex-direction: row;
 		gap: 5px !important;
 
 		>label:has(.ts-ui-select, .ts-select),
@@ -29637,8 +29614,8 @@ configuration model, consistent with the overall system approach. */
 			letter-spacing: var(--ts-select-ls);
 			color: var(--ts-select-color);
 			background-color: var(--ts-this-bg);
-			/* border: 1px solid var(--ts-panel-border); 
-			border-radius: var(--ts-select-rad);*/
+			/* border: 1px solid var(--ts-panel-border); */
+			border-radius: var(--ts-select-rad);
 			outline: none;
 			cursor: pointer;
 			min-width: unset !important;
@@ -29687,13 +29664,14 @@ configuration model, consistent with the overall system approach. */
 			right: 0;
 			/*max-width: var(--ts-select-max-w);*/
 			max-height: var(--ts-ui-select-dd-max-h) !important;
-			min-height: var(--ts-ui-select-dd-min);
 			min-height: 0;
+			min-height: var(--ts-ui-select-dd-min);
 			background: var(--ts-this-bg);
-			border: 1px solid var(--ts-this-bg-border-focus);
-			box-shadow: var(--ts-shadow-accent);
+			outline: 1px solid var(--ts-this-bg-border);
+			border-radius: var(--ts-select-rad);
+			box-shadow: var(--ts-shadow-accent-sm);
 			overflow: hidden !important;
-			z-index: 9999999999;
+			z-index: 100;
 		}
 
 		/* ── Search + List inside dropdown ──────────────────────────── */
@@ -32245,7 +32223,7 @@ After the initial scrape, is it possible to do a **second pass** over the mapped
      controls (search, info, expand/collapse, density) that belong
      inline at every viewport — override the hide rule. */
 @media (max-width: 868px) {
-	#ts-topbar:not(.ts-nav-fixed) #ts-primary-menu.ts-nav-fixed__links {
+	#ts-topbar #ts-primary-menu.ts-nav-fixed__links {
 		display: flex !important;
 	}
 }
@@ -33479,168 +33457,46 @@ border-bottom-width 0 -> 1px for the bulleted variant.*/
 	max-width: 100%;
 	/* Options match trigger row height; override per instance if needed */
 	--ts-ui-select-trigger-min-height: 2.75rem;
-	
-	.ts-ui-select__dropdown {
-		position: absolute;
-		left: 0;
-		right: 0;
-		z-index: 2000;
-		border-radius: var(--ts-input-radius);
-	
-		outline-offset: -1px !important;
-		--ts-this-bg: var(--ts-bg-0);
-		box-shadow: var(--ts-shadow-3);
-		flex-direction: column;
-		top: calc(100% - 1px);
-		/* display: none; */
-	
-		overflow-y: auto;
-		z-index: 99999;
-		backdrop-filter: blur(var(--ts-backdrop-blur)) saturate(.46);
-	
-		background: var(--ts-this-bg-dim-2);
-	
-		border-style: solid;
-		outline-style: solid;
-		border-width: 0px!important;
-		outline-width: 1px!important;
-		border-color: var(--ts-input-border-focus);
-	
-		outline-color: var(--ts-input-border-focus);
-	
-	}
-		
-	.ts-ui-select__native {
-		position: absolute !important;
-		opacity: 0 !important;
-		width: 1px !important;
-		height: 1px !important;
-		pointer-events: none !important;
-	}
-	
-	.ts-ui-select__trigger {
-		width: 100%;
-		min-height: var(--ts-ui-select-trigger-min-height);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--ts-navlink-gap, var(--ts-sp-2));
-		padding: var(--ts-input-pad-y) var(--ts-input-pad-x);
-		box-sizing: border-box;
-		border-radius: var(--ts-input-radius);
-		color: var(--ts-input-color);
-		font-size: var(--ts-input-fs);
-		cursor: pointer;
-		--ts-this-bg: var(--ts-bg-1-t);
-		/* --ts-input-bg: var(--ts-this-bg-dim-4); */
-		--ts-input-bg-grad: var(--ts-accent-glow-bg-2);
-		--ts-input-border: color-mix(in srgb, var(--ts-input-color), transparent 80%);
-		--ts-input-color: var(--_input-color);
-		background-color: var(--ts-input-bg, var(--ts-bg-1-t));
-		/* background-image: var(--ts-input-bg-grad); */
-		border-color: var(--ts-input-border);
-		outline-color: var(--ts-input-border);
-		transition: border-color var(--ts-dur-fast),
-			box-shadow var(--ts-dur-fast),
-			background 300ms ease,
-			outline-color 300ms ease;
-		border-width: 1px;
-		border-style: solid;
-		outline-width: 0px;
-	
-		
-		
-		.ts-ui-select__value-text {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			min-width: 0 !important;
-			width: auto;
-			font-size: inherit !important;
-			line-height: 1;
-		}
-	}
-	.ts-ui-select__search {
-		position: relative;
-		padding: 0;
-		border: 1px solid transparent;
-		border-bottom-color: var(--ts-input-border);
-		flex-shrink: 0;
-	
-		.ts-ui-select__filter {
-			width: 100%;
-			box-sizing: border-box;
-			min-height: var(--ts-ui-select-trigger-min-height);
-			border-radius: 0 !important;
-			border: none;
-			--ts-this-bg: transparent !important;
-			color: inherit;
-			font-size: var(--ts-input-fs);
-			outline: none;
-			box-shadow: none;
-			background: var(--ts-this-bg) !important;
-			color: var(--ts-input-color);
-		
-			/*padding: var(--ts-sp-3) var(--ts-sp-3) var(--ts-sp-3) calc(var(--ts-sp-3) + 1.1em + var(--ts-sp-2)) !important;
-			border-radius: var(--ts-input-radius) var(--ts-input-radius) 0 0;*/
-			border-style: none;
-			border-width: 0px !important;
-			border-bottom-width: 0px;
-			/* background: var(--ts-bg-1-t) !important;
-			color: var(--ts-text-primary) !important; */
-			outline: none !important;
-			box-shadow: none !important;
-		
-			&:focus,
-			&:hover {
-				outline: none;
-				box-shadow: none;
-				--ts-this-bg: var(--ts-bg-2-t) !important;
-				background: var(--ts-this-bg) !important;
-				--ts-input-color: var(--ts-text-primary) !important;
-				color: var(--ts-input-color);
-			
-			}
-			
-			&:focus::placeholder,
-			&:hover::placeholder {
-				opacity: 1;
-				--ts-input-color: var(--ts-text-primary);
-				color: var(--ts-input-color);
-			
-			}
-		
-		
-		}
-		.ts-ui-select__search-icon {
-			 position: absolute;
-			 left: var(--ts-sp-3);
-			 top: 50%;
-			 transform: translateY(-50%);
-			 pointer-events: none;
-			 color: inherit;
-			  font-size: .78em; 
-			 z-index: 1;
-			line-height: 1lh;
-		}
-	}
-
-
-
-	
-.ts-ui-select__list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	overflow-y: auto;
-	border: none;
-	outline: none;
 }
 
+.ts-ui-select__native {
+	position: absolute !important;
+	opacity: 0 !important;
+	width: 1px !important;
+	height: 1px !important;
+	pointer-events: none !important;
+}
 
+.ts-ui-select__trigger {
+	width: 100%;
+	min-height: var(--ts-ui-select-trigger-min-height);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--ts-navlink-gap, var(--ts-sp-1));
+	padding: var(--ts-input-pad-y) var(--ts-input-pad-x);
+	box-sizing: border-box;
+	border-radius: var(--ts-input-radius);
+	color: var(--ts-input-color);
+	font-size: var(--ts-input-fs);
+	cursor: pointer;
+	--ts-this-bg: var(--ts-bg-1-t);
+	/* --ts-input-bg: var(--ts-this-bg-dim-4); */
+	--ts-input-bg-grad: var(--ts-accent-glow-bg-2);
+	--ts-input-border: color-mix(in srgb, var(--ts-input-color), transparent 80%);
+	--ts-input-color: var(--_input-color);
+	background-color: var(--ts-input-bg, var(--ts-bg-1-t));
 
-
-	
+	/*background-image: var(--ts-input-bg-grad);*/
+	border-color: var(--ts-input-border);
+	outline-color: var(--ts-input-border);
+	transition: border-color var(--ts-dur-fast),
+		box-shadow var(--ts-dur-fast),
+		background 300ms ease,
+		outline-color 300ms ease;
+	border-width: 1px;
+	border-style: solid;
+	outline-width: 0px;
 }
 
 
@@ -33657,6 +33513,27 @@ border-bottom-width 0 -> 1px for the bulleted variant.*/
 	/*background-image: var(--ts-input-bg-grad);*/
 }
 
+.ts-ui-select__trigger .ts-ui-select__value,
+.ts-ui-select__value {
+	display: flex;
+	align-items: center;
+	gap: var(--ts-navlink-gap, var(--ts-sp-1));
+	min-width: 0;
+	color: inherit;
+	flex: 1 1 calc(100% - var(--ts-btn-icon-size, 0.7rem) - var(--ts-navlink-gap, var(--ts-sp-1)));
+	max-width: calc(100% - var(--ts-btn-icon-size, 0.7rem) - var(--ts-navlink-gap, var(--ts-sp-1))*2) !important;
+}
+
+.ts-ui-select__value-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0 !important;
+	width: auto;
+	font-size: inherit !important;
+	line-height: 1;
+}
+
 
 .ts-ui-select__chevron {
 	flex: 1 1 var(--ts-btn-icon-size, 0.7rem);
@@ -33670,9 +33547,42 @@ border-bottom-width 0 -> 1px for the bulleted variant.*/
 		transform var(--ts-dur-base) var(--ts-ease-snap);
 }
 
+.ts-ui-select--open .ts-ui-select__chevron {
+	opacity: 1;
+	--ts-input-color: var(--ts-text-accent);
 
+	transform: rotate(180deg);
+}
 
+.ts-ui-select__dropdown {
+	position: absolute;
+	left: 0;
+	right: 0;
+	z-index: 2000;
+	border-radius: var(--ts-input-radius);
 
+	outline-offset: -1px !important;
+	--ts-this-bg: var(--ts-bg-0);
+	box-shadow: var(--ts-shadow-3);
+	flex-direction: column;
+	top: calc(100% - 1px);
+	/* display: none; */
+
+	overflow-y: auto;
+	z-index: 99999;
+	backdrop-filter: blur(var(--ts-backdrop-blur)) saturate(.46);
+
+	background: var(--ts-this-bg-dim-2);
+
+	border-style: solid;
+	outline-style: solid;
+	border-width: 0px;
+	outline-width: 0px;
+	border-color: var(--ts-input-border-focus);
+
+	outline-color: var(--ts-input-border-focus);
+
+}
 
 /* [hidden] must win over display:flex (otherwise panel stays visible) */
 .ts-ui-select__dropdown[hidden] {
@@ -33689,42 +33599,102 @@ border-bottom-width 0 -> 1px for the bulleted variant.*/
 	--ts-input-border: var(--ts-this-bg-border);
 }
 
-.ts-ui-select.ts-ui-select--open {
-	.ts-ui-select__dropdown {
-		top: calc(100% - 1px);
-		border-top-left-radius: 0 ;
-		border-top-right-radius: 0 ;
-		border-width: 0 1px 1px 1px;
-	}
-
-	.ts-ui-select__trigger {
-		border-width: 1px 1px 1px 1px!important;
-		outline-width: 0px!important;
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-	.ts-ui-select__chevron {
-		opacity: 1;
-		--ts-input-color: var(--ts-text-accent);
-	
-		transform: rotate(180deg);
-	}
-	
+.ts-ui-select--open .ts-ui-select__dropdown {
+	top: calc(100% - 1px);
+	border-top-left-radius: 0 !important;
+	border-top-right-radius: 0 !important;
 }
 
+.ts-ui-select--open .ts-ui-select__trigger {
 
-.ts-ui-select.ts-ui-select--no-search .ts-ui-select__search {
+	border-bottom-left-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+}
+
+.ts-ui-select__search {
+	position: relative;
+	padding: 0;
+	border: 1px solid transparent;
+	border-bottom-color: var(--ts-input-border);
+	flex-shrink: 0;
+}
+
+.ts-ui-select--no-search .ts-ui-select__search {
 	display: none;
 }
 
-.ts-ui-select:not(.ts-ui-select--no-search) .ts-ui-select__search {
-   
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
+.ts-ui-select__search-icon {
+	position: absolute;
+	left: var(--ts-sp-3);
+	top: 50%;
+	transform: translateY(-50%);
+	pointer-events: none;
+	color: inherit;
+	font-size: var(--ts-input-fs);
+	line-height: 1;
+	z-index: 1;
 }
 
+.ts-ui-select .ts-ui-select__filter {
+	width: 100%;
+	box-sizing: border-box;
+	min-height: var(--ts-ui-select-trigger-min-height);
+	padding: var(--ts-sp-2) var(--ts-sp-3) var(--ts-sp-2) calc(var(--ts-sp-3) + 1.1em + var(--ts-sp-2));
+	border-radius: 0 !important;
+	border: none;
+	--ts-this-bg: transparent !important;
+	color: inherit;
+	font-size: 98%;
+	outline: none;
+	box-shadow: none;
+	background: var(--ts-this-bg) !important;
+	color: var(--ts-input-color);
+
+}
+
+.ts-ui-select__filter:focus,
+.ts-ui-select__filter:hover {
+	outline: none;
+	box-shadow: none;
+	--ts-this-bg: var(--ts-bg-2-t) !important;
+	background: var(--ts-this-bg) !important;
+	--ts-input-color: var(--ts-text-primary) !important;
+	color: var(--ts-input-color);
+
+}
+
+.ts-ui-select__filter:focus::placeholder,
+.ts-ui-select__filter:hover::placeholder {
+	opacity: 1;
+	--ts-input-color: var(--ts-text-primary);
+	color: var(--ts-input-color);
+
+}
+
+.ts-ui-select__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow-y: auto;
+	border-inline: none;
+	outline: none;
+}
+
+
+
+/*secondary selectors*/
+.ts-ui-select__filter {
+
+	padding: var(--ts-sp-3) var(--ts-sp-3) var(--ts-sp-3) calc(var(--ts-sp-3) + 1.1em + var(--ts-sp-2)) !important;
+	border-radius: var(--ts-input-radius) var(--ts-input-radius) 0 0;
+	border-style: none;
+	border-width: 0px !important;
+	border-bottom-width: 0px;
+	/* background: var(--ts-bg-1-t) !important;
+	color: var(--ts-text-primary) !important; */
+	outline: none !important;
+	box-shadow: none !important;
+}
 
 
 .ts-icon-selected-row {
@@ -35908,7 +35878,7 @@ FINAL GOAL
 		right: 0;
 		border: none;
 		outline-offset: -1px;
-		border-radius: var(--ts-input-radius);
+		/* border-radius: var(--ts-input-radius); */
 		background-color: var(--ts-this-bg);
 		outline: 1px solid var(--ts-input-border-active);
 		flex-direction: column;
@@ -35943,7 +35913,7 @@ FINAL GOAL
 
 	}
 
-	.ts-ui-select:not(:has(.ts-ui-select__dropdown)) .ts-ui-select__list {
+	.ts-ui-select .ts-ui-select__list {
 		border: 1px solid transparent;
 		--ts-this-bg: var(--ts-bg-0);
 		background-color: var(--ts-this-bg);
@@ -36813,300 +36783,3 @@ padding-left:12px;
 @media (max-width: 520px) {
   /* inherits everything from 720px – no additional changes needed */
 }
-
-
-
-
-
-/* ════════════════════════════════════════════════════════════════════
-   .ts-ui-select — self-contained tokenized component
-   ═════════════════════════════════════════════════════════════════════
-   Token discipline (three-tier):
-   - Component tokens (--ts-select-*) defined here at component root
-   - Surface inherited via --ts-this-bg with safe fallback
-   - Sub-elements ONLY consume tokens, never define
-   - Works in isolation (debugger widget) AND in core (toolskin.css)
-   - All consumed tokens have either a fallback or a default declared
-     here, so the component never collapses if a parent scope is missing.
-   ════════════════════════════════════════════════════════════════════ */
-
-	.ts-ui-select {
-		/* ── Component tokens — defaults declared at component root ──── */
-
-		/* Surface chain (consumes --ts-this-bg from parent, falls back gracefully) */
-		--ts-this-bg: var(--ts-bg-1, #1a1b1e);
-
-		--ts-this-bg-2-t: color-mix(in srgb, var(--ts-this-bg), transparent 12%);
-		/* --ts-this-bg-focus: color-mix(in srgb, var(--ts-this-bg), white 4%); */
-
-		/* Sizing */
-		--ts-select-h: var(--ts-btn-h, 38px);
-		--ts-select-width: clamp(12ch, 20ch, 28ch);
-		--ts-select-max-w: var(--ts-select-width);
-		--ts-select-btn-max-h: calc(var(--ts-select-h) - 2px);
-
-		/* Padding (single source of truth — derived from height) */
-		--ts-select-pad-x: calc(var(--ts-select-h) * 0.3);
-		--ts-select-pad-y: calc(var(--ts-select-h) * 0.12);
-
-		/* Radius */
-		--ts-select-rad: var(--ts-radius-sm, 6px);
-
-		/* Typography */
-		--ts-select-fs: var(--ts-fs-xs, 0.875rem);
-		--ts-select-fs-text-icon: var(--ts-select-fs);
-		--ts-select-fw: 500;
-		--ts-select-ls: 0.02em;
-		--ts-select-gap: var(--ts-sp-1, 4px);
-
-		/* Color states */
-		--ts-select-color: var(--ts-text-secondary, rgba(255, 255, 255, 0.7));
-		--ts-select-color-hover: var(--ts-text-primary, rgba(255, 255, 255, 0.92));
-		--ts-select-color-active: var(--ts-accent, #ff5500);
-
-		/* Icon sizing */
-		--ts-btn-icon: calc(var(--ts-select-fs) * 1.1);
-
-		/* Dropdown */
-
-
-		/* Shadow */
-
-		/* ── Layout  */
-		appearance: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: stretch;
-		flex-direction: column;
-		box-sizing: border-box;
-		position: relative;
-		/* gap: var(--ts-select-gap); */
-		/* min-width: var(--ts-select-width); */
-		/* max-width: var(--ts-select-max-w); */
-		min-height: calc(var(--ts-select-h) - 1px);
-		max-height: calc(var(--ts-select-h));
-		padding: 0;
-		max-width: unset;
-		min-width: unset;
-
-		/* padding-inline: var(--ts-select-pad-x); */
-
-		/* ── Visual ─────────────────────────────────────────────────── */
-		background: var(--ts-this-bg);
-		/* border: 1px solid var(--ts-this-bg-border); */
-		color: var(--ts-select-color);
-		/* font-size: var(--ts-select-fs); */
-		font-weight: var(--ts-select-fw);
-		letter-spacing: var(--ts-select-ls);
-		transition: all 0.25s ease;
-		--ts-this-bg: transparent;
-
-
-		/* ── Icon defaults inside the select ────────────────────────── */
-		i,
-		.ts-icon,
-		ion-icon {
-			font-size: var(--ts-btn-icon);
-			max-width: var(--ts-btn-icon);
-			max-height: var(--ts-btn-icon);
-			display: grid;
-			place-content: center;
-			align-items: center;
-		}
-
-		/* ── Trigger  */
-		.ts-ui-select__trigger {
-			flex: 1 1;
-			display: flex;
-			align-items: center;
-			gap: var(--ts-select-gap);
-			min-height: unset;
-			max-height: var(--ts-select-btn-max-h);
-			padding-inline: var(--ts-select-pad-x);
-			padding-block: var(--ts-select-pad-y);
-			font-size: var(--ts-select-fs);
-			font-weight: inherit;
-			letter-spacing: var(--ts-select-ls);
-			color: var(--ts-select-color);
-			background-color: var(--ts-this-bg);
-			/* border: 1px solid var(--ts-panel-border); 
-			border-radius: var(--ts-select-rad);*/
-			outline: none;
-			cursor: pointer;
-			min-width: unset !important;
-			transition: all 0.2s ease;
-			--ts-this-bg: var(--ts-bg-2-t);
-		}
-
-		.ts-ui-select__trigger:hover {
-			--ts-select-color: var(--ts-select-color-active);
-			--ts-panel-border: var(--ts-this-bg-border-hover);
-			--ts-this-bg: var(--ts-accent-dim-2);
-		}
-
-		/* ── Trigger value (selected text)  */
-		.ts-ui-select__value {
-			gap: var(--ts-select-gap);
-			display: flex;
-			align-items: center;
-
-			font-size: 85%;
-			text-transform: uppercase;
-			letter-spacing: inherit;
-
-			min-width: unset;
-			max-width: unset;
-			max-inline-size: max-content;
-
-			--ts-btn-icon: 1em;
-
-			i,
-			.ts-icon,
-			ion-icon {
-				font-size: var(--ts-btn-icon);
-				max-width: var(--ts-btn-icon);
-				min-height: var(--ts-btn-icon);
-				max-height: var(--ts-btn-icon);
-				color: var(--ts-select-color);
-			}
-		}
-
-		/* ── Dropdown panel ─────────────────────────────────────────── */
-		.ts-ui-select__dropdown {
-			position: absolute;
-			top: calc(100% - 1px);
-			left: 0;
-			right: 0;
-			/*max-width: var(--ts-select-max-w);*/
-			max-height: var(--ts-ui-select-dd-max-h) !important;
-			min-height: var(--ts-ui-select-dd-min);
-			min-height: 0;
-			background: var(--ts-this-bg);
-			border: 1px solid var(--ts-this-bg-border-focus);
-			box-shadow: var(--ts-shadow-accent);
-			overflow: hidden !important;
-			z-index: 9999999999;
-		}
-
-		/* ── Search + List inside dropdown ──────────────────────────── */
-		.ts-ui-select__list {
-			height: var(--ts-select-dd-max-h) !important;
-			max-height: var(--ts-select-dd-max-h) !important;
-			/* min-height: 0; */
-			flex: 1;
-			overflow-x: hidden !important;
-			font-size: var(--ts-select-fs);
-
-			overflow-y: auto !important;
-
-
-
-
-			i,
-			.ts-icon,
-			ion-icon {
-				font-size: calc(var(--ts-select-fs-text-icon) * 0.85);
-				width: 1.3ch;
-			}
-		}
-
-		.ts-ui-select__search>input,
-		.ts-ui-select__option {
-			padding-block: var(--ts-select-pad-y);
-			padding-inline: var(--ts-select-pad-x);
-			font-size: var(--ts-select-fs)
-		}
-
-		.ts-ui-select__search>input {
-			padding-left: calc(var(--ts-select-pad-x)*2 + var(--ts-select-gap));
-
-		}
-
-		/* ── Option states  */
-		.ts-ui-select__option {
-			display: flex;
-			align-items: center;
-			gap: var(--ts-select-gap);
-			cursor: pointer;
-			color: var(--ts-select-color);
-			transition: background-color 0.15s ease, color 0.15s ease;
-			max-height: 20px !important;
-			padding-block: 0px !important;
-			background-color: var(--ts-select-item-bg);
-			border-bottom: 1px solid var(--ts-border-0) !important;
-		}
-
-
-		.ts-ui-select__option:hover {
-			--ts-select-item-bg: var(--ts-select-item-bg-hover);
-			--ts-select-color: var(--ts-select-color-hover);
-			--ts-this-bg: var(--ts-select-item-bg);
-
-			i,
-			.ts-icon,
-			ion-icon {
-				color: var(--ts-select-color-active);
-			}
-		}
-
-		.ts-ui-select__option.ts-ui-select__option--selected {
-			--ts-select-item-bg: var(--ts-select-item-bg-active);
-			--ts-select-color: var(--ts-select-color-active);
-
-			i,
-			.ts-icon,
-			ion-icon {
-				color: var(--ts-select-color-active);
-			}
-		}
-
-		/* ── Option / search-input typography ───────────────────────── */
-		.ts-ui-select__option-text,
-		.ts-ui-select__search>input {
-			scrollbar-width: none;
-			font-weight: 400;
-			text-transform: none;
-			letter-spacing: normal;
-			color: inherit;
-			font-size: 90%;
-			background: transparent;
-			border: none;
-			outline: none;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
-			scrollbar-width: none;
-			flex: 1 1 100%;
-			line-height: 1;
-
-
-		}
-
-		.ts-ui-select__option-text {
-			overflow-y: scroll !important;
-			min-width: unset;
-		}
-
-		/* ── Open state ─────────────────────────────────────────────── */
-		&.ts-ui-select--open {
-			z-index: 99999;
-
-			.ts-ui-select__trigger {
-				--ts-select-color: var(--ts-select-color-active);
-				--ts-this-bg-border: var(--ts-this-bg-border-focus);
-				--ts-this-bg: var(--ts-accent-dim-2);
-				color: var(--ts-select-color);
-
-				.ts-ui-select__value,
-				.ts-ui-select__text {
-					color: inherit;
-				}
-
-				i,
-				.ts-icon,
-				ion-icon {
-					color: var(--ts-select-color-active);
-				}
-			}
-		}
-	}
