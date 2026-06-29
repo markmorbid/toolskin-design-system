@@ -26,569 +26,6 @@
 
 'use strict';
 
-/** Auto-generated from Ionicons 7.1.0 Cheatsheet — run scripts/parse-ionicons-cheatsheet.mjs */
-(function (g) {
-  g.TOOLSKIN_IONICONS_710 = {
-    version: '7.1.0',
-    /** base name -> bitmask: 1=filled, 2=outline, 4=sharp */
-    flags: {
-      'accessibility': 7,
-      'add': 7,
-      'add-circle': 7,
-      'airplane': 7,
-      'alarm': 7,
-      'albums': 7,
-      'alert': 7,
-      'alert-circle': 7,
-      'american-football': 7,
-      'analytics': 7,
-      'aperture': 7,
-      'apps': 7,
-      'archive': 7,
-      'arrow-back': 7,
-      'arrow-back-circle': 7,
-      'arrow-down': 7,
-      'arrow-down-circle': 7,
-      'arrow-forward': 7,
-      'arrow-forward-circle': 7,
-      'arrow-redo': 7,
-      'arrow-redo-circle': 7,
-      'arrow-undo': 7,
-      'arrow-undo-circle': 7,
-      'arrow-up': 7,
-      'arrow-up-circle': 7,
-      'at': 7,
-      'at-circle': 7,
-      'attach': 7,
-      'backspace': 7,
-      'bag': 7,
-      'bag-add': 7,
-      'bag-check': 7,
-      'bag-handle': 7,
-      'bag-remove': 7,
-      'balloon': 7,
-      'ban': 7,
-      'bandage': 7,
-      'bar-chart': 7,
-      'barbell': 7,
-      'barcode': 7,
-      'baseball': 7,
-      'basket': 7,
-      'basketball': 7,
-      'battery-charging': 7,
-      'battery-dead': 7,
-      'battery-full': 7,
-      'battery-half': 7,
-      'beaker': 7,
-      'bed': 7,
-      'beer': 7,
-      'bicycle': 7,
-      'bluetooth': 7,
-      'boat': 7,
-      'body': 7,
-      'bonfire': 7,
-      'book': 7,
-      'bookmark': 7,
-      'bookmarks': 7,
-      'bowling-ball': 7,
-      'briefcase': 7,
-      'browsers': 7,
-      'brush': 7,
-      'bug': 7,
-      'build': 7,
-      'bulb': 7,
-      'bus': 7,
-      'business': 7,
-      'cafe': 7,
-      'calculator': 7,
-      'calendar': 7,
-      'calendar-clear': 7,
-      'calendar-number': 7,
-      'call': 7,
-      'camera': 7,
-      'camera-reverse': 7,
-      'car': 7,
-      'car-sport': 7,
-      'card': 7,
-      'caret-back': 7,
-      'caret-back-circle': 7,
-      'caret-down': 7,
-      'caret-down-circle': 7,
-      'caret-forward': 7,
-      'caret-forward-circle': 7,
-      'caret-up': 7,
-      'caret-up-circle': 7,
-      'cart': 7,
-      'cash': 7,
-      'cellular': 7,
-      'chatbox': 7,
-      'chatbox-ellipses': 7,
-      'chatbubble': 7,
-      'chatbubble-ellipses': 7,
-      'chatbubbles': 7,
-      'checkbox': 7,
-      'checkmark': 7,
-      'checkmark-circle': 7,
-      'checkmark-done': 7,
-      'checkmark-done-circle': 7,
-      'chevron-back': 7,
-      'chevron-back-circle': 7,
-      'chevron-collapse': 7,
-      'chevron-down': 7,
-      'chevron-down-circle': 7,
-      'chevron-expand': 7,
-      'chevron-forward': 7,
-      'chevron-forward-circle': 7,
-      'chevron-up': 7,
-      'chevron-up-circle': 7,
-      'clipboard': 7,
-      'close': 7,
-      'close-circle': 7,
-      'cloud': 7,
-      'cloud-circle': 7,
-      'cloud-done': 7,
-      'cloud-download': 7,
-      'cloud-offline': 7,
-      'cloud-upload': 7,
-      'cloudy': 7,
-      'cloudy-night': 7,
-      'code': 7,
-      'code-download': 7,
-      'code-slash': 7,
-      'code-working': 7,
-      'cog': 7,
-      'color-fill': 7,
-      'color-filter': 7,
-      'color-palette': 7,
-      'color-wand': 7,
-      'compass': 7,
-      'construct': 7,
-      'contract': 7,
-      'contrast': 7,
-      'copy': 7,
-      'create': 7,
-      'crop': 7,
-      'cube': 7,
-      'cut': 7,
-      'desktop': 7,
-      'diamond': 7,
-      'dice': 7,
-      'disc': 7,
-      'document': 7,
-      'document-attach': 7,
-      'document-lock': 7,
-      'document-text': 7,
-      'documents': 7,
-      'download': 7,
-      'duplicate': 7,
-      'ear': 7,
-      'earth': 7,
-      'easel': 7,
-      'egg': 7,
-      'ellipse': 7,
-      'ellipsis-horizontal': 7,
-      'ellipsis-horizontal-circle': 7,
-      'ellipsis-vertical': 7,
-      'ellipsis-vertical-circle': 7,
-      'enter': 7,
-      'exit': 7,
-      'expand': 7,
-      'extension-puzzle': 7,
-      'eye': 7,
-      'eye-off': 7,
-      'eyedrop': 7,
-      'fast-food': 7,
-      'female': 7,
-      'file-tray': 7,
-      'file-tray-full': 7,
-      'file-tray-stacked': 7,
-      'film': 7,
-      'filter': 7,
-      'filter-circle': 7,
-      'finger-print': 7,
-      'fish': 7,
-      'fitness': 7,
-      'flag': 7,
-      'flame': 7,
-      'flash': 7,
-      'flash-off': 7,
-      'flashlight': 7,
-      'flask': 7,
-      'flower': 7,
-      'folder': 7,
-      'folder-open': 7,
-      'football': 7,
-      'footsteps': 7,
-      'funnel': 7,
-      'game-controller': 7,
-      'gift': 7,
-      'git-branch': 7,
-      'git-commit': 7,
-      'git-compare': 7,
-      'git-merge': 7,
-      'git-network': 7,
-      'git-pull-request': 7,
-      'glasses': 7,
-      'globe': 7,
-      'golf': 7,
-      'grid': 7,
-      'hammer': 7,
-      'hand-left': 7,
-      'hand-right': 7,
-      'happy': 7,
-      'hardware-chip': 7,
-      'headset': 7,
-      'heart': 7,
-      'heart-circle': 7,
-      'heart-dislike': 7,
-      'heart-dislike-circle': 7,
-      'heart-half': 7,
-      'help': 7,
-      'help-buoy': 7,
-      'help-circle': 7,
-      'home': 7,
-      'hourglass': 7,
-      'ice-cream': 7,
-      'id-card': 7,
-      'image': 7,
-      'images': 7,
-      'infinite': 7,
-      'information': 7,
-      'information-circle': 7,
-      'invert-mode': 7,
-      'journal': 7,
-      'key': 7,
-      'keypad': 7,
-      'language': 7,
-      'laptop': 7,
-      'layers': 7,
-      'leaf': 7,
-      'library': 7,
-      'link': 7,
-      'list': 7,
-      'list-circle': 7,
-      'locate': 7,
-      'location': 7,
-      'lock-closed': 7,
-      'lock-open': 7,
-      'log-in': 7,
-      'log-out': 7,
-      'logo-alipay': 1,
-      'logo-amazon': 1,
-      'logo-amplify': 1,
-      'logo-android': 1,
-      'logo-angular': 1,
-      'logo-apple': 1,
-      'logo-apple-appstore': 1,
-      'logo-apple-ar': 1,
-      'logo-behance': 1,
-      'logo-bitbucket': 1,
-      'logo-bitcoin': 1,
-      'logo-buffer': 1,
-      'logo-capacitor': 1,
-      'logo-chrome': 1,
-      'logo-closed-captioning': 1,
-      'logo-codepen': 1,
-      'logo-css3': 1,
-      'logo-designernews': 1,
-      'logo-deviantart': 1,
-      'logo-discord': 1,
-      'logo-docker': 1,
-      'logo-dribbble': 1,
-      'logo-dropbox': 1,
-      'logo-edge': 1,
-      'logo-electron': 1,
-      'logo-euro': 1,
-      'logo-facebook': 1,
-      'logo-figma': 1,
-      'logo-firebase': 1,
-      'logo-firefox': 1,
-      'logo-flickr': 1,
-      'logo-foursquare': 1,
-      'logo-github': 1,
-      'logo-gitlab': 1,
-      'logo-google': 1,
-      'logo-google-playstore': 1,
-      'logo-hackernews': 1,
-      'logo-html5': 1,
-      'logo-instagram': 1,
-      'logo-ionic': 1,
-      'logo-ionitron': 1,
-      'logo-javascript': 1,
-      'logo-laravel': 1,
-      'logo-linkedin': 1,
-      'logo-markdown': 1,
-      'logo-mastodon': 1,
-      'logo-medium': 1,
-      'logo-microsoft': 1,
-      'logo-no-smoking': 1,
-      'logo-nodejs': 1,
-      'logo-npm': 1,
-      'logo-octocat': 1,
-      'logo-paypal': 1,
-      'logo-pinterest': 1,
-      'logo-playstation': 1,
-      'logo-pwa': 1,
-      'logo-python': 1,
-      'logo-react': 1,
-      'logo-reddit': 1,
-      'logo-rss': 1,
-      'logo-sass': 1,
-      'logo-skype': 1,
-      'logo-slack': 1,
-      'logo-snapchat': 1,
-      'logo-soundcloud': 1,
-      'logo-stackoverflow': 1,
-      'logo-steam': 1,
-      'logo-stencil': 1,
-      'logo-tableau': 1,
-      'logo-tiktok': 1,
-      'logo-tumblr': 1,
-      'logo-tux': 1,
-      'logo-twitch': 1,
-      'logo-twitter': 1,
-      'logo-usd': 1,
-      'logo-venmo': 1,
-      'logo-vercel': 1,
-      'logo-vimeo': 1,
-      'logo-vk': 1,
-      'logo-vue': 1,
-      'logo-web-component': 1,
-      'logo-wechat': 1,
-      'logo-whatsapp': 1,
-      'logo-windows': 1,
-      'logo-wordpress': 1,
-      'logo-xbox': 1,
-      'logo-xing': 1,
-      'logo-yahoo': 1,
-      'logo-yen': 1,
-      'logo-youtube': 1,
-      'magnet': 7,
-      'mail': 7,
-      'mail-open': 7,
-      'mail-unread': 7,
-      'male': 7,
-      'male-female': 7,
-      'man': 7,
-      'map': 7,
-      'medal': 7,
-      'medical': 7,
-      'medkit': 7,
-      'megaphone': 7,
-      'menu': 7,
-      'mic': 7,
-      'mic-circle': 7,
-      'mic-off': 7,
-      'mic-off-circle': 7,
-      'moon': 7,
-      'move': 7,
-      'musical-note': 7,
-      'musical-notes': 7,
-      'navigate': 7,
-      'navigate-circle': 7,
-      'newspaper': 7,
-      'notifications': 7,
-      'notifications-circle': 7,
-      'notifications-off': 7,
-      'notifications-off-circle': 7,
-      'nuclear': 7,
-      'nutrition': 7,
-      'open': 7,
-      'options': 7,
-      'paper-plane': 7,
-      'partly-sunny': 7,
-      'pause': 7,
-      'pause-circle': 7,
-      'paw': 7,
-      'pencil': 7,
-      'people': 7,
-      'people-circle': 7,
-      'person': 7,
-      'person-add': 7,
-      'person-circle': 7,
-      'person-remove': 7,
-      'phone-landscape': 7,
-      'phone-portrait': 7,
-      'pie-chart': 7,
-      'pin': 7,
-      'pint': 7,
-      'pizza': 7,
-      'planet': 7,
-      'play': 7,
-      'play-back': 7,
-      'play-back-circle': 7,
-      'play-circle': 7,
-      'play-forward': 7,
-      'play-forward-circle': 7,
-      'play-skip-back': 7,
-      'play-skip-back-circle': 7,
-      'play-skip-forward': 7,
-      'play-skip-forward-circle': 7,
-      'podium': 7,
-      'power': 7,
-      'pricetag': 7,
-      'pricetags': 7,
-      'print': 7,
-      'prism': 7,
-      'pulse': 7,
-      'push': 7,
-      'qr-code': 7,
-      'radio': 7,
-      'radio-button-off': 7,
-      'radio-button-on': 7,
-      'rainy': 7,
-      'reader': 7,
-      'receipt': 7,
-      'recording': 7,
-      'refresh': 7,
-      'refresh-circle': 7,
-      'reload': 7,
-      'reload-circle': 7,
-      'remove': 7,
-      'remove-circle': 7,
-      'reorder-four': 7,
-      'reorder-three': 7,
-      'reorder-two': 7,
-      'repeat': 7,
-      'resize': 7,
-      'restaurant': 7,
-      'return-down-back': 7,
-      'return-down-forward': 7,
-      'return-up-back': 7,
-      'return-up-forward': 7,
-      'ribbon': 7,
-      'rocket': 7,
-      'rose': 7,
-      'sad': 7,
-      'save': 7,
-      'scale': 7,
-      'scan': 7,
-      'scan-circle': 7,
-      'school': 7,
-      'search': 7,
-      'search-circle': 7,
-      'send': 7,
-      'server': 7,
-      'settings': 7,
-      'shapes': 7,
-      'share': 7,
-      'share-social': 7,
-      'shield': 7,
-      'shield-checkmark': 7,
-      'shield-half': 7,
-      'shirt': 7,
-      'shuffle': 7,
-      'skull': 7,
-      'snow': 7,
-      'sparkles': 7,
-      'speedometer': 7,
-      'square': 7,
-      'star': 7,
-      'star-half': 7,
-      'stats-chart': 7,
-      'stop': 7,
-      'stop-circle': 7,
-      'stopwatch': 7,
-      'storefront': 7,
-      'subway': 7,
-      'sunny': 7,
-      'swap-horizontal': 7,
-      'swap-vertical': 7,
-      'sync': 7,
-      'sync-circle': 7,
-      'tablet-landscape': 7,
-      'tablet-portrait': 7,
-      'telescope': 7,
-      'tennisball': 7,
-      'terminal': 7,
-      'text': 7,
-      'thermometer': 7,
-      'thumbs-down': 7,
-      'thumbs-up': 7,
-      'thunderstorm': 7,
-      'ticket': 7,
-      'time': 7,
-      'timer': 7,
-      'today': 7,
-      'toggle': 7,
-      'trail-sign': 7,
-      'train': 7,
-      'transgender': 7,
-      'trash': 7,
-      'trash-bin': 7,
-      'trending-down': 7,
-      'trending-up': 7,
-      'triangle': 7,
-      'trophy': 7,
-      'tv': 7,
-      'umbrella': 7,
-      'unlink': 7,
-      'videocam': 7,
-      'videocam-off': 7,
-      'volume-high': 7,
-      'volume-low': 7,
-      'volume-medium': 7,
-      'volume-mute': 7,
-      'volume-off': 7,
-      'walk': 7,
-      'wallet': 7,
-      'warning': 7,
-      'watch': 7,
-      'water': 7,
-      'wifi': 7,
-      'wine': 7,
-      'woman': 7,
-    },
-  };
-})(typeof window !== 'undefined' ? window : globalThis);
-
-/**
- * Ionicons 7.1.0 variant metadata (filled / outline / sharp) from cheatsheet-derived registry.
- * Use {@link ToolskinIonIcons.resolveIonIconName} for `<ion-icon name>` and SVG filenames.
- */
-const ToolskinIonIcons = {
-  FILLED: 1,
-  OUTLINE: 2,
-  SHARP: 4,
-  registry() {
-    return typeof window !== 'undefined' ? window.TOOLSKIN_IONICONS_710 : null;
-  },
-  flags(base) {
-    const r = this.registry();
-    if (!r || !r.flags || base == null || base === '') return this.FILLED | this.OUTLINE | this.SHARP;
-    const v = r.flags[base];
-    return typeof v === 'number' ? v : 0;
-  },
-  hasFilled(base) {
-    return (this.flags(base) & this.FILLED) !== 0;
-  },
-  hasOutline(base) {
-    return (this.flags(base) & this.OUTLINE) !== 0;
-  },
-  hasSharp(base) {
-    return (this.flags(base) & this.SHARP) !== 0;
-  },
-  listBases() {
-    const r = this.registry();
-    return r && r.flags ? Object.keys(r.flags).sort() : [];
-  },
-  /**
-   * @param {string} base — icon base name (no -outline / -sharp)
-   * @param {{ outline?: boolean, sharp?: boolean }} opts — sharp wins over outline
-   * @returns {string} name for ion-icon / SVG stem (filled fallback when variant missing)
-   */
-  resolveIonIconName(base, opts) {
-    const o = opts || {};
-    const sharp = !!o.sharp;
-    const outline = !!o.outline && !sharp;
-    if (!base) return '';
-    if (sharp && this.hasSharp(base)) return `${base}-sharp`;
-    if (outline && this.hasOutline(base)) return `${base}-outline`;
-    return this.hasFilled(base) ? base : '';
-  },
-};
-
-if (typeof window !== 'undefined') window.ToolskinIonIcons = ToolskinIonIcons;
 
 /* ═══════════════════════════════════════════════════════════════════
    CONFIGURATION MODULE
@@ -1373,9 +810,13 @@ setMode(mode, save = true, opts = {}) {
    ═══════════════════════════════════════════════════════════════════ */
 
 class ToolskinSmooth {
-  constructor(config) {
-    this.config = config;
-    this.lenis = null;
+    constructor(config) {
+     this.config = config;
+      // If no‑effects flag is set, don't even try to init
+      if (typeof window !== 'undefined' && window.__ts_no_effects) {
+        this.lenis = null;
+        return;
+    }
     /** Caches Lenis `prevent()` scrollability checks — getComputedStyle per wheel was forcing reflows */
     this._preventScrollCache = new Map();
     this._visibilityHandler = null;
@@ -1888,51 +1329,61 @@ class ToolskinSlider {
    ═══════════════════════════════════════════════════════════════════ */
 
 class ToolskinTabs {
-  constructor(root) {
-    this.root = root;
-    this.tabs = [...root.querySelectorAll('.ts-tab')];
-    this.group = root.dataset.tabGroup || root.closest('[data-tab-group]')?.dataset.tabGroup;
-    this._bind();
-  }
-
-  _bind() {
-    this.tabs.forEach(tab => {
-      tab.addEventListener('click', () => this.activate(tab));
-    });
-  }
-
-  activate(tabOrId) {
-    const tab = (typeof tabOrId === 'string')
-      ? this.tabs.find(t => t.dataset.tab === tabOrId)
-      : tabOrId;
-
-    if (!tab) return;
-
-    const targetId = tab.dataset.tab;
-    const scope = this.group
-      ? document
-      : (this.root.closest('.ts-card, .ts-panel, .ts-modal, [data-tab-scope]') || document);
-
-    // Deactivate all tabs in this group
-    this.tabs.forEach(t => t.classList.remove('ts-tab--active'));
-    tab.classList.add('ts-tab--active');
-
-    // Deactivate all panes
-    scope.querySelectorAll('.ts-tab-pane').forEach(pane => {
-      pane.classList.remove('ts-tab-pane--active');
-      pane.removeAttribute('data-active');
-    });
-
-    // Activate target pane
-    const pane = scope.querySelector(`#${targetId}, [data-pane="${targetId}"]`);
-    if (pane) {
-      pane.classList.add('ts-tab-pane--active');
-      pane.setAttribute('data-active', '');
+    constructor(root) {
+      this.root = root;
+      this.tabs = [...root.querySelectorAll('.ts-tab, .ts-ptab')];
+      this.group = root.dataset.tabGroup || root.closest('[data-tab-group]')?.dataset.tabGroup;
+      this._bind();
     }
 
-    tab.dispatchEvent(new CustomEvent('ts:tab-change', { bubbles: true, detail: { id: targetId } }));
+    _bind() {
+      this.tabs.forEach(tab => {
+        tab.addEventListener('click', () => this.activate(tab));
+      });
+    }
+
+    activate(tabOrId) {
+      const tab = (typeof tabOrId === 'string')
+        ? this.tabs.find(t => t.dataset.tab === tabOrId)
+        : tabOrId;
+
+      if (!tab) return;
+
+      const targetId = tab.dataset.tab;
+      const scope = this.group
+        ? document
+        : (this.root.closest('.ts-card, .ts-panel, .ts-modal, [data-tab-scope]') || document);
+
+      // Deactivate all tabs in this group
+      this.tabs.forEach(t => {
+        t.classList.remove('ts-tab--active', 'active');
+      });
+
+      tab.classList.add('ts-tab--active', 'active');
+
+      // keep legacy support
+      if (tab.classList.contains('ts-ptab')) {
+        tab.classList.add('active');
+      }
+
+       // Deactivate all panes
+      scope.querySelectorAll('.ts-tab-pane').forEach(pane => {
+        pane.classList.remove('ts-tab-pane--active', 'active');
+        pane.removeAttribute('data-active');
+      });
+
+      // Activate target pane
+      const pane = scope.querySelector(`#${targetId}, [data-pane="${targetId}"]`);
+      if (pane) {
+        pane.classList.add('ts-tab-pane--active', 'active');
+        pane.setAttribute('data-active', '');
+      }
+
+
+
+      tab.dispatchEvent(new CustomEvent('ts:tab-change', { bubbles: true, detail: { id: targetId } }));
+    }
   }
-}
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2324,8 +1775,11 @@ class ToolskinToggle {
    ═══════════════════════════════════════════════════════════════════ */
 
 class ToolskinObserver {
-  constructor(config) {
-    this.config = config || {
+    constructor(config) {
+      if (typeof window !== 'undefined' && window.__ts_no_effects) {
+        this._observer = null;
+        return;
+      }    this.config = config || {
       autoReveal: true,
       selectors: '.ts-card, .ts-panel, .demo-card, .ts-pricing-card',
       defaultAnimation: 'ts-fade-up',
@@ -2500,8 +1954,11 @@ class ToolskinObserver {
    ═══════════════════════════════════════════════════════════════════ */
 
 class ToolskinGSAPReveal {
-  constructor(config) {
-    this.config = config || {
+    constructor(config) {
+      if (typeof window !== 'undefined' && window.__ts_no_effects) {
+        this._observer = null;
+        return;
+      }    this.config = config || {
       selectors: '.ts-card, .ts-panel, .demo-card, .ts-pricing-card',
       defaultAnimation: 'ts-fade-up',
       stagger: 0.08,
@@ -2912,166 +2369,197 @@ class ToolskinParallaxFallback {
    ═══════════════════════════════════════════════════════════════════ */
 
 
-/**
- * Injects icon elements based on data-icon / data-ts-icon attributes.
- * Supports:
- *   - Font Awesome: "fa:fas fa-user", "fa:far fa-heart", "fa:fab fa-github"
- *   - Ionicons: "ion:grid-outline"
- *   - Any other class string is treated as a plain <i> with those classes.
- *
- * The parent element's `data-icon-pos` attribute controls placement:
- *   - "left" (default) → icon is prepended (before any text/children)
- *   - "right" → icon is appended (after existing content)
- *
- * Every generated icon gets the class `ts-icon`.
- *
- * A CSS rule is added to fade in the parent element only when its icon is ready:
- *   - For Font Awesome (plain <i>) → immediately visible after injection
- *   - For Ionicons (<ion-icon>) → visible only after the component is hydrated
- *
- * @param {HTMLElement|Document} [root=document] - The container to scan.
- */
-/* ═══════════════════════════════════════════════════════════════════
-   ICONS MODULE
-   Renders icons from data-icon attributes.
-   ═══════════════════════════════════════════════════════════════════ */
-
-class ToolskinIcons {
   /**
-   * Injects icons based on data-icon / data-ts-icon.
-   * @param {HTMLElement|Document} [root=document] - Container to scan.
+   * Injects icon elements based on data-icon / data-ts-icon attributes.
+   * Supports:
+   *   - Font Awesome: "fa:fas fa-user", "fa:far fa-heart", "fa:fab fa-github"
+   *   - Ionicons: "ion:grid-outline"
+   *   - Any other class string is treated as a plain <i> with those classes.
+   *
+   * The parent element's `data-icon-pos` attribute controls placement:
+   *   - "left" (default) → icon is prepended (before any text/children)
+   *   - "right" → icon is appended (after existing content)
+   *
+   * Every generated icon gets the class `ts-icon`.
+   *
+   * A CSS rule is added to fade in the parent element only when its icon is ready:
+   *   - For Font Awesome (plain <i>) → immediately visible after injection
+   *   - For Ionicons (<ion-icon>) → visible only after the component is hydrated
+   *
+   * @param {HTMLElement|Document} [root=document] - The container to scan.
    */
-  static inject(root = document) {
+  /* ═══════════════════════════════════════════════════════════════════
+     ICONS MODULE
+     Renders icons from data-icon attributes.
+     ═══════════════════════════════════════════════════════════════════ */
+
+  class ToolskinIcons {
+    /**
+     * Injects icons based on data-icon / data-ts-icon.
+     * @param {HTMLElement|Document} [root=document] - Container to scan.
+     */
+    static inject(root = document) {
 
 
-    // 2. Find all elements that need icons
-    const elements = root.querySelectorAll('[data-icon], [data-ts-icon]');
+      // 2. Find all elements that need icons
+      const elements = root.querySelectorAll('[data-icon], [data-ts-icon]');
 
-    elements.forEach(el => {
-      // Debug logging for Surfaces Lab button
-      if (el.textContent && el.textContent.includes('Surfaces Lab')) {
-        console.log('🔧 Icon injection check for Surfaces Lab:', {
-          alreadyInjected: el.dataset.iconInjected,
-          dataIcon: el.getAttribute('data-icon'),
-          existingIcons: el.querySelectorAll('i, ion-icon, svg, .ts-icon').length
-        });
-      }
-
-      // Skip already processed elements
-      if (el.dataset.iconInjected) {
+      elements.forEach(el => {
+        // Debug logging for Surfaces Lab button
         if (el.textContent && el.textContent.includes('Surfaces Lab')) {
-          console.log('⚠️ SKIPPING Surfaces Lab - already injected');
+          console.log('🔧 Icon injection check for Surfaces Lab:', {
+            alreadyInjected: el.dataset.iconInjected,
+            dataIcon: el.getAttribute('data-icon'),
+            existingIcons: el.querySelectorAll('i, ion-icon, svg, .ts-icon').length
+          });
         }
-        return;
-      }
 
-      // B13/Bug-1: bail if a manually-authored icon descendant already exists.
-      // Prevents duplicate injection when the author wrote <i>/<ion-icon>/.ts-icon
-      // alongside data-icon. Mark as processed so later passes respect the author.
-      if (el.querySelector(':scope > i, :scope > ion-icon, :scope > svg, :scope > .ts-icon, :scope > .ts-menu-text > i, :scope > .ts-menu-text > ion-icon, :scope > .ts-menu-text > .ts-icon')) {
-        el.dataset.iconInjected = '1';
-        return;
-      }
-
-      // Get the raw icon string
-      let raw = (
-        el.getAttribute('data-icon') ||
-        el.getAttribute('data-ts-icon') ||
-        el.dataset.icon ||
-        el.dataset.tsIcon ||
-        ''
-      ).trim();
-      if (!raw) return;
-
-      // Parse type and value
-      let type = '';
-      let value = '';
-      const colonIndex = raw.indexOf(':');
-      if (colonIndex !== -1) {
-        type = raw.slice(0, colonIndex);
-        value = raw.slice(colonIndex + 1).trim();
-      } else {
-        type = '';
-        value = raw;
-      }
-
-      // Create the appropriate icon element
-      let iconEl = null;
-
-      // Font Awesome
-      if (type === 'fa' || /^fa(-(solid|regular|brands))?\s/.test(value)) {
-        iconEl = document.createElement('i');
-        iconEl.className = value;
-        iconEl.setAttribute('aria-hidden', 'true');
-      }
-      // Ionicons
-      else if (type === 'ion') {
-        iconEl = document.createElement('ion-icon');
-        iconEl.setAttribute('name', value);
-        iconEl.setAttribute('aria-hidden', 'true');
-      }
-      // Plain icon (any other class string)
-      else if (value) {
-        iconEl = document.createElement('i');
-        iconEl.className = value;
-        iconEl.setAttribute('aria-hidden', 'true');
-      }
-
-      if (!iconEl) return;
-
-      // Add the mandatory .ts-icon class
-      iconEl.classList.add('ts-icon');
-
-      // Determine position (default 'left')
-      const pos = el.dataset.iconPos || 'left';
-
-      // Safety: prevent hierarchy errors
-      try {
-        if (pos === 'right') {
-          // Only append if the icon is not already an ancestor of the parent
-          if (!iconEl.contains(el)) {
-            el.appendChild(iconEl);
-          } else {
-            console.warn('Skipping append – icon element already contains parent', el);
+        // Skip already processed elements
+        if (el.dataset.iconInjected) {
+          if (el.textContent && el.textContent.includes('Surfaces Lab')) {
+            console.log('⚠️ SKIPPING Surfaces Lab - already injected');
           }
+          return;
+        }
+
+        // B13/Bug-1: bail if a manually-authored icon descendant already exists.
+        // Prevents duplicate injection when the author wrote <i>/<ion-icon>/.ts-icon
+        // alongside data-icon. Mark as processed so later passes respect the author.
+        if (el.querySelector(':scope > i, :scope > ion-icon, :scope > svg, :scope > .ts-icon, :scope > .ts-menu-text > i, :scope > .ts-menu-text > ion-icon, :scope > .ts-menu-text > .ts-icon')) {
+          el.dataset.iconInjected = '1';
+          return;
+        }
+
+        // Get the raw icon string
+        let raw = (
+          el.getAttribute('data-icon') ||
+          el.getAttribute('data-ts-icon') ||
+          el.dataset.icon ||
+          el.dataset.tsIcon ||
+          ''
+        ).trim();
+        if (!raw) return;
+
+        // Parse type and value
+        let type = '';
+        let value = '';
+        const colonIndex = raw.indexOf(':');
+        if (colonIndex !== -1) {
+          type = raw.slice(0, colonIndex);
+          value = raw.slice(colonIndex + 1).trim();
         } else {
-          // Prepend (default)
-          if (!iconEl.contains(el)) {
-            el.prepend(iconEl);
-          } else {
-            console.warn('Skipping prepend – icon element already contains parent', el);
-          }
+          type = '';
+          value = raw;
         }
-      } catch (e) {
-        console.error('Error injecting icon:', e, el);
-      }
 
-      // Mark as processed
-      el.dataset.iconInjected = '1';
+        // Create the appropriate icon element
+        let iconEl = null;
 
-      // Debug logging for successful injection
-      if (el.textContent && el.textContent.includes('Surfaces Lab')) {
-        console.log('✅ Icon injection completed for Surfaces Lab:', {
-          iconType: type,
-          iconValue: value,
-          totalIconsNow: el.querySelectorAll('i, ion-icon, svg, .ts-icon').length
-        });
-      }
-    });
+        // Font Awesome
+        if (type === 'fa' || /^fa(-(solid|regular|brands))?\s/.test(value)) {
+          iconEl = document.createElement('i');
+          iconEl.className = value;
+          iconEl.setAttribute('aria-hidden', 'true');
+        }
+        // Ionicons
+        else if (type === 'ion') {
+          iconEl = document.createElement('ion-icon');
+          iconEl.setAttribute('name', value);
+          iconEl.setAttribute('aria-hidden', 'true');
+        }
+        // Plain icon (any other class string)
+        else if (value) {
+          iconEl = document.createElement('i');
+          iconEl.className = value;
+          iconEl.setAttribute('aria-hidden', 'true');
+        }
+
+        if (!iconEl) return;
+
+        // Add the mandatory .ts-icon class
+        iconEl.classList.add('ts-icon');
+
+        // Determine position (default 'left')
+        const pos = el.dataset.iconPos || 'left';
+
+        // Safety: prevent hierarchy errors
+        try {
+          if (pos === 'right') {
+            // Only append if the icon is not already an ancestor of the parent
+            if (!iconEl.contains(el)) {
+              el.appendChild(iconEl);
+            } else {
+              console.warn('Skipping append – icon element already contains parent', el);
+            }
+          } else {
+            // Prepend (default)
+            if (!iconEl.contains(el)) {
+              el.prepend(iconEl);
+            } else {
+              console.warn('Skipping prepend – icon element already contains parent', el);
+            }
+          }
+        } catch (e) {
+          console.error('Error injecting icon:', e, el);
+        }
+
+        // Mark as processed
+        el.dataset.iconInjected = '1';
+
+        // Debug logging for successful injection
+        if (el.textContent && el.textContent.includes('Surfaces Lab')) {
+          console.log('✅ Icon injection completed for Surfaces Lab:', {
+            iconType: type,
+            iconValue: value,
+            totalIconsNow: el.querySelectorAll('i, ion-icon, svg, .ts-icon').length
+          });
+        }
+      });
+    }
   }
-}
 
-// Auto‑run on DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => ToolskinIcons.inject());
-} else {
-  ToolskinIcons.inject();
-}
+  // Auto‑run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ToolskinIcons.inject());
+  } else {
+    ToolskinIcons.inject();
+  }
 
 /* ═══════════════════════════════════════════════════════════════════
    AUTO ICON ASSIGNMENT
    Intelligently assigns icons to elements based on their text content.
    ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   @REFACTOR: UNIFIED ICON & ASSET ENGINE
+   ═══════════════════════════════════════════════════════════════════
+   * GOAL:
+   * Centralize dynamic icon injection, discovery, and management 
+   * across the entire design system ecosystem.
+   *
+   * ARCHITECTURE CHANGES:
+   * 1. Extensible Schema Structure:
+   *    - Move away from hardcoded engine logic.
+   *    - Allow seamless onboarding of new icon frameworks (e.g., Lucide, Remix).
+   *    - Configure external configurations (CDN sources, import tags, naming 
+   *      conventions) directly via the `toolskin-assets` loader.
+   *
+   * 2. Decoupled Mapping & Maintenance:
+   *    - Offload dictionary mappings to an external reference file (e.g., JSON).
+   *    - Keeps the JavaScript core lightweight, production-ready, and updatable.
+   *
+   * 3. Intelligent Semantic Tagging:
+   *    - Replace the basic keyword matching with a robust fallback system.
+   *    - Integrate Font Awesome’s official category schema for granular 
+   *      tag-based matching (eliminating look-up gaps).
+   *
+   * 4. Multi-Utility Asset Pipeline:
+   *    - Unify the keyword engine to serve both inline auto-assignment (`data-icon`) 
+   *      and UI component utilities.
+   *    - Directly powers future design system tools like searchable, filterable 
+   *      icon pickers (replacing the hardcoded CSS implementation in `ts-ui-select`).
+   */
+
 
 class ToolskinAutoIcons {
   /**
@@ -3364,6 +2852,569 @@ class ToolskinAutoIcons {
     });
   }
 }
+/** Auto-generated from Ionicons 7.1.0 Cheatsheet — run scripts/parse-ionicons-cheatsheet.mjs */
+(function (g) {
+  g.TOOLSKIN_IONICONS_710 = {
+    version: '7.1.0',
+    /** base name -> bitmask: 1=filled, 2=outline, 4=sharp */
+    flags: {
+      'accessibility': 7,
+      'add': 7,
+      'add-circle': 7,
+      'airplane': 7,
+      'alarm': 7,
+      'albums': 7,
+      'alert': 7,
+      'alert-circle': 7,
+      'american-football': 7,
+      'analytics': 7,
+      'aperture': 7,
+      'apps': 7,
+      'archive': 7,
+      'arrow-back': 7,
+      'arrow-back-circle': 7,
+      'arrow-down': 7,
+      'arrow-down-circle': 7,
+      'arrow-forward': 7,
+      'arrow-forward-circle': 7,
+      'arrow-redo': 7,
+      'arrow-redo-circle': 7,
+      'arrow-undo': 7,
+      'arrow-undo-circle': 7,
+      'arrow-up': 7,
+      'arrow-up-circle': 7,
+      'at': 7,
+      'at-circle': 7,
+      'attach': 7,
+      'backspace': 7,
+      'bag': 7,
+      'bag-add': 7,
+      'bag-check': 7,
+      'bag-handle': 7,
+      'bag-remove': 7,
+      'balloon': 7,
+      'ban': 7,
+      'bandage': 7,
+      'bar-chart': 7,
+      'barbell': 7,
+      'barcode': 7,
+      'baseball': 7,
+      'basket': 7,
+      'basketball': 7,
+      'battery-charging': 7,
+      'battery-dead': 7,
+      'battery-full': 7,
+      'battery-half': 7,
+      'beaker': 7,
+      'bed': 7,
+      'beer': 7,
+      'bicycle': 7,
+      'bluetooth': 7,
+      'boat': 7,
+      'body': 7,
+      'bonfire': 7,
+      'book': 7,
+      'bookmark': 7,
+      'bookmarks': 7,
+      'bowling-ball': 7,
+      'briefcase': 7,
+      'browsers': 7,
+      'brush': 7,
+      'bug': 7,
+      'build': 7,
+      'bulb': 7,
+      'bus': 7,
+      'business': 7,
+      'cafe': 7,
+      'calculator': 7,
+      'calendar': 7,
+      'calendar-clear': 7,
+      'calendar-number': 7,
+      'call': 7,
+      'camera': 7,
+      'camera-reverse': 7,
+      'car': 7,
+      'car-sport': 7,
+      'card': 7,
+      'caret-back': 7,
+      'caret-back-circle': 7,
+      'caret-down': 7,
+      'caret-down-circle': 7,
+      'caret-forward': 7,
+      'caret-forward-circle': 7,
+      'caret-up': 7,
+      'caret-up-circle': 7,
+      'cart': 7,
+      'cash': 7,
+      'cellular': 7,
+      'chatbox': 7,
+      'chatbox-ellipses': 7,
+      'chatbubble': 7,
+      'chatbubble-ellipses': 7,
+      'chatbubbles': 7,
+      'checkbox': 7,
+      'checkmark': 7,
+      'checkmark-circle': 7,
+      'checkmark-done': 7,
+      'checkmark-done-circle': 7,
+      'chevron-back': 7,
+      'chevron-back-circle': 7,
+      'chevron-collapse': 7,
+      'chevron-down': 7,
+      'chevron-down-circle': 7,
+      'chevron-expand': 7,
+      'chevron-forward': 7,
+      'chevron-forward-circle': 7,
+      'chevron-up': 7,
+      'chevron-up-circle': 7,
+      'clipboard': 7,
+      'close': 7,
+      'close-circle': 7,
+      'cloud': 7,
+      'cloud-circle': 7,
+      'cloud-done': 7,
+      'cloud-download': 7,
+      'cloud-offline': 7,
+      'cloud-upload': 7,
+      'cloudy': 7,
+      'cloudy-night': 7,
+      'code': 7,
+      'code-download': 7,
+      'code-slash': 7,
+      'code-working': 7,
+      'cog': 7,
+      'color-fill': 7,
+      'color-filter': 7,
+      'color-palette': 7,
+      'color-wand': 7,
+      'compass': 7,
+      'construct': 7,
+      'contract': 7,
+      'contrast': 7,
+      'copy': 7,
+      'create': 7,
+      'crop': 7,
+      'cube': 7,
+      'cut': 7,
+      'desktop': 7,
+      'diamond': 7,
+      'dice': 7,
+      'disc': 7,
+      'document': 7,
+      'document-attach': 7,
+      'document-lock': 7,
+      'document-text': 7,
+      'documents': 7,
+      'download': 7,
+      'duplicate': 7,
+      'ear': 7,
+      'earth': 7,
+      'easel': 7,
+      'egg': 7,
+      'ellipse': 7,
+      'ellipsis-horizontal': 7,
+      'ellipsis-horizontal-circle': 7,
+      'ellipsis-vertical': 7,
+      'ellipsis-vertical-circle': 7,
+      'enter': 7,
+      'exit': 7,
+      'expand': 7,
+      'extension-puzzle': 7,
+      'eye': 7,
+      'eye-off': 7,
+      'eyedrop': 7,
+      'fast-food': 7,
+      'female': 7,
+      'file-tray': 7,
+      'file-tray-full': 7,
+      'file-tray-stacked': 7,
+      'film': 7,
+      'filter': 7,
+      'filter-circle': 7,
+      'finger-print': 7,
+      'fish': 7,
+      'fitness': 7,
+      'flag': 7,
+      'flame': 7,
+      'flash': 7,
+      'flash-off': 7,
+      'flashlight': 7,
+      'flask': 7,
+      'flower': 7,
+      'folder': 7,
+      'folder-open': 7,
+      'football': 7,
+      'footsteps': 7,
+      'funnel': 7,
+      'game-controller': 7,
+      'gift': 7,
+      'git-branch': 7,
+      'git-commit': 7,
+      'git-compare': 7,
+      'git-merge': 7,
+      'git-network': 7,
+      'git-pull-request': 7,
+      'glasses': 7,
+      'globe': 7,
+      'golf': 7,
+      'grid': 7,
+      'hammer': 7,
+      'hand-left': 7,
+      'hand-right': 7,
+      'happy': 7,
+      'hardware-chip': 7,
+      'headset': 7,
+      'heart': 7,
+      'heart-circle': 7,
+      'heart-dislike': 7,
+      'heart-dislike-circle': 7,
+      'heart-half': 7,
+      'help': 7,
+      'help-buoy': 7,
+      'help-circle': 7,
+      'home': 7,
+      'hourglass': 7,
+      'ice-cream': 7,
+      'id-card': 7,
+      'image': 7,
+      'images': 7,
+      'infinite': 7,
+      'information': 7,
+      'information-circle': 7,
+      'invert-mode': 7,
+      'journal': 7,
+      'key': 7,
+      'keypad': 7,
+      'language': 7,
+      'laptop': 7,
+      'layers': 7,
+      'leaf': 7,
+      'library': 7,
+      'link': 7,
+      'list': 7,
+      'list-circle': 7,
+      'locate': 7,
+      'location': 7,
+      'lock-closed': 7,
+      'lock-open': 7,
+      'log-in': 7,
+      'log-out': 7,
+      'logo-alipay': 1,
+      'logo-amazon': 1,
+      'logo-amplify': 1,
+      'logo-android': 1,
+      'logo-angular': 1,
+      'logo-apple': 1,
+      'logo-apple-appstore': 1,
+      'logo-apple-ar': 1,
+      'logo-behance': 1,
+      'logo-bitbucket': 1,
+      'logo-bitcoin': 1,
+      'logo-buffer': 1,
+      'logo-capacitor': 1,
+      'logo-chrome': 1,
+      'logo-closed-captioning': 1,
+      'logo-codepen': 1,
+      'logo-css3': 1,
+      'logo-designernews': 1,
+      'logo-deviantart': 1,
+      'logo-discord': 1,
+      'logo-docker': 1,
+      'logo-dribbble': 1,
+      'logo-dropbox': 1,
+      'logo-edge': 1,
+      'logo-electron': 1,
+      'logo-euro': 1,
+      'logo-facebook': 1,
+      'logo-figma': 1,
+      'logo-firebase': 1,
+      'logo-firefox': 1,
+      'logo-flickr': 1,
+      'logo-foursquare': 1,
+      'logo-github': 1,
+      'logo-gitlab': 1,
+      'logo-google': 1,
+      'logo-google-playstore': 1,
+      'logo-hackernews': 1,
+      'logo-html5': 1,
+      'logo-instagram': 1,
+      'logo-ionic': 1,
+      'logo-ionitron': 1,
+      'logo-javascript': 1,
+      'logo-laravel': 1,
+      'logo-linkedin': 1,
+      'logo-markdown': 1,
+      'logo-mastodon': 1,
+      'logo-medium': 1,
+      'logo-microsoft': 1,
+      'logo-no-smoking': 1,
+      'logo-nodejs': 1,
+      'logo-npm': 1,
+      'logo-octocat': 1,
+      'logo-paypal': 1,
+      'logo-pinterest': 1,
+      'logo-playstation': 1,
+      'logo-pwa': 1,
+      'logo-python': 1,
+      'logo-react': 1,
+      'logo-reddit': 1,
+      'logo-rss': 1,
+      'logo-sass': 1,
+      'logo-skype': 1,
+      'logo-slack': 1,
+      'logo-snapchat': 1,
+      'logo-soundcloud': 1,
+      'logo-stackoverflow': 1,
+      'logo-steam': 1,
+      'logo-stencil': 1,
+      'logo-tableau': 1,
+      'logo-tiktok': 1,
+      'logo-tumblr': 1,
+      'logo-tux': 1,
+      'logo-twitch': 1,
+      'logo-twitter': 1,
+      'logo-usd': 1,
+      'logo-venmo': 1,
+      'logo-vercel': 1,
+      'logo-vimeo': 1,
+      'logo-vk': 1,
+      'logo-vue': 1,
+      'logo-web-component': 1,
+      'logo-wechat': 1,
+      'logo-whatsapp': 1,
+      'logo-windows': 1,
+      'logo-wordpress': 1,
+      'logo-xbox': 1,
+      'logo-xing': 1,
+      'logo-yahoo': 1,
+      'logo-yen': 1,
+      'logo-youtube': 1,
+      'magnet': 7,
+      'mail': 7,
+      'mail-open': 7,
+      'mail-unread': 7,
+      'male': 7,
+      'male-female': 7,
+      'man': 7,
+      'map': 7,
+      'medal': 7,
+      'medical': 7,
+      'medkit': 7,
+      'megaphone': 7,
+      'menu': 7,
+      'mic': 7,
+      'mic-circle': 7,
+      'mic-off': 7,
+      'mic-off-circle': 7,
+      'moon': 7,
+      'move': 7,
+      'musical-note': 7,
+      'musical-notes': 7,
+      'navigate': 7,
+      'navigate-circle': 7,
+      'newspaper': 7,
+      'notifications': 7,
+      'notifications-circle': 7,
+      'notifications-off': 7,
+      'notifications-off-circle': 7,
+      'nuclear': 7,
+      'nutrition': 7,
+      'open': 7,
+      'options': 7,
+      'paper-plane': 7,
+      'partly-sunny': 7,
+      'pause': 7,
+      'pause-circle': 7,
+      'paw': 7,
+      'pencil': 7,
+      'people': 7,
+      'people-circle': 7,
+      'person': 7,
+      'person-add': 7,
+      'person-circle': 7,
+      'person-remove': 7,
+      'phone-landscape': 7,
+      'phone-portrait': 7,
+      'pie-chart': 7,
+      'pin': 7,
+      'pint': 7,
+      'pizza': 7,
+      'planet': 7,
+      'play': 7,
+      'play-back': 7,
+      'play-back-circle': 7,
+      'play-circle': 7,
+      'play-forward': 7,
+      'play-forward-circle': 7,
+      'play-skip-back': 7,
+      'play-skip-back-circle': 7,
+      'play-skip-forward': 7,
+      'play-skip-forward-circle': 7,
+      'podium': 7,
+      'power': 7,
+      'pricetag': 7,
+      'pricetags': 7,
+      'print': 7,
+      'prism': 7,
+      'pulse': 7,
+      'push': 7,
+      'qr-code': 7,
+      'radio': 7,
+      'radio-button-off': 7,
+      'radio-button-on': 7,
+      'rainy': 7,
+      'reader': 7,
+      'receipt': 7,
+      'recording': 7,
+      'refresh': 7,
+      'refresh-circle': 7,
+      'reload': 7,
+      'reload-circle': 7,
+      'remove': 7,
+      'remove-circle': 7,
+      'reorder-four': 7,
+      'reorder-three': 7,
+      'reorder-two': 7,
+      'repeat': 7,
+      'resize': 7,
+      'restaurant': 7,
+      'return-down-back': 7,
+      'return-down-forward': 7,
+      'return-up-back': 7,
+      'return-up-forward': 7,
+      'ribbon': 7,
+      'rocket': 7,
+      'rose': 7,
+      'sad': 7,
+      'save': 7,
+      'scale': 7,
+      'scan': 7,
+      'scan-circle': 7,
+      'school': 7,
+      'search': 7,
+      'search-circle': 7,
+      'send': 7,
+      'server': 7,
+      'settings': 7,
+      'shapes': 7,
+      'share': 7,
+      'share-social': 7,
+      'shield': 7,
+      'shield-checkmark': 7,
+      'shield-half': 7,
+      'shirt': 7,
+      'shuffle': 7,
+      'skull': 7,
+      'snow': 7,
+      'sparkles': 7,
+      'speedometer': 7,
+      'square': 7,
+      'star': 7,
+      'star-half': 7,
+      'stats-chart': 7,
+      'stop': 7,
+      'stop-circle': 7,
+      'stopwatch': 7,
+      'storefront': 7,
+      'subway': 7,
+      'sunny': 7,
+      'swap-horizontal': 7,
+      'swap-vertical': 7,
+      'sync': 7,
+      'sync-circle': 7,
+      'tablet-landscape': 7,
+      'tablet-portrait': 7,
+      'telescope': 7,
+      'tennisball': 7,
+      'terminal': 7,
+      'text': 7,
+      'thermometer': 7,
+      'thumbs-down': 7,
+      'thumbs-up': 7,
+      'thunderstorm': 7,
+      'ticket': 7,
+      'time': 7,
+      'timer': 7,
+      'today': 7,
+      'toggle': 7,
+      'trail-sign': 7,
+      'train': 7,
+      'transgender': 7,
+      'trash': 7,
+      'trash-bin': 7,
+      'trending-down': 7,
+      'trending-up': 7,
+      'triangle': 7,
+      'trophy': 7,
+      'tv': 7,
+      'umbrella': 7,
+      'unlink': 7,
+      'videocam': 7,
+      'videocam-off': 7,
+      'volume-high': 7,
+      'volume-low': 7,
+      'volume-medium': 7,
+      'volume-mute': 7,
+      'volume-off': 7,
+      'walk': 7,
+      'wallet': 7,
+      'warning': 7,
+      'watch': 7,
+      'water': 7,
+      'wifi': 7,
+      'wine': 7,
+      'woman': 7,
+    },
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/**
+ * Ionicons 7.1.0 variant metadata (filled / outline / sharp) from cheatsheet-derived registry.
+ * Use {@link ToolskinIonIcons.resolveIonIconName} for `<ion-icon name>` and SVG filenames.
+ */
+const ToolskinIonIcons = {
+  FILLED: 1,
+  OUTLINE: 2,
+  SHARP: 4,
+  registry() {
+    return typeof window !== 'undefined' ? window.TOOLSKIN_IONICONS_710 : null;
+  },
+  flags(base) {
+    const r = this.registry();
+    if (!r || !r.flags || base == null || base === '') return this.FILLED | this.OUTLINE | this.SHARP;
+    const v = r.flags[base];
+    return typeof v === 'number' ? v : 0;
+  },
+  hasFilled(base) {
+    return (this.flags(base) & this.FILLED) !== 0;
+  },
+  hasOutline(base) {
+    return (this.flags(base) & this.OUTLINE) !== 0;
+  },
+  hasSharp(base) {
+    return (this.flags(base) & this.SHARP) !== 0;
+  },
+  listBases() {
+    const r = this.registry();
+    return r && r.flags ? Object.keys(r.flags).sort() : [];
+  },
+  /**
+   * @param {string} base — icon base name (no -outline / -sharp)
+   * @param {{ outline?: boolean, sharp?: boolean }} opts — sharp wins over outline
+   * @returns {string} name for ion-icon / SVG stem (filled fallback when variant missing)
+   */
+  resolveIonIconName(base, opts) {
+    const o = opts || {};
+    const sharp = !!o.sharp;
+    const outline = !!o.outline && !sharp;
+    if (!base) return '';
+    if (sharp && this.hasSharp(base)) return `${base}-sharp`;
+    if (outline && this.hasOutline(base)) return `${base}-outline`;
+    return this.hasFilled(base) ? base : '';
+  },
+};
+
+if (typeof window !== 'undefined') window.ToolskinIonIcons = ToolskinIonIcons;
 
 /* ═══════════════════════════════════════════════════════════════════
    RANGE SLIDER MODULE
@@ -3829,6 +3880,11 @@ class ToolskinDynamicNav {
       onLeaveTop: null
     };
     this._boundSchedule = () => this.scheduleUpdate();
+
+      // ─── NEW: enable/disable flag ──────────────────────────────
+    //this.enabled = true; // set to false to disable all scroll effects
+    this.enabled = !window.__ts_no_effects;
+
     this._bind();
   }
 
@@ -3965,23 +4021,52 @@ class ToolskinDynamicNav {
     const temp = Object.create(ToolskinDynamicNav.prototype);
     temp._formatMenuItem(linkEl);
   }
+  
 
-  _bind() {
+  /**
+   * Enable or disable the dynamic nav's scroll behaviours.
+   */
+  setEnabled(val) {
+    this.enabled = !!val;
+    if (!this.enabled) {
+      // If disabling, remove any listeners and clean up
+      if (this._ro) {
+        this._ro.disconnect();
+        this._ro = null;
+      }
+      window.removeEventListener('scroll', this._boundOnScroll);
+    } else {
+      // Re‑attach if needed
+      this._bind();
+    }
+  }
+   _bind() {
+    // ─── Skip entirely if __ts_no_effects ───
+      // ─── Skip if disabled ──────────────────────────────────────
+    if (!this.enabled) return;
+    if (window.__ts_no_effects) {
+      // Still format existing items? That's safe, but we skip observers/listeners.
+      this.allLinks.forEach(link => this._formatMenuItem(link));
+      return;
+    }
+
+
     this._ro = new ResizeObserver(this._boundSchedule);
     this._ro.observe(this.primaryNav);
-
-    window.addEventListener('scroll', this._boundOnScroll, { passive: true });
-
-    // Format all existing menu items on initial bind
+    //window.addEventListener('scroll', this._boundOnScroll, { passive: true });
     this.allLinks.forEach(link => this._formatMenuItem(link));
-
     this.scheduleUpdate();
-    this._onScroll(); // initial state
+    this._onScroll();
   }
   _onScroll() {
-    if (this._scrollTicking) return;
 
+
+      // ─── Skip if disabled ──────────────────────────────────────
+    if (!this.enabled) return;
+
+    if (this._scrollTicking) return;
     this._scrollTicking = true;
+
 
     requestAnimationFrame(() => {
       const y = window.scrollY || window.pageYOffset;
@@ -5217,7 +5302,7 @@ class ToolskinPreloader {
       this.el.setAttribute('aria-hidden', 'true');
       this.el.innerHTML =
         '<div class="ts-preloader__brand">' +
-        '<div class="ts-preloader__logo"><svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>TOOL<em>SKIN</em></div>' +
+        ' <div class="ts-preloader__logo"> <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" > <path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>TOOL<em>SKIN</em> </div>' +
         '<div class="ts-preloader__bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Page load progress">' +
         '<span class="ts-preloader__bar"></span></div>' +
         '<div class="ts-preloader__hint">Initializing design system</div>' +
@@ -5470,6 +5555,21 @@ const Toolskin = {
    * @param {object} userConfig - User configuration object
    */
   init(userConfig = {}) {
+
+         // ── IFrame diff mode: skip all scroll/effects modules ──
+      const params = new URLSearchParams(window.location.search);
+      const noEffects = params.get('__ts_no_effects') === '1';
+      if (noEffects) {
+        // Force disable all effect‑driven configs
+        userConfig.smoothScroll = { ...userConfig.smoothScroll, enabled: false };
+        userConfig.reveal = { ...userConfig.reveal, enabled: false };
+        userConfig.locomotiveScroll = { ...userConfig.locomotiveScroll, enabled: false };
+        userConfig.layout = { ...userConfig.layout, fullpage: false };
+        // Also prevent any GSAP ScrollTrigger from being registered later
+        if (typeof window !== 'undefined') {
+          window.__ts_no_effects = true;
+        }
+      }
     if (this._initialized) this.destroy();
     // Initialize configuration
     this.config = ToolskinConfig.init(userConfig);
@@ -5506,6 +5606,13 @@ const Toolskin = {
 
     // Initialize UI modules
     this._initUIModules();
+
+    // ✅ ADD THIS RIGHT HERE
+    document.querySelectorAll('#ts-panel').forEach(el => {
+      if (!el._tsTabs) {
+        el._tsTabs = new ToolskinTabs(el);
+      }
+    });
 
     // Initialize custom cursor (skipped when cursor.enabled is false)
     this.cursor =
@@ -5556,6 +5663,11 @@ const Toolskin = {
     // ── Subtle scroll-end snap correction ──
     this._initScrollSnap();
 
+    // ── UI Kit auto‑init ──
+
+    if (typeof window.ToolskinUIKit !== 'undefined') {
+      window.ToolskinUIKit.init(document);
+    }
     // Dispatch ready event
     window.dispatchEvent(new CustomEvent('ts:ready', { detail: { config: this.config } }));
     this._initialized = true;
@@ -5631,12 +5743,12 @@ const Toolskin = {
 
   _initUIModules() {
     // Tabs
-    document.querySelectorAll('.ts-tabs').forEach(root => {
+    document.querySelectorAll('.ts-tabs,.ts-panel-tabs').forEach(root => {
       if (root.__tsTabsInstance) return;
       const instance = new ToolskinTabs(root);
       root.__tsTabsInstance = instance;
-      if (!root.querySelector('.ts-tab--active')) {
-        const first = root.querySelector('.ts-tab');
+      if (!root.querySelector('.ts-tab--active, .ts-ptab.active')) {
+        const first = root.querySelector('.ts-tab,.ts-ptab');
         if (first) instance.activate(first);
       }
       this.tabs.push(instance);
@@ -5800,6 +5912,9 @@ const Toolskin = {
     if (window.ToolskinUIKit && typeof ToolskinUIKit.init === 'function') {
       ToolskinUIKit.init(document);
     }
+    if (typeof window.ToolskinUIKit !== 'undefined') {
+      window.ToolskinUIKit.init(document);
+    }
     ToolskinDynamicNav.init(document);
     this._initMarquees();
     ToolskinSlider.initAll(document);
@@ -5896,17 +6011,1319 @@ if (typeof module !== 'undefined' && module.exports) {
 
 if (typeof window !== 'undefined') {
   window.Toolskin = Toolskin;
+  Toolskin.UiKit = window.ToolskinUIKit;
   window.ToolskinTooltip = ToolskinTooltip;
   window.ToolskinIcons = ToolskinIcons;
   window.TOOLSKIN_SURFACE_PRESETS = TOOLSKIN_SURFACE_PRESETS;
 }
 
+/*!
+ * Toolskin UI Kit — vanilla JS components (no jQuery).
+ * Namespace: window.ToolskinUIKit
+ * Prefix: ts-ui-* (CSS), data-ts-ui-* (attributes)
+ * Aliases: .ts-accordion ↔ .ts-ui-accordion; data-ts-accordion-* ↔ data-ts-ui-accordion-* (mirrored in JS)
+ * Safe to inject alongside Toolskin core; does not modify native prototypes.
+ */
+(function (global) {
+  'use strict';
+
+  /** Firefox only: Mozilla scrollbar props disable ::-webkit-scrollbar in Chromium if applied to the same element */
+  try {
+    var _ua = typeof navigator !== 'undefined' && navigator.userAgent ? navigator.userAgent : '';
+    if (/Firefox\//i.test(_ua) || /\bFxiOS\b/i.test(_ua)) {
+      document.documentElement.classList.add('ts-env-moz');
+    }
+  } catch (e) {}
+
+  function sanitize(s) {
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+  }
+
+  /** One capture-phase outside click + Escape for all selects (avoids per-instance bubble listeners broken by trigger stopPropagation). */
+  let _tsUiSelectGlobalBound = false;
+  function TSUISelectBindGlobalHandlers() {
+    if (_tsUiSelectGlobalBound) return;
+    _tsUiSelectGlobalBound = true;
+    document.addEventListener(
+      'click',
+      function (e) {
+        document.querySelectorAll('.ts-ui-select--open').forEach(function (w) {
+          if (!w.contains(e.target) && typeof w.__tsUiSelectClose === 'function') {
+            w.__tsUiSelectClose();
+          }
+        });
+      },
+      true
+    );
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      document.querySelectorAll('.ts-ui-select--open').forEach(function (w) {
+        if (typeof w.__tsUiSelectClose === 'function') {
+          w.__tsUiSelectClose();
+          if (w.__tsUiSelectTrigger && typeof w.__tsUiSelectTrigger.focus === 'function') {
+            w.__tsUiSelectTrigger.focus();
+          }
+        }
+      });
+    });
+  }
+
+  function accordionIconHtml(ic) {
+    if (!ic) return '';
+    if (ic.indexOf('<') === 0) return ic;
+    return '<i class="' + sanitize(ic) + '" aria-hidden="true"></i>';
+  }
+
+  /** Normalize optional alias class/attrs on accordion root */
+  function TSUIAccordionNormalizeRoot(root) {
+    if (!root || root.nodeType !== 1) return root;
+    if (root.classList.contains('ts-accordion') && !root.classList.contains('ts-ui-accordion')) {
+      root.classList.add('ts-ui-accordion');
+    }
+    if (root.hasAttribute('data-ts-accordion-multiple') && !root.hasAttribute('data-ts-ui-accordion-multiple')) {
+      root.setAttribute('data-ts-ui-accordion-multiple', root.getAttribute('data-ts-accordion-multiple') || '');
+    }
+    if (root.getAttribute('data-ts-accordion-layout') === 'separated' && !root.classList.contains('ts-ui-accordion--separated')) {
+      root.classList.add('ts-ui-accordion--separated');
+    }
+    if (root.getAttribute('data-ts-accordion-toggle') === 'plus' && !root.classList.contains('ts-ui-accordion--toggle-plus')) {
+      root.classList.add('ts-ui-accordion--toggle-plus');
+    }
+    if (
+      root.classList.contains('ts-ui-accordion--dual-icon') ||
+      root.hasAttribute('data-ts-ui-accordion-dual-icon') ||
+      root.getAttribute('data-ts-ui-accordion-dual-icon') === 'true' ||
+      root.hasAttribute('data-ts-accordion-dual-icon') ||
+      root.getAttribute('data-ts-accordion-dual-icon') === 'true'
+    ) {
+      root.classList.add('ts-ui-accordion--dual-icon');
+    }
+    root.querySelectorAll('.ts-accordion__item').forEach((el) => {
+      if (!el.classList.contains('ts-ui-accordion__item')) el.classList.add('ts-ui-accordion__item');
+    });
+    root.querySelectorAll('.ts-accordion__header').forEach((el) => {
+      if (!el.classList.contains('ts-ui-accordion__header')) el.classList.add('ts-ui-accordion__header');
+    });
+    root.querySelectorAll('.ts-accordion__panel').forEach((el) => {
+      if (!el.classList.contains('ts-ui-accordion__panel')) el.classList.add('ts-ui-accordion__panel');
+    });
+    root.querySelectorAll('.ts-accordion__label').forEach((el) => {
+      if (!el.classList.contains('ts-ui-accordion__label')) el.classList.add('ts-ui-accordion__label');
+    });
+    return root;
+  }
+
+  function TSUIAccordionEnhanceHeader(root, btn) {
+    const item = btn.closest('.ts-ui-accordion__item');
+    const dual = root.classList.contains('ts-ui-accordion--dual-icon');
+    const togglePlus = root.classList.contains('ts-ui-accordion--toggle-plus');
+
+    // ✅ PREVENT double enhancement
+    if (btn.hasAttribute('data-ts-accordion-enhanced')) return;
+    btn.setAttribute('data-ts-accordion-enhanced', 'true');
+
+    // ✅ PRESERVE original label content before manipulation
+    const existingLabel = btn.querySelector('.ts-ui-accordion__label');
+    let labelText = '';
+    if (existingLabel) {
+      labelText = existingLabel.textContent.trim();
+      // Remove existing label to prevent duplication
+      existingLabel.remove();
+    } else {
+      // Extract text from button, excluding any existing icons
+      labelText = Array.from(btn.childNodes)
+        .filter(n => n.nodeType === Node.TEXT_NODE)
+        .map(n => n.textContent.trim())
+        .join(' ') || btn.textContent.trim();
+    }
+
+    // ✅ CREATE or get header-main container
+    let main = btn.querySelector('.ts-ui-accordion__header-main');
+    if (!main) {
+      main = document.createElement('span');
+      main.className = 'ts-ui-accordion__header-main';
+
+      // Clear existing content except indicators
+      const indicator = btn.querySelector('.ts-ui-accordion__indicator');
+      btn.innerHTML = '';
+      btn.appendChild(main);
+      if (indicator) btn.appendChild(indicator);
+    }
+
+    // ✅ ADD icon if specified (only if not already present)
+    const ic = btn.getAttribute('data-icon');
+    if (ic && !main.querySelector('.ts-ui-accordion__icon')) {
+      const iconWrap = document.createElement('span');
+      iconWrap.className = 'ts-ui-accordion__icon';
+      iconWrap.setAttribute('aria-hidden', 'true');
+      iconWrap.innerHTML = accordionIconHtml(ic);
+      main.appendChild(iconWrap);
+    }
+
+    // ✅ ADD label with preserved text (only if not already present)
+    if (labelText && !main.querySelector('.ts-ui-accordion__label')) {
+      const label = document.createElement('span');
+      label.className = 'ts-ui-accordion__label';
+      label.textContent = labelText;
+      main.appendChild(label);
+    }
+
+    if (togglePlus && !btn.querySelector('.ts-ui-accordion__indicator')) {
+      const ind = document.createElement('span');
+      ind.className = 'ts-ui-accordion__indicator';
+      ind.setAttribute('aria-hidden', 'true');
+      btn.appendChild(ind);
+    }
+
+    if (dual) {
+      const catIc =
+        (item && item.getAttribute('data-ts-ui-accordion-category-icon')) ||
+        (item && item.getAttribute('data-ts-accordion-category-icon')) ||
+        root.getAttribute('data-ts-ui-accordion-category-icon') ||
+        root.getAttribute('data-ts-accordion-category-icon');
+      if (catIc && !btn.querySelector('.ts-ui-accordion__category-icon')) {
+        const catWrap = document.createElement('span');
+        catWrap.className = 'ts-ui-accordion__category-icon ts-accordion__category-icon';
+        catWrap.setAttribute('aria-hidden', 'true');
+        catWrap.innerHTML = accordionIconHtml(catIc);
+        /* ✅ REMOVED: separator creation - using border instead */
+        btn.insertBefore(catWrap, main);
+      }
+    }
+  }
+
+  /* ── Accordion ─────────────────────────────────────────────────── */
+  function TSUIAccordion(root) {
+    if (!root || root.__tsUiAccordion) return;
+    TSUIAccordionNormalizeRoot(root);
+    root.__tsUiAccordion = true;
+    const multi =
+      root.hasAttribute('data-ts-ui-accordion-multiple') || root.hasAttribute('data-ts-accordion-multiple');
+    const items = root.querySelectorAll('.ts-ui-accordion__item');
+
+    items.forEach((item) => {
+      const btn = item.querySelector('.ts-ui-accordion__header');
+      const panel = item.querySelector('.ts-ui-accordion__panel');
+      if (!btn || !panel) return;
+
+      TSUIAccordionEnhanceHeader(root, btn);
+
+      const open = () => {
+        if (!multi) {
+          items.forEach((other) => {
+            if (other === item) return;
+            const p = other.querySelector('.ts-ui-accordion__panel');
+            const b = other.querySelector('.ts-ui-accordion__header');
+            if (p) {
+              p.hidden = true;
+              p.classList.remove('ts-ui-accordion__panel--open');
+            }
+            if (b) {
+              b.setAttribute('aria-expanded', 'false');
+              b.classList.remove('ts-ui-accordion__header--active');
+            }
+          });
+        }
+        panel.hidden = false;
+        panel.classList.add('ts-ui-accordion__panel--open');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.classList.add('ts-ui-accordion__header--active');
+        root.dispatchEvent(
+          new CustomEvent('ts-ui:accordion-open', { bubbles: true, detail: { item } })
+        );
+      };
+
+      const close = () => {
+        panel.hidden = true;
+        panel.classList.remove('ts-ui-accordion__panel--open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.classList.remove('ts-ui-accordion__header--active');
+      };
+
+      btn.addEventListener('click', () => {
+        if (panel.hidden) open();
+        else close();
+      });
+
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+  }
+
+  /**
+   * Build accordion DOM from a schema object, then wire TSUIAccordion.
+   * @param {HTMLElement} container Parent to append to (or null to create a detached div)
+   * @param {{ multiple?: boolean, layout?: 'default'|'separated', toggle?: 'chevron'|'plus', dualIcon?: boolean, categoryIcon?: string, items: Array<{ title: string, html?: string, icon?: string, categoryIcon?: string, open?: boolean }> }} schema
+   */
+  function TSUIAccordionFromSchema(container, schema) {
+    schema = schema || {};
+    const root = document.createElement('div');
+    root.className = 'ts-ui-accordion';
+    if (schema.multiple) root.setAttribute('data-ts-ui-accordion-multiple', '');
+    if (schema.layout === 'separated') root.classList.add('ts-ui-accordion--separated');
+    if (schema.toggle === 'plus') root.classList.add('ts-ui-accordion--toggle-plus');
+    if (schema.dualIcon) root.classList.add('ts-ui-accordion--dual-icon');
+    if (schema.categoryIcon) root.setAttribute('data-ts-ui-accordion-category-icon', schema.categoryIcon);
+
+    (schema.items || []).forEach((it, idx) => {
+      const item = document.createElement('div');
+      item.className = 'ts-ui-accordion__item';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ts-ui-accordion__header';
+      btn.setAttribute('aria-expanded', it.open ? 'true' : 'false');
+      if (it.open) btn.classList.add('ts-ui-accordion__header--active');
+      if (it.icon) btn.setAttribute('data-icon', it.icon);
+      if (it.categoryIcon) item.setAttribute('data-ts-ui-accordion-category-icon', it.categoryIcon);
+      const main = document.createElement('span');
+      main.className = 'ts-ui-accordion__header-main';
+      const label = document.createElement('span');
+      label.className = 'ts-ui-accordion__label';
+      label.textContent = it.title != null ? String(it.title) : 'Section ' + (idx + 1);
+      main.appendChild(label);
+      btn.appendChild(main);
+      if (schema.toggle === 'plus') {
+        const ind = document.createElement('span');
+        ind.className = 'ts-ui-accordion__indicator';
+        ind.setAttribute('aria-hidden', 'true');
+        btn.appendChild(ind);
+      }
+      const panel = document.createElement('div');
+      panel.className = 'ts-ui-accordion__panel';
+      if (it.html != null) {
+        const wrap = document.createElement('div');
+        wrap.innerHTML = String(it.html);
+        while (wrap.firstChild) panel.appendChild(wrap.firstChild);
+      }
+      if (!it.open) panel.hidden = true;
+      else panel.classList.add('ts-ui-accordion__panel--open');
+      item.appendChild(btn);
+      item.appendChild(panel);
+      root.appendChild(item);
+    });
+
+    if (container) container.appendChild(root);
+    TSUIAccordion(root);
+    return root;
+  }
+
+    /* ── Accordion Card (ts-card-header.ts-accordion) ────────────── */
+  /*function TSUIAccordionCard(root) {
+    var scope = root || document;
+    // Attach click handlers to all headers
+    scope.querySelectorAll('.ts-card-header.ts-accordion').forEach(function (hdr) {
+      if (hdr.dataset.tsAccordionCardBound) return;
+      hdr.dataset.tsAccordionCardBound = 'true';
+      hdr.addEventListener('click', function (e) {
+        // Toggle this header
+        this.classList.toggle('open');
+        // Exclusive mode: if the closest .ts-tab-pane has data-ts-accordion-exclusive != "false"
+        var pane = this.closest('.ts-tab-pane');
+        var exclusive = pane ? pane.getAttribute('data-ts-accordion-exclusive') !== 'false' : true;
+        if (exclusive) {
+          var card = this.closest('.ts-card');
+          if (!card) return;
+          // Close all other cards in the same pane (or document if no pane)
+          var container = pane || document;
+          container.querySelectorAll('.ts-card').forEach(function (other) {
+            if (other === card) return;
+            var otherHeader = other.querySelector('.ts-card-header.ts-accordion');
+            if (otherHeader) otherHeader.classList.remove('open');
+          });
+        }
+      });
+    });
+    // Ensure at least one header is open per pane (open the first if none open)
+    scope.querySelectorAll('.ts-tab-pane').forEach(function (pane) {
+      var hasOpen = pane.querySelector('.ts-card-header.ts-accordion.open');
+      if (!hasOpen) {
+        var first = pane.querySelector('.ts-card-header.ts-accordion');
+        if (first) first.classList.add('open');
+      }
+    });
+  }*/
+  /* ── Card Accordion (ts-card-header.ts-accordion) ─────────────── */
+function TSUIAccordionCard(root) {
+  var scope = root || document;
+
+  // Global default: true = exclusive (single open); false = multiple
+  var DEFAULT_EXCLUSIVE = true; // change to false to allow multiple by default
+
+  scope.querySelectorAll('.ts-card-header.ts-accordion').forEach(function (hdr) {
+    if (hdr.dataset.tsAccordionCardBound) return;
+    hdr.dataset.tsAccordionCardBound = 'true';
+
+    hdr.addEventListener('click', function (e) {
+      // Toggle this header
+      this.classList.toggle('open');
+
+      // Determine exclusive mode for this pane
+      var pane = this.closest('.ts-tab-pane');
+      var modeAttr = pane ? pane.getAttribute('data-ts-accordion-mode') : null;
+      var exclusive;
+      if (modeAttr === 'multiple') exclusive = false;
+      else if (modeAttr === 'single') exclusive = true;
+      else exclusive = DEFAULT_EXCLUSIVE; // fallback to global
+
+      if (exclusive) {
+        var card = this.closest('.ts-card');
+        if (!card) return;
+        var container = pane || document;
+        container.querySelectorAll('.ts-card').forEach(function (other) {
+          if (other === card) return;
+          var otherHeader = other.querySelector('.ts-card-header.ts-accordion');
+          if (otherHeader) otherHeader.classList.remove('open');
+        });
+      }
+    });
+  });
+
+  // Open first header in each pane if none open (only if exclusive mode)
+  scope.querySelectorAll('.ts-tab-pane').forEach(function (pane) {
+    var modeAttr = pane.getAttribute('data-ts-accordion-mode');
+    var exclusive = (modeAttr === 'single') || (modeAttr !== 'multiple' && DEFAULT_EXCLUSIVE);
+    if (!exclusive) return; // multiple mode: don't force open
+    var hasOpen = pane.querySelector('.ts-card-header.ts-accordion.open');
+    if (!hasOpen) {
+      var first = pane.querySelector('.ts-card-header.ts-accordion');
+      if (first) first.classList.add('open');
+    }
+  });
+}
+
+    /* ── Global MutationObserver for dynamic components ───────────── */
+  var _tsUiGlobalObserver = null;
+  var _tsUiGlobalObserverDebounce = null;
+
+  function TSUIEnsureGlobalObserver() {
+    if (_tsUiGlobalObserver) return;
+    _tsUiGlobalObserver = new MutationObserver(function () {
+      // Debounce to avoid excessive calls
+      if (_tsUiGlobalObserverDebounce) return;
+      _tsUiGlobalObserverDebounce = requestAnimationFrame(function () {
+        _tsUiGlobalObserverDebounce = null;
+        // Re‑initialize all components on the whole document (idempotent)
+        init(document);
+      });
+    });
+    _tsUiGlobalObserver.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+  }
+  /* ── Custom select (native <select> enhancement) ───────────────── */
+  function TSUISelect(wrap) {
+    if (!wrap || wrap.__tsUiSelect) return;
+    const native = wrap.querySelector('select.ts-ui-select__native, select');
+    if (!native) return;
+    wrap.__tsUiSelect = true;
+    TSUISelectBindGlobalHandlers();
+
+    const searchEnabled = wrap.getAttribute('data-ts-ui-select-search') !== 'false';
+
+    native.classList.add('ts-ui-select__native');
+    native.setAttribute('tabindex', '-1');
+    native.setAttribute('aria-hidden', 'true');
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'ts-ui-select__trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+
+    const label = document.createElement('span');
+    label.className = 'ts-ui-select__value';
+    trigger.appendChild(label);
+
+    const chev = document.createElement('span');
+    chev.className = 'ts-ui-select__chevron';
+    chev.setAttribute('aria-hidden', 'true');
+    const chevIc = document.createElement('span');
+    chevIc.className = 'ts-icon';
+    chevIc.setAttribute('data-ts-icon', 'fa-solid fa-chevron-down');
+    chev.appendChild(chevIc);
+    trigger.appendChild(chev);
+
+    const drop = document.createElement('div');
+    drop.className = 'ts-ui-select__dropdown';
+    drop.hidden = true;
+    drop.setAttribute('role', 'listbox');
+
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'ts-ui-select__search';
+    const searchIcon = document.createElement('span');
+    searchIcon.className = 'ts-ui-select__search-icon';
+    searchIcon.setAttribute('aria-hidden', 'true');
+    const searchIc = document.createElement('span');
+    searchIc.className = 'ts-icon';
+    searchIc.setAttribute('data-ts-icon', 'fa-solid fa-magnifying-glass');
+    searchIcon.appendChild(searchIc);
+    const filter = document.createElement('input');
+    filter.type = 'search';
+    filter.className = 'ts-ui-select__filter';
+    filter.placeholder = wrap.getAttribute('data-ts-ui-select-placeholder') || 'Search…';
+    filter.setAttribute('aria-label', 'Filter options');
+    searchWrap.appendChild(searchIcon);
+    searchWrap.appendChild(filter);
+
+    const list = document.createElement('ul');
+    list.className = 'ts-ui-select__list';
+    list.setAttribute('role', 'presentation');
+    if (wrap.hasAttribute('data-ts-ui-scrollbar-moz') && document.documentElement.classList.contains('ts-env-moz')) {
+      list.classList.add('ts-ui-scrollbar--moz');
+      drop.classList.add('ts-ui-scrollbar--moz');
+    }
+
+    if (searchEnabled) {
+      drop.appendChild(searchWrap);
+    } else {
+      searchWrap.hidden = true;
+      wrap.classList.add('ts-ui-select--no-search');
+    }
+    drop.appendChild(list);
+
+    native.insertAdjacentElement('afterend', trigger);
+    trigger.insertAdjacentElement('afterend', drop);
+    if (global.ToolskinIcons && typeof ToolskinIcons.inject === 'function') {
+      ToolskinIcons.inject(wrap);
+    }
+
+    function iconHtml(opt) {
+      const ic = opt.getAttribute('data-icon');
+      if (!ic) return '';
+      if (ic.indexOf('<') === 0) return ic;
+      return '<i class="' + sanitize(ic) + '" aria-hidden="true"></i>';
+    }
+
+    function syncList() {
+      list.innerHTML = '';
+      const q = searchEnabled ? (filter.value || '').toLowerCase() : '';
+      Array.from(native.options).forEach((opt, idx) => {
+        if (opt.disabled) return;
+        const t = (opt.textContent || '').toLowerCase();
+        if (q && t.indexOf(q) === -1) return;
+        const li = document.createElement('li');
+        li.className = 'ts-ui-select__option';
+        li.setAttribute('role', 'option');
+        li.dataset.value = opt.value;
+        li.dataset.index = String(idx);
+        li.innerHTML =
+          '<span class="ts-ui-select__option-inner">' +
+          iconHtml(opt) +
+          '<span class="ts-ui-select__option-text">' +
+          sanitize(opt.textContent) +
+          '</span></span>';
+        if (opt.selected) li.classList.add('ts-ui-select__option--selected');
+        li.addEventListener('click', () => {
+          native.selectedIndex = idx;
+          native.dispatchEvent(new Event('change', { bubbles: true }));
+          updateTrigger();
+          close();
+        });
+        list.appendChild(li);
+      });
+    }
+
+    function updateTrigger() {
+      const opt = native.options[native.selectedIndex];
+      label.innerHTML =
+        iconHtml(opt) + '<span class="ts-ui-select__value-text">' + sanitize(opt.textContent) + '</span>';
+    }
+
+    function closeOthers() {
+      document.querySelectorAll('.ts-ui-select--open').forEach(function (w) {
+        if (w !== wrap && typeof w.__tsUiSelectClose === 'function') {
+          w.__tsUiSelectClose();
+        }
+      });
+    }
+
+    function open() {
+      closeOthers();
+      drop.hidden = false;
+      drop.removeAttribute('hidden');
+      trigger.setAttribute('aria-expanded', 'true');
+      wrap.classList.add('ts-ui-select--open');
+      syncList();
+      if (searchEnabled) {
+        filter.value = '';
+        filter.focus();
+      }
+    }
+
+    function close() {
+      drop.hidden = true;
+      drop.setAttribute('hidden', '');
+      trigger.setAttribute('aria-expanded', 'false');
+      wrap.classList.remove('ts-ui-select--open');
+    }
+
+    wrap.__tsUiSelectClose = close;
+    wrap.__tsUiSelectTrigger = trigger;
+
+    trigger.addEventListener('click', () => {
+      if (drop.hidden) open();
+      else close();
+    });
+
+    if (searchEnabled) {
+      filter.addEventListener('input', syncList);
+    }
+
+    native.addEventListener('change', updateTrigger);
+    updateTrigger();
+    syncList();
+    close();
+  }
+
+  /* ── Spinner (number stepper) ──────────────────────────────────── */
+  function TSUISpinner(el) {
+    if (!el || el.__tsUiSpinner) return;
+    el.__tsUiSpinner = true;
+    const input = el.querySelector('input[type="number"]');
+    const dec = el.querySelector('.ts-ui-spinner__dec');
+    const inc = el.querySelector('.ts-ui-spinner__inc');
+    if (!input) return;
+
+    function stepBy(dir) {
+      if (dir > 0) input.stepUp();
+      else input.stepDown();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    if (dec) dec.addEventListener('click', () => stepBy(-1));
+    if (inc) inc.addEventListener('click', () => stepBy(1));
+  }
+
+  /* ── Draggable (pointer + optional parent bounds) ─────────────── */
+  function getTranslate(el) {
+    const st = el.style.transform;
+    if (st && st.indexOf('translate') === 0) {
+      const m = st.match(/translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/);
+      if (m) return { x: parseFloat(m[1]), y: parseFloat(m[2]) };
+    }
+    return { x: 0, y: 0 };
+  }
+
+  function clampElInsideParent(el, parent, pad) {
+    if (!parent) return;
+    const pr = parent.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const p = pad || 0;
+    let dx = 0;
+    let dy = 0;
+    if (er.left < pr.left + p) dx = pr.left + p - er.left;
+    if (er.top < pr.top + p) dy = pr.top + p - er.top;
+    if (er.right > pr.right - p) dx = pr.right - p - er.right;
+    if (er.bottom > pr.bottom - p) dy = pr.bottom - p - er.bottom;
+    if (dx === 0 && dy === 0) return;
+    const t = getTranslate(el);
+    el.style.transform = 'translate(' + (t.x + dx) + 'px,' + (t.y + dy) + 'px)';
+  }
+
+  /** Simple post-drag separation for sibling .ts-ui-draggable in the same parent. */
+  function nudgeOutOfSiblings(el, parent, pad) {
+    if (!parent) return;
+    const p = pad || 0;
+    const siblings = [...parent.children].filter(
+      (n) => n !== el && n.classList && n.classList.contains('ts-ui-draggable')
+    );
+    for (let iter = 0; iter < 24; iter++) {
+      let er = el.getBoundingClientRect();
+      let hit = false;
+      for (const sib of siblings) {
+        const sr = sib.getBoundingClientRect();
+        if (er.right <= sr.left + p || er.left >= sr.right - p || er.bottom <= sr.top + p || er.top >= sr.bottom - p) {
+          continue;
+        }
+        hit = true;
+        const t = getTranslate(el);
+        const cx = (Math.min(er.right, sr.right) + Math.max(er.left, sr.left)) / 2;
+        const sx = (sr.left + sr.right) / 2;
+        const dx = cx < sx ? -Math.min(12, er.right - sr.left + p) : Math.min(12, sr.right - er.left + p);
+        const cy = (Math.min(er.bottom, sr.bottom) + Math.max(er.top, sr.top)) / 2;
+        const sy = (sr.top + sr.bottom) / 2;
+        const dy = cy < sy ? -Math.min(12, er.bottom - sr.top + p) : Math.min(12, sr.bottom - er.top + p);
+        el.style.transform = 'translate(' + (t.x + dx) + 'px,' + (t.y + dy) + 'px)';
+        clampElInsideParent(el, parent, pad);
+        break;
+      }
+      if (!hit) break;
+    }
+  }
+
+  function TSUIDraggable(el, opts) {
+    opts = opts || {};
+    if (!el || el.__tsUiDraggable) return;
+    el.__tsUiDraggable = true;
+    const handle = opts.handle ? el.querySelector(opts.handle) : el;
+    if (!handle) return;
+
+    const boundsMode = el.getAttribute('data-ts-ui-draggable-bounds');
+    const pad = parseFloat(el.getAttribute('data-ts-ui-draggable-padding') || '6') || 0;
+    const parent = boundsMode === 'parent' ? el.parentElement : null;
+
+    let pid = null;
+    let sx = 0;
+    let sy = 0;
+    let ox = 0;
+    let oy = 0;
+
+    if (!el.style.position) el.style.position = 'relative';
+
+    handle.style.touchAction = 'none';
+    handle.style.cursor = 'grab';
+
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      pid = e.pointerId;
+      handle.setPointerCapture(pid);
+      sx = e.clientX;
+      sy = e.clientY;
+      const p = getTranslate(el);
+      ox = p.x;
+      oy = p.y;
+      handle.style.cursor = 'grabbing';
+      el.classList.add('ts-ui-draggable--dragging');
+
+      function move(ev) {
+        if (ev.pointerId !== pid) return;
+        const dx = ev.clientX - sx;
+        const dy = ev.clientY - sy;
+        el.style.transform = 'translate(' + (ox + dx) + 'px,' + (oy + dy) + 'px)';
+        if (parent) clampElInsideParent(el, parent, pad);
+        const t2 = getTranslate(el);
+        ox = t2.x;
+        oy = t2.y;
+        sx = ev.clientX;
+        sy = ev.clientY;
+      }
+
+      function up(ev) {
+        if (ev.pointerId !== pid) return;
+        try {
+          handle.releasePointerCapture(pid);
+        } catch (_) {}
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        handle.style.cursor = 'grab';
+        el.classList.remove('ts-ui-draggable--dragging');
+        let p2 = getTranslate(el);
+        const overlapMode = el.getAttribute('data-ts-ui-draggable-overlap') || 'allow';
+        if (overlapMode === 'avoid' && parent) {
+          nudgeOutOfSiblings(el, parent, pad);
+          p2 = getTranslate(el);
+        }
+        el.dispatchEvent(
+          new CustomEvent('ts-ui:drag-end', { bubbles: true, detail: { x: p2.x, y: p2.y } })
+        );
+      }
+
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    });
+  }
+
+  /* ── Resizable (corner handle) ─────────────────────────────────── */
+  function TSUIResizable(el) {
+    if (!el || el.__tsUiResizable) return;
+    el.__tsUiResizable = true;
+    const h = el.querySelector('.ts-ui-resizable__handle');
+    if (!h) return;
+
+    let pid = null;
+    let sw = 0;
+    let sh = 0;
+    let sx = 0;
+    let sy = 0;
+
+    h.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      pid = e.pointerId;
+      h.setPointerCapture(pid);
+      const r = el.getBoundingClientRect();
+      sw = r.width;
+      sh = r.height;
+      sx = e.clientX;
+      sy = e.clientY;
+      el.classList.add('ts-ui-resizable--resizing');
+
+      function move(ev) {
+        if (ev.pointerId !== pid) return;
+        const dx = ev.clientX - sx;
+        const dy = ev.clientY - sy;
+        el.style.width = Math.max(120, sw + dx) + 'px';
+        el.style.height = Math.max(80, sh + dy) + 'px';
+      }
+
+      function up(ev) {
+        if (ev.pointerId !== pid) return;
+        h.releasePointerCapture(pid);
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        el.classList.remove('ts-ui-resizable--resizing');
+      }
+
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    });
+  }
+/* ── Sortable list (pointer + ghost + FLIP displacement) ─ */
+function TSUISortable(el) {
+  if (!el || el.__tsUiSortable) return;
+  el.__tsUiSortable = true;
+
+  const handleOnly = el.hasAttribute('data-ts-ui-sort-handle-only');
+  const handleSel  = el.getAttribute('data-ts-ui-sort-handle') || '.ts-ui-sortable__handle';
+  const dragSel    = el.getAttribute('data-ts-ui-sort-drag');
+
+  /* ── FLIP helper ──
+     Snapshots every sibling's Y position before a DOM move,
+     then applies an inverse translateY that the CSS transition
+     animates back to 0 → smooth displacement. */
+  function flipSnapshot(container, exclude) {
+    const map = new Map();
+    for (const child of container.children) {
+      if (child === exclude) continue;
+      map.set(child, child.getBoundingClientRect().top);
+    }
+    return map;
+  }
+
+  function flipAnimate(snapshot, container, exclude) {
+    for (const [child, oldTop] of snapshot) {
+      if (child === exclude || !child.isConnected) continue;
+      const newTop = child.getBoundingClientRect().top;
+      const delta  = oldTop - newTop;
+      if (Math.abs(delta) < 1) continue;
+      // Jump to old position, let CSS transition animate to 0
+      child.style.transform = `translateY(${delta}px)`;
+      // Force reflow so the browser registers the "from" position
+      child.offsetHeight; // eslint-disable-line no-unused-expressions
+      child.style.transform = '';
+    }
+  }
+
+  el.querySelectorAll(':scope > .ts-ui-sortable__item').forEach((item) => {
+    let dragHandle = item;
+    if (dragSel) {
+      dragHandle = item.querySelector(dragSel) || item;
+    } else if (handleOnly) {
+      dragHandle = item.querySelector(handleSel);
+    }
+    if (!dragHandle) return;
+
+    dragHandle.addEventListener('pointerdown', (e) => {
+      if (dragSel && !e.target.closest(dragSel)) return;
+      if (handleOnly && !dragSel && !e.target.closest(handleSel)) return;
+      if (e.button !== 0) return;
+      e.preventDefault();
+
+      const dragItem = item;
+      let pid = e.pointerId;
+      dragHandle.setPointerCapture(pid);
+
+      const rect = dragItem.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+
+      /* ── Sorting mode class: enables displacement transitions via CSS ── */
+      el.classList.add('ts-ui-sortable--sorting');
+
+      /* ── Placeholder ── */
+      const placeholder = document.createElement('div');
+      placeholder.className = 'ts-ui-sortable__placeholder';
+      placeholder.style.height = rect.height + 'px';
+      dragItem.parentNode.insertBefore(placeholder, dragItem);
+
+      /* ── Ghost clone ── */
+      const ghost = dragItem.cloneNode(true);
+      if (ghost.id) ghost.removeAttribute('id');
+      ghost.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+      ghost.classList.add('ts-ui-sortable__ghost');
+      ghost.classList.remove('ts-ui-sortable__item--source');
+      Object.assign(ghost.style, {
+        position: 'fixed',
+        left: rect.left + 'px',
+        top: rect.top + 'px',
+        width: rect.width + 'px',
+        margin: '0',
+        zIndex: '100000',
+        pointerEvents: 'none',
+        boxSizing: 'border-box',
+      });
+      document.body.appendChild(ghost);
+
+      /* ── Collapse source item (CSS handles the visual collapse via --source class) ── */
+      dragItem.classList.add('ts-ui-sortable__item--source');
+
+      /* ── Move placeholder with FLIP animation ── */
+      function movePlaceholder(clientY) {
+        const nodes = [...el.children].filter(
+          (n) =>
+            n !== dragItem &&
+            (n.classList.contains('ts-ui-sortable__item') ||
+             n.classList.contains('ts-ui-sortable__placeholder'))
+        );
+
+        // Find target position
+        let target = null;
+        for (let i = 0; i < nodes.length; i++) {
+          const node = nodes[i];
+          if (node === placeholder) continue;
+          const r   = node.getBoundingClientRect();
+          const mid = r.top + r.height / 2;
+          if (clientY < mid) { target = node; break; }
+        }
+
+        // Skip if placeholder is already in the right spot
+        const currentNext = placeholder.nextElementSibling;
+        if (target === currentNext) return;
+        if (!target && currentNext === null) return;
+
+        // FLIP: snapshot → DOM move → animate
+        const snap = flipSnapshot(el, dragItem);
+
+        if (target) {
+          el.insertBefore(placeholder, target);
+        } else {
+          el.appendChild(placeholder);
+        }
+
+        flipAnimate(snap, el, dragItem);
+      }
+
+      function move(ev) {
+        if (ev.pointerId !== pid) return;
+        ghost.style.left = ev.clientX - offsetX + 'px';
+        ghost.style.top  = ev.clientY - offsetY + 'px';
+        movePlaceholder(ev.clientY);
+      }
+
+      function up(ev) {
+        if (ev.pointerId !== pid) return;
+        try { dragHandle.releasePointerCapture(pid); } catch (_) {}
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+
+        ghost.remove();
+
+        if (placeholder && placeholder.parentNode) {
+          placeholder.parentNode.insertBefore(dragItem, placeholder);
+          placeholder.remove();
+        }
+
+        dragItem.classList.remove('ts-ui-sortable__item--source');
+        el.classList.remove('ts-ui-sortable--sorting');
+
+        // Clean up any lingering transforms from FLIP
+        for (const child of el.children) {
+          child.style.transform = '';
+        }
+
+        el.dispatchEvent(new CustomEvent('ts-ui:sort-end', { bubbles: true }));
+      }
+
+      move(e);
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    });
+  });
+}
+
+  /* ── Table: bulk row selection + floating bar ─────────────────── */
+  function TSUITableBulk(wrap) {
+    if (!wrap || wrap.__tsUiTableBulk) return;
+    const table = wrap.querySelector('table.ts-ui-table--bulk');
+    if (!table) return;
+    wrap.__tsUiTableBulk = true;
+
+    const bar = wrap.querySelector('.ts-ui-bulk-bar');
+    const countEl = bar && bar.querySelector('.ts-ui-bulk-bar__count');
+    const selectAll = table.querySelector('thead .ts-ui-table__select-all');
+
+    function rowCheckboxes() {
+      return table.querySelectorAll('tbody .ts-ui-row-checkbox');
+    }
+
+    function update() {
+      const checks = rowCheckboxes();
+      let n = 0;
+      checks.forEach((c) => {
+        const tr = c.closest('tr');
+        if (!tr) return;
+        if (c.checked) {
+          tr.classList.add('ts-ui-row--selected');
+          n++;
+        } else {
+          tr.classList.remove('ts-ui-row--selected');
+        }
+      });
+      if (bar) {
+        bar.hidden = n === 0;
+        bar.style.display = n === 0 ? 'none' : '';
+      }
+      if (countEl) countEl.textContent = n + ' selected';
+      if (selectAll) {
+        const total = checks.length;
+        selectAll.indeterminate = n > 0 && n < total;
+        selectAll.checked = total > 0 && n === total;
+      }
+    }
+
+    table.addEventListener('change', (e) => {
+      const t = e.target;
+      if (!t || !(t instanceof HTMLInputElement)) return;
+      if (t.classList.contains('ts-ui-table__select-all')) {
+        const on = t.checked;
+        rowCheckboxes().forEach((c) => {
+          c.checked = on;
+        });
+        update();
+        return;
+      }
+      if (t.classList.contains('ts-ui-row-checkbox')) {
+        update();
+      }
+    });
+
+    update();
+  }
+
+  /* ── Enhanced toast (parallel to ToolskinToast, richer styling) ─ */
+  const TSUIToast = {
+    _container: null,
+    getContainer() {
+      if (!this._container) {
+        this._container = document.createElement('div');
+        this._container.className = 'ts-ui-toast-stack';
+        document.body.appendChild(this._container);
+      }
+      return this._container;
+    },
+    show(message, opts) {
+      opts = opts || {};
+      const type = opts.type || 'default';
+      const duration = opts.duration != null ? opts.duration : 4500;
+      const title = opts.title || '';
+      const icons = {
+        success: 'fa-solid fa-circle-check',
+        warning: 'fa-solid fa-triangle-exclamation',
+        error: 'fa-solid fa-circle-xmark',
+        info: 'fa-solid fa-circle-info',
+        default: 'fa-solid fa-bell',
+      };
+      const icon = opts.icon || icons[type] || icons.default;
+
+      const el = document.createElement('div');
+      el.className = 'ts-ui-toast ts-ui-toast--' + type;
+      el.setAttribute('role', 'status');
+      el.innerHTML =
+        '<div class="ts-ui-toast__track"></div>' +
+        '<div class="ts-ui-toast__row">' +
+        '<span class="ts-ui-toast__icon"><i class="' +
+        sanitize(icon) +
+        '"></i></span>' +
+        '<div class="ts-ui-toast__body">' +
+        (title ? '<div class="ts-ui-toast__title">' + sanitize(title) + '</div>' : '') +
+        '<div class="ts-ui-toast__msg">' +
+        sanitize(message) +
+        '</div></div>' +
+        '<button type="button" class="ts-ui-toast__close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button></div>';
+
+      const track = el.querySelector('.ts-ui-toast__track');
+      const close = () => {
+        el.classList.add('ts-ui-toast--out');
+        setTimeout(() => el.remove(), 280);
+      };
+      el.querySelector('.ts-ui-toast__close').addEventListener('click', close);
+      this.getContainer().appendChild(el);
+
+      if (duration > 0 && track) {
+        track.style.transition = 'transform ' + duration + 'ms linear';
+        requestAnimationFrame(() => {
+          track.classList.add('ts-ui-toast__track--animate');
+        });
+        setTimeout(close, duration);
+      }
+      return el;
+    },
+  };
+
+  /* ── Table sort (data-sort-key + data-value, or legacy data-ts-ui-sort) ─ */
+  function TSUITableSort(table) {
+    if (!table || table.__tsUiTableSort) return;
+    table.__tsUiTableSort = true;
+    const thead = table.querySelector('thead');
+    const tbody = table.querySelector('tbody');
+    if (!thead || !tbody) return;
+
+    const keyHeaders = [...thead.querySelectorAll('th[data-sort-key]')];
+    const legacyMode = keyHeaders.length === 0;
+
+    function compareCells(aCell, bCell, reverse) {
+      if (!aCell || !bCell) return 0;
+      const aText =
+        aCell.dataset.value != null && aCell.dataset.value !== '' ? aCell.dataset.value : aCell.textContent.trim();
+      const bText =
+        bCell.dataset.value != null && bCell.dataset.value !== '' ? bCell.dataset.value : bCell.textContent.trim();
+      const aNum = parseFloat(aText);
+      const bNum = parseFloat(bText);
+      let comparison = 0;
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        comparison = aNum - bNum;
+      } else {
+        comparison = String(aText).localeCompare(String(bText), undefined, {
+          sensitivity: 'base',
+          numeric: true,
+        });
+      }
+      return reverse ? -comparison : comparison;
+    }
+
+    if (!legacyMode) {
+      keyHeaders.forEach((th) => {
+        th.style.cursor = 'pointer';
+        th.classList.add('ts-ui-th--sortable');
+        th.addEventListener('click', () => {
+          const columnKey = th.dataset.sortKey;
+          const isReversed =
+            th.classList.contains('ts-ui-th--active') && !th.classList.contains('ts-ui-th--reverse');
+          keyHeaders.forEach((h) => {
+            h.classList.remove('ts-ui-th--active', 'ts-ui-th--reverse');
+            if (h.dataset.sortKey === columnKey) {
+              h.classList.add('ts-ui-th--active');
+              if (isReversed) h.classList.add('ts-ui-th--reverse');
+            }
+          });
+          const columnIndex = [...th.parentNode.children].indexOf(th);
+          if (columnIndex === -1) return;
+          const rows = [...tbody.querySelectorAll('tr')];
+          rows.sort((a, b) => {
+            const aCell = a.children[columnIndex];
+            const bCell = b.children[columnIndex];
+            return compareCells(aCell, bCell, isReversed);
+          });
+          tbody.append(...rows);
+        });
+      });
+      return;
+    }
+
+    const ths = table.querySelectorAll('thead th[data-ts-ui-sort]');
+    ths.forEach((th) => {
+      th.style.cursor = 'pointer';
+      th.classList.add('ts-ui-th--sortable');
+      th.addEventListener('click', () => {
+        const col = parseInt(th.getAttribute('data-ts-ui-sort'), 10) || 0;
+        const asc = th.classList.toggle('ts-ui-th--sort-asc');
+        th.classList.toggle('ts-ui-th--sort-desc', !asc);
+        ths.forEach((h) => {
+          if (h !== th) h.classList.remove('ts-ui-th--sort-asc', 'ts-ui-th--sort-desc');
+        });
+        const rows = [...tbody.querySelectorAll('tr')];
+        rows.sort((a, b) => compareCells(a.cells[col], b.cells[col], !asc));
+        tbody.append(...rows);
+      });
+    });
+  }
+
+
+  /* ── Auto-enhance standalone <input type="number"> (YSS-style chevrons) ─ */
+  function TSUIEnhanceNumberInput(input) {
+    if (!input || !(input instanceof HTMLInputElement) || input.type !== 'number') {
+      return input;
+    }
+    if (input.closest('.ts-ui-spinner') || input.closest('.ts-ui-number-input-wrapper')) {
+      return input.parentElement || input;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ts-ui-number-input-wrapper';
+    if (input.parentNode) input.parentNode.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+
+    const controls = document.createElement('div');
+    controls.className = 'ts-ui-number-input-controls';
+
+    const upBtn = document.createElement('button');
+    upBtn.type = 'button';
+    upBtn.className = 'ts-ui-number-btn';
+    upBtn.setAttribute('aria-label', 'Increment');
+    upBtn.innerHTML = '<i class="fa-solid fa-chevron-up" aria-hidden="true"></i>';
+    upBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      input.stepUp();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    const downBtn = document.createElement('button');
+    downBtn.type = 'button';
+    downBtn.className = 'ts-ui-number-btn';
+    downBtn.setAttribute('aria-label', 'Decrement');
+    downBtn.innerHTML = '<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>';
+    downBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      input.stepDown();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    controls.appendChild(upBtn);
+    controls.appendChild(downBtn);
+    wrapper.appendChild(controls);
+    return wrapper;
+  }
+
+  const _enhancedNumberInputs = new WeakSet();
+  let _numberInputObserver = null;
+
+  function TSUIEnhanceNumberInputsIn(root) {
+    const scope = root || document;
+    scope.querySelectorAll('input[type="number"]:not(.ts-ui-number-input-wrapper input)').forEach((input) => {
+      if (input.closest('.ts-ui-spinner')) return;
+      if (_enhancedNumberInputs.has(input)) return;
+      try {
+        TSUIEnhanceNumberInput(input);
+        _enhancedNumberInputs.add(input);
+      } catch (e) {
+        console.warn('ToolskinUIKit: number input enhance failed', e);
+      }
+    });
+  }
+
+  function TSUIEnsureNumberInputObserver() {
+    if (_numberInputObserver) return;
+    const target = document.body;
+    if (!target) return;
+    _numberInputObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType !== Node.ELEMENT_NODE) return;
+          if (node instanceof HTMLInputElement && node.type === 'number') {
+            if (!node.closest('.ts-ui-spinner') && !_enhancedNumberInputs.has(node)) {
+              try {
+                TSUIEnhanceNumberInput(node);
+                _enhancedNumberInputs.add(node);
+              } catch (_) {}
+            }
+          }
+          if (node.querySelectorAll) {
+            node
+              .querySelectorAll('input[type="number"]:not(.ts-ui-number-input-wrapper input)')
+              .forEach((input) => {
+                if (input.closest('.ts-ui-spinner') || _enhancedNumberInputs.has(input)) return;
+                try {
+                  TSUIEnhanceNumberInput(input);
+                  _enhancedNumberInputs.add(input);
+                } catch (_) {}
+              });
+          }
+        });
+      });
+    });
+    _numberInputObserver.observe(target, { childList: true, subtree: true });
+  }
+
+  /* ── Masonry v2 (CSS columns + reflow) ─────────────────────────── */
+  function TSUIMasonryGrid(el) {
+    if (!el || el.__tsUiMasonry) return;
+    el.__tsUiMasonry = true;
+    if (el.classList.contains('ts-ui-masonry--lanes') || el.classList.contains('ts-ui-masonry--grid')) {
+      return;
+    }
+    const gap = parseInt(getComputedStyle(el).getPropertyValue('--ts-ui-masonry-gap') || '16', 10) || 16;
+
+    function relayout() {
+      const items = el.querySelectorAll('.ts-ui-masonry__item');
+      el.style.columnGap = gap + 'px';
+      items.forEach((node) => {
+        node.style.breakInside = 'avoid';
+        node.style.marginBottom = gap + 'px';
+      });
+    }
+
+    relayout();
+    el.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('load', relayout);
+      if (img.complete) relayout();
+    });
+    new ResizeObserver(relayout).observe(el);
+  }
+
+  /** @deprecated typo alias — use TSUIMasonryGrid */
+  var TSUMasonryGrid = TSUIMasonryGrid;
+
+  /* ── Public API ────────────────────────────────────────────────── */
+  function init(scope) {
+    var root = scope || document;
+
+    // Existing component initialisations
+    root.querySelectorAll('.ts-ui-accordion, .ts-accordion').forEach(TSUIAccordion);
+    root.querySelectorAll('.ts-ui-select').forEach(TSUISelect);
+    root.querySelectorAll('.ts-ui-spinner').forEach(TSUISpinner);
+    root.querySelectorAll('.ts-ui-draggable').forEach(function (el) { TSUIDraggable(el); });
+    root.querySelectorAll('.ts-ui-resizable').forEach(TSUIResizable);
+    root.querySelectorAll('.ts-ui-sortable').forEach(TSUISortable);
+    root.querySelectorAll('table.ts-ui-table--sortable').forEach(TSUITableSort);
+    root.querySelectorAll('.ts-ui-table-bulk-wrap').forEach(TSUITableBulk);
+    root.querySelectorAll('.ts-ui-masonry--v2').forEach(TSUMasonryGrid);
+
+    // Number input enhancement (existing)
+    TSUIEnsureNumberInputObserver();
+    TSUIEnhanceNumberInputsIn(root);
+
+    // NEW: card‑accordion enhancement
+    TSUIAccordionCard(root);
+
+    // NEW: start the global observer (only once)
+    TSUIEnsureGlobalObserver();
+  }
+
+  global.ToolskinUIKit = {
+    init: init,
+    Accordion: TSUIAccordion,
+    AccordionFromSchema: TSUIAccordionFromSchema,
+    Select: TSUISelect,
+    Spinner: TSUISpinner,
+    Draggable: TSUIDraggable,
+    Resizable: TSUIResizable,
+    Sortable: TSUISortable,
+    Toast: TSUIToast,
+    TableSort: TSUITableSort,
+    TableBulk: TSUITableBulk,
+    EnhanceNumberInput: TSUIEnhanceNumberInput,
+    EnhanceNumberInputsIn: TSUIEnhanceNumberInputsIn,
+    MasonryGrid: TSUIMasonryGrid,
+    // NEW
+    AccordionCard: TSUIAccordionCard,
+  };
+
+  /*if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => init(document));
+  } else {
+    init(document);
+  }*/
+})(typeof window !== 'undefined' ? window : this);
+
 /* ═══════════════════════════════════════════════════════════════════
-   ASSET REGISTRY
-   Loads assets/toolskin-assets-map.json (generated by
-   tools/scripts/build-asset-map.js). Resolves base path automatically
-   from the current document — works on root and nested HTML pages.
-   ═══════════════════════════════════════════════════════════════════ */
+START OF ROOT  CSS DEBUGGER TOOL: 
+
+ASSET REGISTRY
+Loads assets/toolskin-assets-map.json (generated by
+tools/scripts/build-asset-map.js). Resolves base path automatically
+from the current document — works on root and nested HTML pages.
+═══════════════════════════════════════════════════════════════════ */   
 (function (global) {
   'use strict';
 
@@ -5924,13 +7341,11 @@ if (typeof window !== 'undefined') {
   }
 
   function deriveAssetsBaseFromHref(href) {
-    // href like "../assets/css/toolskin.css" → "../assets/css/"
     const idx = href.lastIndexOf('/');
     return idx >= 0 ? href.slice(0, idx + 1) : 'assets/css/';
   }
 
   function deriveProjectBaseFromCss(cssBase) {
-    // cssBase ends with assets/css/ → strip both segments to get the project root prefix
     return cssBase.replace(/assets\/css\/$/, '');
   }
 
@@ -5940,8 +7355,8 @@ if (typeof window !== 'undefined') {
 
   class ToolskinAssetRegistry {
     constructor() {
-      this.basePath = 'assets/css/';      // CSS base — debugger uses this for swap targets
-      this.assetsBase = 'assets/';         // root of the registry
+      this.basePath = 'assets/css/';
+      this.assetsBase = 'assets/';
       this.degraded = false;
       this._manifest = null;
       this._loadPromise = null;
@@ -5954,21 +7369,18 @@ if (typeof window !== 'undefined') {
     }
 
     async _load() {
-      // 1. Anchor from existing toolskin core <link>
       const href = findCoreLinkHref();
       if (href) {
         this.basePath = deriveAssetsBaseFromHref(href);
         this.assetsBase = deriveProjectBaseFromCss(this.basePath) + 'assets/';
       }
 
-      // 2. file:// guard
       if (isFileProtocol()) {
         this.degraded = true;
         console.warn('[Toolskin.assets] file:// detected — using fallback path resolution. Run via a local server (npx http-server .) for full registry support.');
         return;
       }
 
-      // 3. Fetch manifest
       const url = this.assetsBase + MANIFEST_FILENAME;
       try {
         const res = await fetch(url, { cache: 'no-cache' });
@@ -5987,19 +7399,35 @@ if (typeof window !== 'undefined') {
     byKind(k)     { return this.all().filter(f => f.kind === k); }
     cores()       { return this.all().filter(f => f.isCore && f.type === 'css'); }
     coresJs()     { return this.all().filter(f => f.isCore && f.type === 'js'); }
+
+    // Enhanced find: handles encoded paths, spaces, and basename fallback
     find(idOrName) {
-      return this.all().find(f => f.id === idOrName || f.name === idOrName) || null;
+      const all = this.all();
+      const basename = (p) => p.split('/').pop().split('?')[0];
+      let found = all.find(f => f.id === idOrName || f.name === idOrName || f.path === idOrName);
+      if (found) return found;
+      const decoded = decodeURIComponent(idOrName);
+      found = all.find(f => f.id === decoded || f.name === decoded || f.path === decoded);
+      if (found) return found;
+      const base = basename(idOrName);
+      return all.find(f => f.name === base) || null;
     }
+
     url(record) {
-      // record.path is "assets/css/foo.css" relative to project root; resolve to current page.
       const projectBase = this.assetsBase.replace(/assets\/$/, '');
       return projectBase + record.path;
+    }
+
+    reload() {
+      this._manifest = null;
+      this._loadPromise = null;
+      this.degraded = false;
+      return this.ready();
     }
   }
 
   if (global.Toolskin) {
     global.Toolskin.assets = new ToolskinAssetRegistry();
-    // Eagerly start loading so the debugger and other consumers can `await`.
     global.Toolskin.assets.ready();
   }
   global.ToolskinAssetRegistry = ToolskinAssetRegistry;
@@ -6018,7 +7446,7 @@ if (typeof window !== 'undefined') {
   'use strict';
 
   const STORAGE_KEY = 'ts-style-debug-active';
-
+  window.__TS_DIFF_DISABLE_SCROLL_SYNC__ = true;
   // Minimal fallback used only when the registry is unavailable (file:// or
   // missing manifest). See ToolskinAssetRegistry for the canonical list.
   const FALLBACK_FILES = {
@@ -6032,8 +7460,6 @@ if (typeof window !== 'undefined') {
       if (link.dataset.tsDebugger) continue;
       const href = (link.getAttribute('href') || '').toLowerCase();
       const file = (href.split('?')[0].split('/').pop()) || '';
-      // Match toolskin.css, toolskin-merged-*.css, "toolskin - Copy.css", etc.
-      // Exclude uikit / patterns / userscript files.
       if (/^toolskin[^/]*\.css$/i.test(file) && !/uikit/i.test(file) && !/^toolskin_(automation|toolpanel)/i.test(file)) {
         return link;
       }
@@ -6085,6 +7511,8 @@ if (typeof window !== 'undefined') {
       this.elements = {};
       this._kbHandler = null;
       this._loadStart = 0;
+      this.rebuildEndpoint = opts.rebuildEndpoint || '/rebuild-assets';
+      this._lenisWasEnabled = false;
 
       this.mode = 'single';
       this._build();
@@ -6138,11 +7566,11 @@ if (typeof window !== 'undefined') {
 
       const root = document.createElement('div');
       root.id = 'ts-debug-root';
-      Object.assign(root.style, this._positionStyles()); // FAB position only
+      Object.assign(root.style, this._positionStyles());
       document.body.appendChild(root);
       this.elements.root = root;
 
-      // FAB — ts-btn
+      // FAB
       const fab = document.createElement('button');
       fab.type = 'button';
       fab.className = 'ts-btn ts-btn--primary ts-btn--icon';
@@ -6150,19 +7578,18 @@ if (typeof window !== 'undefined') {
       fab.setAttribute('aria-label', 'Toggle stylesheet debugger');
       fab.setAttribute('data-icon', 'fa-solid fa-flask-vial');
       fab.innerHTML = '<span class="ts-btn__icon"></span>';
-      // Inline shape so the FAB is round even before icons are injected:
       Object.assign(fab.style, { width: '44px', height: '44px', borderRadius: '50%', padding: '0' });
       root.appendChild(fab);
       this.elements.fab = fab;
 
-      // Panel — ts-ui-panel
+      // Panel
       const panel = document.createElement('aside');
       panel.className = 'ts-ui-panel ts-ui-panel--floating';
       panel.setAttribute('data-ts-panel', '');
       panel.hidden = true;
       Object.assign(panel.style, {
         position: 'absolute',
-        width: '320px', maxWidth: 'calc(100vw - 40px)',
+        width: '360px', maxWidth: 'calc(100vw - 40px)',
         [this.position.indexOf('top') === 0 ? 'top' : 'bottom']: '54px',
         [this.position.indexOf('left') > -1 ? 'left' : 'right']: '0',
       });
@@ -6173,7 +7600,7 @@ if (typeof window !== 'undefined') {
       const header = document.createElement('header');
       header.className = 'ts-ui-panel__header';
       header.innerHTML =
-        '<strong class="ts-ui-panel__title">CSS Debugger</strong>' +
+        '<strong class="ts-ui-panel__title" data-icon="fa-solid fa-flask-vial">CSS Debugger</strong>' +
         '<button type="button" class="ts-btn ts-btn--icon ts-btn--ghost" data-action="close" aria-label="Close">×</button>';
       panel.appendChild(header);
       header.querySelector('[data-action="close"]').addEventListener('click', () => this.togglePanel(false));
@@ -6191,13 +7618,13 @@ if (typeof window !== 'undefined') {
       this.elements.activeInfo.className = 'ts-ui-panel__row';
       body.appendChild(this.elements.activeInfo);
 
-      // Mode tabs (Single / Diff)
+      // Mode tabs
       const modes = document.createElement('div');
       modes.className = 'ts-tabs';
       modes.setAttribute('role', 'tablist');
       modes.innerHTML =
-        '<button type="button" class="ts-tab is-active" data-mode="single">Single</button>' +
-        '<button type="button" class="ts-tab" data-mode="diff">Diff</button>';
+        '<button type="button" class="ts-tab is-active" data-mode="single" data-icon="fa-regular fa-file-code">Single File</button>' +
+        '<button type="button" class="ts-tab" data-mode="diff" data-icon="fa-solid fa-code-compare">Diff/Compare</button>';
       body.appendChild(modes);
       this.elements.modes = modes;
       modes.addEventListener('click', (e) => {
@@ -6207,7 +7634,7 @@ if (typeof window !== 'undefined') {
         this._setMode(t.getAttribute('data-mode'));
       });
 
-      // ts-ui-select host (single mode)
+      // Select for single mode
       const selectWrap = document.createElement('div');
       selectWrap.className = 'ts-ui-select';
       selectWrap.setAttribute('data-ts-ui-select-placeholder', 'Select stylesheet');
@@ -6218,13 +7645,13 @@ if (typeof window !== 'undefined') {
       this.elements.select = native;
       this.elements.selectWrap = selectWrap;
 
-      // Diff sub-UI (hidden by default — populated in Task 11; keep selects ready)
+      // Diff selects
       const diffSelectsWrap = document.createElement('div');
       diffSelectsWrap.className = 'ts-debug-diff-selects';
       diffSelectsWrap.hidden = true;
       diffSelectsWrap.innerHTML =
-        '<label class="ts-text-muted">Sheet A<div class="ts-ui-select" data-ts-ui-select-placeholder="A"><select class="ts-ui-select__native" data-role="diff-a"></select></div></label>' +
-        '<label class="ts-text-muted">Sheet B<div class="ts-ui-select" data-ts-ui-select-placeholder="B"><select class="ts-ui-select__native" data-role="diff-b"></select></div></label>';
+        '<label><span class="ts-text-muted">Sheet A</span><div class="ts-ui-select" data-ts-ui-select-placeholder="Stylesheet A"><select class="ts-ui-select__native" data-role="diff-a"></select></div></label>' +
+        '<label><span class="ts-text-muted">Sheet B</span><div class="ts-ui-select" data-ts-ui-select-placeholder="Stylesheet B"><select class="ts-ui-select__native" data-role="diff-b"></select></div></label>';
       body.appendChild(diffSelectsWrap);
       this.elements.diffSelectsWrap = diffSelectsWrap;
       this.elements.diffSelectA = diffSelectsWrap.querySelector('[data-role="diff-a"]');
@@ -6234,15 +7661,17 @@ if (typeof window !== 'undefined') {
       const actions = document.createElement('div');
       actions.className = 'ts-ui-panel__actions';
       actions.innerHTML =
-        '<button type="button" class="ts-btn ts-btn--primary" data-action="apply">Apply</button>' +
-        '<button type="button" class="ts-btn ts-btn--outline" data-action="reload">Reload</button>' +
-        '<button type="button" class="ts-btn ts-btn--outline" data-action="reset">Reset</button>';
+        '<button type="button" class="ts-btn ts-btn--primary" data-action="apply" data-icon="fa-solid fa-circle-check">Apply</button>' +
+        '<button type="button" class="ts-btn ts-btn--outline" data-action="reload" data-icon="fa-solid fa-arrow-rotate-left">Reload</button>' +
+        '<button type="button" class="ts-btn ts-btn--outline" data-action="reset" data-icon="fa-solid fa-recycle">Clear</button>' +
+        '<button type="button" class="ts-btn ts-btn--secondary" data-action="rebuild" data-icon="fa-solid fa-chart-diagram">Redo Registry</button>';
       body.appendChild(actions);
       this.elements.applyBtn = actions.querySelector('[data-action="apply"]');
       this.elements.reloadBtn = actions.querySelector('[data-action="reload"]');
       this.elements.resetBtn = actions.querySelector('[data-action="reset"]');
+      this.elements.rebuildBtn = actions.querySelector('[data-action="rebuild"]');
 
-      // Compare button (Task 11 will wire it up; create now hidden)
+      // Compare button (initially hidden)
       const compareBtn = document.createElement('button');
       compareBtn.type = 'button';
       compareBtn.className = 'ts-btn ts-btn--primary';
@@ -6252,6 +7681,59 @@ if (typeof window !== 'undefined') {
       body.appendChild(compareBtn);
       this.elements.compareBtn = compareBtn;
 
+      // ===== Manual inputs row (URL + File) =====
+      const manualRow = document.createElement('div');
+      manualRow.className = 'ts-ui-panel__row';
+      manualRow.style.display = 'flex';
+      manualRow.style.gap = '6px';
+      manualRow.style.marginTop = '8px';
+      manualRow.style.alignItems = 'center';
+
+      // URL input
+      const urlInput = document.createElement('input');
+      urlInput.type = 'text';
+      urlInput.placeholder = 'CSS URL';
+      urlInput.className = 'ts-input';
+      urlInput.style.flex = '1';
+      urlInput.style.minWidth = '0';
+      manualRow.appendChild(urlInput);
+      urlInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && urlInput.value.trim()) {
+          this.apply(urlInput.value.trim(), { manual: true });
+          urlInput.value = '';
+        }
+      });
+      this.elements.manualUrlInput = urlInput;
+
+      // File input
+      const fileLabel = document.createElement('label');
+      fileLabel.className = 'ts-btn ts-btn--outline ts-btn--sm';
+      fileLabel.style.margin = '0';
+      fileLabel.style.cursor = 'pointer';
+      fileLabel.textContent = '📁 File';
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.css';
+      fileInput.style.display = 'none';
+      fileLabel.appendChild(fileInput);
+      manualRow.appendChild(fileLabel);
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const css = ev.target.result;
+          const blob = new Blob([css], { type: 'text/css' });
+          const url = URL.createObjectURL(blob);
+          this.apply(url, { manual: true, blob: true, label: file.name });
+          fileInput.value = '';
+        };
+        reader.readAsText(file);
+      });
+      this.elements.fileInput = fileInput;
+
+      body.appendChild(manualRow);
+
       // Hint footer
       const hint = document.createElement('footer');
       hint.className = 'ts-ui-panel__footer ts-text-muted';
@@ -6259,20 +7741,20 @@ if (typeof window !== 'undefined') {
         (this.shortcut ? ' · <kbd>Alt+S</kbd>' : '');
       body.appendChild(hint);
 
-      // Banner host (the .ts-banner is created lazily on first activation, see _renderBanner)
+      // Banner host
       const bannerHost = document.createElement('div');
       bannerHost.id = 'ts-debug-banner-host';
       document.body.appendChild(bannerHost);
       this.elements.bannerHost = bannerHost;
 
-      // Populate selects from registry (best-effort; refreshed by ready())
+      // Populate selects
       this._populateSelects();
 
-      // Initial info paint
+      // Initial info
       this._refreshDefaultInfo();
       this._refreshActiveInfo();
 
-      // Enhance Toolskin components (after structure is in place)
+      // Enhance with Toolskin UIKit/Icons if available
       if (global.ToolskinUIKit && global.ToolskinUIKit.init) {
         global.ToolskinUIKit.init(panel);
       }
@@ -6288,10 +7770,17 @@ if (typeof window !== 'undefined') {
       if (reg && !reg.degraded) {
         cores = reg.cores();
       }
-      // Fallback to constructor-supplied list if registry is degraded.
       const items = (cores && cores.length)
-        ? cores.map(r => ({ file: r.path, label: r.name, group: this._groupLabel(r) }))
-        : this.files.map(f => ({ file: 'assets/css/' + f.file, label: f.file.split('/').pop(), group: f.group }));
+        ? cores.map(r => ({
+            file: r.path,
+            label: r.name + ' (' + r.folder + ')',
+            group: this._groupLabel(r)
+          }))
+        : this.files.map(f => ({
+            file: 'assets/css/' + f.file,
+            label: f.file,
+            group: f.group
+          }));
 
       for (const sel of [this.elements.select, this.elements.diffSelectA, this.elements.diffSelectB]) {
         if (!sel) continue;
@@ -6410,6 +7899,7 @@ if (typeof window !== 'undefined') {
       });
       this.elements.reloadBtn.addEventListener('click', () => this.reload());
       this.elements.resetBtn.addEventListener('click', () => this.reset());
+      this.elements.rebuildBtn.addEventListener('click', () => this._rebuildRegistry());
 
       if (this.shortcut) {
         this._kbHandler = (e) => {
@@ -6437,11 +7927,9 @@ if (typeof window !== 'undefined') {
       let saved;
       try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
       if (!saved) return;
-      // Accept if it matches either the fallback files list or a current select option.
-      const inFallback = this.files.some(f => f.file === saved);
       const inSelect = this.elements.select &&
         Array.from(this.elements.select.options).some(o => o.value === saved);
-      if (!inFallback && !inSelect) return;
+      if (!inSelect) return;
       if (this.elements.select) this.elements.select.value = saved;
       this.apply(saved);
     }
@@ -6456,9 +7944,59 @@ if (typeof window !== 'undefined') {
 
     apply(file, opts) {
       const cacheBust = !!(opts && opts.cacheBust);
+      const manual = !!(opts && opts.manual);
+      const label = opts && opts.label;
       if (!file) return;
-      // If caller passed a full manifest path (e.g. "assets/css/foo.css"), strip the basePath
-      // prefix so we don't double it when building the link href.
+
+      // If manual, treat as full URL (including blob:)
+      if (manual) {
+        if (!this.originalLink) {
+          console.warn('[ToolskinStylesheetDebugger] No core sheet detected; cannot swap.');
+          return;
+        }
+        if (this.injectedLink) {
+          this.injectedLink.remove();
+          this.injectedLink = null;
+        }
+        this.injectedFailed = false;
+        this.injectedLoadMs = 0;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = file + (cacheBust ? (file.includes('?') ? '&_ts=' : '?_ts=') + Date.now() : '');
+        link.dataset.tsDebugger = 'active';
+        this._loadStart = (performance && performance.now) ? performance.now() : Date.now();
+        link.addEventListener('load', () => {
+          const now = (performance && performance.now) ? performance.now() : Date.now();
+          this.injectedLoadMs = Math.round(now - this._loadStart);
+          if (this.originalLink) this.originalLink.disabled = true;
+          this.activeFile = label || file;
+          this._refreshActiveInfo();
+          this._renderBanner();
+          this._toast('Applied manual: ' + (label || file) + ' (' + this.injectedLoadMs + 'ms)', 'success');
+        });
+        link.addEventListener('error', () => {
+          this.injectedFailed = true;
+          console.error('[ToolskinStylesheetDebugger] Failed to load manual URL:', link.href);
+          this._refreshActiveInfo();
+          this._renderBanner();
+          this._toast('Failed to load manual URL: ' + (label || file), 'error');
+        });
+        if (this.originalLink && this.originalLink.parentNode) {
+          this.originalLink.parentNode.insertBefore(link, this.originalLink.nextSibling);
+        } else {
+          document.head.appendChild(link);
+        }
+        this.injectedLink = link;
+        this.activeFile = label || file;
+        if (this.persist && !opts.blob) {
+          try { localStorage.setItem(STORAGE_KEY, file); } catch (e) {}
+        }
+        this._refreshActiveInfo();
+        this._renderBanner();
+        return;
+      }
+
+      // Normal mode: strip basePath if present
       if (this.basePath && file.startsWith(this.basePath)) {
         file = file.slice(this.basePath.length);
       }
@@ -6480,8 +8018,8 @@ if (typeof window !== 'undefined') {
       link.addEventListener('load', () => {
         const now = (performance && performance.now) ? performance.now() : Date.now();
         this.injectedLoadMs = Math.round(now - this._loadStart);
-        // Disable original AFTER override loads to avoid FOUC.
         if (this.originalLink) this.originalLink.disabled = true;
+        this.activeFile = file;
         this._refreshActiveInfo();
         this._renderBanner();
         this._toast('Applied: ' + file + ' (' + this.injectedLoadMs + 'ms)', 'success');
@@ -6489,12 +8027,10 @@ if (typeof window !== 'undefined') {
       link.addEventListener('error', () => {
         this.injectedFailed = true;
         console.error('[ToolskinStylesheetDebugger] Failed to load:', link.href);
-        // Don't disable original on failure — keep visual state usable.
         this._refreshActiveInfo();
         this._renderBanner();
         this._toast('Failed to load: ' + file, 'error');
       });
-      // Insert after original so cascade favors override when same-specificity.
       if (this.originalLink && this.originalLink.parentNode) {
         this.originalLink.parentNode.insertBefore(link, this.originalLink.nextSibling);
       } else {
@@ -6511,7 +8047,8 @@ if (typeof window !== 'undefined') {
 
     reload() {
       if (!this.activeFile) return;
-      this.apply(this.activeFile, { cacheBust: true });
+      const isManual = this.activeFile.startsWith('http://') || this.activeFile.startsWith('https://') || this.activeFile.startsWith('blob:');
+      this.apply(this.activeFile, { cacheBust: true, manual: isManual, label: this.activeFile });
     }
 
     reset() {
@@ -6531,86 +8068,270 @@ if (typeof window !== 'undefined') {
       this._renderBanner();
     }
 
-    openDiff(filePathA, filePathB) {
-      this.closeDiff(); // idempotent
-      this._diffReadyCount = 0;
-      const wrap = document.createElement('div');
-      wrap.className = 'ts-debug-diff';
-      Object.assign(wrap.style, {
-        position: 'fixed', inset: '0', zIndex: '2147483640',
-        display: 'grid', gridTemplateColumns: '1fr 1fr',
-        background: '#000',
-      });
-      const buildPane = (pathStr, role) => {
-        const col = document.createElement('div');
-        col.style.cssText = 'display:flex;flex-direction:column;border-right:1px solid #222;';
-        const head = document.createElement('div');
-        head.className = 'ts-banner ts-banner--info';
-        head.style.cssText = 'position:relative;';
-        head.innerHTML =
-          '<div class="ts-banner__label"><span class="ts-banner__tag">' + role + '</span><span class="ts-banner__file">' + escapeHtml(pathStr) + '</span></div>';
-        col.appendChild(head);
-        const iframe = document.createElement('iframe');
-        iframe.style.cssText = 'flex:1 1 auto;border:0;width:100%;background:#fff;';
-        const pageURL = new URL(location.href);
-        pageURL.searchParams.set('__ts_override_css', pathStr);
-        pageURL.searchParams.set('__ts_debug', 'off');
-        pageURL.searchParams.set('__ts_diff_role', role);
-        // Strip fragment so iframes don't auto-scroll on load
-        pageURL.hash = '';
-        iframe.src = pageURL.toString();
-        iframe.dataset.role = role;
-        col.appendChild(iframe);
-        wrap.appendChild(col);
-        return iframe;
-      };
-      const iframeA = buildPane(filePathA, 'A');
-      const iframeB = buildPane(filePathB, 'B');
-      document.body.appendChild(wrap);
-
-      // Floating exit + overlay toggle
-      const controls = document.createElement('div');
-      Object.assign(controls.style, {
-        position: 'fixed', top: '8px', right: '12px', zIndex: '2147483647',
-        display: 'flex', gap: '8px',
-      });
-      controls.innerHTML =
-        '<button type="button" class="ts-btn ts-btn--outline" data-action="overlay">Toggle overlay</button>' +
-        '<button type="button" class="ts-btn ts-btn--primary" data-action="exit">Exit diff</button>';
-      controls.querySelector('[data-action="exit"]').addEventListener('click', () => this.closeDiff());
-      controls.querySelector('[data-action="overlay"]').addEventListener('click', () => this._toggleDiffOverlay());
-      wrap.appendChild(controls);
-
-      // postMessage bridge — strict envelope, origin checked
-      this._diffWrap = wrap;
-      this._diffIframes = { A: iframeA, B: iframeB };
-      this._diffSuppress = { A: false, B: false };
-      this._onDiffMessage = (e) => {
-        if (e.origin !== location.origin) return;
-        const m = e.data;
-        if (!m || m.type !== 'ts-debug-diff') return;
-        if (m.action === 'ready') {
-          this._diffReadyCount = (this._diffReadyCount || 0) + 1;
-        } else if (m.action === 'scroll') {
-          const senderId = m.payload.sender;
-          const otherId = senderId === 'A' ? 'B' : 'A';
-          if (this._diffSuppress[otherId]) return;
-          const other = this._diffIframes[otherId];
-          if (other && other.contentWindow) {
-            this._diffSuppress[otherId] = true;
-            other.contentWindow.postMessage(
-              { type: 'ts-debug-diff', action: 'scroll-set', payload: { y: m.payload.y } },
-              location.origin
-            );
-            // Release suppression next frame
-            requestAnimationFrame(() => { this._diffSuppress[otherId] = false; });
-          }
+    async _rebuildRegistry() {
+      this._toast('Rebuilding asset registry...', 'info');
+      try {
+        const res = await fetch(this.rebuildEndpoint, { method: 'POST' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const reg = global.Toolskin && global.Toolskin.assets;
+        if (reg) {
+          await reg.reload();
+          this._populateSelects();
+          this._toast('Registry rebuilt and reloaded', 'success');
+        } else {
+          this._toast('Registry rebuilt but could not reload; refresh page', 'warning');
         }
-      };
-      window.addEventListener('message', this._onDiffMessage);
+      } catch (err) {
+        console.error('[Toolskin] Rebuild failed:', err);
+        this._toast('Rebuild failed: ' + err.message, 'error');
+      }
     }
 
-    closeDiff() {
+    openDiff(filePathA, filePathB) {
+  // Close any previous diff
+  this.closeDiff();
+
+  // Disable all main‑page scrolling effects
+  this._disableMainPageEffects();
+
+  this._diffReadyCount = 0;
+  const wrap = document.createElement('div');
+  wrap.className = 'ts-debug-diff';
+  Object.assign(wrap.style, {
+    position: 'fixed', inset: '0', zIndex: '2147483640',
+    display: 'grid', gridTemplateColumns: '1fr 1fr',
+    background: '#000',
+  });
+
+  const buildPane = (pathStr, role) => {
+  const col = document.createElement('div');
+  col.style.cssText = 'display:flex;flex-direction:column;border-right:1px solid var(--ts-border-1, rgba(22,22,22,.5));';
+  const head = document.createElement('div');
+  head.className = 'ts-banner ts-banner--info';
+  head.style.cssText = 'position:relative;';
+  head.innerHTML =
+    '<div class="ts-banner__label"><span class="ts-banner__tag">' + role + '</span><span class="ts-banner__file">' + escapeHtml(pathStr) + '</span></div>';
+  col.appendChild(head);
+
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = 'flex:1 1 auto;border:0;width:100%;background:var(--ts-bg-body, transparent);';
+  const pageURL = new URL(location.href);
+  pageURL.searchParams.set('__ts_override_css', pathStr);
+  pageURL.searchParams.set('__ts_debug', 'off');
+  pageURL.searchParams.set('__ts_diff_role', role);
+  pageURL.searchParams.set('__ts_no_effects', '1');
+  pageURL.hash = '';
+  iframe.src = pageURL.toString();
+  iframe.dataset.role = role;
+  col.appendChild(iframe);
+  wrap.appendChild(col);
+
+  // Inject label + cleanup script + reset style after load
+  iframe.addEventListener('load', function onLoad() {
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if (!doc) return;
+
+      // --- Floating label (keep it) ---
+      const oldLabel = doc.getElementById('ts-diff-label');
+      if (oldLabel) oldLabel.remove();
+
+      const label = doc.createElement('div');
+      label.id = 'ts-diff-label';
+      label.style.cssText = `
+        position: fixed;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2147483647;
+        background: rgba(0,0,0,0.75);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        pointer-events: none;
+        opacity: 0.7;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255,255,255,0.1);
+        max-width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      `;
+      label.textContent = role + ': ' + pathStr;
+      doc.body.appendChild(label);
+
+      // --- RESET STYLE (injected directly, no script needed for this) ---
+      const resetStyle = doc.createElement('style');
+      resetStyle.textContent = `
+        html, body {
+          overflow: auto !important;
+          height: auto !important;
+          scroll-behavior: auto !important;
+          scroll-snap-type: none !important;
+        }
+        .ts-section, .ts-hero {
+          scroll-snap-align: none !important;
+          min-height: auto !important;
+        }
+        [data-scroll-container], [data-scroll] {
+          will-change: auto !important;
+        }
+      `;
+      doc.head.appendChild(resetStyle);
+
+      // --- CLEANUP SCRIPT (to kill Lenis, GSAP, etc.) ---
+      // Use a script element – if it fails, the style is already applied, so scroll snap is fixed.
+      const cleanupScript = doc.createElement('script');
+      cleanupScript.textContent = `
+        (function() {
+          window.__TS_DIFF_MODE = true;
+
+          function disableEffects() {
+            if (window.Toolskin) {
+              if (window.Toolskin.smooth) {
+                if (typeof window.Toolskin.smooth.destroy === 'function') window.Toolskin.smooth.destroy();
+                else if (window.Toolskin.smooth.lenis) window.Toolskin.smooth.lenis.destroy();
+                window.Toolskin.smooth = null;
+              }
+              if (window.Toolskin.observer) {
+                if (typeof window.Toolskin.observer.destroy === 'function') window.Toolskin.observer.destroy();
+                window.Toolskin.observer = null;
+              }
+              if (window.Toolskin.gsapReveal) {
+                if (typeof window.Toolskin.gsapReveal.destroy === 'function') window.Toolskin.gsapReveal.destroy();
+                window.Toolskin.gsapReveal = null;
+              }
+              if (window.Toolskin.locomotive) {
+                if (window.Toolskin.locomotive.locomotive && typeof window.Toolskin.locomotive.locomotive.destroy === 'function') {
+                  window.Toolskin.locomotive.locomotive.destroy();
+                }
+                window.Toolskin.locomotive = null;
+              }
+              // Also destroy any ToolskinDynamicNav that might be listening
+              if (window.ToolskinDynamicNav && typeof window.ToolskinDynamicNav.destroy === 'function') {
+                window.ToolskinDynamicNav.destroy();
+              }
+              if (window.ToolskinDynamicNav) {
+                const nav = document.getElementById('ts-primary-menu');
+                if (nav && nav.__tsDynamicNav) {
+                  nav.__tsDynamicNav.setEnabled(false);
+                }
+              }
+              var html = document.documentElement;
+              if (html) {
+                html.classList.remove('ts-fullpage', 'lenis', 'lenis-smooth', 'lenis-stopped', 'lenis-scrolling');
+                html.style.removeProperty('overflow');
+                html.style.removeProperty('height');
+                html.style.removeProperty('scroll-behavior');
+              }
+              if (document.body) {
+                document.body.style.removeProperty('overflow');
+                document.body.style.removeProperty('height');
+              }
+              if (window.gsap) {
+                gsap.killTweensOf('*');
+                if (window.ScrollTrigger) ScrollTrigger.getAll().forEach(st => st.kill());
+              }
+              document.querySelectorAll('[style*="position: fixed"]').forEach(el => {
+                if (el.id !== 'ts-diff-label') el.style.position = '';
+              });
+            }
+          }
+
+          if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            disableEffects();
+          } else {
+            document.addEventListener('DOMContentLoaded', disableEffects);
+            // Fallback after a short delay
+            setTimeout(disableEffects, 500);
+          }
+        })();
+      `;
+      doc.head.appendChild(cleanupScript);
+
+      // If the script fails, we already have the reset style, so scroll snap is fixed.
+    } catch (e) {
+      // If we can't inject, the iframe may be cross-origin – but we still have the reset style in the iframe's own CSS?
+      // Actually, if we can't inject, the style won't be applied. But we can try again later.
+      console.warn('[Diff] Could not inject cleanup script, retrying...', e);
+      // Retry after a short delay
+      setTimeout(function() {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          if (!doc) return;
+          // Re-inject the reset style (in case it failed)
+          const resetStyle = doc.createElement('style');
+          resetStyle.textContent = `
+            html, body {
+              overflow: auto !important;
+              height: auto !important;
+              scroll-behavior: auto !important;
+              scroll-snap-type: none !important;
+            }
+            .ts-section, .ts-hero {
+              scroll-snap-align: none !important;
+              min-height: auto !important;
+            }
+          `;
+          doc.head.appendChild(resetStyle);
+        } catch (_) {}
+      }, 300);
+    }
+  });
+
+  return iframe;
+};
+  const iframeA = buildPane(filePathA, 'A');
+  const iframeB = buildPane(filePathB, 'B');
+  document.body.appendChild(wrap);
+
+  // Controls
+  const controls = document.createElement('div');
+  Object.assign(controls.style, {
+    position: 'fixed', top: '8px', right: '12px', zIndex: '2147483647',
+    display: 'flex', gap: '8px',
+  });
+  controls.innerHTML =
+    '<button type="button" class="ts-btn ts-btn--outline ts-btn--sm" data-action="overlay">Toggle overlay</button>' +
+    '<button type="button" class="ts-btn ts-btn--secondary ts-btn--sm" data-action="resetDiff">Reset (default)</button>' +
+    '<button type="button" class="ts-btn ts-btn--primary ts-btn--sm" data-action="exit">Exit diff</button>';
+  controls.querySelector('[data-action="exit"]').addEventListener('click', () => this.closeDiff());
+  controls.querySelector('[data-action="overlay"]').addEventListener('click', () => this._toggleDiffOverlay());
+  controls.querySelector('[data-action="resetDiff"]').addEventListener('click', () => this.reset());
+  wrap.appendChild(controls);
+
+  // postMessage bridge
+  this._diffWrap = wrap;
+  this._diffIframes = { A: iframeA, B: iframeB };
+  this._diffSuppress = { A: false, B: false };
+  this._onDiffMessage = (e) => {
+    if (e.origin !== location.origin) return;
+    const m = e.data;
+    if (!m || m.type !== 'ts-debug-diff') return;
+    if (m.action === 'ready') {
+      this._diffReadyCount = (this._diffReadyCount || 0) + 1;
+    } else if (m.action === 'scroll') {
+      const senderId = m.payload.sender;
+      const otherId = senderId === 'A' ? 'B' : 'A';
+      if (this._diffSuppress[otherId]) return;
+      const other = this._diffIframes[otherId];
+      if (other && other.contentWindow) {
+        this._diffSuppress[otherId] = true;
+        other.contentWindow.postMessage(
+          { type: 'ts-debug-diff', action: 'scroll-set', payload: { y: m.payload.y } },
+          location.origin
+        );
+        requestAnimationFrame(() => { this._diffSuppress[otherId] = false; });
+      }
+    }
+  };
+  window.addEventListener('message', this._onDiffMessage);
+}
+
+    /*closeDiff() {
       if (this._onDiffMessage) {
         window.removeEventListener('message', this._onDiffMessage);
         this._onDiffMessage = null;
@@ -6620,7 +8341,141 @@ if (typeof window !== 'undefined') {
       this._diffIframes = null;
       this._diffSuppress = null;
       this._diffReadyCount = 0;
+
+      if (this._lenisWasEnabled && window.Toolskin && window.Toolskin.smooth && window.Toolskin.smooth.lenis) {
+        window.Toolskin.smooth.lenis.start();
+        this._lenisWasEnabled = false;
+      }
+    }*/
+closeDiff() {
+  if (this._onDiffMessage) {
+    window.removeEventListener('message', this._onDiffMessage);
+    this._onDiffMessage = null;
+  }
+  if (this._diffWrap && this._diffWrap.parentNode) this._diffWrap.remove();
+  this._diffWrap = null;
+  this._diffIframes = null;
+  this._diffSuppress = null;
+  this._diffReadyCount = 0;
+
+  // Re‑enable main‑page effects
+  this._enableMainPageEffects();
+}
+
+_disableMainPageEffects() {
+  const html = document.documentElement;
+  const body = document.body;
+
+  // Store original styles
+  this._mainEffectsState = {
+    fullpageClass: html.classList.contains('ts-fullpage'),
+    htmlOverflow: html.style.overflow,
+    htmlMaxHeight: html.style.maxHeight,
+    htmlMaxWidth: html.style.maxWidth,
+    htmlScrollBehavior: html.style.scrollBehavior,
+    bodyOverflow: body.style.overflow,
+    bodyMaxHeight: body.style.maxHeight,
+    bodyMaxWidth: body.style.maxWidth,
+  };
+
+  // --- LOCK THE MAIN PAGE ---
+  html.style.overflow = 'hidden';
+  html.style.maxHeight = '100dvh';
+  html.style.maxWidth = '100dvw';
+  html.style.scrollBehavior = 'auto';
+  body.style.overflow = 'hidden';
+  body.style.maxHeight = '100dvh';
+  body.style.maxWidth = '100dvw';
+  html.classList.remove('ts-fullpage');
+
+  // Disable Toolskin modules (Lenis, Observer, GSAP, etc.)
+  if (window.Toolskin) {
+    if (window.Toolskin.smooth && window.Toolskin.smooth.lenis) {
+      window.Toolskin.smooth.lenis.stop();
+      // Also cancel any RAF loops
+      if (window.Toolskin.smooth._rafHandle) {
+        cancelAnimationFrame(window.Toolskin.smooth._rafHandle);
+        window.Toolskin.smooth._rafHandle = null;
+      }
+      if (window.Toolskin.smooth._gsapTicker && window.gsap) {
+        window.gsap.ticker.remove(window.Toolskin.smooth._gsapTicker);
+        window.Toolskin.smooth._gsapTicker = null;
+      }
+      this._smoothWasEnabled = true;
     }
+    if (window.Toolskin.observer && window.Toolskin.observer._observer) {
+      window.Toolskin.observer._observer.disconnect();
+      this._observerWasEnabled = true;
+    }
+    if (window.Toolskin.gsapReveal && window.gsap && window.ScrollTrigger) {
+      ScrollTrigger.getAll().forEach(st => st.disable());
+      this._scrollTriggerWasEnabled = true;
+    }
+    if (window.Toolskin.layout) {
+      this._layoutFullpagePrev = window.Toolskin.config.layout.fullpage;
+      window.Toolskin.layout.update({ fullpage: false });
+    }
+  }
+
+  // Remove any lenis classes that might linger
+  html.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped', 'lenis-scrolling');
+}
+
+_enableMainPageEffects() {
+  if (!this._mainEffectsState) return;
+
+  const html = document.documentElement;
+  const body = document.body;
+  const state = this._mainEffectsState;
+
+  // Restore original styles
+  html.style.overflow = state.htmlOverflow || '';
+  html.style.maxHeight = state.htmlMaxHeight || '';
+  html.style.maxWidth = state.htmlMaxWidth || '';
+  html.style.scrollBehavior = state.htmlScrollBehavior || '';
+  body.style.overflow = state.bodyOverflow || '';
+  body.style.maxHeight = state.bodyMaxHeight || '';
+  body.style.maxWidth = state.bodyMaxWidth || '';
+
+  if (state.fullpageClass) {
+    html.classList.add('ts-fullpage');
+  }
+
+  // Re‑enable Toolskin modules
+  if (window.Toolskin) {
+    if (window.Toolskin.smooth && this._smoothWasEnabled) {
+      if (window.Toolskin.smooth.lenis) {
+        window.Toolskin.smooth.lenis.start();
+        // Re‑add GSAP ticker if needed (optional – we can skip for simplicity)
+        if (!window.Toolskin.smooth._gsapTicker && window.gsap) {
+          window.Toolskin.smooth._gsapTicker = (time) => {
+            if (window.Toolskin.smooth && window.Toolskin.smooth.lenis) {
+              window.Toolskin.smooth.lenis.raf(time * 1000);
+            }
+          };
+          window.gsap.ticker.add(window.Toolskin.smooth._gsapTicker);
+          window.gsap.ticker.lagSmoothing(0);
+        }
+      }
+      this._smoothWasEnabled = false;
+    }
+    if (window.Toolskin.observer && this._observerWasEnabled) {
+      window.Toolskin.observer.refresh();
+      this._observerWasEnabled = false;
+    }
+    if (window.Toolskin.gsapReveal && this._scrollTriggerWasEnabled && window.ScrollTrigger) {
+      ScrollTrigger.getAll().forEach(st => st.enable());
+      ScrollTrigger.refresh();
+      this._scrollTriggerWasEnabled = false;
+    }
+    if (window.Toolskin.layout && this._layoutFullpagePrev !== undefined) {
+      window.Toolskin.layout.update({ fullpage: this._layoutFullpagePrev });
+      this._layoutFullpagePrev = undefined;
+    }
+  }
+
+  this._mainEffectsState = null;
+}
 
     _toggleDiffOverlay() {
       if (!this._diffIframes) return;
@@ -6651,7 +8506,7 @@ if (typeof window !== 'undefined') {
     }
   }
 
-  // Wire into the Toolskin namespace.
+  // Wire into Toolskin namespace
   if (global.Toolskin) {
     global.Toolskin.stylesheetDebugger = null;
     global.Toolskin.initStylesheetDebugger = function (opts) {
@@ -6664,9 +8519,7 @@ if (typeof window !== 'undefined') {
   }
   global.ToolskinStylesheetDebugger = ToolskinStylesheetDebugger;
 
-  // Auto-init when __TOOLSKIN_CONFIG__.stylesheetDebugger.enabled is truthy.
-  // Also handles URL params: ?__ts_override_css=<path> and ?__ts_debug=off.
-
+  // Auto‑init / URL override handling
   function getURLParams() {
     try { return new URLSearchParams(location.search); } catch (e) { return new URLSearchParams(); }
   }
@@ -6676,20 +8529,17 @@ if (typeof window !== 'undefined') {
   }
 
   async function validateOverridePath(rawValue) {
-    // 1. Path-shape rejection
     if (!rawValue || rawValue.length > 512) return { ok: false, reason: 'empty or too long' };
     if (rawValue.includes('\\')) return { ok: false, reason: 'backslash not allowed' };
     if (/^[a-z][a-z0-9+.-]*:\/\//i.test(rawValue)) {
       return { ok: false, reason: 'absolute URL scheme not allowed' };
     }
-    // 2. Same-origin resolution
     let resolved;
     try { resolved = new URL(rawValue, document.baseURI); }
     catch (e) { return { ok: false, reason: 'unparseable URL' }; }
     if (resolved.origin !== location.origin) {
       return { ok: false, reason: 'cross-origin' };
     }
-    // 3. Manifest membership
     const reg = global.Toolskin && global.Toolskin.assets;
     if (!reg) return { ok: false, reason: 'registry unavailable' };
     await reg.ready();
@@ -6705,20 +8555,15 @@ if (typeof window !== 'undefined') {
     const override = params.get('__ts_override_css');
     const cfg = (global.__TOOLSKIN_CONFIG__ && global.__TOOLSKIN_CONFIG__.stylesheetDebugger) || {};
 
-    // If a URL override is requested, init debugger silently and apply.
     if (override) {
       if (!global.Toolskin || typeof global.Toolskin.initStylesheetDebugger !== 'function') return;
       const v = await validateOverridePath(override);
       if (!v.ok) {
         console.error('[Toolskin] rejected override:', v.reason, '(' + override + ')');
-        // Always init debugger when a URL override was requested — the user opened
-        // this URL intentionally and should get the debugger UI even on rejection.
         global.Toolskin.initStylesheetDebugger(cfg);
         return;
       }
       const dbg = global.Toolskin.initStylesheetDebugger(Object.assign({}, cfg, { _silentBoot: true }));
-      // v.value is a manifest path like "assets/css/_old/foo.css".
-      // apply() prepends dbg.basePath, so strip it first.
       const rel = dbg.basePath && v.value.startsWith(dbg.basePath)
         ? v.value.slice(dbg.basePath.length)
         : v.value;
@@ -6736,44 +8581,116 @@ if (typeof window !== 'undefined') {
     const role = params.get('__ts_diff_role');
     if (!role) return;
 
-    // Announce ready.
+    // 🔴 HARD EXIT: do NOTHING if disabled
+    if (window.__TS_DIFF_DISABLE_SCROLL_SYNC__) {
+      return;
+    }
+
+    // --- ALWAYS DEFINE post (prevents crash) ---
     const post = (action, payload) => {
-      try { window.parent.postMessage({ type: 'ts-debug-diff', action, payload: Object.assign({ sender: role }, payload) }, location.origin); }
-      catch (e) {}
+      try {
+        window.parent.postMessage(
+          {
+            type: 'ts-debug-diff',
+            action,
+            payload: Object.assign({ sender: role }, payload)
+          },
+          location.origin
+        );
+      } catch (e) {}
     };
+
+    // --- Apply stylesheet override if present ---
+    const overridePath = params.get('__ts_override_css');
+    if (overridePath) {
+      const reg = window.Toolskin && window.Toolskin.assets;
+      let href = null;
+
+      if (reg && !reg.degraded) {
+        const record = reg.find(overridePath);
+        if (record) {
+          href = reg.url(record);
+        } else {
+          console.warn('[Diff] Override not in manifest, trying direct:', overridePath);
+        }
+      }
+
+      if (!href) {
+        const base = (window.Toolskin && window.Toolskin.assets)
+          ? window.Toolskin.assets.basePath
+          : 'assets/css/';
+
+        if (overridePath.startsWith(base)) {
+          href = overridePath;
+        } else {
+          const encoded = overridePath.split('/').map(encodeURIComponent).join('/');
+          href = base + encoded;
+        }
+      }
+
+      if (href) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        document.head.appendChild(link);
+      }
+    }
+
+    // --- Scroll sync bridge ---
     let suppressEmit = false;
 
     function onScroll() {
       if (suppressEmit) return;
+
       const y = window.scrollY || window.pageYOffset || 0;
-      post('scroll', { y, ratio: y / Math.max(1, document.documentElement.scrollHeight - window.innerHeight) });
+
+      post('scroll', {
+        y,
+        ratio: y / Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+      });
     }
+
     let rafPending = false;
     window.addEventListener('scroll', () => {
       if (rafPending) return;
+
       rafPending = true;
-      requestAnimationFrame(() => { rafPending = false; onScroll(); });
+
+      requestAnimationFrame(() => {
+        rafPending = false;
+        onScroll();
+      });
     }, { passive: true });
 
     window.addEventListener('message', (e) => {
       if (e.origin !== location.origin) return;
+
       const m = e.data;
       if (!m || m.type !== 'ts-debug-diff') return;
+
       if (m.action === 'scroll-set') {
         suppressEmit = true;
-        window.scrollTo({ top: m.payload.y, behavior: 'instant' });
-        requestAnimationFrame(() => { suppressEmit = false; });
+
+        const target = m.payload.y | 0;
+        const current = window.scrollY || window.pageYOffset || 0;
+
+        if (Math.abs(current - target) > 2) {
+          window.scrollTo(0, target);
+        }
+
+        setTimeout(() => {
+          suppressEmit = false;
+        }, 50);
       }
     });
 
-    // Initial post once DOM is ready and styles applied.
+    // --- Notify parent when ready ---
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => post('ready', {}));
     } else {
       post('ready', {});
     }
   }
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => { autoBoot(); });
     document.addEventListener('DOMContentLoaded', maybeInstallDiffBridge);
@@ -6783,293 +8700,7 @@ if (typeof window !== 'undefined') {
   }
 })(typeof window !== 'undefined' ? window : this);
 
-
-/* Toolskin Phantom gallery integration script */
-
-
-
-
-/* Sample Schema for displaying the Gallery*/
-
-
-/* const projects = [
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_ac1c29d3bc5641cc9809ce8c8b8be798~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_dcce76b23d6f410fa85e01eccfed4de6~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_0a1bce4e77b648a99bb3e3a8a6ed27a0~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_f45cc440cef44fd3a880f81b786424b0~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_f3a19a2593354a339b1ee891bf2d31d8~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_5cd33a9cd7134dc19fc95415e25caf83~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_5434a40c460e40e7b005874fc28d5cab~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_b33dce4a01404840ad9138e23fdb4781~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_0f9813c332394fbfa74a155894fe00c6~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_95356ff9ad8f466f99184c42c6b077a3~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_b34cbfd83cef46ca84231653993d4e26~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_ebdcd60b85ea4d50b74605a61d9a6499~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_dcf6f85aef7c4d10a0758acbb9c84eec~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_e21cf7d811ee4be39c8bc9e5154c0396~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_c4356cf501714cefaa3fc19689c36926~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_27f1ac001d754d91ba0c0cf30b576ca3~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_424f2984bff348ab9bfa09616bd2aa5f~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_5f80c0bec4a7497c849853ae4692d4a1~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_ac9b022a1a4042a5ae57aaeef6d95866~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_79e487d397684fa2a4a59be463c9bf0a~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_3fae3d343f264737ba3a9f645d0a6c3e~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_05f5ef3af8b94cd4bee6940010b1a9e4~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_aa20b5fe97bd43808a3060054a0e264a~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_9f86f6cb652e4cbd961287d9fdd4a4eb~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_ae3990f3d71e44129f62713eafd6d8b3~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_f64a2d48e30d4ceca4ca698703200061~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_b0af69308499409ba3f6a5b42f6e3bb8~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_e91f66177ea54a37a1059b9ff4a38390~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_242352b715b342368983655dced88c1d~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_088731c9fa674e93a8f4cbd89335dad2~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_8944f1419aed4433ba99a8226ba38eb3~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_9e90853643f1425aaa05b50f7500db6e~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_3346ddff0ab641989e848e0ff479ab56~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_1255e43684be4dac9ce04fed8017fe67~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_fb7784cf05df4278b281219e5bf9251a~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_4bf8a5954ab0430b94ffee73a69dce25~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_d512a32bc0284daab56199552f3550ad~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_a2dd10646f724a12ab9e7d29e53ca0fc~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_b04a173e3434446d90f5e821c3775979~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_da2b6b6f3ff9487bb8a108e2154c889a~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_cf411233725e4f42a47000d096a888da~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_96fa1a11e57a4e8190b68567b5903cb5~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_55c0a1808bfc42ab911abaf0f388df49~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_3730e2b72b72470f80d0cbe57271ea72~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_2d727f5f61e841759be24011f5bf40c1~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_c83748bc815348edaaf42a8b72ba473f~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_6caa51c5551f4eb4b49b85c247d26b3a~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_6698ab3337a8468e9194ecde6e003b0e~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_7999d7edd6d74c96a5836afa003e2df4~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_1a0be68c235545b8b1685ccff16d901c~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_91d49aec3abf4e4f9408ac1a0d7648e8~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_c6201d8f5e2b45c784ea345a07b4face~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_1d5a59c0858c4ee4bf9c00b672cd1882~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_65593ea0bfda4f40bded15a7735ca768~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_9ed1ef074045413bb82a34bc2916cd2b~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_a9671724b32842dca6b529c37da9fad0~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_a4eb22f1f76840d6aded22e8dbead476~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_f64a2d48e30d4ceca4ca698703200061~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_b0af69308499409ba3f6a5b42f6e3bb8~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_e91f66177ea54a37a1059b9ff4a38390~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_242352b715b342368983655dced88c1d~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_088731c9fa674e93a8f4cbd89335dad2~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_8944f1419aed4433ba99a8226ba38eb3~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_9e90853643f1425aaa05b50f7500db6e~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_3346ddff0ab641989e848e0ff479ab56~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_1255e43684be4dac9ce04fed8017fe67~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_fb7784cf05df4278b281219e5bf9251a~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_ac1c29d3bc5641cc9809ce8c8b8be798~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_dcce76b23d6f410fa85e01eccfed4de6~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_0a1bce4e77b648a99bb3e3a8a6ed27a0~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_f45cc440cef44fd3a880f81b786424b0~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_f3a19a2593354a339b1ee891bf2d31d8~mv2.jpg"
-    ]
-  },
-  {
-    mainImage: "https://static.wixstatic.com/media/a5775f_5cd33a9cd7134dc19fc95415e25caf83~mv2.jpg",
-    images: [
-      "https://static.wixstatic.com/media/a5775f_5434a40c460e40e7b005874fc28d5cab~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_b33dce4a01404840ad9138e23fdb4781~mv2.jpg",
-      "https://static.wixstatic.com/media/a5775f_0f9813c332394fbfa74a155894fe00c6~mv2.jpg"
-    ]
-  }
-]; */
-//Currently used on the html example, but can be used with any schema.
-const projects = [
-  {
-    mainImage: "https://picsum.photos/300?random=1",
-    images: [
-      "https://picsum.photos/800?random=2",
-      "https://picsum.photos/800?random=3",
-      "https://picsum.photos/800?random=4",
-      "https://picsum.photos/800?random=5"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=6",
-    images: [
-      "https://picsum.photos/800?random=7",
-      "https://picsum.photos/800?random=8",
-      "https://picsum.photos/800?random=9"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=10",
-    images: [
-      "https://picsum.photos/800?random=11",
-      "https://picsum.photos/800?random=12",
-      "https://picsum.photos/800?random=13",
-      "https://picsum.photos/800?random=14"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=15",
-    images: [
-      "https://picsum.photos/800?random=16",
-      "https://picsum.photos/800?random=17"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=18",
-    images: [
-      "https://picsum.photos/800?random=19",
-      "https://picsum.photos/800?random=20",
-      "https://picsum.photos/800?random=21",
-      "https://picsum.photos/800?random=22",
-      "https://picsum.photos/800?random=23"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=24",
-    images: [
-      "https://picsum.photos/800?random=25",
-      "https://picsum.photos/800?random=26",
-      "https://picsum.photos/800?random=27",
-      "https://picsum.photos/800?random=28"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=29",
-    images: [
-      "https://picsum.photos/800?random=30",
-      "https://picsum.photos/800?random=31"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=32",
-    images: [
-      "https://picsum.photos/800?random=33",
-      "https://picsum.photos/800?random=34",
-      "https://picsum.photos/800?random=35"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=36",
-    images: [
-      "https://picsum.photos/800?random=37",
-      "https://picsum.photos/800?random=38",
-      "https://picsum.photos/800?random=39",
-      "https://picsum.photos/800?random=40"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=41",
-    images: [
-      "https://picsum.photos/800?random=42",
-      "https://picsum.photos/800?random=43",
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=44",
-    images: [
-      "https://picsum.photos/800?random=45",
-      "https://picsum.photos/800?random=46",
-      "https://picsum.photos/800?random=47",
-      "https://picsum.photos/800?random=48"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=49",
-    images: [
-      "https://picsum.photos/800?random=50",
-      "https://picsum.photos/800?random=51",
-      "https://picsum.photos/800?random=52"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=53",
-    images: [
-      "https://picsum.photos/800?random=54",
-      "https://picsum.photos/800?random=55",
-      "https://picsum.photos/800?random=56",
-      "https://picsum.photos/800?random=57"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=58",
-    images: [
-      "https://picsum.photos/800?random=59",
-      "https://picsum.photos/800?random=60"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=61",
-    images: [
-      "https://picsum.photos/800?random=2",
-      "https://picsum.photos/800?random=63",
-      "https://picsum.photos/800?random=64",
-      "https://picsum.photos/800?random=65"
-    ]
-  },
-  {
-    mainImage: "https://picsum.photos/300?random=66",
-    images: [
-      "https://picsum.photos/800?random=67",
-      "https://picsum.photos/800?random=68",
-      "https://picsum.photos/800?random=69"
-    ]
-  }
-];
+/* END OF  ROOT DEBUGGER TOOL */
 
 /* Shaders for the phantom gallery */
 const vertexShader = `
@@ -8141,3 +9772,70 @@ const initPhantomGallery = async () => {
 
 
 
+  document.addEventListener('DOMContentLoaded', () => {
+    /*document.querySelectorAll('#ts-panel').forEach(el => {
+      if (!el._tsTabs) {
+        el._tsTabs = new ToolskinTabs(el);
+      }
+    });*/
+    document.querySelectorAll('#ts-panel-tabs').forEach(el => {
+    new ToolskinTabs(el);
+  });
+});
+
+// ─── PATCH: Lock main page during diff mode ─────────────────────
+/*(function patchDiffScrolling() {
+  if (typeof ToolskinStylesheetDebugger === 'undefined') return;
+
+  const origOpen = ToolskinStylesheetDebugger.prototype.openDiff;
+  const origClose = ToolskinStylesheetDebugger.prototype.closeDiff;
+
+  ToolskinStylesheetDebugger.prototype.openDiff = function(filePathA, filePathB) {
+    // Lock main page
+    const html = document.documentElement;
+    const body = document.body;
+    if (!this._mainPageStylesBackup) {
+      this._mainPageStylesBackup = {
+        htmlOverflow: html.style.overflow,
+        htmlMaxHeight: html.style.maxHeight,
+        htmlMaxWidth: html.style.maxWidth,
+        htmlScrollBehavior: html.style.scrollBehavior,
+        bodyOverflow: body.style.overflow,
+        bodyMaxHeight: body.style.maxHeight,
+        bodyMaxWidth: body.style.maxWidth,
+      };
+    }
+    html.style.overflow = 'hidden';
+    html.style.maxHeight = '100dvh';
+    html.style.maxWidth = '100dvw';
+    html.style.scrollBehavior = 'auto';
+    body.style.overflow = 'hidden';
+    body.style.maxHeight = '100dvh';
+    body.style.maxWidth = '100dvw';
+    html.classList.remove('ts-fullpage');
+    body.classList.remove('ts-fullpage');
+
+    // Call original openDiff
+    return origOpen.call(this, filePathA, filePathB);
+  };
+
+  ToolskinStylesheetDebugger.prototype.closeDiff = function() {
+    // Restore main page styles
+    if (this._mainPageStylesBackup) {
+      const html = document.documentElement;
+      const body = document.body;
+      const b = this._mainPageStylesBackup;
+      html.style.overflow = b.htmlOverflow || '';
+      html.style.maxHeight = b.htmlMaxHeight || '';
+      html.style.maxWidth = b.htmlMaxWidth || '';
+      html.style.scrollBehavior = b.htmlScrollBehavior || '';
+      body.style.overflow = b.bodyOverflow || '';
+      body.style.maxHeight = b.bodyMaxHeight || '';
+      body.style.maxWidth = b.bodyMaxWidth || '';
+      this._mainPageStylesBackup = null;
+    }
+
+    // Call original closeDiff
+    return origClose.call(this);
+  };
+})();*/

@@ -294,6 +294,16 @@
     return root;
   }
 
+  /* ── ACCORDION ──────────────────────────────────────────── */
+  function initCardAccordion() {
+    document.querySelectorAll('.ts-card-header.ts-accordion').forEach(function (hdr) {
+      hdr.addEventListener('click', function () { hdr.classList.toggle('open'); });
+    });
+    document.querySelectorAll('.ts-tab-pane').forEach(function (pane) {
+      var first = pane.querySelector('.ts-card-header.ts-accordion');
+      if (first) first.classList.add('open');
+    });
+  }
   /* ── Custom select (native <select> enhancement) ───────────────── */
   function TSUISelect(wrap) {
     if (!wrap || wrap.__tsUiSelect) return;

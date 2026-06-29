@@ -97,13 +97,13 @@ function buildRulers() {
   rt.innerHTML = ''; rl.innerHTML = '';
   for (let i = 0; i < Math.ceil(window.innerWidth / 55); i++) {
     const d = document.createElement('div');
-    d.className = 'rstk' + (i % 5 === 0 ? ' m' : '');
+    d.className = 'ts-rt-ruler' + (i % 5 === 0 ? ' m' : '');
     if (i % 5 === 0) d.dataset.v = i * 55;
     rt.appendChild(d);
   }
   for (let i = 0; i < Math.ceil(window.innerHeight / 80); i++) {
     const d = document.createElement('div');
-    d.className = 'rsvtk';
+    d.className = 'ts-rl-ruler';
     rl.appendChild(d);
   }
   document.getElementById('ts-dims').textContent = `${window.innerWidth}px × ${window.innerHeight}px`;
@@ -182,13 +182,13 @@ window.addEventListener('resize', buildRulers);*/
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   // Slot renderer into the placeholder canvas element
-  const ph = document.getElementById('ts-cv');
+  const ph = document.getElementById('ts-canvas-cube');
   ph.replaceWith(renderer.domElement);
   Object.assign(renderer.domElement.style, {
     position: 'absolute', inset: '0',
     width: '100%', height: '100%', zIndex: '999', display: 'block'
   });
-  renderer.domElement.id = 'ts-cv';
+  renderer.domElement.id = 'ts-canvas-cube';
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -372,7 +372,7 @@ window.addEventListener('resize', buildRulers);*/
  *
  * NAMING CONFLICT  ⚠
  * ──────────────────────────────────────────────────────────────────
- * The name "ts-sidebar" is conflictive: a core Toolskin component
+ * The name "ts-portfolio-sidebar" is conflictive: a core Toolskin component
  * already uses that name. This module must be renamed and deduped
  * across class names, IDs, and styles. It must also be adapted to
  * use the core component directly for optimal integration.
@@ -390,12 +390,12 @@ window.addEventListener('resize', buildRulers);*/
  * Mouse-position driven, eased, wave reveal.
  * ════════════════════════════════════════════════════════════════════ */
 const mt = document.getElementById('ts-mt');
-const sb = document.getElementById('ts-sidebar');
+const sb = document.getElementById('ts-portfolio-sidebar');
 mt.style.height = (MENU_LIST.length * ITEM_H) + 'px';
 
 MENU_LIST.forEach((proj, idx) => {
   const a = document.createElement('a');
-  a.className = 'ts-wl';
+  a.className = 'ts-slide-menu-item';
   a.href = '#';
   a.textContent = proj.title;
   a.dataset.slug = proj.slug;
@@ -403,7 +403,7 @@ MENU_LIST.forEach((proj, idx) => {
   mt.appendChild(a);
 });
 
-const links = Array.from(mt.querySelectorAll('.ts-wl'));
+const links = Array.from(mt.querySelectorAll('.ts-slide-menu-item'));
 
 function revealMenu() {
   links.forEach((el, i) => {
@@ -491,7 +491,7 @@ sb.addEventListener('mouseleave', () => {
  * It looks ideal for portfolio or website views.
  * Pending: integration + CSS componentization.
  * ════════════════════════════════════════════════════════════════════ */
-const detEl = document.getElementById('ts-detail');
+const detEl = document.getElementById('ts-portfolio-detail');
 const wipeEl = document.getElementById('ts-wipe');
 
 function openDetail(p) {

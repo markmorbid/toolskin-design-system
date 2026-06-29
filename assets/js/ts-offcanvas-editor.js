@@ -1572,7 +1572,7 @@
     tabs.forEach(function (t) { t.addEventListener('click', function () { switchTab(this.dataset.tab); }); });
 
     // Accordion (banner generator: one open per pane)
-    panel.querySelectorAll('.ts-card-header.ts-accordion').forEach(function (hdr) {
+    /*panel.querySelectorAll('.ts-card-header.ts-accordion').forEach(function (hdr) {
       hdr.addEventListener('click', function () {
         var c = this.closest('.ts-card'), pane = c ? c.closest('.ts-tab-pane') : null;
         if (pane) pane.querySelectorAll('.ts-card').forEach(function (oc) {
@@ -1580,7 +1580,7 @@
         });
         this.classList.toggle('open');
       });
-    });
+    });*/
 
     /* ── HERO ── */
     var bgTypeSelect = panel.querySelector('#ts-oce-bg-type');
