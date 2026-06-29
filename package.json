@@ -1,0 +1,26 @@
+{
+  "name": "toolskin-showcase",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node --test tools/scripts/*.test.js",
+    "test:e2e": "playwright test",
+    "build:assets": "node tools/scripts/build-asset-map.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "pixelmatch": "^5.3.0",
+    "pngjs": "^7.0.0"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

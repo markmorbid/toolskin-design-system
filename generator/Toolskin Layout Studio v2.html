@@ -1,0 +1,2645 @@
+<!DOCTYPE html>
+<html lang="en" class="ts-banner-generator-app">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toolskin Layout Studio v2</title>
+
+  <script id="ts-theme-mode-boot">(function(){try{var key='ts-theme-mode';var m=localStorage.getItem(key);if(!m)return;if(m==='auto'){m=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(m==='dark'||m==='light'){document.documentElement.setAttribute('data-theme',m);document.documentElement.setAttribute('data-ts-theme',m);}}catch(e){}})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/favicon.ico" sizes="any">
+  <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="https://satsea.io/toolskin-showcase/assets/img/apple-touch-icon.png">
+
+  <style id="ts-preloader-boot">
+    html.ts-preloader-lock, html.ts-preloader-lock body { overflow: hidden !important; }
+    html.ts-preloader-lock #ts-app, html.ts-preloader-lock #ts-main { visibility: hidden !important; pointer-events: none !important; }
+    html.ts-preloader-lock .ts-preloader { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+    html.ts-preloader-lock .ts-oce-panel.ts-oce--open,
+    html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab { opacity: 0 !important; z-index: -20 !important; pointer-events: none !important; }
+  </style>
+
+  <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-assets.js" defer></script>
+  <script id="ts-preloader-lock">
+    document.documentElement.classList.add('ts-preloader-lock');
+    Promise.all([
+      document.fonts.load('600 1em "Space Grotesk"'),
+      document.fonts.load('400 1em "JetBrains Mono"')
+    ]).then(function(){ document.documentElement.classList.add('ts-fonts-ready'); });
+  </script>
+
+  <link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/toolskin.css">
+  <link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/ts-layout-editor-dirty-styles.css">
+  <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin.js" defer></script>
+  <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-uikit.js" defer></script>
+  <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin.bannerGenerator.js" defer></script>
+
+  <!-- ====================================================================
+   TOOLSKIN LAYOUT STUDIO — v2 CSS
+   ====================================================================
+   SINGLE SOURCE OF TRUTH:
+     --ts-layout-cols   JS: updateGrid(N)
+     --ts-grid-gap      JS: gap slider → updateGap(px)
+     --ts-col-width     JS: computeGridVars() — exact rendered px
+     --ts-tile-width    JS: computeGridVars() — col-width + gap
+   All layout derives from these four variables.
+   NO duplicated calc. NO hardcoded px values for grid math.
+
+   FIX LOG (v2):
+     [F1] .ts-stack: height:auto → flex:1 fill (stack-in-tile bug)
+     [F2] .ts-bento > *: display:flex so stack fills the cell
+     [F3] .ts-grid nested: smaller minmax(100px) — no collapse in narrow tiles
+     [F4] Mesh: moved to .ts-app__main, uses --ts-col-width/--ts-tile-width
+          for exact column alignment (not decorative fixed-sz grid)
+     [F5] CSS: all duplicate :root / .ts-bento / .ts-stack / .ts-grid removed
+     [F6] .ts-split/.ts-grid: flex:1 so they fill nested containers
+     [F7] Gap slider wired to --ts-grid-gap SSOT
+     [F8] Cell type switcher: per-tile span + inner layout control
+     [F9] computeGridVars reads actual px from bento paddingLeft/columnGap
+          (not getPropertyValue on var() strings which return raw tokens)
+   ==================================================================== -->
+  <style>
+    /* ── RESET (single declaration) ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOKENS — single :root block ────────────────────────────── */
+    :root {
+      --ts-ls-panel-w:      320px;
+      --ts-ls-topbar-h:     65px;
+      --ts-ls-sidebar-w:    200px;
+      --ts-ls-navbar-h:     45px;
+      --ts-panel-w:         var(--ts-ls-panel-w);
+      --ts-title-color:     #ffffff;
+
+      /* Grid engine (JS overwrites col-width + tile-width after paint) */
+      --ts-layout-cols:  12;
+      --ts-grid-gap:     0px;    /* SSOT — gap slider writes here */
+      --ts-col-width:    80px;   /* JS-computed exact px */
+      --ts-tile-width:   80px;   /* JS-computed: col-width + gap */
+
+      /* Bento — follows grid gap SSOT */
+      --ts-bento-gap:      var(--ts-grid-gap);
+      --ts-bento-pad:      var(--ts-sp-6, 24px);
+      --ts-bento-cell-pad: var(--ts-sp-6, 24px);
+      --ts-bento-min-h:    160px;
+      --ts-bento-border:   var(--ts-this-bg-border, rgba(255,255,255,.07));
+      --ts-bento-border-hi:var(--ts-this-bg-border-hover, rgba(255,255,255,.14));
+      --ts-bento-bg:       var(--ts-this-bg-dim-4, rgba(0,0,0,.15));
+
+      /* Overlay */
+      --ts-overlay-fill: color-mix(in srgb, var(--ts-info, #3b82f6) 8%, transparent);
+
+      /* Mesh color — applied on .ts-app__main via column-aligned gradient */
+      --ts-mesh-color: var(--ts-this-bg-border, rgba(255,255,255,.07));
+
+      /* Nesting surfaces */
+      --ts-nest-bg:   transparent;
+      --ts-nest-card: transparent;
+      --ts-nest-pad:  calc(var(--ts-bento-pad) * .65);
+    }
+
+    /* ── BASE ────────────────────────────────────────────────────── */
+    html { color-scheme: dark; overflow: hidden; }
+    body {
+      background: var(--ts-bg-body, #0c0d0f);
+      font-family: var(--ts-font-body, 'Space Grotesk', system-ui, sans-serif);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── EDITOR SHELL ────────────────────────────────────────────── */
+    .ts-editor {
+      display: grid;
+      grid-template-columns: 1fr var(--ts-ls-panel-w);
+      grid-template-rows: var(--ts-ls-topbar-h) 1fr;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    /* ── CANVAS AREA ─────────────────────────────────────────────── */
+    #ts-canvas-area {
+      grid-column: 1;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      background-color: var(--ts-bg-body, #0c0d0f);
+      overflow: hidden;
+      position: relative;
+      flex: 1;
+    }
+    .ts-canvas-info-bar {
+      position: fixed;
+      top: calc(var(--ts-ls-topbar-h) + 6px);
+      left: var(--ts-sp-4, 16px);
+      display: flex;
+      gap: var(--ts-sp-3, 12px);
+      align-items: center;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .ts-canvas-badge {
+      font-size: 11px;
+      color: var(--ts-text-muted, rgba(232,233,234,.45));
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--ts-border-0, rgba(255,255,255,.07));
+      border-radius: 6px;
+      padding: 4px 7px;
+    }
+    #ts-canvas-container[class*="ts-pattern-"] {
+      position: relative;
+      overflow: hidden;
+      background-color: transparent !important;
+    }
+
+    /* ── WORKBENCH ───────────────────────────────────────────────── */
+    .ts-workbench {
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      height: 100%;
+      min-height: 0;
+      flex: 1 1 auto;
+      align-items: stretch;
+      width: 100%;
+      border: 1px solid var(--ts-border-1, rgba(255,255,255,.05));
+    }
+    .ts-workbench h3, .ts-workbench h4 {
+      font-family: var(--ts-font-body, sans-serif);
+    }
+
+    /* ── CANVAS ──────────────────────────────────────────────────── */
+    .ts-canvas {
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      /* No background on canvas — mesh lives on .ts-app__main for alignment */
+    }
+    #ts-master-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    /* Structural marker — no display override */
+    .ts-layout-container { position: relative; }
+
+    /* ── APP SHELL ───────────────────────────────────────────────── */
+    .ts-app {
+      flex: 1;
+      display: grid;
+      grid-template:
+        "nav topbar" var(--ts-ls-navbar-h)
+        "nav main"   1fr
+        / var(--ts-ls-sidebar-w) 1fr;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .ts-app__nav {
+      grid-area: nav;
+      background: var(--ts-bg-0, #14161a);
+      border-right: 1px solid var(--ts-bento-border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .ts-app__topbar {
+      grid-area: topbar;
+      background: var(--ts-bg-0, #14161a);
+      border-bottom: 1px solid var(--ts-bento-border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--ts-bento-cell-pad);
+      font-size: 12px;
+      gap: var(--ts-sp-3, 12px);
+      flex-wrap: wrap;
+      min-height: var(--ts-ls-navbar-h);
+      overflow: hidden;
+    }
+    .ts-app__main {
+      grid-area: main;
+      overflow: auto;
+      position: relative;
+      scrollbar-width: thin;
+      background-color: var(--ts-bg-body, #0c0d0f);
+      /* [F4] Column-aligned mesh — exact match to bento grid.
+         background-position offsets by --ts-bento-pad so the first column
+         guide line starts exactly where the bento's first column starts.
+         When gap = 0, col-width = tile-width → gradient has zero-width
+         colored stop → mesh invisible (wireframe mode). Gap > 0 → lines appear. */
+      background-image: repeating-linear-gradient(
+        to right,
+        transparent                     0px,
+        transparent                     var(--ts-col-width),
+        var(--ts-mesh-color)            var(--ts-col-width),
+        var(--ts-mesh-color)            var(--ts-tile-width)
+      );
+      background-position: var(--ts-bento-pad) 0;
+      background-repeat: repeat;
+    }
+
+    .ts-app__main {
+      grid-area: main;
+      overflow: auto;
+      position: relative;
+      scrollbar-width: thin;
+      background-color: var(--ts-bg-body, #0c0d0f);
+      /* background-image: repeating-linear-gradient(
+          to right,
+          transparent                     0px,
+          transparent                     1px,
+          var(--ts-mesh-color)            1px,
+          var(--ts-mesh-color)            var(--ts-tile-width)
+        ); */
+      background-position: var(--ts-bento-cell-pad) 0;
+      background-repeat: repeat;
+      background-image: var(--ts-bg-mesh)!important;
+      --ts-bg-mesh: repeating-linear-gradient(0deg,  transparent, 
+                    transparent calc(var(--ts-mesh-sz) - 1px), 
+                    var(--ts-mesh-color) var(--ts-mesh-sz)),
+                    repeating-linear-gradient(90deg, transparent, 
+                    transparent calc(var(--ts-mesh-sz) - 1px), 
+                    var(--ts-mesh-color) var(--ts-mesh-sz));
+      --ts-mesh-sz: calc(var(--ts-bento-cell-pad)*2);
+  }
+
+    /* ── GRID OVERLAY ────────────────────────────────────────────── */
+    .ts-grid-overlay {
+      position: absolute;
+      inset: 0;
+      margin: var(--ts-bento-pad);
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity .18s;
+      background-image: repeating-linear-gradient(
+        to right,
+        var(--ts-overlay-fill) 0px,
+        var(--ts-overlay-fill) var(--ts-col-width),
+        transparent            var(--ts-col-width),
+        transparent            var(--ts-tile-width)
+      );
+    }
+    .ts-grid-overlay[data-visible="true"] { opacity: 1; }
+
+    /* ── BENTO GRID ──────────────────────────────────────────────── */
+    .ts-bento {
+      display: grid;
+      grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+      gap: var(--ts-bento-gap);
+      grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+      grid-auto-flow: dense;
+      padding: var(--ts-bento-pad);
+      min-height: 100%;
+    }
+
+    /* [F2] Bento cells are flex containers so .ts-stack fills them */
+    .ts-bento > * {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: border-color .1s, box-shadow .12s;
+      position: relative;
+    }
+    /* Wireframe borders via ::before — no gap-doubling at zero gap */
+    .ts-bento > *::before {
+        content: "";
+        position: absolute;
+        inset: 0px 0px;
+        border: 1px solid var(--ts-bento-border);
+        background-color: var(--ts-bento-bg);
+        box-sizing: content-box;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .ts-bento > *:hover:not(.ts-tile--selected) {
+      z-index: 99;
+    }
+    .ts-bento > *:hover:not(.ts-tile--selected)::before {
+      border-color: var(--ts-bento-border-hi);
+    }
+    .ts-bento > *.ts-tile--selected {
+      outline: 2px solid var(--ts-accent, #ff5500) !important;
+      outline-offset: -1px;
+      z-index: 99;
+    }
+    .ts-bento > *.ts-tile--selected::before {
+      border-width: 0;
+    }
+
+    /* ── BENTO TILE SPANS — 12 col (default) ───────────────────── */
+    .ts-bento__hero  { grid-column: span 8;  grid-row: span 2; }
+    .ts-bento__half  { grid-column: span 4;  grid-row: span 2; }
+    .ts-bento__third { grid-column: span 4; }
+    .ts-bento__quart { grid-column: span 3; }
+    .ts-bento__wide  { grid-column: span 5; }
+    .ts-bento__full  { grid-column: 1 / -1; }
+
+    /* ── BENTO TILE SPANS — 8 col ──────────────────────────────── */
+    [data-ts-cols="8"] .ts-bento__hero  { grid-column: span 5; grid-row: span 2; }
+    [data-ts-cols="8"] .ts-bento__half  { grid-column: span 3; grid-row: span 2; }
+    [data-ts-cols="8"] .ts-bento__third { grid-column: span 3; }
+    [data-ts-cols="8"] .ts-bento__quart { grid-column: span 2; }
+    [data-ts-cols="8"] .ts-bento__wide  { grid-column: span 3; }
+    [data-ts-cols="8"] .ts-bento__full  { grid-column: 1 / -1; }
+
+    /* ── BENTO TILE SPANS — 16 col ─────────────────────────────── */
+    [data-ts-cols="16"] .ts-bento__hero  { grid-column: span 10; grid-row: span 2; }
+    [data-ts-cols="16"] .ts-bento__half  { grid-column: span 6;  grid-row: span 2; }
+    [data-ts-cols="16"] .ts-bento__third { grid-column: span 5; }
+    [data-ts-cols="16"] .ts-bento__quart { grid-column: span 4; }
+    [data-ts-cols="16"] .ts-bento__wide  { grid-column: span 7; }
+    [data-ts-cols="16"] .ts-bento__full  { grid-column: 1 / -1; }
+
+    /* ── LAYOUT PRIMITIVES ──────────────────────────────────────── */
+
+    /* [F1] Stack: flex fill — replaces grid+height:auto which left tiles empty.
+       flex:1 fills the bento cell (parent is now flex via [F2]).
+       min-height:0 allows it to shrink inside flex parent without overflow. */
+    .ts-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ts-sp-3, 12px);
+      padding: var(--ts-bento-cell-pad);
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* [F6] Split/Grid also get flex:1 so they fill nested containers */
+    .ts-split {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--ts-grid-gap, 0px);
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* [F3] Nested grids: smaller minmax(100px) — avoids single-col collapse
+       in narrow tiles like ts-bento__quart (3 cols wide). */
+    .ts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+      gap: var(--ts-grid-gap, 0px);
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ── NESTING LEVEL VISUAL CUES ─────────────────────────────── */
+    .ts-layout-container[data-level="2"] {
+      outline: 1px solid color-mix(in srgb, var(--ts-accent, #ff5500) 32%, transparent);
+      outline-offset: -1px;
+    }
+    .ts-layout-container[data-level="3"] {
+      outline: 1px solid color-mix(in srgb, var(--ts-info, #3b82f6) 32%, transparent);
+      outline-offset: -1px;
+    }
+
+    /* ── NESTED BLOCKS ──────────────────────────────────────────── */
+    /* [F1/F6] nested blocks flex:1 — fill parent, no margin-top hack */
+    .ts-nested-block {
+      background: var(--ts-nest-bg);
+      padding: var(--ts-nest-pad);
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+    .ts-nested-card {
+      background: var(--ts-nest-card);
+      padding: var(--ts-nest-pad) !important;
+      min-height: 80px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Nested card wireframe border via ::before */
+    .ts-nested-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px 0 0 -1px;
+      border: 1px solid var(--ts-bento-border);
+      box-sizing: content-box;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ts-nested-block.ts-split .ts-nested-card { min-height: 100px; }
+
+    /* ── TILE SELECTION BADGE ────────────────────────────────────── */
+    .ts-tile--selected::after {
+      content: "L" attr(data-level);
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--ts-accent, #ff5500);
+      color: var(--ts-on-accent, #fff);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-family: var(--ts-font-mono, monospace);
+      z-index: 20;
+      pointer-events: none;
+      letter-spacing: .04em;
+    }
+
+    /* ── CELL TYPE CONTROLS ─────────────────────────────────────── */
+    /* Shown in .ts-app__topbar when a tile is selected */
+    .ts-cell-controls {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+      margin-left: auto;
+      overflow: hidden;
+    }
+    .ts-cell-controls[data-visible="true"] { display: flex; }
+    .ts-cell-sep {
+      width: 1px;
+      height: 14px;
+      background: var(--ts-border-0, rgba(255,255,255,.08));
+      margin: 0 4px;
+      flex-shrink: 0;
+    }
+    .ts-cell-btn {
+      font-size: 10px;
+      font-family: var(--ts-font-mono, monospace);
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid var(--ts-border-0, rgba(255,255,255,.08));
+      background: var(--ts-bg-1, #1c1e24);
+      color: var(--ts-text-muted, rgba(232,233,234,.5));
+      cursor: pointer;
+      transition: background .1s, color .1s, border-color .1s;
+      white-space: nowrap;
+      flex-shrink: 0;
+      line-height: 1.6;
+    }
+    .ts-cell-btn:hover {
+      background: var(--ts-bg-2, #23262e);
+      color: var(--ts-text-primary, #e8e9ea);
+      border-color: var(--ts-border-1, rgba(255,255,255,.12));
+    }
+    .ts-cell-btn.ts-active {
+      background: color-mix(in srgb, var(--ts-accent, #ff5500) 15%, var(--ts-bg-1, #1c1e24));
+      color: var(--ts-accent, #ff5500);
+      border-color: color-mix(in srgb, var(--ts-accent, #ff5500) 40%, transparent);
+    }
+
+    /* ── GAP CONTROL (topbar) ────────────────────────────────────── */
+    .ts-gap-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ts-gap-label {
+      font-size: 11px;
+      color: var(--ts-text-muted, rgba(232,233,234,.45));
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      white-space: nowrap;
+    }
+    .ts-gap-val {
+      font-size: 11px;
+      font-family: var(--ts-font-mono, monospace);
+      color: var(--ts-text-secondary, rgba(232,233,234,.65));
+      min-width: 26px;
+      text-align: right;
+    }
+    #ts-gap-slider { width: 72px; }
+
+    /* ── MUTED / HELPER TEXT ─────────────────────────────────────── */
+    .ts-muted, .ts-placeholder-text {
+      color: var(--ts-text-muted, rgba(232,233,234,.45));
+      font-size: 12px;
+    }
+
+    /* ── TOAST ───────────────────────────────────────────────────── */
+    .ts-ls-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ts-bg-3, #2d3038);
+      color: var(--ts-text-primary, #e8e9ea);
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: 1px solid var(--ts-border-1, rgba(255,255,255,.12));
+      font-size: 12px;
+      font-family: var(--ts-font-body, sans-serif);
+      z-index: 9999;
+      pointer-events: none;
+      white-space: nowrap;
+      animation: ts-toast-in .17s ease both;
+    }
+    @keyframes ts-toast-in {
+      from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .ts-bento { grid-template-columns: repeat(6, 1fr) !important; }
+      .ts-bento__hero  { grid-column: span 4 !important; }
+      .ts-bento__half  { grid-column: span 2 !important; }
+      .ts-bento__third,
+      .ts-bento__quart,
+      .ts-bento__wide  { grid-column: span 3 !important; }
+    }
+    @media (max-width: 768px) {
+      .ts-split { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .ts-bento { grid-template-columns: 1fr !important; }
+      .ts-bento > * { grid-column: 1 !important; grid-row: auto !important; }
+    }
+
+    /*
+
+    Overrdide stezxtoing styles for visual mockup output fixes*/
+    /* ============================================================
+   Reset & base – kept once
+   ============================================================ */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   Root variables – merged from duplicates
+   ============================================================ */
+:root {
+  --ts-ls-panel-w: 320px;
+  --ts-ls-topbar-h: 60px;
+  --ts-ls-sidebar-w: 200px;
+  --ts-ls-navbar-h: 42px;
+  --ts-layout-cols: 12;
+  --ts-grid-gap: 0px;
+  --ts-col-width: 80px;
+  --ts-tile-width: 80px;
+  --ts-bento-gap: var(--ts-grid-gap);
+  --ts-bento-pad: var(--ts-sp-6, 24px);
+  --ts-bento-cell-pad: var(--ts-sp-6, 24px);
+  --ts-bento-min-h: 160px;
+  --ts-bento-border: var(--ts-this-bg-border, rgba(255, 255, 255, .08));
+  --ts-bento-border-hi: var(--ts-this-bg-border-hover, rgba(255, 255, 255, .15));
+  --ts-overlay-fill: color-mix(in srgb, var(--ts-info, #3b82f6) 8%, transparent);
+  --ts-nest-pad: calc(var(--ts-bento-pad)*.5);
+  --ts-bento-bg: transparent;
+}
+
+html {
+  color-scheme: dark;
+  overflow: hidden;
+}
+
+body {
+  background: var(--ts-bg-body, #0c0d0f);
+  font-family: var(--ts-font-body, 'Space Grotesk', system-ui, sans-serif);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Global app grid
+   ============================================================ */
+#ts-app {
+  display: grid;
+  grid-template-columns: 1fr var(--ts-ls-panel-w);
+  grid-template-rows: var(--ts-ls-topbar-h) 1fr;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#ts-topbar {
+  grid-area: 1 / 1 / auto / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-3, 12px);
+  padding: 0 var(--ts-sp-4, 16px);
+  background: var(--ts-bg-0, #14161a);
+  border-bottom: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .07));
+  z-index: 200;
+  overflow: hidden;
+}
+
+.ts-topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--ts-sp-2, 8px);
+}
+
+#ts-canvas-size-badge {
+  font-family: var(--ts-font-mono, monospace);
+  font-size: 10px;
+  color: var(--ts-text-muted);
+  padding: 2px 8px;
+  background: var(--ts-this-bg-dim-2, rgba(255, 255, 255, .03));
+  border: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .07));
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+#ts-canvas-area {
+  grid-area: 2 / 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#ts-panel {
+  grid-area: 2 / 2;
+  display: flex;
+  flex-direction: column;
+  background: var(--ts-bg-0, #14161a);
+  border-left: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .07));
+  overflow: hidden;
+}
+
+/* ============================================================
+   Canvas & master layout
+   ============================================================ */
+.ts-canvas {
+  flex: 1 1 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: stretch;
+  align-items: stretch;
+}
+
+#ts-master-layout {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  position: relative;
+  align-items: stretch;
+  flex-wrap: wrap;
+  align-content: stretch;
+  justify-content: space-between;
+}
+
+.ts-layout-container {
+  position: relative;
+}
+
+/* ============================================================
+   App main grid (nav / topbar / main)
+   ============================================================ */
+.ts-app {
+  flex: 1 1 0%;
+  display: grid;
+  grid-template:
+    "nav topbar" var(--ts-ls-navbar-h)
+    "nav main" 1fr
+    / var(--ts-ls-sidebar-w) 1fr;
+  overflow: hidden;
+  min-height: 100%;
+  max-height: calc(100dvh - var(--ts-topbar-h));
+  justify-content: stretch;
+  grid-auto-flow: column dense;
+  align-items: stretch;
+}
+
+.ts-app__nav {
+  grid-area: nav;
+  background: var(--ts-bg-0, #14161a);
+  border-right: 1px solid var(--ts-bento-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ts-app__topbar {
+  grid-area: topbar;
+  background: var(--ts-bg-0, #14161a);
+  border-bottom: 1px solid var(--ts-bento-border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--ts-bento-cell-pad);
+  font-size: 12px;
+  gap: var(--ts-sp-3, 12px);
+  min-height: var(--ts-ls-navbar-h);
+}
+
+.ts-app__main {
+  grid-area: main;
+  overflow: auto;
+  position: relative;
+  scrollbar-width: unset;
+  background-image: linear-gradient(var(--ts-bento-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ts-bento-border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ============================================================
+   Grid overlay
+   ============================================================ */
+.ts-grid-overlay {
+  display: grid;
+  grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+  gap: var(--ts-bento-gap);
+  padding: var(--ts-bento-pad);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.18s;
+  min-height: -webkit-fill-available;
+  grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+  overflow: hidden;
+  top: calc(var(--ts-topbar-h) + var(--ts-ls-navbar-h));
+  max-height: 100dvh;
+}
+
+.ts-grid-overlay[data-visible="true"] {
+  opacity: 1;
+}
+
+.ts-grid-overlay__col {
+  background: var(--ts-this-bg-dim-7);
+  border-radius: 2px;
+  --ts-overlay-fill: color-mix(in srgb, var(--ts-info) 83%, transparent 83%);
+  border-inline: 1px dashed var(--ts-this-bg-border-0);
+  --ts-this-bg: var(--ts-overlay-fill);
+}
+
+/* ============================================================
+   Bento grid & tiles
+   ============================================================ */
+.ts-bento {
+  display: grid;
+  grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+  gap: var(--ts-bento-gap);
+  grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+  grid-auto-flow: dense;
+  padding: var(--ts-bento-pad);
+  min-height: 100%;
+  border-top: 1px solid var(--ts-bento-border);
+  border-left: 1px solid var(--ts-bento-border);
+}
+
+.ts-bento[data-gap-mode="card"],
+.ts-bento[data-gap-mode="spaced"] {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+
+.ts-bento > * {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.ts-bento > *::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ts-bento-border);
+  background: var(--ts-bento-bg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ts-bento[data-gap-mode="card"] > *::before,
+.ts-bento[data-gap-mode="spaced"] > *::before {
+  border-color: var(--ts-bento-border);
+  border-width: 1px;
+  border-style: solid;
+  background: var(--ts-bento-bg);
+}
+
+.ts-bento > :hover:not(.ts-tile--selected) {
+  z-index: 9;
+}
+
+.ts-bento > :hover:not(.ts-tile--selected)::before {
+  border-color: var(--ts-bento-border-hi);
+}
+
+.ts-tile--selected::before {
+  border-color: transparent !important;
+}
+
+.ts-tile--selected::after {
+  content: "L" attr(data-level);
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--ts-accent-dark);
+  color: var(--ts-on-accent);
+  font-size: 12px;
+  font-weight: 700;
+  padding:  6px 10px;
+  border-radius: 999px;
+  font-family: var(--ts-font-mono, monospace);
+  z-index: 20;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   Bento tile size modifiers
+   ============================================================ */
+.ts-bento__hero {grid-area: span 2 / span 8;}
+.ts-bento__half  { grid-area: span 2 / span 4; }
+.ts-bento__third { grid-column: span 4; }
+.ts-bento__quart { grid-column: span 3; }
+.ts-bento__wide  { grid-column: span 5; }
+.ts-bento__full  { grid-column: 1 / -1; }
+
+[data-ts-cols="8"] .ts-bento__hero { grid-area: span 2 / span 5; }
+[data-ts-cols="8"] .ts-bento__half  { grid-area: span 2 / span 3; }
+[data-ts-cols="8"] .ts-bento__third { grid-column: span 3; }
+[data-ts-cols="8"] .ts-bento__quart { grid-column: span 2; }
+[data-ts-cols="8"] .ts-bento__wide  { grid-column: span 3; }
+[data-ts-cols="8"] .ts-bento__full  { grid-column: 1 / -1; }
+
+[data-ts-cols="16"] .ts-bento__hero { grid-area: span 2 / span 10; }
+[data-ts-cols="16"] .ts-bento__half  { grid-area: span 2 / span 6; }
+[data-ts-cols="16"] .ts-bento__third { grid-column: span 5; }
+[data-ts-cols="16"] .ts-bento__quart { grid-column: span 4; }
+[data-ts-cols="16"] .ts-bento__wide  { grid-column: span 7; }
+[data-ts-cols="16"] .ts-bento__full  { grid-column: 1 / -1; }
+
+/* ============================================================
+   Stack, split, grid – layout components
+   ============================================================ */
+.ts-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-sp-3, 12px);
+  /* padding: var(--ts-bento-cell-pad); */
+  flex: 1 1 0%;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+}
+.ts-stack > :nth-child(2) {
+  flex: 1 1 auto;
+  min-height: fit-content;
+}
+
+.ts-split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--ts-grid-gap, 0);
+  align-items: stretch;
+  flex: 1 1 0%;
+  min-height: 0;
+}
+
+.ts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+  gap: var(--ts-grid-gap, 0);
+  align-items: stretch;
+  flex: 1 1 0%;
+  min-height: 0;
+}
+
+/* ============================================================
+   Nested layouts (level indicators)
+   ============================================================ */
+.ts-layout-container[data-level="2"] {
+  outline: 1px solid color-mix(in srgb, var(--ts-accent, #ff5500) 28%, transparent);
+  outline-offset: -1px;
+}
+.ts-layout-container[data-level="3"] {
+  outline: 1px solid color-mix(in srgb, var(--ts-info, #3b82f6) 28%, transparent);
+  outline-offset: -1px;
+}
+
+.ts-nested-block {
+  padding: var(--ts-nest-pad);
+  flex: 1 1 0%;
+  min-height: 0;
+  position: relative;
+}
+
+.ts-nested-card {
+  min-height: 80px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--ts-nest-pad) !important;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+.ts-nested-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ts-bento-border);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   Muted text
+   ============================================================ */
+.ts-muted {
+  color: var(--ts-text-muted, rgba(232, 233, 234, .45));
+  font-size: 12px;
+}
+
+/* ============================================================
+   Panel tabs & body
+   ============================================================ */
+.ts-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .07));
+  flex-shrink: 0;
+}
+
+.ts-ptab {
+  flex: 1 1 0%;
+  padding: 0 16px;
+  height: var(--ts-ls-navbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ts-text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.1s, border-color 0.1s;
+  user-select: none;
+}
+.ts-ptab:hover {
+  color: var(--ts-text-secondary);
+}
+.ts-ptab.active {
+  color: var(--ts-text-primary);
+  border-bottom-color: var(--ts-accent, #ff5500);
+}
+
+.ts-panel-body {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.ts-tab-pane {
+  display: none;
+}
+.ts-tab-pane.active {
+  display: block;
+}
+
+.ts-panel-footer {
+  flex-shrink: 0;
+  padding: var(--ts-sp-3, 12px) var(--ts-sp-4, 16px);
+  border-top: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .07));
+}
+
+#ts-tile-section {
+  display: none;
+}
+#ts-tile-section.active {
+  display: block;
+}
+
+.ts-tile-placeholder {
+  padding: var(--ts-sp-5, 20px) var(--ts-sp-4, 16px);
+  font-size: 12px;
+  color: var(--ts-text-muted);
+  text-align: center;
+  border-bottom: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .07));
+}
+
+/* ============================================================
+   Chips & controls
+   ============================================================ */
+.ts-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 0 4px;
+}
+
+.ts-chip-btn {
+  font-size: 11px;
+  font-family: var(--ts-font-mono, monospace);
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .08));
+  background: var(--ts-bg-2, #1c1e24);
+  color: var(--ts-text-muted);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.ts-chip-btn:hover {
+  background: var(--ts-bg-3, #23262e);
+  color: var(--ts-text-secondary);
+  border-color: var(--ts-this-bg-border-hover, rgba(255, 255, 255, .12));
+}
+.ts-chip-btn.active {
+  background: color-mix(in srgb, var(--ts-accent, #ff5500) 14%, var(--ts-bg-2, #1c1e24));
+  color: var(--ts-accent, #ff5500);
+  border-color: color-mix(in srgb, var(--ts-accent, #ff5500) 38%, transparent);
+}
+
+.ts-range-row-ls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ts-range-val-ls {
+  font-family: var(--ts-font-mono, monospace);
+  font-size: 11px;
+  color: var(--ts-text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ============================================================
+   Code window
+   ============================================================ */
+.ts-code-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.ts-code-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--ts-bg-1, #1c1e24);
+  border-bottom: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .07));
+  flex-shrink: 0;
+}
+.ts-code-dotbtn {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ts-code-dotbtn.red   { background: rgb(239, 68, 68); }
+.ts-code-dotbtn.yellow{ background: rgb(245, 158, 11); }
+.ts-code-dotbtn.green { background: rgb(34, 197, 94); }
+
+.ts-code-label {
+  font-family: var(--ts-font-mono, monospace);
+  font-size: 10px;
+  color: var(--ts-text-muted);
+  margin-left: 4px;
+}
+.ts-code-copy {
+  margin-left: auto;
+  font-size: 10px;
+  font-family: var(--ts-font-body, sans-serif);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--ts-this-bg-border, rgba(255, 255, 255, .08));
+  background: var(--ts-bg-2, #23262e);
+  color: var(--ts-text-muted);
+  cursor: pointer;
+  transition: color 0.1s;
+}
+.ts-code-copy:hover {
+  color: var(--ts-text-primary);
+}
+
+#ts-export-textarea {
+  flex: 1 1 0%;
+  min-height: 0;
+  padding: 16px 18px;
+  font-family: var(--ts-font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  line-height: 1.7;
+  background: var(--ts-bg-body, #0c0d0f);
+  color: var(--ts-text-muted);
+  border: none;
+  outline: none;
+  resize: none;
+  width: 100%;
+  overflow: auto;
+  scrollbar-width: thin;
+  tab-size: 2;
+  white-space: pre;
+  display: block;
+}
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.ts-ls-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ts-bg-3, #2d3038);
+  color: var(--ts-text-primary, #e8e9ea);
+  padding: 9px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--ts-this-bg-border-hover, rgba(255, 255, 255, .12));
+  font-size: 12px;
+  font-family: var(--ts-font-body, sans-serif);
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: ts-toast-in 0.15s ease 1 both;
+}
+@keyframes ts-toast-in {
+  0% { opacity: 0; transform: translateX(-50%) translateY(5px); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ============================================================
+   Field label
+   ============================================================ */
+.ts-field-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ts-text-muted);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ============================================================
+   Manual adjustments (custom overrides)
+   ============================================================ */
+.ts-stack > .ts-layout-tag,
+.ts-grid > div:not(.ts-layout-tag),
+.ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) {
+  --ts-nest-title-pad: calc(var(--ts-bento-cell-pad) * 0.25);
+  display: inline-flex;
+  flex-direction: column;
+  padding: var(--ts-nest-title-pad);
+  background: var(--ts-bento-bg);
+  margin: 0 -3px;
+  border: 1px dashed var(--ts-bento-border);
+  outline-offset: 1px;
+  border-radius: 0 var(--ts-nest-border-radius) 0;
+  pointer-events: none;
+}
+.ts-stack > .ts-layout-tag > .ts-layout-tag_title,
+.ts-stack > .ts-layout-tag > p,
+.ts-stack > .ts-layout-tag > strong,
+.ts-grid > div:not(.ts-layout-tag) > .ts-layout-tag_title,
+.ts-grid > div:not(.ts-layout-tag) > p,
+.ts-grid > div:not(.ts-layout-tag) > strong,
+.ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) > .ts-layout-tag_title,
+.ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) > p,
+.ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) > strong {
+  padding: var(--ts-nest-title-pad);
+
+  line-height: 1;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+}
+.ts-stack > .ts-layout-tag > .ts-layout-tag_title,
+.ts-grid > div:not(.ts-layout-tag) > .ts-layout-tag_title,
+.ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) > .ts-layout-tag_title {
+  padding-bottom: var(--ts-nest-title-pad);
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.005rem;
+}
+.ts-stack > .ts-layout-tag > p,
+.ts-grid > div:not(.ts-layout-tag) > p,
+.ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) > p {
+  padding-top: var(--ts-nest-title-pad);
+  font-size: .6em;
+}
+.ts-stack > .ts-layout-tag > :not(:first-child),
+.ts-grid > div:not(.ts-layout-tag) > :not(:first-child),
+.ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) > :not(:first-child) {
+  border-top: 1px dashed var(--ts-bento-border);
+  padding-top: var(--ts-nest-pad);
+
+}
+
+.ts-stack > .ts-layout-tag {
+  max-width: fit-content;
+}
+.ts-stack > .ts-layout-tag * {
+  font-size-adjust: 0.4;
+}
+
+.ts-bento .ts-layout-container.ts-tile--selected > .ts-stack,
+.ts-bento .ts-layout-container .ts-stack:hover,
+.ts-bento .ts-layout-container.ts-tile--selected > .ts-grid,
+.ts-bento .ts-layout-container .ts-grid:hover {
+  --ts-bento-bg: var(--ts-bg-0-t);
+}
+.ts-bento .ts-layout-container.ts-tile--selected > .ts-stack > .ts-layout-tag,
+.ts-bento .ts-layout-container .ts-stack:hover > .ts-layout-tag,
+.ts-bento .ts-layout-container.ts-tile--selected > .ts-grid > .ts-layout-tag,
+.ts-bento .ts-layout-container .ts-grid:hover > .ts-layout-tag {
+  --ts-bento-border: var(--ts-info);
+}
+
+.ts-bento .ts-layout-container.ts-tile--selected > .ts-stack > .ts-layout-tag,
+.ts-bento .ts-layout-container.ts-tile--selected > .ts-stack > .ts-layout-tag * {
+  margin: 0;
+  --ts-bento-border: var(--ts-accent);
+  --ts-bento-bg: var(--ts-accent-dim);
+  --ts-text-muted: var(--ts-text-accent);
+}
+
+.ts-stack:has(> .ts-layout-tag > .ts-layout-tag_title + .ts-layout-tag_subtitle),
+.ts-grid:has(> .ts-layout-tag > .ts-layout-tag_title + .ts-layout-tag_subtitle) {
+  min-height: fit-content;
+}
+
+.ts-layout-container .ts-nested-block.ts-layout-container > .ts-nested-card:not(:last-child):before {
+  border-right-width: 0;
+}
+
+.ts-layout-container[data-level="2"],
+.ts-layout-container .ts-nested-block.ts-layout-container[data-level="2"] {
+  outline-color: color-mix(in srgb, var(--ts-accent) 98%, transparent) !important;
+   outline-offset: -1px;
+  --ts-accent: var(--ts-success);
+  margin-bottom: -1px;
+  padding: var(--ts-bento-pad);
+  gap: var(--ts-nest-pad);
+  margin: var(--ts-bento-gap);
+  outline-style: dashed;
+}
+.ts-layout-container[data-level="2"] .ts-nested-card:not(:has(> .ts-layout-tag)).ts.grid,
+.ts-layout-container[data-level="2"] .ts-nested-card:not(:has(> .ts-layout-tag)) .ts-grid > .ts-grid,
+.ts-layout-container .ts-nested-block.ts-layout-container[data-level="2"] .ts-nested-card:not(:has(> .ts-layout-tag)).ts.grid,
+.ts-layout-container .ts-nested-block.ts-layout-container[data-level="2"] .ts-nested-card:not(:has(> .ts-layout-tag)) .ts-grid > .ts-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+}
+.ts-layout-container[data-level="2"] .ts-nested-card:not(:has(> .ts-layout-tag)) strong,
+.ts-layout-container .ts-nested-block.ts-layout-container[data-level="2"] .ts-nested-card:not(:has(> .ts-layout-tag)) strong {
+  color: var(--ts-bento-color);
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.005rem;
+}
+
+.ts-grid > .ts-grid,
+.ts-grid > .ts-grid.ts-nested-card {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+  grid-auto-flow: column dense;
+  justify-content: stretch;
+  align-items: stretch;
+  max-width: unset;
+}
+
+
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) {
+  outline-offset: -1px;
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) .ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p, span.ts-mudted) {
+  padding: var(--ts-nest-pad);
+  flex: 1 1 auto;
+  width: 100%;
+  flex-direction: row;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-between;
+  max-width: 100%;
+  outline-color: var(--ts-bento-border);
+  min-height: 0;
+  background: transparent;
+  display: flex;
+  font-size: .88rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack).ts-tile--selected .ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p),
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack).ts-tile--selected:has(.ts-stack > *:is(strong:hover, p:hover)) .ts-split:has(.ts-stack) > .ts-stack > *:is(strong, p) {
+  border-color: var(--ts-bento-border);
+  --ts-bento-border: var(--ts-accent);
+  --ts-bento-color: var(--ts-bento-border);
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) {
+  --ts-bento-color: var(--ts-text-secondary);
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack).ts-tile--selected::before {
+  border-width: 2px;
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) .ts-split {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(auto, 5fr) minmax(auto, 7fr);
+  flex: 1 1 auto;
+  min-height: fit-content;
+  padding: 0;
+  background: var(--ts-bento-bg);
+  --ts-bento-bg: var(--ts-bg-0-t);
+  gap: 0;
+  align-content: stretch;
+  justify-items: stretch;
+  justify-content: stretch;
+  align-items: stretch;
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) .ts-split:has(+ div) {
+  margin-bottom: 0;
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) .ts-split .ts-stack:has(> strong, > p):not(.ts-nested-card) {
+  gap: 0;
+  padding: 0;
+  min-width: fit-content;
+  flex: 1 1 auto;
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) .ts-split .ts-stack:has(> strong, > p) > *:is(strong, p) {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  color: var(--ts-bento-color);
+  /* padding: var(--ts-bento-cell-pad) !important; */
+}
+.ts-bento .ts-layout-container:has(.ts-split > .ts-stack) .ts-split .ts-stack:has(> strong, > p):hover {
+  color: var(--ts-accent);
+}
+.ts-tile--selected {
+  --ts-bento-border: var(--ts-accent) ;
+  outline-color: var(--ts-bento-border);
+  border-color: var(--ts-bento-border);
+  outline-offset: -1px!important;
+  --ts-bento-color: var(--ts-bento-border);
+        border-width: 0px!important;
+      outline-width: 1px!important;
+
+ 
+}
+
+/* ============================================================
+   Icon hydration helper
+   ============================================================ */
+ion-icon { visibility: hidden; }
+.hydrated { visibility: inherit; }
+
+/* ============================================================
+   Preloader lock
+   ============================================================ */
+html.ts-preloader-lock,
+html.ts-preloader-lock body {
+  overflow: hidden !important;
+}
+html.ts-preloader-lock #ts-app,
+html.ts-preloader-lock #ts-main {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html.ts-preloader-lock .ts-preloader {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+html.ts-preloader-lock .ts-oce-panel.ts-oce--open,
+html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab {
+  opacity: 0 !important;
+  z-index: -20 !important;
+  pointer-events: none !important;
+}
+
+/* ============================================================
+   Media queries – responsive adjustments
+   ============================================================ */
+@media (max-width: 960px) {
+  .ts-bento {
+    grid-template-columns: repeat(6, 1fr) !important;
+  }
+  .ts-bento__hero { grid-column: span 4 !important; }
+  .ts-bento__half  { grid-column: span 2 !important; }
+  .ts-bento__third,
+  .ts-bento__quart,
+  .ts-bento__wide { grid-column: span 3 !important; }
+}
+
+@media (max-width: 768px) {
+  .ts-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .ts-bento {
+    grid-template-columns: 1fr !important;
+  }
+  .ts-bento > * {
+    grid-area: auto / 1 !important;
+  }
+}
+
+.ts-banner-generator-app{
+  #ts-topbar:is(.ts-toolbar, .ts-topbar) *,
+  #ts-topbar:not(.ts-nav-fixed), 
+  #ts-topbar:is(.ts-toolbar, .ts-topbar) {
+         --ts-header-logo-fs-adjust: 0.566;
+          --ts-header-logo-subtext-fs-adjust: calc(var(--ts-header-logo-fs-adjust)*.67);
+          --ts-btn-radius: 5px;
+          --ts-input-h: var(--ts-btn-h);
+          --ts-navlink-fs: var(--ts-btn-fs);
+          --ts-btn-scale: .8;
+          --ts-btn-h: calc(var(--ts-topbar-h, 65px) - var(--ts-topbar-pad-y, 20px) * 1.1) !important;
+          --ts-btn-fs: calc((var(--ts-btn-size) * var(--ts-btn-fs-ratio)) * var(--ts-btn-scale)* 1px);
+          --ts-btn-fs-ratio: .33;
+
+
+      .ts-topbar__logo:has(.ts-logo-brand) {
+          display: grid;
+          grid-template-columns: max-content;
+          align-content: center;
+          justify-items: start;
+          width: fit-content;
+          height: fit-content;
+          font-family: var(--ts-font-display);
+          font-weight: 700;
+          font-size: var(--ts-header-logo-fs) !important;
+
+          .ts-logo-sub {
+              grid-column: span 2;
+              grid-column: 1 / -1;
+              display: -webkit-box;
+              font-size: inherit !important;
+              letter-spacing: var(--ts-letter-spacing-wide) !important;
+              color: var(--ts-header-logo-subtext-color) !important;
+              font-weight: var(--ts-font-weight-normal) !important;
+              flex: 1 1 var(--ts-header-logo-max-w) !important;
+              font-size-adjust: var(--ts-header-logo-subtext-fs-adjust) !important;
+              line-height: 2ch;
+              max-height: unset;
+              overflow: hidden;
+              -webkit-line-clamp: 1;
+              text-overflow: ellipsis;
+              white-space: normal;
+              -webkit-box-orient: vertical;
+              max-inline-size: 100%;
+              width: 100%;
+              font-family: var(--ts-font-mono);
+
+              text-transform: uppercase;
+          }
+         
+      }
+
+      .ts-ui-select{
+          min-width: 0;
+          --ts-placeholder-select: attr(data-ts-ui-select-placeholder);
+              font-size-adjust: var(--ts-header-logo-fs-adjust) ;
+
+          .ts-ui-select__trigger{
+              padding-block: 0px!important;
+              padding-right: var(--ts-input-pad-left);
+                   gap:0;
+              padding-left: var(--ts-input-pad-x);
+
+               &:before{
+                      content: var(--ts-placeholder-select);
+                   font-size: 74%;
+                   text-align: left;
+                       flex: 1 1 auto;
+                   -webkit-line-clamp: 2;
+                   margin-right: auto;
+                   margin-left: -3px;
+                   display:-webkit-inline-box;
+                   -webkit-box-orient: vertical;
+                   overflow: hidden;
+                   text-overflow: ellipsis;
+                   max-width: 9ch;
+                   line-height: 1;
+                font-family: var(--ts-font-mono);
+              color: var(--ts-text-primary-dim-2);
+              text-transform: uppercase;    
+                   padding-right: 5px;
+                   border-right: 1px solid var(--ts-border-1);
+                  }
+              .ts-ui-select__value{
+                 flex: 1 1 3ch;
+                  min-width: 3ch;
+                   font-size: 1.2em;
+                  text-align: center;
+                  font-weight: bold;
+                   line-height: 1em;
+                  justify-content: center;
+                  font-size-adjust: var(--ts-header-logo-fs-adjust) ;
+                  margin-right: 5px;
+              }
+              .ts-ui-select__chevron {
+                  opacity: 1;
+                  transform: none!important;
+                  color: var(--ts-input-color) !important;
+                  --ts-input-color: var(--ts-text-primary-dim);
+                  font-size: var(--ts-btn-icon-size, 0.7rem);
+                  position: absolute;
+                  right: 0;
+                  top:0;
+                  bottom:0;
+                  min-width: var(--ts-input-pad-left);
+                  border-left: 1px solid;
+                  min-height: 100%;
+                  border-color: inherit;
+                  
+              }
+          }
+      }
+  }
+  
+}
+
+
+
+.ts-layout-tag_title, 
+.ts-layout-tag_subtitle{
+  position:relative;
+  z-index:1;
+}
+
+
+ .ts-ui-select{
+    &.ts-ui-select--bignum{
+        min-width: 0;
+        --ts-placeholder-select: attr(data-ts-ui-select-placeholder);
+        font-size-adjust: 0.566;
+
+         .ts-ui-select__trigger{
+          
+
+             &:before{
+                content: var(--ts-placeholder-select);
+                font-size: 0.75em;
+                text-align: left;
+                flex: 1 1 auto;
+                -webkit-line-clamp: 2;
+                margin-left: -3px;
+                display:-webkit-inline-box;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 9ch;
+                line-height: 1;
+                font-family: var(--ts-font-mono);
+                color: var(--ts-text-primary-dim-2);
+                text-transform: uppercase;    
+                padding-right: 5px;
+                border-right: 1px solid var(--ts-border-1);
+            }
+            .ts-ui-select__value{
+               flex: 1 1 3ch;
+                min-width: 3ch;
+                 font-size: 1.2em;
+                text-align: center;
+                font-weight: bold;
+                 line-height: 1em;
+                justify-content: center;
+            font-size-adjust: var(--ts-header-logo-fs-adjust) ;
+                margin-right: 5px;
+            }
+           
+        }
+    }
+    /*end of  big number select variant styles scope 
+    this one displays the  attribute text placeholder inside 
+    the text value, and   shows the  value text bigger,  
+    desighned for numbers values dropdowns. */
+
+    &.ts-ui-select--split{
+        padding-block: 0px!important;
+
+        .ts-ui-select__trigger{
+            padding-block: 0px!important;
+            padding-right: calc(var(--ts-input-pad-left) + var(--ts-sp-1));
+            gap:0;
+            padding-left: var(--ts-input-pad-y);
+        }
+        /*end of  select  right spacing*/
+
+         .ts-ui-select__chevron {
+            opacity: 1;
+            transform: none!important;
+            font-size: var(--ts-btn-icon-size, 0.7rem);
+            position: absolute;
+            right: 0;
+            top:0;
+            bottom:0;
+            min-width: var(--ts-input-pad-left);
+            border-left: 1px solid;
+            min-height: 100%;
+            border-color: inherit;
+            
+        }
+        /*end of chevrop split design */
+
+    }
+    /*end of  split Variant  styles scope */
+}
+/*end of  select  new variants*/
+  </style>
+</head>
+
+<body>
+  <!-- Preloader -->
+  <div id="ts-preloader" class="ts-preloader" aria-hidden="true">
+    <div class="ts-preloader__brand">
+      <div class="ts-preloader__logo">
+        <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>
+        TOOL<em>SKIN</em>
+      </div>
+      <div class="ts-preloader__bar-wrap"><span class="ts-preloader__bar"></span></div>
+      <div class="ts-preloader__hint">Layout Studio</div>
+    </div>
+  </div>
+
+  <div id="ts-app" class="ts-editor">
+
+    <!-- ── TOPBAR ─────────────────────────────────────────────── -->
+    <div id="ts-topbar" class="ts-toolbar ts-topbar">
+      <div class="ts-logo ts-topbar__logo">
+        <div class="ts-logo-brand">Tool<em>skin</em></div>
+        <span class="ts-logo-sub">Layout Studio</span>
+      </div>
+      <div class="ts-topbar-right">
+        <button id="ts-toggle-grid-btn" class="ts-btn ts-btn--sm" data-active="false" data-icon="ion:grid-outline">Grid Overlay</button>
+        <button id="ts-nest-grid-btn"   class="ts-btn ts-btn--sm" data-icon="ion:duplicate-outline">Nest Grid</button>
+        <button id="ts-nest-split-btn"  class="ts-btn ts-btn--sm" data-icon="ion:layers-outline">Nest Split</button>
+        <button id="ts-reset-layout-btn" class="ts-btn ts-btn--sm" data-icon="ion:reload-sharp">↺ Reset</button>
+
+        <!-- Column select -->
+        <div class="ts-ui-select" data-ts-ui-select-search="false" data-ts-ui-select-placeholder="Select Columns">
+          <select class="ts-ui-select__native" id="ts-column-select">
+            <option value="8">8</option>
+            <option value="12" selected>12</option>
+            <option value="16">16</option>
+          </select>
+        </div>
+
+        <!-- [F7] Gap slider — controls --ts-grid-gap SSOT -->
+        <div class="ts-gap-control">
+          <span class="ts-gap-label">Gap</span>
+          <input type="range" id="ts-gap-slider" class="ts-range" min="0" max="48" step="4" value="0">
+          <span class="ts-gap-val" id="ts-gap-val">0px</span>
+        </div>
+
+        <div class="ts-btn-group">
+          <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-load-json"
+            data-ts-icon="ion:folder-open" data-icon-position="left"><span>Load Preset</span></button>
+          <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-save-json"
+            data-ts-icon="ion:save" data-icon-position="left"><span>Save Preset</span></button>
+          <button class="ts-btn ts-btn--icon ts-btn--secondary" id="ts-btn-preview"
+            style="text-decoration:none" data-ts-icon="ion:eye" data-icon-position="left">
+            <span>Preview &amp; Export</span><span class="ts-spinner" id="ts-export-spinner"></span>
+          </button>
+        </div>
+        <div class="ts-btn-group">
+          <a href="https://satsea.io/toolskin-showcase/generator/" target="_blank"
+            class="ts-btn ts-btn--icon ts-btn-secondary" style="text-decoration:none"
+            data-ts-icon="ion:image-outline" data-icon-position="left"><span>Banner Generator</span></a>
+          <a href="https://satsea.io/toolskin-showcase" target="_blank"
+            class="ts-btn ts-btn--icon ts-btn-secondary" style="text-decoration:none"
+            data-ts-icon="ion:home-outline" data-icon-position="left"><span>Showcase</span></a>
+          <button class="ts-btn ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
+            <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" aria-hidden="true"></span>
+            <span class="ts-icon ts-theme-icon-dark"  data-ts-icon="fa-solid fa-moon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CANVAS AREA ────────────────────────────────────────── -->
+    <div id="ts-canvas-area">
+      <div class="ts-canvas-info-bar">
+        <span class="ts-canvas-badge" id="ts-canvas-size-label">Canvas Size</span>
+      </div>
+
+      <div class="ts-workbench">
+        <div class="ts-canvas" id="ts-canvas-container">
+          <div id="ts-master-layout" class="ts-layout-container" data-level="0">
+            <div class="ts-app ts-live-preview" id="ts-root-app">
+
+              <!-- Nav sidebar -->
+              <div class="ts-app__nav">
+                <div class="ts-stack">
+                  <strong>Sidebar</strong>
+                  <span class="ts-muted">ts-stack · nav</span>
+                  <div class="ts-muted">Dashboard</div>
+                  <div class="ts-muted">Analytics</div>
+                  <div class="ts-muted">Components</div>
+                </div>
+              </div>
+
+              <!-- App topbar (inner canvas) -->
+              <div class="ts-app__topbar">
+                <span>Toolskin Layout Studio</span>
+                <span class="ts-muted" id="ts-grid-status">12 cols · click a tile to select</span>
+                <!-- [F8] Cell type controls — appear on tile selection -->
+                <div id="ts-cell-controls" class="ts-cell-controls" data-visible="false">
+                  <span class="ts-muted" style="font-size:10px;white-space:nowrap">Span:</span>
+                  <button class="ts-cell-btn" data-cell-span="ts-bento__hero">Hero</button>
+                  <button class="ts-cell-btn" data-cell-span="ts-bento__half">Half</button>
+                  <button class="ts-cell-btn" data-cell-span="ts-bento__third">Third</button>
+                  <button class="ts-cell-btn" data-cell-span="ts-bento__quart">Quarter</button>
+                  <button class="ts-cell-btn" data-cell-span="ts-bento__wide">Wide</button>
+                  <button class="ts-cell-btn" data-cell-span="ts-bento__full">Full</button>
+                  <div class="ts-cell-sep"></div>
+                  <span class="ts-muted" style="font-size:10px;white-space:nowrap">Layout:</span>
+                  <button class="ts-cell-btn" data-cell-layout="ts-stack">Stack</button>
+                  <button class="ts-cell-btn" data-cell-layout="ts-split">Split</button>
+                  <button class="ts-cell-btn" data-cell-layout="ts-grid">Grid</button>
+                </div>
+              </div>
+
+              <!-- Main canvas -->
+              <div class="ts-app__main" id="ts-app-main">
+                <!-- Grid overlay: uses JS-computed col-width/tile-width, inset by bento-pad -->
+                <div id="ts-grid-overlay" class="ts-grid-overlay" data-visible="false"></div>
+
+                <!-- Level 1 bento tiles -->
+                <div class="ts-bento" id="ts-primary-bento">
+
+                  <div class="ts-bento__hero ts-layout-container" data-level="1">
+                    <div class="ts-stack">
+                      <div>
+                        <h3>Hero Tile</h3>
+                        <p class="ts-muted">Level 1 · 8 col · 2 rows</p>
+                      </div>
+                      <p class="ts-muted">Click tile → then ＋ Nest Grid or ＋ Nest Split</p>
+                    </div>
+                  </div>
+
+                  <div class="ts-bento__half ts-layout-container" data-level="1">
+                    <div class="ts-stack">
+                      <div>
+                        <h4>Insights</h4>
+                        <p class="ts-muted">Level 1 · 4 col · 2 rows</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ts-bento__third ts-layout-container" data-level="1">
+                    <div class="ts-stack">
+                      <div>
+                        <h4>Metrics</h4>
+                        <p class="ts-muted">Level 1 · span 4</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ts-bento__quart ts-layout-container" data-level="1">
+                    <div class="ts-stack">
+                      <div>
+                        <h4>Status</h4>
+                        <p class="ts-muted">Level 1 · span 3</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ts-bento__wide ts-layout-container" data-level="1">
+                    <div class="ts-split">
+                      <div class="ts-stack">
+                        <strong>Split Left · 5fr</strong>
+                        <p class="ts-muted">Magazine-grade asymmetric layout</p>
+                      </div>
+                      <div class="ts-stack">
+                        <strong>Split Right · 7fr</strong>
+                        <p class="ts-muted">ts-bento__wide · span 5</p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div><!-- /.ts-bento -->
+              </div><!-- /#ts-app-main -->
+            </div><!-- /#ts-root-app -->
+          </div><!-- /#ts-master-layout -->
+        </div><!-- /.ts-canvas -->
+      </div><!-- /.ts-workbench -->
+    </div><!-- /#ts-canvas-area -->
+
+    <!-- ── PANEL (LOCKED — pattern controls, tab system) ──────── -->
+    <div id="ts-panel" class="ts-sidebar-panel">
+      <div id="ts-panel-tabs" class="ts-panel-tabs ts-sidebar-tabs">
+        <div class="ts-ptab active" data-tab="controls">Controls</div>
+        <div class="ts-ptab" data-tab="code">CSS Code</div>
+      </div>
+      <div id="ts-panel-body" class="ts-panel-body ts-sidebar-body">
+
+        <!-- Controls pane -->
+        <div class="ts-tab-pane active" data-pane="controls">
+          <div class="ts-card">
+            <div class="ts-card-header absolute">
+              <span class="ts-card-title" data-ts-icon="ion:grid-outline">Pattern type</span>
+            </div>
+            <div class="ts-card-rows">
+              <div class="ts-card-row">
+                <div class="ts-card-col-full">
+                  <div class="ts-field">
+                    <label>Select pattern</label>
+                    <div class="ts-ui-select" data-ts-ui-select-search="false">
+                      <select class="ts-ui-select__native" id="input-pattern-type">
+                        <option value="none" selected>None</option>
+                        <option value="dots">Dots</option>
+                        <option value="dots-dense">Dots Dense</option>
+                        <option value="grid">Grid</option>
+                        <option value="grid-bold">Grid Bold</option>
+                        <option value="checkerboard">Checkerboard</option>
+                        <option value="diagonal-stripes">Diagonal Stripes</option>
+                        <option value="triangle">Triangle</option>
+                        <option value="circles-grid">Circles Grid</option>
+                        <option value="cool">WTF Cool</option>
+                        <option value="cross">Cross</option>
+                        <option value="zigzag">Zigzag</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ts-card">
+            <div class="ts-card-header absolute"><span class="ts-card-title" data-ts-icon="ion:color-palette-outline">Pattern color</span></div>
+            <div class="ts-card-rows">
+              <div class="ts-card-row">
+                <div class="ts-card-col-half">
+                  <div class="ts-field">
+                    <label class="ts-field-label">Pattern color</label>
+                    <div class="ts-color-row">
+                      <div class="ts-color-swatch">
+                        <div class="ts-sw" id="sw-pattern-color" style="background:#ff5500"></div>
+                        <input type="color" id="input-pattern-color" value="#ff5500">
+                      </div>
+                      <input type="text" class="ts-input-text mono" id="input-pattern-color-text" value="#ff5500" maxlength="9">
+                    </div>
+                  </div>
+                </div>
+                <div class="ts-card-col-half">
+                  <div class="ts-field">
+                    <label class="ts-field-label">Background color</label>
+                    <div class="ts-color-row">
+                      <div class="ts-color-swatch">
+                        <div class="ts-sw" id="sw-bg-color" style="background:#0a0a0a"></div>
+                        <input type="color" id="input-bg-color" value="#0a0a0a">
+                      </div>
+                      <input type="text" class="ts-input-text mono" id="input-bg-color-text" value="#0a0a0a" maxlength="9">
+                    </div>
+                  </div>
+                </div>
+                <div class="ts-card-col-full">
+                  <div class="ts-field-hint ts-hint">Leave blank to use accent color</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ts-card">
+            <div class="ts-card-header absolute"><span class="ts-card-title" data-ts-icon="ion:play-outline">Animation</span></div>
+            <div class="ts-card-rows">
+              <div class="ts-card-row">
+                <div class="ts-card-col-full">
+                  <div class="ts-toggle-row">
+                    <span class="ts-toggle-label" data-ts-icon="ion:play-outline" data-icon-position="left">Enable animation</span>
+                    <label class="ts-toggle">
+                      <input type="checkbox" id="input-animated">
+                      <span class="ts-toggle__knob"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div id="animation-controls" class="ts-card-row disabled">
+                <div class="ts-card-col-quarter">
+                  <div class="ts-field" id="ts-anim-direction-wrap">
+                    <label>Direction</label>
+                    <div class="ts-chips ts-align-anchor-grid" id="input-anim-direction" style="--ts-anchor-cols:2;--ts-btn-h:22px">
+                      <button class="ts-chip ts-align-anchor-btn ts-arrow-rotate bottom-right active" type="button" value="diagonal" data-icon="ion:arrow-forward" data-tooltip="Diagonal motion"><span class="sr-only">Diagonal</span></button>
+                      <button class="ts-chip ts-align-anchor-btn" type="button" value="horizontal" data-icon="ion:arrow-forward" data-tooltip="Horizontal motion"><span class="sr-only">Horizontal</span></button>
+                      <button class="ts-chip ts-align-anchor-btn" type="button" value="vertical" data-icon="ion:arrow-down" data-tooltip="Vertical motion"><span class="sr-only">Vertical</span></button>
+                      <button class="ts-chip ts-align-anchor-btn" type="button" value="reverse" data-icon="ion:arrow-back" data-tooltip="Reverse direction"><span class="sr-only">Reverse</span></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ts-card-col-half">
+                  <div class="ts-field">
+                    <label>Speed</label>
+                    <div class="ts-range-row">
+                      <input type="range" class="ts-range" id="input-anim-speed" min="25" max="200" step="25" value="100">
+                      <span class="ts-range-val" id="val-anim-speed">1.0×</span>
+                    </div>
+                    <div class="ts-field-hint ts-hint">100% = normal speed</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ts-card">
+            <div class="ts-card-header absolute"><span class="ts-card-title" data-ts-icon="ion:resize-outline">Scale</span></div>
+            <div class="ts-card-rows">
+              <div class="ts-card-row">
+                <div class="ts-card-col-full">
+                  <div class="ts-field ts-range-stack">
+                    <label class="ts-field-label" data-ts-icon="ion:resize-outline">Pattern scale</label>
+                    <div class="ts-range-row">
+                      <input type="range" class="ts-range" id="input-scale" min="1" max="3" step="0.25" value="1">
+                      <span class="ts-range-val" id="val-scale">1×</span>
+                    </div>
+                    <p class="ts-fs-xs ts-text-muted ts-mt-2">Minimum scale is 1× to prevent pattern breakage</p>
+                  </div>
+                </div>
+              </div>
+              <div class="ts-card-row">
+                <div class="ts-card-col-full">
+                  <div class="ts-field ts-range-stack">
+                    <label class="ts-field-label" data-ts-icon="ion:contrast-outline">Pattern opacity</label>
+                    <div class="ts-range-row">
+                      <input type="range" class="ts-range" id="input-opacity" min="0" max="100" value="50">
+                      <span class="ts-range-val" id="val-opacity">50%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /controls pane -->
+
+        <!-- Code pane -->
+        <div class="ts-tab-pane" data-pane="code">
+          <div class="ts-code-window" data-purpose="code-example">
+            <div class="ts-code-header">
+              <div class="ts-code-dotbtn red"></div>
+              <div class="ts-code-dotbtn yellow"></div>
+              <div class="ts-code-dotbtn green"></div>
+              <span class="ts-code-label">generated-pattern.css</span>
+              <button class="ts-code-copy" aria-label="Copy code" data-tooltip="Copy code"
+                data-ts-icon="ion:copy-outline" data-icon-position="left"></button>
+            </div>
+            <div id="code-export" class="ts-generator-code-export"></div>
+            <textarea id="ts-export-textarea" class="ts-code-area ts-generator-code-export"
+              readonly spellcheck="false" placeholder="Layout HTML will appear here…"></textarea>
+          </div>
+        </div><!-- /code pane -->
+      </div><!-- /#ts-panel-body -->
+
+      <div id="ts-panel-footer" class="ts-sidebar-footer ts-panel-footer">
+        <button id="ts-copy-export-btn" class="ts-btn ts-btn--primary" style="flex:1">Copy HTML</button>
+      </div>
+    </div><!-- /#ts-panel -->
+
+  </div><!-- /#ts-app -->
+
+
+  <!-- ================================================================
+       SCRIPT 1 — PATTERN GENERATOR (LOCKED — DO NOT MODIFY)
+       ================================================================ -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const S = {
+        patternType: 'none', animated: false, animDirection: 'diagonal',
+        animSpeed: 100, patternColor: '#ff5500', bgColor: '#0a0a0a', scale: 1, opacity: 50
+      };
+      const $ = id => document.getElementById(id);
+      let preview = null;
+      let codeExport = null;
+
+      function hexValid(h) { return /^#[0-9a-fA-F]{6}$/.test(h); }
+      const NON_ANIMATABLE_PATTERNS = ['zigzag','checkerboard','diagonal-stripes','dots-dense','cross'];
+      function isPatternAnimatable(t) { return !NON_ANIMATABLE_PATTERNS.includes(t); }
+
+      function updateAnimationControls() {
+        const animatedEl = $('input-animated');
+        const animControls = $('animation-controls');
+        const canAnimate = isPatternAnimatable(S.patternType);
+        if (animatedEl && animControls) {
+          if (!canAnimate) {
+            animatedEl.disabled = true; animatedEl.checked = false;
+            S.animated = false; animControls.classList.add('disabled');
+            animControls.style.display = 'none';
+          } else {
+            animatedEl.disabled = false; animControls.classList.remove('disabled');
+            animControls.style.display = S.animated ? '' : 'none';
+          }
+        }
+      }
+
+      function updatePreview() {
+        if (!preview) return;
+        const classes = [`ts-pattern-${S.patternType}`];
+        if (S.animated) {
+          classes.push('ts-pattern--animated');
+          if (S.animDirection === 'reverse') classes.push('ts-pattern--anim-reverse');
+          else if (S.animDirection === 'horizontal') classes.push('ts-pattern--anim-horizontal');
+          else if (S.animDirection === 'vertical') classes.push('ts-pattern--anim-vertical');
+        }
+        preview.className = ''; preview.classList.add(...classes);
+        const safeScale = Math.max(1, S.scale);
+        const styles = {
+          '--ts-pattern-scale': String(safeScale),
+          '--ts-pattern-opacity': String(S.opacity / 100),
+          'background-color': S.bgColor
+        };
+        if (S.animated && isPatternAnimatable(S.patternType)) {
+          styles['--ts-pattern-anim-duration'] = `${(30 * 100) / S.animSpeed}s`;
+        } else {
+          preview.classList.remove('ts-pattern--animated','ts-pattern--anim-reverse','ts-pattern--anim-horizontal','ts-pattern--anim-vertical');
+          preview.style.removeProperty('--ts-pattern-anim-duration');
+          preview.style.removeProperty('--ts-pattern-anim-name');
+        }
+        if (S.patternColor && hexValid(S.patternColor)) styles['--ts-pattern-color'] = S.patternColor;
+        else preview.style.removeProperty('--ts-pattern-color');
+        Object.keys(styles).forEach(k => preview.style.setProperty(k, styles[k]));
+        updateCode();
+      }
+
+      function updateCode() {
+        if (!codeExport) return;
+        const classes = [`ts-pattern-${S.patternType}`];
+        const safeScale = Math.max(1, S.scale);
+        const canAnimate = isPatternAnimatable(S.patternType);
+        if (S.animated && canAnimate) {
+          classes.push('ts-pattern--animated');
+          if (S.animDirection === 'reverse') classes.push('ts-pattern--anim-reverse');
+          else if (S.animDirection === 'horizontal') classes.push('ts-pattern--anim-horizontal');
+          else if (S.animDirection === 'vertical') classes.push('ts-pattern--anim-vertical');
+        }
+        let out = `/* HTML with inline styles */\n<div class="${classes.join(' ')}"`;
+        const sp = [];
+        sp.push(`--ts-pattern-scale: ${safeScale}`);
+        sp.push(`--ts-pattern-opacity: ${S.opacity / 100}`);
+        if (S.animated && canAnimate) sp.push(`--ts-pattern-anim-duration: ${(30*100)/S.animSpeed}s`);
+        if (S.patternColor && hexValid(S.patternColor)) sp.push(`--ts-pattern-color: ${S.patternColor}`);
+        sp.push(`background-color: ${S.bgColor}`);
+        out += ` style="${sp.join('; ')}">\n  <!-- content -->\n</div>`;
+        codeExport.textContent = out;
+      }
+
+      function syncAnimDirectionUI() {
+        const wrap = $('input-anim-direction');
+        if (!wrap) return;
+        wrap.querySelectorAll('button[value]').forEach(b => b.classList.toggle('active', b.getAttribute('value') === S.animDirection));
+      }
+
+      function bindControls() {
+        const ptEl = $('input-pattern-type');
+        if (ptEl) ptEl.addEventListener('change', e => { S.patternType = e.target.value; updateAnimationControls(); updatePreview(); });
+
+        const animEl = $('input-animated');
+        const animCtrl = $('animation-controls');
+        if (animEl) animEl.addEventListener('change', e => {
+          if (animEl.disabled) { e.preventDefault(); return; }
+          S.animated = e.target.checked && isPatternAnimatable(S.patternType);
+          if (animCtrl) animCtrl.style.display = S.animated ? '' : 'none';
+          updatePreview();
+        });
+
+        const animDir = $('input-anim-direction');
+        if (animDir) {
+          animDir.addEventListener('click', e => {
+            const btn = e.target.closest('button[value]');
+            if (!btn || !animDir.contains(btn)) return;
+            const val = btn.getAttribute('value');
+            if (!val || val === S.animDirection) return;
+            S.animDirection = val;
+            animDir.querySelectorAll('button[value]').forEach(b => b.classList.toggle('active', b.getAttribute('value') === val));
+            updatePreview();
+          });
+          syncAnimDirectionUI();
+        }
+
+        const animSp = $('input-anim-speed');
+        const animSpVal = $('val-anim-speed');
+        if (animSp) animSp.addEventListener('input', e => {
+          S.animSpeed = parseInt(e.target.value);
+          if (animSpVal) animSpVal.textContent = (S.animSpeed/100).toFixed(1)+'×';
+          updatePreview();
+        });
+
+        function updatePatternColor(val) {
+          if (!val || val === 'accent' || !hexValid(val)) {
+            S.patternColor = '';
+            $('input-pattern-color-text').value = 'accent';
+            $('sw-pattern-color').style.background = getComputedStyle(document.documentElement).getPropertyValue('--ts-accent')||'#ff5500';
+          } else {
+            S.patternColor = val;
+            $('input-pattern-color').value = val;
+            $('sw-pattern-color').style.background = val;
+          }
+          updatePreview();
+        }
+        const pcEl = $('input-pattern-color');
+        const pcTxt = $('input-pattern-color-text');
+        if (pcEl) pcEl.addEventListener('input', e => { updatePatternColor(e.target.value); if(pcTxt) pcTxt.value=e.target.value; });
+        if (pcTxt) {
+          pcTxt.addEventListener('input', e => { const v=e.target.value.trim(); if(v&&v!=='accent'&&hexValid(v)) updatePatternColor(v); });
+          pcTxt.addEventListener('blur', e => { if(!hexValid(e.target.value.trim())&&e.target.value.trim()!=='accent') e.target.value=S.patternColor||'accent'; });
+        }
+
+        function updateBgColor(val) {
+          if (hexValid(val)) { S.bgColor=val; $('input-bg-color').value=val; $('sw-bg-color').style.background=val; updatePreview(); }
+        }
+        const bgEl = $('input-bg-color');
+        const bgTxt = $('input-bg-color-text');
+        if (bgEl) bgEl.addEventListener('input', e => { updateBgColor(e.target.value); if(bgTxt) bgTxt.value=e.target.value; });
+        if (bgTxt) {
+          bgTxt.addEventListener('input', e => { const v=e.target.value.trim(); if(hexValid(v)) updateBgColor(v); });
+          bgTxt.addEventListener('blur', e => { if(!hexValid(e.target.value.trim())) e.target.value=S.bgColor; });
+        }
+
+        const scEl = $('input-scale');
+        const scVal = $('val-scale');
+        if (scEl) scEl.addEventListener('input', e => { S.scale=Math.max(1,parseFloat(e.target.value)); if(scVal) scVal.textContent=S.scale+'×'; updatePreview(); });
+
+        const opEl = $('input-opacity');
+        const opVal = $('val-opacity');
+        if (opEl) opEl.addEventListener('input', e => { S.opacity=parseInt(e.target.value); if(opVal) opVal.textContent=S.opacity+'%'; updatePreview(); });
+      }
+
+      function init() {
+        preview = $('ts-canvas-container');
+        codeExport = $('code-export');
+        if (!preview || !codeExport) return;
+        bindControls();
+        updateAnimationControls();
+        updatePreview();
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+    });
+  </script>
+
+
+  <!-- ================================================================
+       SCRIPT 2 — ACCORDION (LOCKED — DO NOT MODIFY)
+       ================================================================ -->
+  <script>
+    const ACCORDION_MODE = false;
+    document.querySelectorAll('.ts-card-header.ts-accordion').forEach(header => {
+      header.addEventListener('click', e => {
+        const card = header.closest('.ts-card');
+        if (!card) return;
+        if (ACCORDION_MODE) {
+          const pane = card.closest('.ts-tab-pane');
+          const others = pane
+            ? Array.from(pane.querySelectorAll('.ts-card')).filter(c => c !== card)
+            : Array.from(document.querySelectorAll('.ts-card')).filter(c => c !== card);
+          others.forEach(c => { const h = c.querySelector('.ts-card-header.ts-accordion'); if(h) h.classList.remove('open'); });
+          header.classList.toggle('open');
+        } else {
+          header.classList.toggle('open');
+        }
+      });
+    });
+    document.querySelectorAll('.ts-tab-pane').forEach(pane => {
+      const first = pane.querySelector('.ts-card');
+      if (first) { const h = first.querySelector('.ts-card-header.ts-accordion'); if(h) h.classList.add('open'); }
+    });
+  </script>
+
+
+  <!-- ================================================================
+       SCRIPT 3 — LAYOUT ENGINE v2
+       ================================================================
+       SSOT contracts:
+         updateGrid(N)  → sets --ts-layout-cols + data-ts-cols → computeGridVars()
+         updateGap(px)  → sets --ts-grid-gap → computeGridVars()
+         computeGridVars() → reads ACTUAL px from bento paddingLeft + columnGap
+                             (NOT getPropertyValue on var() — those return raw tokens)
+       NO INLINE STYLES: all appearance via CSS class + attribute toggling.
+       NESTING GUARD: data-level ≥ 3 → toast, no deeper nesting.
+       CELL TYPE SWITCH: span class swap + inner layout class swap on existing nodes.
+       ================================================================ -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── CANVAS SIZE OBSERVER ─────────────────────────────────── */
+    var sizeLabel = document.getElementById('ts-canvas-size-label');
+    var canvasEl  = document.getElementById('ts-canvas-container');
+    if (canvasEl && sizeLabel && typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(function(entries) {
+        var r = entries[0].contentRect;
+        sizeLabel.textContent = Math.round(r.width) + 'px × ' + Math.round(r.height) + 'px';
+      }).observe(canvasEl);
+    }
+
+    /* ── STATE ────────────────────────────────────────────────── */
+    var currentCols   = 12;
+    var currentGap    = 0;
+    var overlayActive = false;
+    var selectedTile  = null;
+    var ro, mo;
+
+    /* ── DOM REFS ─────────────────────────────────────────────── */
+    var root         = document.documentElement;
+    var masterLayout = document.getElementById('ts-master-layout');
+    var columnSelect = document.getElementById('ts-column-select');
+    var toggleBtn    = document.getElementById('ts-toggle-grid-btn');
+    var nestGridBtn  = document.getElementById('ts-nest-grid-btn');
+    var nestSplitBtn = document.getElementById('ts-nest-split-btn');
+    var resetBtn     = document.getElementById('ts-reset-layout-btn');
+    var exportArea   = document.getElementById('ts-export-textarea');
+    var copyBtn      = document.getElementById('ts-copy-export-btn');
+    var gridStatus   = document.getElementById('ts-grid-status');
+    var gapSlider    = document.getElementById('ts-gap-slider');
+    var gapValEl     = document.getElementById('ts-gap-val');
+    var cellControls = document.getElementById('ts-cell-controls');
+
+    function getOverlay()      { return document.getElementById('ts-grid-overlay'); }
+    function getAppMain()      { return document.getElementById('ts-app-main'); }
+    function getPrimaryBento() { return document.getElementById('ts-primary-bento'); }
+
+    var INITIAL_HTML = masterLayout.innerHTML;
+
+    /* ── GRID ENGINE — SSOT ────────────────────────────────────
+       [F9] reads paddingLeft + columnGap from the actual rendered bento
+       element — NOT getPropertyValue() which returns raw "var(...)" strings
+       that parseFloat turns into NaN.
+    ──────────────────────────────────────────────────────────── */
+    function computeGridVars() {
+      var main  = getAppMain();
+      var bento = getPrimaryBento() || (main && main.querySelector('.ts-bento'));
+      if (!main || !bento) return;
+
+      var cs  = getComputedStyle(bento);
+      var pad = parseFloat(cs.paddingLeft)  || 0;   /* actual rendered px */
+      var gap = parseFloat(cs.columnGap)    || 0;   /* actual rendered px */
+      var N   = currentCols;
+      var W   = main.clientWidth;
+      var inner = W - 2 * pad;
+      var colW  = inner > 0 ? (inner - (N - 1) * gap) / N : 0;
+      var tileW = colW + gap;
+
+      root.style.setProperty('--ts-col-width',  Math.max(0, colW)  + 'px');
+      root.style.setProperty('--ts-tile-width', Math.max(0, tileW) + 'px');
+      /* Expose resolved bento-pad as px so .ts-grid-overlay margin resolves */
+      root.style.setProperty('--ts-bento-pad', pad + 'px');
+    }
+
+    /* updateGrid: ONLY entry point for column count changes */
+    function updateGrid(cols) {
+      currentCols = cols;
+      root.style.setProperty('--ts-layout-cols', cols);
+      root.setAttribute('data-ts-cols', String(cols));
+      requestAnimationFrame(function() { computeGridVars(); refreshStatus(); updateExport(); });
+    }
+
+    /* updateGap: ONLY entry point for gap changes */
+    function (px) {
+      currentGap = px;
+      root.style.setProperty('--ts-grid-gap', px + 'px');
+      if (gapValEl) gapValEl.textContent = px + 'px';
+      requestAnimationFrame(function() { computeGridVars(); updateExport(); });
+    }
+
+    /* ── OVERLAY ──────────────────────────────────────────────── */
+    function setOverlay(active) {
+      overlayActive = active;
+      var ol = getOverlay();
+      if (ol) ol.setAttribute('data-visible', active ? 'true' : 'false');
+      if (toggleBtn) {
+        toggleBtn.setAttribute('data-active', active ? 'true' : 'false');
+        toggleBtn.textContent = active ? 'Hide Grid' : 'Grid Overlay';
+      }
+    }
+
+    /* ── STATUS ───────────────────────────────────────────────── */
+    function refreshStatus() {
+      var lvl   = selectedTile ? selectedTile.getAttribute('data-level') : null;
+      var atMax = lvl && parseInt(lvl, 10) >= 3;
+      if (gridStatus) {
+        gridStatus.textContent = currentCols + ' cols · ' +
+          (lvl
+            ? (atMax ? 'L' + lvl + ' — max depth' : 'L' + lvl + ' selected')
+            : 'click a tile to select');
+      }
+    }
+
+    /* ── TILE SELECTION ───────────────────────────────────────── */
+    var SPAN_CLASSES = [
+      'ts-bento__hero','ts-bento__half','ts-bento__third',
+      'ts-bento__quart','ts-bento__wide','ts-bento__full'
+    ];
+
+    function selectTile(el) {
+      masterLayout.querySelectorAll('.ts-tile--selected').forEach(function(e) {
+        e.classList.remove('ts-tile--selected');
+      });
+      selectedTile = el || null;
+      if (el) el.classList.add('ts-tile--selected');
+      refreshStatus();
+      syncCellControls();
+    }
+
+    /* [F8] Show cell controls and highlight active span/layout */
+    function syncCellControls() {
+      if (!cellControls) return;
+      if (!selectedTile) {
+        cellControls.setAttribute('data-visible', 'false');
+        return;
+      }
+      cellControls.setAttribute('data-visible', 'true');
+
+      /* Active span */
+      var activeSpan = SPAN_CLASSES.find(function(c) { return selectedTile.classList.contains(c); }) || null;
+      cellControls.querySelectorAll('[data-cell-span]').forEach(function(btn) {
+        btn.classList.toggle('ts-active', btn.getAttribute('data-cell-span') === activeSpan);
+      });
+
+      /* Active inner layout */
+      var inner = selectedTile.querySelector(':scope > .ts-stack, :scope > .ts-split, :scope > .ts-grid');
+      var activeLayout = null;
+      if (inner) {
+        if (inner.classList.contains('ts-split')) activeLayout = 'ts-split';
+        else if (inner.classList.contains('ts-grid')) activeLayout = 'ts-grid';
+        else activeLayout = 'ts-stack';
+      }
+      cellControls.querySelectorAll('[data-cell-layout]').forEach(function(btn) {
+        btn.classList.toggle('ts-active', btn.getAttribute('data-cell-layout') === activeLayout);
+      });
+    }
+
+    /* Set tile span class — does NOT re-render the tile content */
+    function setCellSpan(spanClass) {
+      if (!selectedTile) return;
+      SPAN_CLASSES.forEach(function(c) { selectedTile.classList.remove(c); });
+      if (spanClass) selectedTile.classList.add(spanClass);
+      syncCellControls();
+      updateExport();
+    }
+
+    /* Set inner layout type — swaps classes on existing content node */
+    var LAYOUT_CLASSES = ['ts-stack', 'ts-split', 'ts-grid'];
+
+    function setCellLayout(layoutClass) {
+      if (!selectedTile) return;
+      var lvl = parseInt(selectedTile.getAttribute('data-level') || '1', 10);
+      /* Find top-level content child (not a nested-block) */
+      var inner = selectedTile.querySelector(':scope > .ts-stack, :scope > .ts-split, :scope > .ts-grid');
+      if (!inner) {
+        inner = document.createElement('div');
+        selectedTile.prepend(inner);
+      }
+      LAYOUT_CLASSES.forEach(function(c) { inner.classList.remove(c); });
+      inner.classList.add(layoutClass);
+
+      /* Ensure minimum children for split */
+      if (layoutClass === 'ts-split' && inner.children.length < 2) {
+        while (inner.children.length < 2) {
+          var pane = document.createElement('div');
+          pane.className = 'ts-stack ts-nested-card';
+          pane.innerHTML = inner.children.length === 0 ? '<strong>← 5fr</strong>' : '<strong>7fr →</strong>';
+          inner.appendChild(pane);
+        }
+      }
+      syncCellControls();
+      updateExport();
+    }
+
+    /* Returns tile for nesting — respects max depth */
+    function getSelectedTile() {
+      if (selectedTile && masterLayout.contains(selectedTile)) {
+        var lvl = parseInt(selectedTile.getAttribute('data-level') || '0', 10);
+        if (lvl > 0 && lvl < 3) return selectedTile;
+        if (lvl >= 3) return null;
+      }
+      return masterLayout.querySelector('.ts-layout-container[data-level="1"]') || null;
+    }
+
+    /* ── NESTING ──────────────────────────────────────────────────
+       Created elements carry CSS classes only — NO inline styles.
+       Nesting level guard: data-level ≥ 3 → toast and return.
+    ────────────────────────────────────────────────────────────── */
+    function nestGrid() {
+      var target = getSelectedTile();
+      if (!target) { toast('Max depth (3) — select a shallower tile'); return; }
+      var lvl = parseInt(target.getAttribute('data-level') || '0', 10);
+      if (lvl >= 3) { toast('Maximum nesting depth (3) reached'); return; }
+      var newLvl = lvl + 1;
+
+      var grid = document.createElement('div');
+      grid.className = 'ts-grid ts-nested-block ts-layout-container';
+      grid.setAttribute('data-level', newLvl);
+
+      for (var i = 1; i <= 3; i++) {
+        var card = document.createElement('div');
+        card.className = 'ts-stack ts-nested-card ts-layout-container';
+        card.setAttribute('data-level', newLvl);
+        card.innerHTML = '<strong>Card ' + i + '</strong>'
+          + '<span class="ts-muted">L' + newLvl + ' · grid</span>';
+        grid.appendChild(card);
+      }
+      target.appendChild(grid);
+      updateExport();
+    }
+
+    function nestSplit() {
+      var target = getSelectedTile();
+      if (!target) { toast('Max depth (3) — select a shallower tile'); return; }
+      var lvl = parseInt(target.getAttribute('data-level') || '0', 10);
+      if (lvl >= 3) { toast('Maximum nesting depth (3) reached'); return; }
+      var newLvl = lvl + 1;
+
+      var split = document.createElement('div');
+      split.className = 'ts-split ts-nested-block ts-layout-container';
+      split.setAttribute('data-level', newLvl);
+
+      var left = document.createElement('div');
+      left.className = 'ts-stack ts-nested-card ts-layout-container';
+      left.setAttribute('data-level', newLvl);
+      left.innerHTML = '<strong>← 5fr</strong><span class="ts-muted">L' + newLvl + ' split</span>';
+
+      var right = document.createElement('div');
+      right.className = 'ts-stack ts-nested-card ts-layout-container';
+      right.setAttribute('data-level', newLvl);
+      right.innerHTML = '<strong>7fr →</strong><span class="ts-muted">L' + newLvl + ' split</span>';
+
+      split.appendChild(left);
+      split.appendChild(right);
+      target.appendChild(split);
+      updateExport();
+    }
+
+    /* ── RESET ────────────────────────────────────────────────── */
+    function resetLayout() {
+      if (ro) { try { var m = getAppMain(); if (m) ro.unobserve(m); } catch(e){} }
+      if (mo) mo.disconnect();
+      masterLayout.innerHTML = INITIAL_HTML;
+      selectTile(null);
+      var m2 = getAppMain();
+      if (ro && m2) ro.observe(m2);
+      if (mo) mo.observe(masterLayout, MO_OPTS);
+      setOverlay(overlayActive);
+      requestAnimationFrame(function() { computeGridVars(); updateExport(); });
+    }
+
+    /* ── PRISTINE SEMANTIC EXPORT ─────────────────────────────── */
+    var EDITOR_CLASSES = [
+      'ts-layout-container','ts-live-preview','ts-tile--selected',
+      'ts-nested-block','ts-nested-card'
+    ];
+    var EDITOR_ATTRS = ['data-level','data-viz-columns','data-visible'];
+
+    function getCleanHTML() {
+      var clone = masterLayout.cloneNode(true);
+      var ol = clone.querySelector('#ts-grid-overlay');
+      if (ol) ol.remove();
+
+      clone.querySelectorAll('*').forEach(function(el) {
+        EDITOR_CLASSES.forEach(function(c) { el.classList.remove(c); });
+        EDITOR_ATTRS.forEach(function(a)   { el.removeAttribute(a); });
+        if (el.hasAttribute('style')) {
+          var s = el.getAttribute('style')
+            .replace(/outline\s*:[^;]*;?\s*/gi,    '')
+            .replace(/margin-top\s*:[^;]*;?\s*/gi, '')
+            .trim().replace(/^;+|;+$/g, '');
+          if (s) el.setAttribute('style', s); else el.removeAttribute('style');
+        }
+        if (typeof el.className === 'string' && el.className.trim() === '')
+          el.removeAttribute('class');
+      });
+
+      var html = (new XMLSerializer()).serializeToString(clone);
+      html = html.replace(/ xmlns="[^"]*"/g, '');
+      return prettyHTML(html);
+    }
+
+    function prettyHTML(html) {
+      var VOID = 'area base br col embed hr img input link meta param source track wbr'.split(' ');
+      var P = '  '; var d = 0; var out = '';
+      var parts = html.split(/(<[^>]+>)/);
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        if (!p) continue;
+        if (p.charAt(0) === '<' && p.charAt(1) === '!') {
+          out += '\n' + P.repeat(d) + p;
+        } else if (p.charAt(0) === '<' && p.charAt(1) === '/') {
+          d = Math.max(0, d - 1); out += '\n' + P.repeat(d) + p;
+        } else if (p.charAt(0) === '<') {
+          var name = ((p.match(/<([a-zA-Z][\w-]*)/) || [])[1] || '').toLowerCase();
+          out += '\n' + P.repeat(d) + p;
+          if (name && VOID.indexOf(name) === -1 && !/\/>$/.test(p)) d++;
+        } else {
+          var t = p.trim(); if (t) out += '\n' + P.repeat(d) + t;
+        }
+      }
+      return out.trim();
+    }
+
+    function updateExport() {
+      try {
+        if (exportArea) exportArea.value = getCleanHTML();
+      } catch(e) {
+        if (exportArea) exportArea.value = '<!-- export error: ' + e.message + ' -->';
+      }
+    }
+
+    /* ── TOAST ────────────────────────────────────────────────── */
+    function toast(msg) {
+      var el = document.createElement('div');
+      el.className = 'ts-ls-toast';
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(function() { if (el.parentNode) el.remove(); }, 2400);
+    }
+
+    /* ── EVENT HANDLERS ───────────────────────────────────────── */
+    if (toggleBtn)    toggleBtn.addEventListener('click',    function()  { setOverlay(!overlayActive); });
+    if (columnSelect) columnSelect.addEventListener('change', function(e) { updateGrid(parseInt(e.target.value, 10)); });
+    if (nestGridBtn)  nestGridBtn.addEventListener('click',   nestGrid);
+    if (nestSplitBtn) nestSplitBtn.addEventListener('click',  nestSplit);
+    if (resetBtn)     resetBtn.addEventListener('click',      resetLayout);
+
+    
+
+    /* Tile click delegation — finds deepest matching tile (stops propagation) */
+    masterLayout.addEventListener('click', function(e) {
+      var tile = e.target.closest('.ts-layout-container[data-level]');
+      if (!tile || !masterLayout.contains(tile)) return;
+      var lvl = parseInt(tile.getAttribute('data-level'), 10);
+      if (lvl > 0) { e.stopPropagation(); selectTile(tile); }
+    });
+
+    /* Cell type controls */
+    if (cellControls) {
+      cellControls.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-cell-span]');
+        if (btn) { setCellSpan(btn.getAttribute('data-cell-span')); return; }
+        btn = e.target.closest('[data-cell-layout]');
+        if (btn) setCellLayout(btn.getAttribute('data-cell-layout'));
+      });
+    }
+
+    /* Copy HTML */
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function() {
+        if (!exportArea || !exportArea.value) return;
+        navigator.clipboard.writeText(exportArea.value)
+          .then(function() {
+            copyBtn.textContent = '✓ Copied!';
+            setTimeout(function() { copyBtn.textContent = 'Copy HTML'; }, 1800);
+          })
+          .catch(function() { toast('Copy failed — select manually'); });
+      });
+    }
+
+    /* ── OBSERVERS ────────────────────────────────────────────── */
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(function() { computeGridVars(); });
+    } else {
+      window.addEventListener('resize', computeGridVars, { passive: true });
+    }
+
+    var MO_OPTS = { childList: true, subtree: true, attributes: true };
+    mo = new MutationObserver(function() { updateExport(); });
+    mo.observe(masterLayout, MO_OPTS);
+
+    /* ── INIT ─────────────────────────────────────────────────── */
+    function init() {
+      var main = getAppMain();
+      if (ro && main) ro.observe(main);
+      updateGrid(12);
+      updateGap(0);
+      setOverlay(false);
+      requestAnimationFrame(function() { computeGridVars(); updateExport(); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+  }());
+  </script>
+
+</body>
+</html>

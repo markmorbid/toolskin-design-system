@@ -1,0 +1,327 @@
+/* ================================================================
+   TOOLSKIN LAYOUT STUDIO — layout.css   (Layer 1 · SSOT)
+   ================================================================
+   Authoritative grid + bento + tokens.
+   Single :root for the entire studio.
+   This file ships in exports.
+
+   Pair: ts-layout-editor.skin.css  (Layer 0 · editor chrome ONLY)
+================================================================ */
+
+
+/* ── RESET ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+/* ── TOKENS — single canonical :root (SSOT) ───────────────── */
+:root {
+  /* Studio chrome geometry */
+  --ts-ls-panel-w:     280px;
+  --ts-ls-topbar-h:    60px;
+  --ts-ls-sidebar-w:   200px;
+  --ts-ls-navbar-h:    45px;
+  --ts-panel-w:        var(--ts-ls-panel-w);
+  --ts-topbar-h:       var(--ts-ls-topbar-h);
+  --ts-sidebar-w:      var(--ts-ls-sidebar-w);
+  --ts-navbar-h:       var(--ts-ls-navbar-h);
+
+  /* Grid engine — JS writes these via SSOT setters */
+  --ts-layout-cols:    12;
+  --ts-grid-gap:       0px;
+  --ts-col-width:      80px;                  /* JS-computed */
+  --ts-tile-width:     var(--ts-col-width);   /* JS-computed (col + gap) */
+
+  /* Bento — all values derive from grid SSOT */
+  --ts-bento-gap:      var(--ts-grid-gap);
+  --ts-bento-pad:      var(--ts-sp-6, 24px);
+  --ts-bento-cell-pad: var(--ts-sp-6, 24px);
+  --ts-bento-min-h:    160px;
+  --ts-bento-border:    var(--ts-neutral-600);
+  --ts-bento-border-hi: var(--ts-text-primary);
+  --ts-bento-bg:        transparent;
+
+  /* Overlay column fill */
+  --ts-overlay-fill:   color-mix(in srgb, var(--ts-info, #3b82f6) 8%, transparent);
+
+  /* Nesting + labelling */
+  --ts-nest-pad:       8px;
+  --ts-nest-title-pad: calc(var(--ts-bento-cell-pad) * 0.7 - .35vmin);
+  --ts-card-pad:       10px;
+
+  /* Background mesh — derives from --ts-col-width / --ts-tile-width */
+  --ts-mesh-color:     var(--ts-border-1);
+  --ts-mesh-sz:        round(calc(var(--ts-tile-width) * 0.5), 1px);
+  --ts-bg-mesh:
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent calc(var(--ts-mesh-sz) - 1px),
+      var(--ts-mesh-color) var(--ts-mesh-sz)),
+    repeating-linear-gradient(90deg,
+      transparent,
+      transparent calc(var(--ts-mesh-sz) - 1px),
+      var(--ts-mesh-color) var(--ts-mesh-sz));
+}
+
+
+/* ── BASE ─────────────────────────────────────────────────── */
+html { color-scheme: dark; overflow: hidden; }
+body {
+  background: var(--ts-bg-body, #0c0d0f);
+  font-family: var(--ts-font-body, 'Space Grotesk', system-ui, sans-serif);
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+/* ── APP SHELL SCAFFOLD (shipped) ─────────────────────────── */
+.ts-app {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template:
+    "nav topbar" var(--ts-ls-navbar-h)
+    "nav main"   1fr
+    / var(--ts-ls-sidebar-w) 1fr;
+  overflow: hidden;
+  min-height: 100%;
+  max-height: calc(100dvh - var(--ts-topbar-h));
+}
+.ts-app__nav {
+  grid-area: nav;
+  --ts-this-bg: var(--ts-bg-0, #14161a);
+  background: var(--ts-this-bg-dim-4);
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+.ts-app__nav .ts-stack {
+  border-right: 1px solid var(--ts-bento-border);
+  margin-right: -1px;
+  padding-bottom: calc(var(--ts-bento-cell-pad) * 3);
+}
+.ts-app__topbar {
+  grid-area: topbar;
+  --ts-this-bg: var(--ts-bg-0, #14161a);
+  background: var(--ts-this-bg-dim-4);
+  border-bottom: 1px solid var(--ts-bento-border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--ts-bento-cell-pad);
+  font-size: 12px;
+  gap: var(--ts-sp-3, 12px);
+  min-height: var(--ts-ls-navbar-h);
+}
+.ts-app__topbar .ts-stack {
+  border-right: 1px solid var(--ts-bento-border);
+}
+.ts-app__main {
+  grid-area: main;
+  overflow: auto;
+  position: relative;
+  background: transparent;
+}
+
+
+/* ── GRID OVERLAY (column guide) ──────────────────────────── */
+.ts-grid-overlay {
+  display: grid;
+  grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+  grid-template-rows: minmax(var(--ts-bento-min-h), 100%);
+  grid-auto-rows: unset;
+  gap: var(--ts-bento-gap);
+  row-gap: 0;
+  padding: 0 !important;
+  position: absolute;
+  inset: var(--ts-bento-pad);
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .18s;
+  min-height: -webkit-fill-available;
+  overflow: hidden;
+}
+.ts-grid-overlay[data-visible="true"] { opacity: 1; }
+.ts-grid-overlay__col {
+  background: transparent;
+  border-radius: 2px;
+  border-inline: 1px dashed var(--ts-this-bg-border-focus);
+  min-height: 100%;
+}
+
+
+/* ── BENTO GRID ───────────────────────────────────────────── */
+.ts-bento {
+  display: grid;
+  grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+  /* gap: var(--ts-bento-gap); */
+  p); */
+  grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+  grid-auto-flow: dense;
+  padding: var(--ts-bento-pad);
+  min-height: 100%;
+  border: 0 solid var(--ts-bento-border);
+  justify-content: stretch;
+}
+.ts-bento[data-gap-mode="card"],
+.ts-bento[data-gap-mode="spaced"] {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+
+/* Cell box (flex column + ::before border layer) */
+.ts-bento > * {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+  flex-wrap: wrap;
+  align-content: stretch;
+  align-items: stretch;
+}
+.ts-bento > *::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ts-bento-border);
+  background: var(--ts-bento-bg);
+  pointer-events: none;
+  z-index: 0;
+}
+.ts-bento[data-gap-mode="card"] > *::before,
+.ts-bento[data-gap-mode="spaced"] > *::before {
+  border: 1px solid var(--ts-bento-border);
+  background: var(--ts-bento-bg);
+}
+.ts-bento > *:hover:not(.ts-tile--selected) { z-index: 9; }
+.ts-bento > *:hover:not(.ts-tile--selected)::before {
+  border-color: var(--ts-bento-border-hi);
+}
+
+
+/* ── BENTO SPAN CLASSES — 12 col default ──────────────────── */
+.ts-bento__hero  { grid-area: span 2 / span 8; }
+.ts-bento__half  { grid-area: span 2 / span 4; }
+.ts-bento__third { grid-column: span 4; }
+.ts-bento__quart { grid-column: span 3; }
+.ts-bento__wide  { grid-column: span 5; }
+.ts-bento__full  { grid-column: 1 / -1; }
+
+/* 8-col */
+[data-ts-cols="8"]  .ts-bento__hero  { grid-area: span 2 / span 5; }
+[data-ts-cols="8"]  .ts-bento__half  { grid-area: span 2 / span 3; }
+[data-ts-cols="8"]  .ts-bento__third { grid-column: span 3; }
+[data-ts-cols="8"]  .ts-bento__quart { grid-column: span 2; }
+[data-ts-cols="8"]  .ts-bento__wide  { grid-column: span 3; }
+[data-ts-cols="8"]  .ts-bento__full  { grid-column: 1 / -1; }
+
+/* 16-col */
+[data-ts-cols="16"] .ts-bento__hero  { grid-area: span 2 / span 10; }
+[data-ts-cols="16"] .ts-bento__half  { grid-area: span 2 / span 6; }
+[data-ts-cols="16"] .ts-bento__third { grid-column: span 5; }
+[data-ts-cols="16"] .ts-bento__quart { grid-column: span 4; }
+[data-ts-cols="16"] .ts-bento__wide  { grid-column: span 7; }
+[data-ts-cols="16"] .ts-bento__full  { grid-column: 1 / -1; }
+
+
+/* ── LAYOUT PRIMITIVES ────────────────────────────────────── */
+.ts-stack {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  /* min-height: fit-content; */
+  position: relative;
+  z-index: 1;
+  padding: 0; 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  &:has( >
+  div:is(.ts-stack)){
+      flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0;
+  }
+}
+.ts-stack > *:nth-child(2) {
+  flex: 1 1 auto;
+  min-height: fit-content;
+}
+
+.ts-split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--ts-grid-gap, 0);
+  flex: 1 1 auto;
+  /* min-height: 0; */
+  justify-items: stretch;
+  justify-content: stretch;
+}
+
+.ts-grid {
+  display: grid;
+/*  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--ts-col-width))), 1fr));*/
+  align-items: stretch;
+  flex: 1 1;
+  min-height: fit-content;
+  justify-content: stretch;
+  align-content: stretch;
+  justify-items: stretch;
+}
+
+
+/* ── NESTING ──────────────────────────────────────────────── */
+.ts-layout-container { position: relative; }
+.ts-nested-block {
+  padding: var(--ts-nest-pad);
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+}
+.ts-nested-card {
+  min-height: 80px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--ts-nest-pad) !important;
+}
+.ts-nested-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px dashed var(--ts-bento-border);
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+/* ── MUTED TEXT ───────────────────────────────────────────── */
+.ts-muted { color: var(--ts-text-muted, rgba(232,233,234,.45)); font-size: 12px; }
+
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .ts-bento { grid-template-columns: repeat(6, 1fr) !important; }
+  .ts-bento__hero  { grid-column: span 4 !important; }
+  .ts-bento__half  { grid-column: span 2 !important; }
+  .ts-bento__third,
+  .ts-bento__quart,
+  .ts-bento__wide  { grid-column: span 3 !important; }
+}
+@media (max-width: 768px) {
+  .ts-split { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .ts-bento { grid-template-columns: 1fr !important; }
+  .ts-bento > * { grid-area: auto / 1 !important; }
+}

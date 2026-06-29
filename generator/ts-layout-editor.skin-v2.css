@@ -1,0 +1,145 @@
+/* ================================================================
+   TOOLSKIN LAYOUT STUDIO — editor.skin.css   (Phase 1 · deduped)
+   ================================================================
+   Authority hierarchy:
+     dirty.css  → SINGLE SOURCE OF TRUTH (tokens, layout, chrome)
+     skin.css   → COMPLEMENT ONLY (selectors NOT in dirty.css)
+
+   This file contains the rules that dirty.css explicitly
+   commented out or never defined at base specificity:
+     · panel tab system (.ts-panel-tabs, .ts-ptab*, .ts-tab-pane*,
+       .ts-panel-body, .ts-panel-footer) — dirty has this block
+       commented out at lines 897–948
+     · .ts-chip-btn:hover           — dirty defines only base
+     · .ts-chip.ts-active           — dirty has no active state
+     · .ts-range-row-ls/val-ls      — sidebar range layout utility
+     · #ts-export-textarea (base)   — dirty defines it only inside
+                                      .ts-popup-asset.ts-code-window
+
+   Removed (now solely owned by dirty.css):
+     #ts-app, #ts-topbar, .ts-topbar-right, #ts-canvas-size-badge,
+     #ts-canvas-area, .ts-canvas, #ts-master-layout,
+     #ts-app:has(.ts-canvas-info-bar) chain,
+     #ts-panel.ts-sidebar-panel + .ts-tab-pane.active,
+     #ts-tile-section + .ts-tile-placeholder,
+     .ts-chip-group + .ts-chip-btn (base),
+     .ts-tile--selected + ::before + ::after,
+     .ts-layout-container[data-level="2"|"3"] chains,
+     .ts-grid > .ts-grid + .ts-nested-card,
+     .ts-stack > .ts-layout-tag + label compound chain,
+     .ts-bento .ts-layout-container.ts-tile--selected chains,
+     .ts-bento .ts-layout-container:has(.ts-split > .ts-stack) chains,
+     .ts-ls-toast + @keyframes,
+     ion-icon, .hydrated,
+     html.ts-preloader-lock chain,
+     .ts-banner-generator-app #ts-topbar overrides,
+     .ts-ui-select--bignum, .ts-ui-select--split,
+     div#ts-col-chips.
+
+   Load order in HTML: layout-stub (none) → skin.css → dirty.css
+   (dirty loads last, wins cascade at equal specificity).
+================================================================ */
+
+
+/* ── PANEL TAB SYSTEM (dirty has this block commented out) ── */
+.ts-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--ts-this-bg-border);
+  flex-shrink: 0;
+}
+.ts-ptab {
+  flex: 1 1 0%;
+  padding: 0 16px;
+  height: var(--ts-navbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ts-text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color .1s, border-color .1s;
+  user-select: none;
+}
+.ts-ptab:hover  { color: var(--ts-text-secondary); }
+.ts-ptab.active {
+  color: var(--ts-text-primary);
+  border-bottom-color: var(--ts-accent, #ff5500);
+}
+
+.ts-panel-body {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.ts-tab-pane:not(.active) { display: none; }
+/*  .ts-tab-pane.active is owned by dirty.css via the nested
+   #ts-panel.ts-sidebar-panel block — not re-declared here. */
+
+.ts-panel-footer {
+  flex-shrink: 0;
+  padding: var(--ts-sp-3, 12px) var(--ts-sp-4, 16px);
+  border-top: 1px solid var(--ts-this-bg-border);
+}
+
+
+/* ── CHIP STATES (dirty defines only base .ts-chip-btn) ───── */
+.ts-chip-btn:hover {
+  background: var(--ts-bg-3, #23262e);
+  color: var(--ts-text-secondary);
+  border-color: var(--ts-this-bg-border-hover, rgba(255,255,255,.12));
+}
+.ts-chip.ts-active {
+  background: color-mix(in srgb, var(--ts-accent, #ff5500) 14%, var(--ts-bg-2, #1c1e24));
+  color: var(--ts-accent, #ff5500);
+  border-color: color-mix(in srgb, var(--ts-accent, #ff5500) 38%, transparent);
+}
+
+
+/* ── SIDEBAR RANGE ROW UTILITY (skin-unique) ──────────────── */
+.ts-range-row-ls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ts-range-val-ls {
+  font-family: var(--ts-font-mono, monospace);
+  font-size: 11px;
+  color: var(--ts-text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+
+/* ── EXPORT TEXTAREA — SIDEBAR (un-popped) STATE ──────────── */
+/*  dirty.css addresses #ts-export-textarea only in popup mode
+   (.ts-popup-asset.ts-code-window descendant). This rule covers
+   the sidebar (un-popped) state. Scoped by .ts-sidebar-panel so
+   the selector string cannot collide with anything in dirty.
+   Specificity (0,1,1) < dirty's popup rule (0,2,1) — dirty wins
+   in popup mode automatically, no  needed. */
+.ts-sidebar-panel #ts-export-textarea {
+  flex: 1 1;
+  min-height: 0;
+  padding: 16px 18px;
+  font-family: var(--ts-font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  line-height: 1.7;
+  background: var(--ts-bg-body, #0c0d0f);
+  color: var(--ts-text-muted);
+  border: 0;
+  outline: 0;
+  resize: none;
+  width: 100%;
+  overflow: auto;
+  tab-size: 2;
+  white-space: pre;
+  display: block;
+  color-scheme: dark;
+}

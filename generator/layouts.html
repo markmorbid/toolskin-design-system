@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en" class="ts-banner-generator-app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolskin Banner Generator v2.3</title>
+   
+ <script>
+      (function () {
+        try {
+          var key = 'ts-theme-mode';
+          var m = localStorage.getItem(key);
+          if (!m) return;
+          if (m === 'auto') {
+            m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          if (m === 'dark' || m === 'light') {
+            document.documentElement.setAttribute('data-theme', m);
+            document.documentElement.setAttribute('data-ts-theme', m);
+          }
+        } catch (e) { /* ignore */ }
+      })();
+    </script>
+    <!-- Google Fonts — render-blocking (critical for preloader + body text) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <!-- Other CDN assets loaded dynamically by toolskin-assets.js -->
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    </noscript>
+
+    <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/favicon.ico" sizes="any">
+    <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="https://satsea.io/toolskin-showcase/assets/img/apple-touch-icon.png">
+ <!-- Preloader critical CSS — inline so the lock is available at first paint,
+       before the external stylesheet finishes loading. Mirrors generator/index.html
+       <style id="ts-preloader-boot"> pattern. -->
+    <style id="ts-preloader-boot">
+      html.ts-preloader-lock,
+      html.ts-preloader-lock body {
+        overflow: hidden !important;
+      }
+
+      html.ts-preloader-lock #ts-app,
+      html.ts-preloader-lock #ts-main {
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      html.ts-preloader-lock .ts-preloader {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+      }
+
+      /* Hide sidebar during preloader (it's outside #ts-main) */
+      html.ts-preloader-lock .ts-oce-panel.ts-oce--open,
+      html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab {
+        opacity: 0 !important;
+        z-index: -20 !important;
+
+        pointer-events: none !important;
+      }
+    </style>
+ <script>
+      document.documentElement.classList.add('ts-preloader-lock');
+      // Font-gate: reveal preloader text only after the two fonts it uses are loaded.
+      // Uses document.fonts.load() for specific families (resolves fast, doesn't wait for FA).
+      Promise.all([
+        document.fonts.load('600 1em "Space Grotesk"'),
+        document.fonts.load('400 1em "JetBrains Mono"')
+      ]).then(function () {
+        document.documentElement.classList.add('ts-fonts-ready');
+      });
+    </script>
+       <link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/toolskin.css" />
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-assets.js" defer></script>
+
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin.js" defer></script>
+
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-uikit.js" defer></script>
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin.bannerGenerator.js" defer></script>
+    <style>
+        /* ═══════════════════════════════════════════════════════    DESIGN SYSTEM TOKENS — edit these to restyle everything ═══════════════════════════════════════════════════════ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+
+            /* Layout & Panel */
+            --ts-panel-w: 280px;
+            --ts-topbar-h: 65px;
+
+            /* Card component (Merged) */
+            --ts-card-pad: var(--ts-sp-5);
+            --ts-card-gap: var(--ts-sp-2);
+            --ts-card-sp: var(--ts-sp-3);
+            --ts-card-radius: var(--ts-radius-md);
+            --ts-card-header-h: 45px;
+
+            --ts-card-bg: var(--ts-bg-1-t);
+            --ts-card-bg-2: var(--ts-bg-2);
+            --ts-card-border: var(--ts-border-1);
+
+            /* Input component (Merged) */
+            --ts-input-h: 50px;
+            --ts-input-fs: var(--ts-fs-md);
+            --ts-input-pad-y: calc(var(--ts-input-h)*.3);
+            --ts-input-pad-left: calc(var(--ts-input-h) - var(--ts-input-pad-y));
+            --ts-input-padding: var(--ts-input-pad-y) var(--ts-input-pad-x) var(--ts-input-pad-y) var(--ts-input-pad-left);
+            --ts-input-radius: var(--ts-radius-md);
+
+
+
+            /* Button (Merged) */
+            --ts-btn-h: 50px;
+            --ts-btn-pad-x: var(--ts-sp-3);
+            --ts-btn-radius: var(--ts-radius-md);
+            --ts-btn-fs: var(--ts-fs-sm);
+
+            /* Range component (Added) */
+            --ts-range-h: 10px;
+            --ts-range-thumb: calc(var(--ts-range-h) * 2);
+            --ts-range-bg: var(--ts-bg-3);
+            --ts-range-bg-2: var(--ts-bg-0);
+            --ts-range-border: var(--ts-border-1);
+            --ts-range-accent: var(--ts-accent);
+            --ts-range-label: var(--ts-bg-4);
+            --ts-range-text: var(--ts-text-primary);
+            --ts-range-rad: var(--ts-radius-base);
+            --ts-range-arrow: 5px;
+            --ts-toggle-knob-bg: var(--ts-text-muted);
+            --ts-toggle-knob-bg-active: #ffffffe9;
+
+            /* Toggle (Added) */
+            --ts-toggle-size: 30px;
+
+            /* Banner & Canvas */
+            --ts-title-color: #ffffff;
+            --ts-badge-radius: 7px;
+            --ts-badge-opacity: 1;
+            --ts-icon-size: 60px;
+            --ts-icon-top: 0px;
+            --ts-icon-right: 0px;
+            --ts-canvas-grid-size: 35px;
+            --ts-canvas-grid-opacity: 93%;
+            --ts-canvas-grid-color: color-mix(in srgb, var(--ts-text-primary), var(--ts-bg-body) var(--ts-canvas-grid-opacity));
+            --ts-bg-grid-pattern: repeating-linear-gradient(0deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size)), repeating-linear-gradient(90deg, transparent, transparent calc(var(--ts-canvas-grid-size) - 1px), var(--ts-canvas-grid-color) var(--ts-canvas-grid-size));
+
+        }
+
+    </style>
+     <!-- Toolskin Configuration -->
+    <script>
+      window.addEventListener('ts:ready', () => {
+        console.log('✅ Toolskin Framework Initialized');
+        console.log('Config:', Toolskin.config);
+      });
+    </script>
+</head>
+
+<body>
+    
+    <div id="ts-preloader" class="ts-preloader" aria-hidden="true">
+        <div class="ts-preloader__brand">
+          <div class="ts-preloader__logo">
+            <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>
+            TOOL<em>SKIN</em>
+          </div>
+          <div class="ts-preloader__bar-wrap"><span class="ts-preloader__bar"></span></div>
+          <div class="ts-preloader__hint">Banner Generator</div>
+        </div>
+    </div>
+    <div id="ts-app">
+        <div id="ts-topbar" class="ts-nav-static">
+            <div class="ts-logo ts-topbar__logo">
+                <div class="ts-logo-brand">Tool<em>skin</em></div>
+                <span class="ts-logo-sub">Banner Generator</span>
+            </div> 
+            <div class="ts-topbar-sep"></div> <span class="ts-accent-text">v2.3</span>
+            <div class="ts-topbar-right">
+                <a href="patterns.html" class="ts-btn ts--btn-secondary" style="text-decoration: none;"
+                    data-ts-icon="ion:grid" data-icon-position="left">
+                    <span>Pattern Generator</span>
+                </a>
+                <a href="../index.html" class="ts-btn ts-btn--icon ts-btn-secondary" style="text-decoration: none;"
+                    data-ts-icon="ion:home-outline" data-icon-position="left">
+                    <span>Home</span>
+                </a>
+                <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-load-json" title="Load preset"
+                    data-ts-icon="ion:folder-open" data-icon-position="left">
+                    <span>Load Preset</span>
+                </button>
+                <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-save-json" title="Save preset"
+                    data-ts-icon="ion:save" data-icon-position="left">
+                    <span>Save Preset</span></button>
+                <button class="ts-btn ts-btn--primary" id="ts-btn-preview"
+                    style="text-decoration: none;" data-ts-icon="ion:eye" data-icon-position="left">
+                    <span>Preview &amp; Export</span> <span class="ts-spinner" id="ts-export-spinner"></span>
+                </button>
+                <button class="ts-btn ts-btn--icon" id="ts-btn-reset" title="Reset"
+                    data-ts-icon="ion:refresh" data-icon-position="left">
+                    <span>Reset</span>
+                </button>
+                 <button class="ts-btn ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
+                  <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" aria-hidden="true"></span>
+                  <span class="ts-icon ts-theme-icon-dark" data-ts-icon="fa-solid fa-moon" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <div id="ts-canvas-area">
+            <div class="ts-canvas-info-bar"> 
+                <span class="ts-canvas-badge" id="ts-banner-size-label">1200 × 630px</span> <span class="ts-canvas-badge" id="ts-zoom-label">50%</span> 
+            </div>
+            <div id="ts-layout-workspace">
+                <!-- @MAIN HOOK:
+                Inside Here   you will place  the editor with proper resizable and repsopsnivce functions  accprding to the output of final  asset you have from the refactorgn of that bento generatign system asset, ot should be something integratable n this space.  and the  ts-ánel shuld ust be the  place where the outpit textarea should wpork regardless any situationm.-->
+            </div>
+        </div>
+        <div id="ts-panel">
+            <!-- <div id="ts-panel-tabs">
+                <div class="ts-ptab active" data-tab="text">Text</div>
+                <div class="ts-ptab" data-tab="bg">BG</div>
+                <div class="ts-ptab" data-tab="elements">Elements</div>
+                <div class="ts-ptab" data-tab="icon">Icon</div>
+                <div class="ts-ptab" data-tab="canvas">Canvas</div>
+            </div> -->
+            <div id="ts-panel-body">
+              <!-- @Secondary  HOOK: HERE GOES THE TEXTAREA AND  TOOLS ON SIDEBAR (MAIN ONE/ts-panel one, not the inner   editor's sidebar)-->
+               <!-- if content isnide the panel is tabbed, iscomment above and use  this wrapper inside the body to make cotnent   switchable via ids and attribute automatically. without this  the cotnent just displays normally <div class="ts-tab-pane active" data-pane="text"></div>-->
+
+                  
+
+                  <div class="ts-card">
+                        <div class="ts-card-header ts-accordion absolute">
+                            <span class="ts-card-title" data-icon="ion:download-outline"> Pristine Semantic Export</span>
+                        </div>
+                        <div class="ts-card-rows"><!-- undee this structure on banner gewnerator and oce panel both layouts uses the cards like this woth the header  converting the  cards into  a ui accordion tyoe  asset. no style required hyusr   usign the exact same layout and dispisition without exceoption.  -->
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full"><!-- inside each rows (in poluralk) there are row in singular which holds direclty the   columns  layout.. thta scheme cannot eb overrided.. on ther efawctor final verison this schemea will be automated so the formatting will not he human   buiklt anymroe,. just js injected  and only  using the basic selectors..  in this second  row    it fdispaslys a hint block with an icon to serve as a help   element box. actiosn and buttons unless   the local  asset requires it, should be displayed on actiosn abr on the footer on the poanel not inside ropeferently oin the card iutself. no extra selectro muts be added unless soemthign is not correcxlty migrated.  this shoud work exactly as the rogiinak verison opublished on satsea.io-->
+                                    <div class="ts-hint">Click "Preview &amp; Export" above to render a pixel-perfect canvas preview before downloading.</div>
+                                </div>
+                            </div>
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-hint" style="color:var(--ts-text-secondary)"> ✓ Pure Canvas 2D render — no html2canvas.
+                                        <br> ✓ Gradient text, noise &amp; glow all correct.
+                                        <br> ✓ Choose PNG or JPEG quality.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field">
+                                        <label>Format</label>
+                                        <div class="ts-chips" id="ts-format-presets">
+                                            <div class="ts-chip active" data-fmt="png">PNG</div>
+                                            <div class="ts-chip" data-fmt="jpeg">JPEG</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field" id="ts-jpeg-quality-wrap" style="display:none">
+                                        <label>JPEG Quality</label>
+                                        <div class="ts-range-row">
+                                            <input type="range" class="ts-range" id="ts-input-jpeg-quality" min="60"
+                                                max="100" value="92">
+                                            <span class="ts-range-val" id="ts-val-jpeg-quality">92%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+
+            </div>
+            <!-- Is a good practice to keep a footed  wioth  additional or mirriored     actions/buttons too for better usability  btu the layout can   work  right without it. keep it if possible. asa the ui is riucher with it.  max 2 buttons in a  row or 2 + 1 icon btn- the footer is sticky and non  scrollable so its allways viosoble and not overlapping.use this footer bar to  add   the save or copy or and reset buttons  too. -->
+            <div id="ts-panel-footer">
+                <button class="ts-btn ts-btn--primary" id="ts-btn-preview2" data-icon="ion:eye">
+                    <span>Preview &amp; Export </span>
+                </button>
+                <button class="ts-btn ts--btn-secondary" id="ts-btn-save-json2" data-icon="ion:save-outline">
+                    <span>Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="ts-export-modal">
+        <div class="ts-modal-title" id="ts-modal-title">Preview — 1200 × 630 @ 2×</div>
+        <div class="ts-modal-sub" id="ts-modal-sub">Canvas render — what you see is what you get</div> <img
+            id="ts-modal-preview-img" class="ts-modal-preview" src="" alt="preview">
+        <div class="ts-modal-actions">
+            <button class="ts-btn ts-btn--primary" id="ts-btn-download" data-icon="ion:download-outline">
+                Download</button>
+            <button class="ts-btn" id="ts-btn-modal-close" data-icon="ion:close-outline">
+                Close</button>
+        </div>
+    </div>
+    <!-- Check if you cna leverage the export modal that is already bult..  is     developed for rpevbviewing   pixel exports buit can hod any jidn of content, in cludign markuo or jtml if you set up  prism library  to preview the renders   usign    the porism library parsing the output as json on the modla viewport.   works with asyncronous loading si it shoudl work  as preview semalessly so the user can really  see  on an isolated  popup   modal  a clean  simulated outpu, poreferreently fullscreen to ensure there's nos claing on the layout. no need to add backgorudn surfac,e   we  kep  the   overlay alpha backlground that s contemplated to be kept dark either o lgith and dark mode. the onyl thing you shoud cuomize is the rband part using  the -->
+    <input type="file" id="ts-json-file-input" accept=".ts-tools-json" style="display:none">
+    <div class="ts-toast-container"></div>
+    <div id="ts-grid-overlay-element" class="ts-grid-overlay"></div>
+
+    <script>
+        // === CONFIGURATION === THIS SCRIPT IS NECCESARY FOR THE COLLAPSOVBLE CARDSTUCTURE, DON T REMOVBE S IT NEEDS TO REMAIN  THE DSAME AS THE OTHER  SCAFFOLD LAYOUTS. 
+        const ACCORDION_MODE = true;   // Set to false to allow multiple open cards per pane
+
+        // Helper: get all cards inside a pane (or the whole document if no pane)
+        function getCardsInSamePane(element) {
+            const pane = element.closest('.ts-tab-pane');
+            if (pane) {
+                return Array.from(pane.querySelectorAll('.ts-card'));
+            } else {
+                // If no pane, consider all cards on page
+                return Array.from(document.querySelectorAll('.ts-card'));
+            }
+        }
+
+        // Function to open a specific card (adds open class to its header)
+        function openCard(card) {
+            const header = card.querySelector('.ts-card-header.ts-accordion');
+            if (header && !header.classList.contains('open')) {
+                header.classList.add('open');
+            }
+        }
+
+        // Function to close a specific card (removes open class from its header)
+        function closeCard(card) {
+            const header = card.querySelector('.ts-card-header.ts-accordion');
+            if (header && header.classList.contains('open')) {
+                header.classList.remove('open');
+            }
+        }
+
+        // Close all cards inside a given container (pane or whole document)
+        function closeAllCards(container) {
+            const cards = container.querySelectorAll('.ts-card');
+            cards.forEach(card => closeCard(card));
+        }
+
+        // Initialize: attach click handlers to all accordion headers
+        document.querySelectorAll('.ts-card-header.ts-accordion').forEach(header => {
+            header.addEventListener('click', (e) => {
+                const card = header.closest('.ts-card');
+                if (!card) return;
+
+                if (ACCORDION_MODE) {
+                    const pane = card.closest('.ts-tab-pane');
+                    if (pane) {
+                        // Close all other cards in the same pane
+                        const otherCards = Array.from(pane.querySelectorAll('.ts-card')).filter(c => c !== card);
+                        otherCards.forEach(c => closeCard(c));
+                    } else {
+                        // No pane – close all other cards on the page
+                        const allCards = document.querySelectorAll('.ts-card');
+                        allCards.forEach(c => {
+                            if (c !== card) closeCard(c);
+                        });
+                    }
+                    // Open the clicked card (toggle its own state)
+                    header.classList.toggle('open');
+                } else {
+                    // Simple toggle: just this card
+                    header.classList.toggle('open');
+                }
+            });
+        });
+
+        // Make the first card in each tab pane open by default
+        document.querySelectorAll('.ts-tab-pane').forEach(pane => {
+            const firstCard = pane.querySelector('.ts-card');
+            if (firstCard) {
+                openCard(firstCard);
+            }
+        });
+      
+    </script>
+
+    <script>
+         /* ================================================================
+             PREVIEW DRAG-RESIZE + MODAL POPOUT  (clean rewrite) THIS OS THE SCRIPT MIGRATED  THAT CAN BE USED FOR DRAGGVBALE RESIING OF THE EXTERNAL PANEL- ommit if unnecesary for now
+             ================================================================ */
+          (function () {
+            'use strict';
+
+            /* ── Config ─────────────────────────────────────────────────── */
+            var STORAGE_KEY       = 'ts-col-w';
+            var MIN_PREVIEW_PX    = 240;
+            var MIN_Editor_PX       = 300;
+            var MAX_PREVIEW_RATIO = 0.65;
+
+            /* ── Grab elements once ──────────────────────────────────────── */
+            var editorEl   = document.getElementById('ts-editor');
+            var resizerEl    = document.getElementById('ts-editor-resizer');
+            var sidebarFrame = document.getElementById('ts-editor-iframe');
+            var popoutBtn    = document.getElementById('ts-editor-popout');
+            var overlayEl    = document.getElementById('ts-editor-preview-overlay');
+            var modalFrame   = document.getElementById('ts-editor-modal-iframe');
+            var modalNameEl  = document.getElementById('ts-modal-preview-name');
+
+            if (!editorEl || !resizerEl) return;
+
+            /* ── Restore persisted width ─────────────────────────────────── */
+            var savedW = parseInt(localStorage.getItem(STORAGE_KEY), 10) || 0;
+            if (savedW >= MIN_PREVIEW_PX) {
+              editorEl.style.setProperty('--ts-editor-col-w', savedW + 'px');
+            }
+
+            /* ── Resizer visibility — no DOM queries during show/hide ────── */
+            function syncResizer() {
+              /* On mobile (<= 600px) the resizer is hidden by CSS; JS leaves it alone */
+              if (window.innerWidth <= 600) {
+                resizerEl.style.display = 'none';
+                return;
+              }
+              var open = editorEl.getAttribute('data-preview-visible') === 'true';
+              resizerEl.style.display = open ? 'flex' : 'none';
+            }
+
+            new MutationObserver(function (muts) {
+              for (var i = 0; i < muts.length; i++) {
+                if (muts[i].attributeName === 'data-preview-visible') { syncResizer(); break; }
+              }
+            }).observe(editorEl, { attributes: true });
+
+            /* Re-sync resizer when crossing the 600px breakpoint */
+            window.addEventListener('resize', syncResizer, { passive: true });
+
+            syncResizer(); /* initial state */
+
+            /* ── Drag state ──────────────────────────────────────────────── */
+            var dragging       = false;
+            var startX         = 0;
+            var startW         = 0;
+            var editorRight  = 0;
+            var editorWidth  = 0;
+            var rafId          = null;
+            var pendingX       = 0;
+
+            /* ── rAF-throttled resize applier ────────────────────────────── */
+            function applyResize() {
+              rafId = null;
+              var rawW   = editorRight - pendingX;
+              var maxW   = editorWidth * MAX_PREVIEW_RATIO;
+              var minW   = Math.min(MIN_PREVIEW_PX, editorWidth - MIN_Editor_PX);
+              var clamped = Math.max(minW, Math.min(maxW, rawW));
+              /* also keep Editor above MIN_Editor_PX */
+              if (editorWidth - clamped < MIN_Editor_PX) {
+                clamped = editorWidth - MIN_Editor_PX;
+              }
+              clamped = Math.max(MIN_PREVIEW_PX, clamped);
+              editorEl.style.setProperty('--ts-editor-col-w', clamped + 'px');
+            }
+
+            /* ── Pointer capture — bulletproof, no "stuck" drag ─────────── */
+            resizerEl.addEventListener('pointerdown', function (e) {
+              if (e.button !== 0) return;
+              e.preventDefault();
+
+              /* Snapshot layout once at drag start — no getBCR during move */
+              var rect     = editorEl.getBoundingClientRect();
+              editorRight = rect.right;
+              editorWidth = rect.width;
+
+              /* Capture pointer so mouseleave / moving outside window
+                 never orphans the drag state */
+              resizerEl.setPointerCapture(e.pointerId);
+
+              dragging = true;
+              resizerEl.classList.add('is-dragging');
+              document.body.classList.add('ts-resizing');
+            });
+
+            resizerEl.addEventListener('pointermove', function (e) {
+              if (!dragging) return;
+              pendingX = e.clientX;
+              if (!rafId) rafId = requestAnimationFrame(applyResize);
+            });
+
+            function endDrag(e) {
+              if (!dragging) return;
+              dragging = false;
+              if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+              resizerEl.classList.remove('is-dragging');
+              document.body.classList.remove('ts-resizing');
+              /* Persist final width */
+              var w = editorEl.style.getPropertyValue('--ts-editor-col-w');
+              var wPx = parseInt(w, 10);
+              if (wPx >= MIN_PREVIEW_PX) localStorage.setItem(STORAGE_KEY, wPx);
+            }
+
+            resizerEl.addEventListener('pointerup',     endDrag);
+            resizerEl.addEventListener('pointercancel', endDrag);
+            /* Safety net: if pointer somehow escapes capture */
+            document.addEventListener('pointerup',     function (e) { if (dragging) endDrag(e); });
+
+            /* ── Modal popout ────────────────────────────────────────────── */
+            if (popoutBtn && overlayEl && modalFrame) {
+
+              /* Resolve the Toolskin modal instance — toolskin.js exposes it
+                 on ToolskinUIKit after init, falling back to a direct instantiation */
+              var _modal = null;
+              function openModal() {
+                if (!_modal) {
+                  _modal = (window.ToolskinUIKit && window.ToolskinUIKit.modal)
+                         ? window.ToolskinUIKit.modal
+                         : (window.ToolskinModal ? new window.ToolskinModal() : null);
+                }
+                if (_modal) {
+                  _modal.open('ts-preview-modal-overlay');
+                } else {
+                  /* bare fallback */
+                  overlayEl.classList.add('ts-overlay--open');
+                  overlayEl.setAttribute('data-open', '');
+                  document.body.style.overflow = 'hidden';
+                }
+              }
+
+              /* Open the lightbox with just the currently-previewed image. */
+              function openPreviewLightbox() {
+                var galleryMount = document.getElementById('ts-preview-gallery');
+                var img = window.__tsEditor && window.__tsEditor._previewImage;
+                if (!(galleryMount && !galleryMount.hidden && img &&
+                      window.ToolskinUIKit && window.ToolskinUIKit.Gallery)) return false;
+                var holder = document.getElementById('ts-lightbox-source');
+                if (!holder) {
+                  holder = document.createElement('div');
+                  holder.id = 'ts-lightbox-source';
+                  holder.style.display = 'none';
+                  document.body.appendChild(holder);
+                }
+                holder.innerHTML = '';
+                var gEl = window.ToolskinUIKit.Gallery.create(holder, {
+                  variant: 'uniform',
+                  images: [{ src: img.src, caption: img.caption }]
+                });
+                window.ToolskinUIKit.Gallery.open(gEl, 0);
+                return true;
+              }
+
+              /* Clicking the previewed image opens the lightbox too. just imported it along qwiht  the   old code.  I JIUST  DID BULK WORD RPELACEMENT. AS THS WAS FORM THE TREEMAP  RENDERER  WOFTWARE AMDE WTH TOOLSKIN.  THIS MPORTED FEATTRUES HAS>
+              1- A FULLY  WORKINK RIGHT CICK OPERATIVE POPUT 7MENU  THAT IS 100%    in production. 
+              2-  a 100% in production horizontal automatic reizere for fullheight cotnianer layouts
+
+              https://satsea.io/toolskin-rebuild/_tree-explorer/tree-explorer.html here yopu cna see it in action  clickin any file the sidebar opens for a     slipt screen rpeview layout that is perfectly resizeasble and itneractive  withas  good hover margin. leverag it and ajdust the code so it works  flexibly under any  circunstance of itneraction require.  it was origfinally inyl  built for the treemap but notwq ist shoud eba general usage class or fucntion that shoudk work without  even thinking about it.. *enablign an attribute olike ts-resizable ts/resizable//x  or soemtyhign liek that *both.  */
+              var galleryMountEl = document.getElementById('ts-preview-gallery');
+              if (galleryMountEl) {
+                galleryMountEl.addEventListener('click', function (e) {
+                  if (e.target.closest('.ts-preview-single__img')) openPreviewLightbox();
+                });
+              }
+
+              popoutBtn.addEventListener('click', function () {
+                /* Image preview → lightbox (full screen + zoom/pan), one image. */
+                if (openPreviewLightbox()) return;
+                /* Otherwise (text / html / pdf): mirror into the modal iframe. */
+                var nameEl = document.getElementById('ts-preview-name');
+                if (modalNameEl && nameEl) modalNameEl.textContent = nameEl.textContent;
+                if (sidebarFrame) {
+                  if (sidebarFrame.getAttribute('srcdoc')) {
+                    modalFrame.srcdoc = sidebarFrame.srcdoc;
+                  } else if (sidebarFrame.src && sidebarFrame.src !== window.location.href) {
+                    modalFrame.src = sidebarFrame.src;
+                  }
+                }
+                openModal();
+              });
+
+              /* Clear modal iframe when closed — stop background resource loading */
+              overlayEl.addEventListener('ts:modal-close', function () {
+                modalFrame.removeAttribute('src');
+                modalFrame.removeAttribute('srcdoc');
+              });
+              /* Backdrop click fallback (for when ToolskinModal is not yet loaded) */
+              overlayEl.addEventListener('click', function (ev) {
+                if (ev.target === overlayEl) {
+                  overlayEl.classList.remove('ts-overlay--open');
+                  overlayEl.removeAttribute('data-open');
+                  document.body.style.overflow = '';
+                  modalFrame.removeAttribute('src');
+                  modalFrame.removeAttribute('srcdoc');
+                }
+              });
+            }
+
+
+        /* ==================================================================
+               PREVIEW SIDEBAR  ·  preview(node) opens an iframe in the sidebar.
+               Falls back to a "not previewable" panel for binary types.
+            ================================================================== */
+            var PREVIEW_KIND = {
+              png:'image', jpg:'image', jpeg:'image', gif:'image', webp:'image',
+              svg:'image', ico:'image', avif:'image',
+              md:'text', txt:'text', log:'text', csv:'text', tsv:'text', xml:'text',
+              json:'text', yml:'text', yaml:'text', toml:'text', ini:'text',
+              sh:'text', bat:'text', ps1:'text',
+              py:'text', js:'text', mjs:'text', cjs:'text', ts:'text', tsx:'text', jsx:'text',
+              css:'text', scss:'text', sass:'text',
+              html:'html', htm:'html',
+              pdf:'pdf'
+            };
+            function previewKindOf(name) {
+              var s = String(name || '');
+              var dot = s.lastIndexOf('.');
+              var ext = dot > 0 ? s.slice(dot + 1).toLowerCase() : '';
+              return PREVIEW_KIND[ext] || null;
+            }
+            function formatBytes(b) {
+              if (b == null) return '';
+              if (b < 1024) return b + ' B';
+              if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+              return (b / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+
+            Tree.prototype._bindPreview = function () {
+              var self = this;
+              if (this.previewCloseEl) {
+                this.previewCloseEl.addEventListener('click', function () { self.closePreview(); });
+              }
+            };
+
+            function _escHtml(s) {
+              return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+              });
+            }
+            /* ── Theme helpers ──────────────────────────────────────────────────
+               _iframeTheme() reads the current data-theme on <html> and returns
+               an object with bg / fg / scheme strings for srcdoc injection.
+               Called at srcdoc-build time AND by the MutationObserver below so
+               the iframe always mirrors the parent page's light/dark state.   */
+            function _iframeTheme() {
+              var dark = document.documentElement.getAttribute('data-theme') !== 'light';
+              /* Read the REAL computed Toolskin tokens off the parent so the iframe
+                 mirrors the live theme + any retheming — not a hardcoded snapshot.
+                 Fall back to the canonical dark/light hex only if a token is empty. */
+              var cs = getComputedStyle(document.documentElement);
+              function tok(name, fallback) {
+                var v = cs.getPropertyValue(name).trim();
+                return v || fallback;
+              }
+              return {
+                scheme : dark ? 'dark' : 'light',
+                bg     : tok('--ts-bg-body',        dark ? '#0c0d0f' : '#f5f5f7'),
+                fg     : tok('--ts-text-primary',   dark ? '#e8e9ea' : '#1a1a1a'),
+                fgMono : tok('--ts-text-secondary', dark ? '#9ea0a5' : '#555'),
+                accent : tok('--ts-accent',         '#fbac23')
+              };
+            }
+
+            function _renderTextSrcdoc(text, name) {
+              var t = _iframeTheme();
+              return (
+                '<!DOCTYPE html><meta charset="utf-8"><title>' + _escHtml(name) + '</title>' +
+                '<meta name="color-scheme" content="' + t.scheme + '">' +
+                '<style>html,body{scrollbar-width:none;margin:0;color-scheme:' + t.scheme + ';' +
+                'background:' + t.bg + ';color:' + t.fg + ';}' +
+                'body{font:12px/1.55 "JetBrains Mono","Fira Code",monospace;' +
+                'padding:14px 18px;}' +
+                'pre{white-space:pre-wrap;word-break:break-word;margin:0;color:' + t.fgMono + ';}' +
+                '@media print{html,body{background:#fff;color:#000;}}' +
+                '</style><pre>' + _escHtml(text) + '</pre>'
+              );
+            }
+
+            function _renderImageSrcdoc(url) {
+              var t = _iframeTheme();
+              return (
+                '<!DOCTYPE html><meta charset="utf-8">' +
+                '<meta name="color-scheme" content="' + t.scheme + '">' +
+                '<style>*{box-sizing:border-box;margin:0;padding:0;}' +
+                'html,body{width:100%;height:100%;color-scheme:' + t.scheme + ';' +
+                'background:' + t.bg + ';display:flex;align-items:center;justify-content:center;' +
+                'overflow:auto;padding:12px;}' +
+                /* transparency checkerboard so transparent PNGs/SVGs are visible */
+                'img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;' +
+                'object-fit:contain;' +
+                'background-image:' +
+                'linear-gradient(45deg,#80808022 25%,transparent 25%),' +
+                'linear-gradient(-45deg,#80808022 25%,transparent 25%),' +
+                'linear-gradient(45deg,transparent 75%,#80808022 75%),' +
+                'linear-gradient(-45deg,transparent 75%,#80808022 75%);' +
+                'background-size:16px 16px;' +
+                'background-position:0 0,0 8px,8px -8px,-8px 0;}' +
+                '</style>' +
+                '<img src="' + url.replace(/"/g, '%22') + '" alt="">'
+              );
+            }
+
+            /* Helper: show one of the two preview surfaces (iframe | gallery),
+               hide the other. Keeps their visibility mutually exclusive. */
+            Tree.prototype._showPreviewSurface = function (which) {
+              if (this.previewIframeEl) this.previewIframeEl.style.display = (which === 'iframe') ? '' : 'none';
+              if (this.previewGalleryEl) this.previewGalleryEl.hidden = (which !== 'gallery');
+            };
+
+            /* Build the folder's sibling images so the lightbox can browse prev/next.
+               Returns { images: [...], index } where index is the clicked node. */
+            Tree.prototype.preview = function (node) {
+              if (!this.previewEl || !this.explorerEl) return;
+              if (!node || node.type !== 'file') return;
+              var kind = previewKindOf(node.name);
+              var url  = node.url || '';
+              var self = this;
+
+              if (this.previewNameEl) this.previewNameEl.textContent = node.name || '';
+              if (this.previewMetaEl) {
+                var bits = [];
+                if (node.size != null)  bits.push(formatBytes(node.size));
+                if (node.mtime)         bits.push(new Date(node.mtime * 1000).toLocaleString());
+                bits.push(kind || 'binary');
+                this.previewMetaEl.textContent = bits.join(' · ');
+              }
+              this.explorerEl.setAttribute('data-preview-visible', 'true');
+              this._lastNodeData = node;
+
+              if (!kind || !url) {
+                this._showPreviewSurface('none');
+                if (this.previewIframeEl) {
+                  this.previewIframeEl.removeAttribute('src');
+                  this.previewIframeEl.removeAttribute('srcdoc');
+                }
+                if (this.previewFallbackEl) this.previewFallbackEl.hidden = false;
+                return;
+              }
+              if (this.previewFallbackEl) this.previewFallbackEl.hidden = true;
+
+              if (kind === 'image') {
+                /* Render a SINGLE image directly in the preview column — NOT a
+                   gallery. Its own .ts-preview-single class keeps the gallery's
+                   grid / fade-in / figure styling off it. The lightbox (opened via
+                   the pop-out button) is the only place the gallery is used, and
+                   it gets exactly this one image. */
+                this._showPreviewSurface('gallery');
+                if (this.previewIframeEl) {
+                  this.previewIframeEl.removeAttribute('src');
+                  this.previewIframeEl.removeAttribute('srcdoc');
+                }
+                if (this.previewGalleryEl) {
+                  this.previewGalleryEl.innerHTML =
+                    '<img class="ts-preview-single__img" src="' +
+                    url.replace(/"/g, '&quot;') + '" alt="' +
+                    (node.name || '').replace(/"/g, '&quot;') + '">';
+                }
+                /* Remember the clicked image so the pop-out lightbox shows just it. */
+                this._previewImage = { src: url, caption: node.name || '' };
+                return;
+              }
+
+              /* Doc types use the iframe. */
+              this._showPreviewSurface('iframe');
+              if (!this.previewIframeEl) return;
+
+              if (kind === 'text') {
+                /* Fetch + render as source. Avoids the browser's blank-page
+                   behaviour for .css / .js / .json AND the sandbox-script
+                   warnings for files with userscript metadata. */
+                this.previewIframeEl.removeAttribute('src');
+                var iframe = this.previewIframeEl;
+                var lt = _iframeTheme();
+                iframe.srcdoc = '<!DOCTYPE html><meta charset="utf-8"><meta name="color-scheme" content="' + lt.scheme + '"><body style="scrollbar-width:none;margin:0;color-scheme:' + lt.scheme + ';background:' + lt.bg + ';color:' + lt.fgMono + ';font:12px/1.55 monospace;padding:14px;">Loading\u2026</body>';
+                fetch(url, { cache: 'force-cache' })
+                  .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+                  .then(function (text) {
+                    if (self._lastNodeData !== node) return;   /* user moved on */
+                    iframe.srcdoc = _renderTextSrcdoc(text, node.name);
+                  })
+                  .catch(function (err) {
+                    if (self._lastNodeData !== node) return;
+                    iframe.srcdoc = _renderTextSrcdoc('Could not load file:\n  ' + err.message, node.name);
+                  });
+              } else {
+                /* html / pdf: let the browser handle it. */
+                this.previewIframeEl.removeAttribute('srcdoc');
+                this.previewIframeEl.src = url;
+              }
+            };
+
+
+            /* ==================================================================
+               TAXONOMY OVERFLOW  ·  exposes the filter chips as a menu when the
+               chip strip is too narrow to render them inline.
+            ================================================================== */
+            Tree.prototype._populateTaxonomyOverflow = function (entries) {
+              if (!this.overflowPopoverEl) return;
+              this.overflowPopoverEl.textContent = '';
+              var self = this;
+              entries.forEach(function (e) {
+                var item = document.createElement('button');
+                item.type = 'button';
+                item.className = 'ts-tree-popover__item';
+                item.setAttribute('role', 'menuitemradio');
+                item.setAttribute('aria-checked', e[0] === self._activeTaxonomy ? 'true' : 'false');
+                item.dataset.taxonomy = e[0];
+                var label = document.createElement('span');
+                label.className = 'ts-tree-popover__item-label';
+                label.textContent = e[0];
+                var count = document.createElement('small');
+                count.textContent = e[1];
+                item.appendChild(label);
+                item.appendChild(count);
+                self.overflowPopoverEl.appendChild(item);
+              });
+            };
+
+            Tree.prototype._bindTaxonomyOverflow = function () {
+              var self = this;
+              if (!this.overflowTriggerEl || !this.overflowPopoverEl) return;
+
+              this.overflowTriggerEl.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var isOpen = !self.overflowPopoverEl.hidden;
+                self._toggleOverflow(!isOpen);
+              });
+              document.addEventListener('click', function (e) {
+                if (!self.overflowPopoverEl.contains(e.target)
+                    && e.target !== self.overflowTriggerEl
+                    && !self.overflowTriggerEl.contains(e.target)) {
+                  self._toggleOverflow(false);
+                }
+              });
+              this.overflowPopoverEl.addEventListener('click', function (e) {
+                var btn = e.target.closest('[data-taxonomy]');
+                if (!btn) return;
+                self.filterByTaxonomy(btn.dataset.taxonomy);
+                self._toggleOverflow(false);
+              });
+
+              var actionbar = this.taxonomyEl.closest('.ts-tree-explorer__actionbar');
+              if (actionbar && typeof ResizeObserver !== 'undefined') {
+                this._taxonomyRO = new ResizeObserver(function () {
+                  self._updateTaxonomyOverflow();
+                });
+                this._taxonomyRO.observe(actionbar);
+                this._updateTaxonomyOverflow();
+              }
+            };
+
+            Tree.prototype._updateTaxonomyOverflow = function () {
+              if (!this.taxonomyEl || !this.overflowTriggerEl) return;
+              var actionbar = this.taxonomyEl.closest('.ts-tree-explorer__actionbar');
+              if (!actionbar) return;
+              var title = actionbar.querySelector('.ts-tree-explorer__actionbar-title');
+              var actions = actionbar.querySelector('.ts-tree-explorer__actionbar-actions');
+              var titleW = title ? title.getBoundingClientRect().width : 0;
+              var self = this;
+              var actionsW = 0;
+              if (actions) {
+                Array.from(actions.children).forEach(function (child) {
+                  if (child === self.overflowTriggerEl) return;
+                  actionsW += child.getBoundingClientRect().width;
+                });
+                var visibleAlways = actions.children.length - 1;
+                if (visibleAlways > 0) actionsW += (visibleAlways - 1) * 10;
+              }
+              var availableW = actionbar.clientWidth;
+              var freeForStrip = Math.max(0, availableW - titleW - actionsW - 32);
+              var chipW = this._chipWidthRef || 80;
+              var current = this._overflowState || 'strip';
+              var onThreshold  = chipW * 2;
+              var offThreshold = chipW * 2.8;
+              var needTrigger;
+              if (current === 'trigger') {
+                needTrigger = freeForStrip < offThreshold;
+              } else {
+                needTrigger = freeForStrip < onThreshold;
+              }
+              var newState = needTrigger ? 'trigger' : 'strip';
+              if (newState === this._overflowState && this._overflowState !== undefined) return;
+              this._overflowState = newState;
+              this.overflowTriggerEl.hidden = !needTrigger;
+              actionbar.dataset.overflow = newState;
+              if (!needTrigger && !this.overflowPopoverEl.hidden) {
+                this._toggleOverflow(false);
+              }
+            };
+
+            Tree.prototype._toggleOverflow = function (show) {
+              if (!this.overflowPopoverEl) return;
+              if (!show) {
+                this.overflowPopoverEl.hidden = true;
+                this.overflowTriggerEl.setAttribute('aria-expanded', 'false');
+                return;
+              }
+              this.overflowPopoverEl.hidden = false;
+              this.overflowTriggerEl.setAttribute('aria-expanded', 'true');
+              var pop = this.overflowPopoverEl.getBoundingClientRect();
+              var t = this.overflowTriggerEl.getBoundingClientRect();
+              var x = t.right - pop.width;
+              var y = t.bottom + 6;
+              x = Math.min(Math.max(8, x), window.innerWidth  - pop.width  - 8);
+              y = Math.min(Math.max(8, y), window.innerHeight - pop.height - 8);
+              this.overflowPopoverEl.style.left = x + 'px';
+              this.overflowPopoverEl.style.top  = y + 'px';
+            };
+
+            Tree.prototype.closePreview = function () {
+              if (this.previewIframeEl) this.previewIframeEl.removeAttribute('src');
+              if (this.explorerEl)      this.explorerEl.setAttribute('data-preview-visible', 'false');
+            };
+
+            /* ── Theme-sync observer ────────────────────────────────────────────
+               Watches data-theme on <html>. When it flips, re-renders any open
+               srcdoc preview (text or image) so the iframe background/colors
+               match the new parent theme without a manual re-click.            */
+            Tree.prototype._bindThemeSync = function () {
+              var self = this;
+              var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (m) {
+                  if (m.attributeName !== 'data-theme') return;
+                  var node = self._lastNodeData;
+                  var iframe = self.previewIframeEl;
+                  if (!node || !iframe) return;
+                  /* Only re-render srcdoc-based previews; src-based (html/pdf) handle their own theme */
+                  var kind = previewKindOf(node.name);
+                  if (kind === 'text') {
+                    /* Re-fetch is expensive — just patch the srcdoc with the live text if already loaded.
+                       Simplest correct approach: re-trigger the full preview flow. */
+                    self.preview(node);
+                  } else if (kind === 'image') {
+                    var url = node.url || '';
+                    if (url) iframe.srcdoc = _renderImageSrcdoc(url);
+                  }
+                });
+              });
+              observer.observe(document.documentElement, { attributes: true });
+            };
+
+            /* ==================================================================
+               ROW ACTIONS MENU  ·  popover attached to #ts-action-more, applies
+               to the currently-selected row. Supports right-click context too.
+            ================================================================== */
+            Tree.prototype._bindMenu = function () {
+              var self = this;
+              if (!this.menuTriggerEl || !this.menuPopoverEl) return;
+
+              this.menuTriggerEl.addEventListener('click', function (e) {
+                e.stopPropagation();
+                self._toggleMenu(true);
+              });
+
+              /* Right-click on a tree row also opens the menu, positioned at the
+                 pointer, and selects the row underneath. */
+              this.tree.addEventListener('contextmenu', function (e) {
+                var row = e.target.closest('.ts-tree__row');
+                if (!row) return;
+                e.preventDefault();
+                /* Select the row WITHOUT running preview (which is heavy for
+                   large files). User opens preview deliberately via the menu. */
+                var nodeEl = row.parentElement;
+                var prevSel = self.tree.querySelector('.ts-tree__node[aria-selected="true"]');
+                if (prevSel && prevSel !== nodeEl) prevSel.removeAttribute('aria-selected');
+                nodeEl.setAttribute('aria-selected', 'true');
+                self._toggleMenu(true, { x: e.clientX, y: e.clientY });
+              });
+
+              document.addEventListener('click', function (e) {
+                if (!self.menuPopoverEl.contains(e.target)
+                    && e.target !== self.menuTriggerEl
+                    && !self.menuTriggerEl.contains(e.target)) {
+                  self._toggleMenu(false);
+                }
+              });
+
+              this.menuPopoverEl.addEventListener('click', function (e) {
+                var btn = e.target.closest('[data-menu-action]');
+                if (!btn) return;
+                self._runMenuAction(btn.dataset.menuAction);
+                self._toggleMenu(false);
+              });
+            };
+
+            Tree.prototype._toggleMenu = function (show, atPoint) {
+              if (!this.menuPopoverEl) return;
+              if (!show) { this.menuPopoverEl.hidden = true; return; }
+              this.menuPopoverEl.hidden = false;
+              var pop = this.menuPopoverEl.getBoundingClientRect();
+              var x, y;
+              if (atPoint) { x = atPoint.x; y = atPoint.y; }
+              else {
+                var t = this.menuTriggerEl.getBoundingClientRect();
+                x = t.right - pop.width; y = t.bottom + 6;
+              }
+              x = Math.min(Math.max(8, x), window.innerWidth  - pop.width  - 8);
+              y = Math.min(Math.max(8, y), window.innerHeight - pop.height - 8);
+              this.menuPopoverEl.style.left = x + 'px';
+              this.menuPopoverEl.style.top  = y + 'px';
+            };
+
+            Tree.prototype._runMenuAction = function (action) {
+              var nodeEl = this.tree.querySelector('.ts-tree__node[aria-selected="true"]');
+              if (!nodeEl) return;
+              var node = this._nodeFromEl(nodeEl);
+              var fullPath = node.id || node.url;
+              var fileUrl  = node.id ? ('file:///' + node.id.replace(/\\/g, '/')) : node.url;
+              var name     = node.name;
+              function clip(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  navigator.clipboard.writeText(text);
+                } else {
+                  var ta = document.createElement('textarea');
+                  ta.value = text; document.body.appendChild(ta);
+                  ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+                }
+              }
+              switch (action) {
+                case 'open':       var a = nodeEl.querySelector('a.ts-tree__label'); if (a) a.click(); break;
+                case 'preview':    this.preview(node); break;
+                case 'copy-path':  clip(fullPath); break;
+                case 'copy-url':   clip(fileUrl);  break;
+                case 'copy-md':    clip('[' + name + '](' + fileUrl + ')'); break;
+                case 'copy-html':  clip('<a href="' + fileUrl + '">' + name + '</a>'); break;
+                case 'reveal':
+                  /* Step out of any active filter so the row is visible in its
+                     real hierarchical position before we expand + scroll. */
+                  if (this._activeTaxonomy !== 'All') this.filterByTaxonomy('All');
+                  if (this.searchEl) this.searchEl.value = '';
+                  this._activeQuery = '';
+                  this._applyFilters();
+                  var cur = nodeEl.parentElement;
+                  while (cur) {
+                    var anc = cur.closest('.ts-tree__node');
+                    if (!anc) break;
+                    this._setExpanded(anc, true);
+                    cur = anc.parentElement;
+                  }
+                  nodeEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                  break;
+              }
+            };
+
+            /* ==================================================================
+               EXPORT MENU  ·  emit the tree as CSV / MD / JSON / static HTML.
+               Triggered from #ts-action-export. The static HTML is a no-JS
+               <ul>/<li> view so the export is readable without ToolskinTree.
+            ================================================================== */
+            Tree.prototype._bindExport = function () {
+              var self = this;
+              if (!this.exportTriggerEl || !this.exportPopoverEl) return;
+              if (this.exportTriggerEl.disabled) this.exportTriggerEl.disabled = false;
+
+              this.exportTriggerEl.addEventListener('click', function (e) {
+                e.stopPropagation();
+                self._toggleExport(true);
+              });
+              document.addEventListener('click', function (e) {
+                if (!self.exportPopoverEl.contains(e.target)
+                    && e.target !== self.exportTriggerEl
+                    && !self.exportTriggerEl.contains(e.target)) {
+                  self._toggleExport(false);
+                }
+              });
+              this.exportPopoverEl.addEventListener('click', function (e) {
+                var btn = e.target.closest('[data-export-format]');
+                if (!btn) return;
+                self.export(btn.dataset.exportFormat);
+                self._toggleExport(false);
+              });
+            };
+            Tree.prototype._toggleExport = function (show) {
+              if (!this.exportPopoverEl) return;
+              if (!show) { this.exportPopoverEl.hidden = true; return; }
+              this.exportPopoverEl.hidden = false;
+              var pop = this.exportPopoverEl.getBoundingClientRect();
+              var t = this.exportTriggerEl.getBoundingClientRect();
+              var x = t.right - pop.width;
+              var y = t.bottom + 6;
+              x = Math.min(Math.max(8, x), window.innerWidth  - pop.width  - 8);
+              y = Math.min(Math.max(8, y), window.innerHeight - pop.height - 8);
+              this.exportPopoverEl.style.left = x + 'px';
+              this.exportPopoverEl.style.top  = y + 'px';
+            };
+
+            function _esc(s) {
+              return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+              });
+            }
+
+            Tree.prototype.export = function (format) {
+              var data = this.data;
+              var rootName = (data[0] && (data[0].name || 'tree')) || 'tree';
+              var content = '', mime = 'text/plain', ext = '.txt';
+
+              if (format === 'json') {
+                content = JSON.stringify(data, null, 2);
+                mime = 'application/json'; ext = '.json';
+              } else if (format === 'csv') {
+                var rows = [['name','type','depth','url','size_bytes']];
+                (function walk(nodes, depth) {
+                  nodes.forEach(function (n) {
+                    rows.push([n.name, n.type, depth, n.url || '', n.size == null ? '' : n.size]);
+                    if (n.children) walk(n.children, depth + 1);
+                  });
+                })(data, 0);
+                content = rows.map(function (r) {
+                  return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(',');
+                }).join('\n');
+                mime = 'text/csv'; ext = '.csv';
+              } else if (format === 'md') {
+                var lines = ['# ' + rootName, ''];
+                (function walk(nodes, depth) {
+                  nodes.forEach(function (n) {
+                    var pad = new Array(depth + 1).join('  ');
+                    if (n.type === 'folder') {
+                      lines.push(pad + '- **' + n.name + '/**');
+                    } else {
+                      var u = n.url ? ('](' + n.url + ')') : '';
+                      lines.push(pad + '- ' + (n.url ? '[' + n.name + u : n.name));
+                    }
+                    if (n.children) walk(n.children, depth + 1);
+                  });
+                })(data, 0);
+                content = lines.join('\n');
+                mime = 'text/markdown'; ext = '.md';
+              } else if (format === 'html' || format === 'pdf') {
+                /* Both 'html' and 'pdf' share the same static markup. For 'html'
+                   we download it; for 'pdf' we open in a new window and trigger
+                   print() so the user can save through the OS print dialog. */
+                var staticHtml = (function () {
+                  var lines = ['<ul class="tree">'];
+                  (function walk(nodes) {
+                    nodes.forEach(function (n) {
+                      if (n.type === 'folder') {
+                        lines.push('<li><b>' + _esc(n.name) + '/</b>');
+                        if (n.children && n.children.length) {
+                          lines.push('<ul>'); walk(n.children); lines.push('</ul>');
+                        }
+                        lines.push('</li>');
+                      } else {
+                        lines.push('<li><a href="' + _esc(n.url) + '">' + _esc(n.name) + '</a></li>');
+                      }
+                    });
+                  })(data);
+                  lines.push('</ul>');
+                  return (
+                    '<!DOCTYPE html>\n<meta charset="utf-8">\n<title>' + _esc(rootName) + ' — tree</title>\n' +
+                    '<style>body{scrollbar-width:none;margin:0;background:#0c0d0f;color:#e8e9ea;margin:0;padding:24px 32px;background:#0c0d0f;color:#e8e9ea;' +
+                    'font-family:system-ui,sans-serif}h1{font-weight:600}ul{padding-left:1.3em;list-style:none}' +
+                    'li{padding:2px 0;border-left:1px dashed #3e4045;padding-left:.6em;margin-left:.2em}' +
+                    'a{color:#fbac23;text-decoration:none}a:hover{text-decoration:underline}' +
+                    'b{color:#fff}' +
+                    '@media print{body{background:#fff;color:#000}li{border-left-color:#bbb}' +
+                    'a{color:#b06800}b{color:#000}}' +
+                    '</style>\n<h1>' + _esc(rootName) + '</h1>\n' + lines.join('')
+                  );
+                })();
+
+                if (format === 'pdf') {
+                  var w = window.open('', '_blank');
+                  if (!w) {
+                    console.warn('[ToolskinTree] PDF export: popup blocked');
+                    return;
+                  }
+                  w.document.open();
+                  w.document.write(staticHtml);
+                  w.document.close();
+                  w.focus();
+                  /* Give the new window a tick to lay out before invoking print. */
+                  setTimeout(function () { try { w.print(); } catch (e) {} }, 250);
+                  return;
+                }
+                content = staticHtml;
+                mime = 'text/html'; ext = '.html';
+              } else { return; }
+
+              var blob = new Blob([content], { type: mime + ';charset=utf-8' });
+              var u = URL.createObjectURL(blob);
+              var a = document.createElement('a');
+              a.href = u;
+              a.download = rootName.replace(/[^a-z0-9._-]+/gi, '_') + '-tree' + ext;
+              document.body.appendChild(a); a.click(); document.body.removeChild(a);
+              setTimeout(function () { URL.revokeObjectURL(u); }, 1000);
+            };
+          })();
+    </script>
+
+
+    <script>
+      (function(){
+        // ---------- strict ts-prefixed state ----------
+        const masterContainer = document.getElementById('ts-master-layout');
+        const columnSelect = document.getElementById('ts-column-select');
+        const overlayDiv = document.getElementById('ts-grid-overlay-element');
+        const toggleBtn = document.getElementById('ts-toggle-grid-btn');
+        const nestGridBtn = document.getElementById('ts-nest-grid-btn');
+        const nestSplitBtn = document.getElementById('ts-nest-split-btn');
+        const resetBtn = document.getElementById('ts-reset-layout');
+        const exportTextarea = document.getElementById('ts-export-textarea');
+
+        // dynamic column tracking
+        let currentColumns = 12;
+        let overlayVisible = false;
+
+        // Helper: update overlay columns (CSS variable)
+        function updateOverlayColumns() {
+          overlayDiv.style.setProperty('--ts-layout-cols', currentColumns);
+          const step = 100 / currentColumns;
+        }
+
+        function setGridOverlay(visible) {
+          overlayVisible = visible;
+          overlayDiv.style.display = visible ? 'block' : 'none';
+        }
+
+        // toggle behavior: show/hide
+        toggleBtn.addEventListener('click', () => {
+          setGridOverlay(!overlayVisible);
+        });
+
+        // column change affects overlay + also applies optional inline container style for bento (but not mandatory)
+        columnSelect.addEventListener('change', (e) => {
+          currentColumns = parseInt(e.target.value, 10);
+          updateOverlayColumns();
+          // Also adjust any .ts-bento container? Bento uses 12cols base but designers want to visualize;
+          // we keep .ts-bento as is (12->6->1 responsive), but we reflect column count via overlay
+          // additional: store data-attribute for potential live design feedback
+          document.querySelectorAll('.ts-bento').forEach(bento => {
+            bento.setAttribute('data-viz-columns', currentColumns);
+          });
+        });
+
+        // ---- Deep Structural Nesting (exactly up to 3 levels) ----
+        // Helper: find currently active nested zone inside canvas: we will nest into a selected bento tile or split tile.
+        // For usability, the nesting operations target the last focused container inside the preview? We implement robust:
+        // Level1: inside .ts-app__main (primary bento). Level2: inside any tile of bento that has .ts-layout-container[data-level="1"].
+        // Level3: inside any child that is level2 and then nest a split/grid further.
+        // We programmatically nest components and maintain hierarchy.
+
+        /* ─────────────────────────────────────────────────────────────
+        GRID SYSTEM — BACKGROUND + OVERLAY SYNC
+        ─────────────────────────────────────────────────────────────
+
+        The current grid was migrated from the old UI and is currently
+        purely ornamental. This must be corrected.
+
+        The grid system has TWO responsibilities:
+
+        1. BACKGROUND GRID (VISUAL MESH)
+
+           * Must render a pixel-perfect mesh
+           * Must visually match the actual layout grid
+           * Every container edge must align exactly to grid lines
+           * No drift, no approximation
+
+           Reference behavior:
+
+           * Vercel-style layout grids
+           * Blueprint / engineering-style UI systems
+
+           This is not decorative — it is a visual representation
+           of the layout engine.
+
+        2. COLUMN OVERLAY (INTERACTIVE GUIDE)
+
+           * Toggleable overlay for column visualization
+           * Uses different color + opacity from background grid
+           * Must NOT use inline styles (currently does — needs removal)
+           * Must be fully token-driven
+
+           Critical requirement:
+
+           * Overlay columns MUST match EXACTLY the column calculations
+             from the layout engine (no independent logic)
+
+        /* ─────────────────────────────────────────────────────────────
+        SINGLE SOURCE OF TRUTH (CRITICAL)
+        ─────────────────────────────────────────────────────────────
+
+        Both systems (background grid + overlay) MUST derive from:
+
+        * column count (global control / dropdown)
+        * gutter size (token)
+        * container width
+        * padding tokens
+
+        NO duplicated calculations.
+        NO hardcoded values.
+        NO visual approximations.
+
+        The overlay must be a direct projection of the layout engine state.
+
+        /* ─────────────────────────────────────────────────────────────
+        COLUMN SIZE CALCULATION (TO FIX)
+        ─────────────────────────────────────────────────────────────
+
+        Current issue:
+
+        * Column widths are not accurately reflected in overlay
+        * Mismatch between visual grid and actual layout behavior
+
+        Required:
+
+        * Centralize column width calculation (JS or CSS variables)
+        * Expose computed values as tokens / CSS variables
+        * Use SAME values for:
+
+          * layout engine
+          * overlay grid
+          * background mesh (if applicable)
+
+        Example direction:
+        --grid-columns: N
+        --grid-gap: X
+        --grid-column-width: calc((100% - (N - 1) * gap) / N)
+
+        All derived values must cascade from this.
+
+        /* ─────────────────────────────────────────────────────────────
+        NO INLINE STYLES RULE
+        ─────────────────────────────────────────────────────────────
+
+        Current state:
+
+        * Overlay grid uses inline styles (temporary hack)
+
+        Fix:
+
+        * Replace with class-based + token-driven system
+        * Use CSS variables for dynamic updates
+        * JS only updates variables, not styles directly
+
+        /* ─────────────────────────────────────────────────────────────
+        BENTO FLEXIBILITY + NESTING (EDITOR + EXPORT)
+        ─────────────────────────────────────────────────────────────
+
+        The bento system must behave consistently in:
+
+        * Editor (interactive)
+        * Export (static output)
+
+        Current need:
+
+        * Review and stabilize nesting behavior
+        * Ensure nested elements respect the same grid system
+        * Prevent scale drift in nested grids
+
+        Rules:
+
+        * Nested grids must NOT rescale independently
+        * They inherit the same column system unless explicitly overridden
+        * All sizing must remain proportional to root grid tokens
+
+        /* ─────────────────────────────────────────────────────────────
+        EXPECTED OUTCOME
+        ─────────────────────────────────────────────────────────────
+
+        * Background grid visually matches layout exactly
+        * Overlay grid is a precise, toggleable diagnostic tool
+        * Bento layout aligns perfectly with both systems
+        * No divergence between:
+
+          * visual guides
+          * actual layout math
+
+        This turns the grid into a reliable construction system,
+        not a decorative layer.
+
+        */
+
+        let currentNestingLevel = 1; // track global deepest? we allow user to click inside container -> target
+
+        function getActiveNestingTarget() {
+          // Find any element with class .ts-layout-container that is currently hovered? but simpler: find last selected via click.
+          // We use click delegation: store last clicked layout container.
+          let lastTarget = window.__ts_last_nest_target;
+          if(lastTarget && masterContainer.contains(lastTarget)) {
+            let level = parseInt(lastTarget.getAttribute('data-level') || '0', 10);
+            if(level < 3) return lastTarget;
+          }
+          // fallback: find first level 1 or level 2 inside main content.
+          const level2Candidate = masterContainer.querySelector('.ts-layout-container[data-level="2"]');
+          if(level2Candidate && parseInt(level2Candidate.getAttribute('data-level'),10) < 3) return level2Candidate;
+          const level1Candidate = masterContainer.querySelector('.ts-layout-container[data-level="1"]');
+          if(level1Candidate && parseInt(level1Candidate.getAttribute('data-level'),10) < 3) return level1Candidate;
+          return masterContainer.querySelector('#ts-primary-bento')?.querySelector('.ts-bento__hero, .ts-bento__wide, .ts-bento__half');
+        }
+
+        function setActiveTarget(element) {
+          window.__ts_last_nest_target = element;
+        }
+
+        // Click delegation for selecting target inside canvas.
+        masterContainer.addEventListener('click', (e) => {
+          let target = e.target.closest('.ts-layout-container, .ts-bento > div, .ts-split, .ts-grid');
+          if(target && masterContainer.contains(target)) {
+            if(!target.classList.contains('ts-layout-container')) {
+              // wrap or find parent container
+              let containerParent = target.closest('.ts-layout-container');
+              if(containerParent) target = containerParent;
+            }
+            if(target && target.getAttribute && target.getAttribute('data-level') !== undefined) {
+              setActiveTarget(target);
+              // visual highlight feedback (temporary)
+              target.style.outline = '2px solid var(--ts-accent-2)';
+              setTimeout(() => { if(target) target.style.outline = ''; }, 300);
+            } else {
+              // create a container region if needed - but default components have containers
+              let possible = target.closest('.ts-bento > div, .ts-split, .ts-grid');
+              if(possible && !possible.classList.contains('ts-layout-container')) {
+                let level = 0;
+                const parentContainer = possible.closest('.ts-layout-container');
+                if(parentContainer) level = Math.min(3, parseInt(parentContainer.getAttribute('data-level')||'0',10) + 1);
+                else level = 1;
+                possible.classList.add('ts-layout-container');
+                possible.setAttribute('data-level', level);
+                setActiveTarget(possible);
+              }
+            }
+          }
+        });
+
+        // Nest Grid (Level up to 3)
+        function nestGridComponent() {
+          let target = getActiveNestingTarget();
+          if(!target) {
+            alert("ts-nest: No active layout container selected. Click inside any tile (hero, half, split) to target.");
+            return;
+          }
+          let currentLevel = parseInt(target.getAttribute('data-level') || '0', 10);
+          if(currentLevel >= 3) {
+            alert("Maximum nesting depth (Level 3) reached. Cannot nest deeper.");
+            return;
+          }
+          const newLevel = currentLevel + 1;
+          // Create a new ts-grid component
+          const gridWrapper = document.createElement('div');
+          gridWrapper.className = 'ts-grid ts-live-preview ts-layout-container';
+          gridWrapper.setAttribute('data-level', newLevel);
+          gridWrapper.style.marginTop = 'var(--ts-bento-edit-pad)';
+          gridWrapper.style.padding = 'var(--ts-bento-edit-pad)';
+          gridWrapper.style.background = 'var(--ts-bg-2)';
+          //gridWrapper.style.borderRadius = '20px';
+          // Add demo cards
+          for(let i=1; i<=3; i++) {
+            const card = document.createElement('div');
+            card.className = 'ts-stack';
+            card.style.background = 'var(--ts-card-bg)';
+            card.style.padding = 'var(--ts-bento-edit-pad)';
+            //card.style.borderRadius = '16px';
+            card.innerHTML = `<strong>Nested Card ${i}</strong><span class="ts-placeholder-text">Level ${newLevel} · Auto-fit grid</span>`;
+            gridWrapper.appendChild(card);
+          }
+          target.appendChild(gridWrapper);
+          setActiveTarget(gridWrapper);
+          updateExportCode();
+        }
+
+        function nestSplitComponent() {
+          let target = getActiveNestingTarget();
+          if(!target) {
+            alert("ts-nest: Select a target tile before nesting split component.");
+            return;
+          }
+          let currentLevel = parseInt(target.getAttribute('data-level') || '0', 10);
+          if(currentLevel >= 3) {
+            alert("Maximum nesting depth (Level 3) reached.");
+            return;
+          }
+          const newLevel = currentLevel + 1;
+          const splitWrapper = document.createElement('div');
+          splitWrapper.className = 'ts-split ts-live-preview ts-layout-container';
+          splitWrapper.setAttribute('data-level', newLevel);
+          splitWrapper.style.marginTop = 'var(--ts-bento-edit-pad)';
+          splitWrapper.style.background = 'var(--ts-bg-2)';
+          splitWrapper.style.padding = 'var(--ts-bento-edit-pad)';
+          splitWrapper.style.borderRadius = '20px';
+          splitWrapper.style.gap = 'var(--ts-bento-edit-gap)';
+          // left and right columns
+          const leftPanel = document.createElement('div');
+          leftPanel.className = 'ts-stack';
+          leftPanel.innerHTML = `<strong>📐 Split Left (5fr)</strong><div class="ts-placeholder-text">Magazine-grade asymmetry</div><div>Content block</div>`;
+          const rightPanel = document.createElement('div');
+          rightPanel.className = 'ts-stack';
+          rightPanel.innerHTML = `<strong>🎨 Split Right (7fr)</strong><div class="ts-placeholder-text">Rich media ready</div><div>Level ${newLevel} nested split</div>`;
+          splitWrapper.appendChild(leftPanel);
+          splitWrapper.appendChild(rightPanel);
+          target.appendChild(splitWrapper);
+          setActiveTarget(splitWrapper);
+          updateExportCode();
+        }
+
+        function resetMasterLayout() {
+          // reset full layout to pristine state (level 0 + original app shell)
+          const originalAppHtml = `
+            <div class="ts-app ts-live-preview" id="ts-root-app">
+              <div class="ts-app__nav">
+                <div class="ts-stack" style="gap: var(--ts-bento-edit-gap);">
+                  <strong>🗂️ Sidebar (Level 1)</strong>
+                  <span class="ts-placeholder-text">[ts-stack pinning]</span>
+                  <div class="ts-placeholder-text">Dashboard</div>
+                  <div class="ts-placeholder-text">Analytics</div>
+                </div>
+              </div>
+              <div class="ts-app__topbar">
+                <span>🎛️ Toolskin Layout Studio</span>
+                <span class="ts-placeholder-text">Topbar</span>
+              </div>
+              <div class="ts-app__main">
+                <div class="ts-bento" id="ts-primary-bento">
+                  <div class="ts-bento__hero ts-layout-container" data-level="1">
+                    <div class="ts-stack"><h3>Hero Tile</h3><p>Level 1 · Bento Hero (span 8)</p></div>
+                  </div>
+                  <div class="ts-bento__half ts-layout-container" data-level="1"><div class="ts-stack"><h4>Insights</h4><p>Half width. Auto-fit responsive grid ready.</p></div></div>
+                  <div class="ts-bento__third ts-layout-container" data-level="1"><div class="ts-stack"><h4>Metric</h4><p>4-col item.</p></div></div>
+                  <div class="ts-bento__quart ts-layout-container" data-level="1"><div class="ts-stack"><h4>Quick</h4><p>Compact block</p></div></div>
+                  <div class="ts-bento__wide ts-layout-container" data-level="1"><div class="ts-split"><div>Split left: 5fr</div><div>Split right: 7fr · Magazine grade</div></div></div>
+                </div>
+              </div>
+            </div>
+          `;
+          masterContainer.innerHTML = originalAppHtml;
+          // reassign container data attributes
+          document.querySelectorAll('.ts-layout-container').forEach(el => {
+            if(!el.getAttribute('data-level')) el.setAttribute('data-level', '1');
+          });
+          window.__ts_last_nest_target = null;
+          updateExportCode();
+        }
+
+        // ---- PRISTINE SEMANTIC EXPORTER (strips editor wrappers, reveals only tokenized layout tags) ----
+        function getCleanSemanticHTML() {
+          // Clone master layout deeply, strip any event listeners or temporary classes added by studio.
+          const cloneLayout = masterContainer.cloneNode(true);
+          // Remove overlays, remove editor-specific classes (ts-live-preview, ts-layout-container data attributes optional but keep semantic layout)
+          // But we need to keep all Toolskin layout classes: .ts-app, .ts-bento, .ts-split, .ts-grid, .ts-stack, .ts-bento__*
+          // Remove ts-layout-container attribute (depth markers) because exporter shows pure layout.
+          cloneLayout.querySelectorAll('.ts-layout-container').forEach(el => {
+            el.classList.remove('ts-layout-container');
+            el.removeAttribute('data-level');
+            // keep all original Toolskin classNames intact.
+          });
+          // remove any inline style that is added for visual nesting (margin/padding extras except rhythm)
+          cloneLayout.querySelectorAll('[style]').forEach(el => {
+            const styleAttr = el.getAttribute('style');
+            if(styleAttr && (styleAttr.includes('margin-top') || styleAttr.includes('outline'))) {
+              el.removeAttribute('style');
+            }
+          });
+          // remove editor button / extra interactive stuff inside canvas? not needed because master never has ui buttons inside.
+          // Also remove any background colors that are not token based? keep default. We're cleaning.
+          const serializer = new XMLSerializer();
+          let htmlString = serializer.serializeToString(cloneLayout);
+          // clean up xmlns and other meta from serialization
+          htmlString = htmlString.replace(/ xmlns="[^"]+"/g, '');
+          // wrap minimal root to show tokens plus basic style variables? But handoff expects just tokens tags.
+          return `<div class="ts-layout-export" style="background: inherit;">\n${htmlString}\n</div>`;
+        }
+
+        function updateExportCode() {
+          const cleanCode = getCleanSemanticHTML();
+          exportTextarea.value = cleanCode;
+        }
+
+        // Mutation observer to auto-update exporter on any layout change
+        function observeLayoutChanges() {
+          const observer = new MutationObserver(() => {
+            updateExportCode();
+          });
+          observer.observe(masterContainer, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'data-level'] });
+          updateExportCode();
+        }
+
+        // Add event listeners for nesting buttons
+        nestGridBtn.addEventListener('click', () => {
+          nestGridComponent();
+          updateExportCode();
+        });
+        nestSplitBtn.addEventListener('click', () => {
+          nestSplitComponent();
+          updateExportCode();
+        });
+        resetBtn.addEventListener('click', () => {
+          resetMasterLayout();
+          updateExportCode();
+        });
+
+        // init column overlay and export
+        updateOverlayColumns();
+        setGridOverlay(false);
+        observeLayoutChanges();
+        // Reset selected target on initial load
+        window.__ts_last_nest_target = null;
+        updateExportCode();
+
+        // Extra: ensure rhythm law demonstration inside canvas: container padding ≥ gap.
+        // All tokens comply by design.
+      })();
+    </script>
+
+</body>
+
+</html>

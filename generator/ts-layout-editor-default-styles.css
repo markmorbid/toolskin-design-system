@@ -1,0 +1,503 @@
+    /*  ================================================================
+     TOOLSKIN LAYOUT STUDIO v3 — Implementation of System Architecture
+     ================================================================
+     SINGLE SOURCE OF TRUTH (§2):
+       --ts-layout-cols  JS: updateGrid(N)
+       --ts-grid-gap     JS: updateGap(px)
+       --ts-bento-pad    JS: updatePad(px)
+       --ts-bento-min-h  JS: updateMinH(px)
+       --ts-col-width    JS: computeGridVars() — exact rendered px
+       --ts-tile-width   JS: computeGridVars() — col-width + gap
+
+     FIX REGISTER (from §12 bug register):
+       [B01] Grid overlay: CSS Grid cells — no repeating-linear-gradient drift
+       [B02] ts-stack: flex:1 min-height:0 — no height:100% overflow
+       [B03] Pattern generator: removed entirely
+       [B04] Single :root block — no duplicates
+       [B05] computeGridVars reads paddingLeft/columnGap from DOM element
+       [B06] ts-workbench removed — clean editor CSS Grid
+       [B07] All colors via --ts-this-bg-* / --ts-bg-* tokens
+       [B08] ts-grid minmax: 100px — no 1-column collapse in narrow tiles
+       [B09] Inner topbar: status display only, no controls
+       [B10] Overlay padding matches bento — self-correcting
+       [B11] Export strips all editor artifacts + style attributes
+        ================================================================ */
+
+        /* ── RESET ─────────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── TOKENS — single canonical :root (§2) ───────────────────── */
+        :root {
+          /* Studio chrome */
+          --ts-ls-panel-w:      320px;
+          --ts-ls-topbar-h:     60px;
+          --ts-ls-sidebar-w:    200px;
+          --ts-ls-navbar-h:     42px;
+
+          /* Grid engine — JS writes these after paint */
+          --ts-layout-cols:     12;
+          --ts-grid-gap:        0px;
+          --ts-col-width:       80px;   /* JS-computed */
+          --ts-tile-width:      80px;   /* JS-computed */
+
+          /* Bento — all derive from grid SSOT */
+          --ts-bento-gap:       var(--ts-grid-gap);
+          --ts-bento-pad:       var(--ts-sp-6, 24px);
+          --ts-bento-cell-pad:  var(--ts-sp-6, 24px);
+          --ts-bento-min-h:     160px;
+          --ts-bento-border:    var(--ts-this-bg-border, rgba(255,255,255,.08));
+          --ts-bento-border-hi: var(--ts-this-bg-border-hover, rgba(255,255,255,.15));
+          --ts-bento-bg:        var(--ts-this-bg-dim-4, rgba(0,0,0,.15));
+
+          /* Overlay (§3b): column fill color */
+          --ts-overlay-fill: color-mix(in srgb, var(--ts-info, #3b82f6) 8%, transparent);
+
+          /* Nesting */
+          --ts-nest-pad: calc(var(--ts-bento-pad) * .65);
+        }
+
+        /* ── BASE ────────────────────────────────────────────────────── */
+        html { color-scheme: dark; overflow: hidden; }
+        body {
+          background: var(--ts-bg-body, #0c0d0f);
+          font-family: var(--ts-font-body, 'Space Grotesk', system-ui, sans-serif);
+          height: 100vh;
+          overflow: hidden;
+        }
+
+        /* ── EDITOR SHELL (§6) — clean CSS Grid, no workbench ────────── */
+        #ts-app {
+          display: grid;
+          grid-template-columns: 1fr var(--ts-ls-panel-w);
+          grid-template-rows: var(--ts-ls-topbar-h) 1fr;
+          height: 100vh;
+          width: 100vw;
+          overflow: hidden;
+        }
+        #ts-topbar    { grid-column: 1 / -1; grid-row: 1; }
+        #ts-canvas-area { grid-column: 1; grid-row: 2; overflow: hidden; display: flex; flex-direction: column; }
+        #ts-panel     { grid-column: 2; grid-row: 2; }
+
+        /* ── TOPBAR (§8) — global only ────────────────────────────────── */
+      /*  #ts-topbar {
+          display: flex;
+          align-items: center;
+          gap: var(--ts-sp-3, 12px);
+          padding: 0 var(--ts-sp-4, 16px);
+          background: var(--ts-bg-0, #14161a);
+          border-bottom: 1px solid var(--ts-this-bg-border, rgba(255,255,255,.07));
+          z-index: 200;
+          overflow: hidden;
+        }*/
+        .ts-topbar-right { margin-left: auto; display: flex; align-items: center; gap: var(--ts-sp-2, 8px); }
+        #ts-canvas-size-badge {
+          font-family: var(--ts-font-mono, monospace);
+          font-size: 10px;
+          color: var(--ts-text-muted);
+          padding: 2px 8px;
+          background: var(--ts-this-bg-dim-2, rgba(255,255,255,.03));
+          border: 1px solid var(--ts-this-bg-border, rgba(255,255,255,.07));
+          border-radius: 4px;
+          letter-spacing: .04em;
+          white-space: nowrap;
+        }
+
+        /* ── CANVAS AREA ─────────────────────────────────────────────── */
+        #ts-canvas-area { background: var(--ts-bg-body, #0c0d0f); }
+        .ts-canvas {
+          flex: 1;
+          min-height: 0;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+        #ts-master-layout {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          min-height: 100%;
+          position: relative;
+        }
+        .ts-layout-container { position: relative; }
+
+        /* ── APP SHELL SCAFFOLD ──────────────────────────────────────── */
+        .ts-app {
+          flex: 1;
+          display: grid;
+          grid-template:
+            "nav topbar" var(--ts-ls-navbar-h)
+            "nav main"   1fr
+            / var(--ts-ls-sidebar-w) 1fr;
+          overflow: hidden;
+          min-height: 0;
+        }
+        .ts-app__nav {
+          grid-area: nav;
+          background: var(--ts-bg-0, #14161a);
+          border-right: 1px solid var(--ts-bento-border);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+        .ts-app__topbar {
+          grid-area: topbar;
+          background: var(--ts-bg-0, #14161a);
+          border-bottom: 1px solid var(--ts-bento-border);
+          display: flex;
+          align-items: center;
+          padding: 0 var(--ts-bento-cell-pad);
+          font-size: 12px;
+          gap: var(--ts-sp-3, 12px);
+          min-height: var(--ts-ls-navbar-h);
+        }
+        .ts-app__main {
+          grid-area: main;
+          overflow: auto;
+          position: relative;
+          scrollbar-width: thin;
+          /* §3a — ambient square mesh (Layer 0): pure CSS, always on */
+          background-image:
+            linear-gradient(var(--ts-bento-border) 1px, transparent 1px),
+            linear-gradient(90deg, var(--ts-bento-border) 1px, transparent 1px);
+          background-size: 24px 24px;
+        }
+
+        /* ── GRID OVERLAY (§3b) — CSS Grid cells, exact match to bento ─
+           Layer 1: toggleable column guide.
+           Uses SAME grid-template-columns + gap + padding as .ts-bento.
+           JS creates N .ts-grid-overlay__col children via renderOverlayCols().
+           No repeating-linear-gradient — no drift, zero approximation.
+        ────────────────────────────────────────────────────────────────── */
+        .ts-grid-overlay {
+          display: grid;
+          grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+          gap: var(--ts-bento-gap);
+          padding: var(--ts-bento-pad);
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 50;
+          opacity: 0;
+          transition: opacity .18s;
+        }
+        .ts-grid-overlay[data-visible="true"] { opacity: 1; }
+        .ts-grid-overlay__col {
+          background: var(--ts-overlay-fill);
+          border-radius: 2px;
+        }
+
+        /* ── BENTO GRID (§4) ─────────────────────────────────────────── */
+        .ts-bento {
+          display: grid;
+          grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+          gap: var(--ts-bento-gap);
+          grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+          grid-auto-flow: dense;
+          padding: var(--ts-bento-pad);
+          min-height: 100%;
+          /* §10: wireframe border model — container gets top + left */
+          border-top:  1px solid var(--ts-bento-border);
+          border-left: 1px solid var(--ts-bento-border);
+        }
+        /* Remove container borders when padding > 0 (cells have visual separation) */
+        .ts-bento[data-gap-mode="card"],
+        .ts-bento[data-gap-mode="spaced"] {
+          border-top-color: transparent;
+          border-left-color: transparent;
+        }
+
+        /* §4, §10: bento cells — display:flex so .ts-stack fills, ::before for borders */
+        .ts-bento > * {
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          position: relative;
+        }
+        /* §10: wireframe model — right + bottom on each cell via ::before */
+        .ts-bento > *::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-right:  1px solid var(--ts-bento-border);
+          border-bottom: 1px solid var(--ts-bento-border);
+          background: var(--ts-bento-bg);
+          pointer-events: none;
+          z-index: 0;
+        }
+        .ts-bento[data-gap-mode="card"] > *::before,
+        .ts-bento[data-gap-mode="spaced"] > *::before {
+          border-color: var(--ts-bento-border);
+          border-width: 1px;
+          border-style: solid;
+          background: var(--ts-bento-bg);
+        }
+        .ts-bento > *:hover:not(.ts-tile--selected) { z-index: 9; }
+        .ts-bento > *:hover:not(.ts-tile--selected)::before {
+          border-color: var(--ts-bento-border-hi);
+        }
+        /* Selection */
+        .ts-tile--selected {
+          outline: 2px solid var(--ts-accent, #ff5500) !important;
+          outline-offset: -1px;
+          z-index: 99;
+        }
+        .ts-tile--selected::before { border-color: transparent !important; }
+        /* Level badge */
+        .ts-tile--selected::after {
+          content: "L" attr(data-level);
+          position: absolute;
+          top: 8px; right: 8px;
+          background: var(--ts-accent, #ff5500);
+          color: var(--ts-on-accent, #fff);
+          font-size: 9px; font-weight: 700;
+          padding: 2px 6px;
+          border-radius: 999px;
+          font-family: var(--ts-font-mono, monospace);
+          z-index: 20;
+          pointer-events: none;
+          letter-spacing: .04em;
+        }
+
+        /* ── BENTO SPAN CLASSES — 12 col (default) ─────────────────── */
+        .ts-bento__hero  { grid-column: span 8;  grid-row: span 2; }
+        .ts-bento__half  { grid-column: span 4;  grid-row: span 2; }
+        .ts-bento__third { grid-column: span 4; }
+        .ts-bento__quart { grid-column: span 3; }
+        .ts-bento__wide  { grid-column: span 5; }
+        .ts-bento__full  { grid-column: 1 / -1; }
+
+        /* 8-col overrides */
+        [data-ts-cols="8"] .ts-bento__hero  { grid-column: span 5; grid-row: span 2; }
+        [data-ts-cols="8"] .ts-bento__half  { grid-column: span 3; grid-row: span 2; }
+        [data-ts-cols="8"] .ts-bento__third { grid-column: span 3; }
+        [data-ts-cols="8"] .ts-bento__quart { grid-column: span 2; }
+        [data-ts-cols="8"] .ts-bento__wide  { grid-column: span 3; }
+        [data-ts-cols="8"] .ts-bento__full  { grid-column: 1 / -1; }
+
+        /* 16-col overrides */
+        [data-ts-cols="16"] .ts-bento__hero  { grid-column: span 10; grid-row: span 2; }
+        [data-ts-cols="16"] .ts-bento__half  { grid-column: span 6;  grid-row: span 2; }
+        [data-ts-cols="16"] .ts-bento__third { grid-column: span 5; }
+        [data-ts-cols="16"] .ts-bento__quart { grid-column: span 4; }
+        [data-ts-cols="16"] .ts-bento__wide  { grid-column: span 7; }
+        [data-ts-cols="16"] .ts-bento__full  { grid-column: 1 / -1; }
+
+        /* ── LAYOUT PRIMITIVES (§4) ─────────────────────────────────── */
+
+        /* §4 / B02: ts-stack — flex fill, NO height property */
+        .ts-stack {
+          display: flex;
+          flex-direction: column;
+          gap: var(--ts-sp-3, 12px);
+          padding: var(--ts-bento-cell-pad);
+          flex: 1;
+          min-height: 0;
+          position: relative;
+          z-index: 1;
+        }
+        .ts-stack > *:nth-child(2) { flex: 1; min-height: 0; }
+
+        .ts-split {
+          display: grid;
+          grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+          gap: var(--ts-grid-gap, 0px);
+          align-items: stretch;
+          flex: 1;
+          min-height: 0;
+        }
+
+        /* §4 / B08: minmax 100px — no collapse in narrow tiles */
+        .ts-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+          gap: var(--ts-grid-gap, 0px);
+          align-items: stretch;
+          flex: 1;
+          min-height: 0;
+        }
+
+        /* ── NESTING (§9) ───────────────────────────────────────────── */
+        .ts-layout-container[data-level="2"] {
+          outline: 1px solid color-mix(in srgb, var(--ts-accent, #ff5500) 28%, transparent);
+          outline-offset: -1px;
+        }
+        .ts-layout-container[data-level="3"] {
+          outline: 1px solid color-mix(in srgb, var(--ts-info, #3b82f6) 28%, transparent);
+          outline-offset: -1px;
+        }
+        /* Nested block wrapper — CSS class only, no inline styles */
+        .ts-nested-block {
+          padding: var(--ts-nest-pad);
+          flex: 1;
+          min-height: 0;
+          position: relative;
+        }
+        .ts-nested-card {
+          padding: var(--ts-nest-pad) !important;
+          min-height: 80px;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+        }
+        .ts-nested-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border: 1px solid var(--ts-bento-border);
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        /* ── MUTED TEXT ─────────────────────────────────────────────── */
+        .ts-muted { color: var(--ts-text-muted); }
+
+        /* ── SIDEBAR PANEL (§7) ─────────────────────────────────────── 
+        #ts-panel {
+          display: flex;
+          flex-direction: column;
+          background: var(--ts-bg-0, #14161a);
+          border-left: 1px solid var(--ts-this-bg-border, rgba(255,255,255,.07));
+          overflow: hidden;
+        }
+        .ts-panel-tabs {
+          display: flex;
+          border-bottom: 1px solid var(--ts-this-bg-border, rgba(255,255,255,.07));
+          flex-shrink: 0;
+        }
+        .ts-ptab {
+          flex: 1;
+          padding: 0 16px;
+          height: var(--ts-ls-navbar-h);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          color: var(--ts-text-muted);
+          cursor: pointer;
+          border-bottom: 2px solid transparent;
+          margin-bottom: -1px;
+          transition: color .1s, border-color .1s;
+          user-select: none;
+        }
+        .ts-ptab:hover { color: var(--ts-text-secondary); }
+        .ts-ptab.active { color: var(--ts-text-primary); border-bottom-color: var(--ts-accent, #ff5500); }
+        .ts-panel-body {
+          flex: 1;
+          min-height: 0;
+          overflow-y: auto;
+          scrollbar-width: thin;
+        }
+        .ts-tab-pane { display: none; }
+        .ts-tab-pane.active { display: block; }
+        .ts-panel-footer {
+          flex-shrink: 0;
+          padding: var(--ts-sp-3, 12px) var(--ts-sp-4, 16px);
+          border-top: 1px solid var(--ts-this-bg-border, rgba(255,255,255,.07));
+        }
+*/
+        /* ── SELECTED TILE PANEL ────────────────────────────────────── */
+        #ts-tile-section { display: none; }
+        #ts-tile-section.active { display: block; }
+        .ts-tile-placeholder {
+          padding: var(--ts-sp-5, 20px) var(--ts-sp-4, 16px);
+          font-size: 12px;
+          color: var(--ts-text-muted);
+          text-align: center;
+          border-bottom: 1px solid var(--ts-this-bg-border, rgba(255,255,255,.07));
+        }
+        /* Chip groups */
+        .ts-chip-group {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          padding: 8px 0 4px;
+        }
+        .ts-chip-btn {
+          font-size: 11px;
+          font-family: var(--ts-font-mono, monospace);
+          padding: 3px 9px;
+          border-radius: 4px;
+          border: 1px solid var(--ts-this-bg-border, rgba(255,255,255,.08));
+          background: var(--ts-bg-2, #1c1e24);
+          color: var(--ts-text-muted);
+          cursor: pointer;
+          transition: background .1s, color .1s, border-color .1s;
+          line-height: 1.6;
+          white-space: nowrap;
+        }
+        .ts-chip-btn:hover {
+          background: var(--ts-bg-3, #23262e);
+          color: var(--ts-text-secondary);
+          border-color: var(--ts-this-bg-border-hover, rgba(255,255,255,.12));
+        }
+        .ts-chip-btn.active {
+          background: color-mix(in srgb, var(--ts-accent, #ff5500) 14%, var(--ts-bg-2, #1c1e24));
+          color: var(--ts-accent, #ff5500);
+          border-color: color-mix(in srgb, var(--ts-accent, #ff5500) 38%, transparent);
+        }
+
+        /* Range row */
+        .ts-range-row-ls {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .ts-range-val-ls {
+          font-family: var(--ts-font-mono, monospace);
+          font-size: 11px;
+          color: var(--ts-text-muted);
+          min-width: 36px;
+          text-align: right;
+        }
+
+        /* ── CODE AREA ──────────────────────────────────────────────── */
+       
+        /* ── TOAST ──────────────────────────────────────────────────── */
+        .ts-ls-toast {
+          position: fixed;
+          bottom: 28px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: var(--ts-bg-3, #2d3038);
+          color: var(--ts-text-primary, #e8e9ea);
+          padding: 9px 20px;
+          border-radius: 8px;
+          border: 1px solid var(--ts-this-bg-border-hover, rgba(255,255,255,.12));
+          font-size: 12px;
+          font-family: var(--ts-font-body, sans-serif);
+          z-index: 9999;
+          pointer-events: none;
+          white-space: nowrap;
+          animation: ts-toast-in .15s ease both;
+        }
+        @keyframes ts-toast-in {
+          from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+          to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ── SECTION FIELD LABELS ───────────────────────────────────── */
+        .ts-field-lbl {
+          font-size: 10px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: .07em;
+          color: var(--ts-text-muted);
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        /* ── RESPONSIVE ─────────────────────────────────────────────── */
+        @media (max-width: 960px) {
+          .ts-bento { grid-template-columns: repeat(6, 1fr) !important; }
+          .ts-bento__hero  { grid-column: span 4 !important; }
+          .ts-bento__half  { grid-column: span 2 !important; }
+          .ts-bento__third,.ts-bento__quart,.ts-bento__wide { grid-column: span 3 !important; }
+        }
+        @media (max-width: 768px) { .ts-split { grid-template-columns: 1fr; } }
+        @media (max-width: 560px) {
+          .ts-bento { grid-template-columns: 1fr !important; }
+          .ts-bento > * { grid-column: 1 !important; grid-row: auto !important; }
+        }

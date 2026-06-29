@@ -1,27 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" data-ts-offcanvas-editor>
-
   <head>
     <meta charset="UTF-8" />
+    <title>Toolskin · Design System Showcase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
     <!-- Theme before first paint (matches ToolskinTheme storageKey + auto mode) to reduce FOUC -->
     <script>
-      (function () {
-        try {
-          var key = 'ts-theme-mode';
-          var m = localStorage.getItem(key);
-          if (!m) return;
-          if (m === 'auto') {
-            m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          }
-          if (m === 'dark' || m === 'light') {
-            document.documentElement.setAttribute('data-theme', m);
-            document.documentElement.setAttribute('data-ts-theme', m);
-          }
-        } catch (e) { /* ignore */ }
-      })();
+      (function () {try {var key = 'ts-theme-mode'; var m = localStorage.getItem(key); if (!m) return; if (m === 'auto') {m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; } if (m === 'dark' || m === 'light') {document.documentElement.setAttribute('data-theme', m); document.documentElement.setAttribute('data-ts-theme', m); } } catch (e) { /* ignore */ } })();
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Toolskin · Design System Showcase</title>
+   
 
     <!-- Google Fonts — render-blocking (critical for preloader + body text, prevents FOUT) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,63 +20,24 @@
     <link rel="dns-prefetch" href="https://api.cdnjs.com" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
     <!-- Other CDN assets (FA, Ionicons, Lenis, GSAP, etc.) loaded dynamically by toolskin-assets.js -->
-    <noscript>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    </noscript>
-    <link rel="icon" href="assets/img/favicon.ico" sizes="any">
-    <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" /></noscript>
+    <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/favicon.ico" sizes="any">
+    <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="https://satsea.io/toolskin-showcase/assets/img/apple-touch-icon.png">
 
-  <!-- ToolskinAssets — dynamic asset pipeline (must load before toolskin.js early boot) -->
-  <script src="assets/js/toolskin-assets.js" defer></script>
-    <!-- Preloader critical CSS — inline so the lock is available at first paint,
-       before the external stylesheet finishes loading. Mirrors generator/index.html
-       <style id="ts-preloader-boot"> pattern. -->
-    <style id="ts-preloader-boot">
-      /* FOUC guard: body background locks to the dark default before external CSS parses.
-         Prevents white flash on cold loads. The external stylesheet overrides this once loaded. */
-      html.ts-preloader-lock body {
-        background-color: #0c0d0f !important;
-      }
-
-      html.ts-preloader-lock,
-      html.ts-preloader-lock body {
-        overflow: hidden !important;
-      }
-
-      html.ts-preloader-lock #ts-app,
-      html.ts-preloader-lock #ts-main {
-        visibility: hidden !important;
-        pointer-events: none !important;
-      }
-
-      /* Ensure preloader overlay paints before external CSS resolves.
-         Fallback background mirrors --ts-bg-body dark default. */
-      html.ts-preloader-lock .ts-preloader {
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        background-color: #0c0d0f !important;
-      }
-
-       /* Hide sidebar during preloader (it's outside #ts-main) */
-    html.ts-preloader-lock .ts-oce-panel.ts-oce--open,
-    html.ts-preloader-lock #ts-debug-root,
-    html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab {
-      opacity: 0 !important;
-      z-index: -20 !important;
-
-      pointer-events: none !important;
-    }
-    </style>
+    <!-- ToolskinAssets — dynamic asset pipeline (must load before toolskin.js early boot) -->
+    <script src="assets/js/toolskin-assets.js" defer></script>
+    <style id="ts-preloader-boot"> html.ts-preloader-lock body {background-color: var(--ts-bg-body)!important; --ts-bg-body:#0c0d0f!important; } html.ts-preloader-lock, html.ts-preloader-lock body {overflow: hidden !important; } html.ts-preloader-lock #ts-app, html.ts-preloader-lock #ts-main {visibility: hidden !important; pointer-events: none !important; } html.ts-preloader-lock .ts-preloader {opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; background-color: var(--ts-bg-body)!important; --ts-bg-body:#0c0d0f!important; } /* Hide sidebar during preloader (it's outside #ts-main) */ html.ts-preloader-lock .ts-oce-panel.ts-oce--open, html.ts-preloader-lock #ts-debug-root, html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab {opacity: 0 !important; z-index: -20 !important; pointer-events: none !important; } </style>
 
     <!-- Toolskin System (local — render-critical) -->
     <script>
-      document.documentElement.classList.add('ts-preloader-lock');
+     // document.documentElement.classList.add('ts-preloader-lock');
       window.__TOOLSKIN_CONFIG__ = {
-        cursor: { mode: 'simple', follower: true, easing: 0.42, followerEasing: 0.12 },
-        reveal: { enabled: false, useGSAP: false, stagger: 0.05, rootMargin: '0px 0px -40px 0px' },
-        smoothScroll: { enabled: false, duration: 1.2 },
+        //cursor: { mode: 'simple', follower: true, easing: 0.42, followerEasing: 0.12 },
+      //  reveal: { enabled: true, useGSAP: true, stagger: 0.05, rootMargin: '0px 0px -40px 0px' },
+       // smoothScroll: { enabled: true, duration: 1.2 },
+        stylesheetDebugger: { enabled: true }
+
       };
       // Font-gate: reveal preloader text only after the two fonts it uses are loaded.
       // Uses document.fonts.load() for specific families (resolves fast, doesn't wait for FA).
@@ -99,45 +48,101 @@
         document.documentElement.classList.add('ts-fonts-ready');
       });
     </script>
-    <script src="assets/js/toolskin.showcase.js" defer></script>
 
     <link rel="stylesheet" href="assets/css/toolskin.css" />
+  <!-- Showcase config — must be before toolskin.js so __tsPreloaderEarlyBoot reads it -->
+    <!-- Toolskin Configuration -->
 
 
-    <!-- Toolskin Framework — early boot IIFE kicks off ToolskinAssets.loadAll() -->
-    <script>
-      window.__TOOLSKIN_CONFIG__ = {
-        stylesheetDebugger: { enabled: false }
-      };
+    <script id="ts-assets-version-apend">
+        window.ASSET_VERSION = "4.2.6";
+
+        (function() {
+          const version = window.ASSET_VERSION;
+          
+          // Core function to rewrite paths immediately
+          function patchElement(el) {
+            const attr = el.tagName === 'LINK' ? 'href' : 'src';
+            const originalPath = el.getAttribute(attr);
+            
+            if (originalPath && originalPath.includes('assets/') && !originalPath.includes(`v=${version}`)) {
+              const cleanPath = originalPath.split('?')[0];
+              el.setAttribute(attr, `${cleanPath}?v=${version}`);
+            }
+          }
+
+          // 1. Intercept elements as they stream into the HTML document (Prevents FOUC/Double-fetch)
+          const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+              for (const node of mutation.addedNodes) {
+                if (node.nodeType === 1) { // Check if it's an element
+                  if ((node.tagName === 'LINK' && node.hasAttribute('href')) || 
+                      (node.tagName === 'SCRIPT' && node.hasAttribute('src'))) {
+                    patchElement(node);
+                  }
+                  // Catch nested items if necessary
+                  if (node.userId === undefined) {
+                    const childs = node.querySelectorAll('link[href], script[src]');
+                    childs.forEach(patchElement);
+                  }
+                }
+              }
+            }
+          });
+
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+
+          // 2. Disconnect safely once the document is interactive
+          document.addEventListener('readystatechange', () => {
+            if (document.readyState === 'interactive' || document.readyState === 'complete') {
+              observer.disconnect();
+            }
+          });
+        })();
     </script>
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin.showcase.js" defer></script>
     <script src="assets/js/toolskin.js" defer></script>
-    <script src="assets/js/toolskin-uikit.js" defer></script>
-    <script src="assets/js/ts-gradient-canvas.js" defer></script>
+    <!-- <script src="assets/js/toolskin-uikit.js" defer></script> -->
+    <script src="https://satsea.io/toolskin-showcase/assets/js/ts-gradient-canvas.js" defer></script>
     <script src="assets/js/ts-offcanvas-editor.js" defer></script>
 
-    <!-- External CDN libs (Lenis, Locomotive, GSAP, Color.js) are now loaded dynamically by toolskin-assets.js -->
-    <!-- Showcase config — must be before toolskin.js so __tsPreloaderEarlyBoot reads it -->
-    <!-- Toolskin Configuration -->
-    <script>
+  
+  <!--   <script>
       window.addEventListener('ts:ready', () => {
         console.log('✅ Toolskin Framework Initialized');
         console.log('Config:', Toolskin.config);
       });
+    </script> -->
+<style>
+  html:has(.ts-debug-diff),
+html:has(.ts-debug-diff) body,html:has(.ts-debug-diff) .ts-debug-diff ,html:has(.ts-debug-diff) .ts-debug-diff *{
+    overflow: hidden!important;
+    max-height: 100dvh!important;
+          scroll-behavior: initial!important;
+      scroll-snap-type: unset!important;
+    scroll-snap-align: unset!important;
+  scroll-snap-stop: unset!important;
 
 
+    
+    main{
+        display: none;
+    }
+    .ts-section {
+      max-height: 100vh;
+     scroll-snap-align: unset!important;
+  scroll-snap-stop: unset!important;
+    }
 
-
-    </script>
-
-
+}
+</style>
   </head>
 
   <body>
-    <!-- Synchronous lock — add class BEFORE any content element is parsed/painted.
-       The deferred toolskin.js IIFE is a safety net, not the primary mechanism. -->
 
 
-    <div id="ts-preloader" class="ts-preloader" >
+
+     <div id="ts-preloader" class="ts-preloader" >
       <div class="ts-preloader__brand">
         <div class="ts-preloader__logo">
           <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" >
@@ -173,7 +178,6 @@
 
           <span class="ts-logo-sub">Design System v1.0</span>
         </div>
-         <!-- the header has variants  in which adding class .spaced and .ts-icon-only-nav the styles applies and are combinable. the variant Glass, sidebar and Mobile are pending-->
         <div class="ts-nav-fixed__links ts-nav-truncate ts-auto-icon" id="ts-primary-menu">
           <a href="#top">Home</a>
           <a href="#typography">Type</a>
@@ -187,33 +191,19 @@
           <a href="surface-lab.html" class="ts-nav-link ts-btn ts-btn--primary" data-icon="ion:color-palette-outline" data-tooltip="Navigate to the Tokens and Surfaces Color Lab from the Design System.">Surfaces Lab</a>
 
         </div>
-        <!-- The "More" Button -->
         <div id="navbar-collapse" class="ts-nav-more">
-          <button class="ts-more-trigger">•••</button>
+          <button class="ts-more-trigger" data-icon="fa-solid fa-ellipsis"><span class="sr-only">•••</span></button>
           <div id="navbar-extend" class="ts-nav-dropdown"></div>
         </div>
-        <!-- Theme Toggle (right side of menu) -->
-        <!-- <button class="ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
-          <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" ></span>
-          <span class="ts-icon ts-theme-icon-dark" data-ts-icon="fa-solid fa-moon" ></span>
-        </button> -->
-        <label class="theme-toggle theme-toggle--force-motion theme-toggle--toggled" data-theme-toggle aria-label="Dark/Light Mode" data-tooltip="Switch Dark/Light Mode" data-tooltip-pos="bottom">
+     
+        <label class="theme-toggle theme-toggle--force-motion" data-theme-toggle aria-label="Dark/Light Mode" data-tooltip="Switch Dark/Light Mode" data-tooltip-pos="bottom">
           <input type="checkbox" />
           <span class="theme-toggle-sr">Switch Dark/Light Mode</span>
-          <svg xmlns="http://www.w3.org/2000/svg"  width="1em" height="1em" fill="currentColor" class="theme-toggle__expand ts-icon ts-btn-icon" viewBox="0 0 32 32" style="pointer-events: none;">
-            <clipPath id="theme-toggle__expand__cutout">
-              <path d="M0-11h25a1 1 0 0017 13v30H0Z" />
-            </clipPath>
-            <g clip-path="url(#theme-toggle__expand__cutout)">
-              <circle cx="16" cy="16" r="8.4" />
-              <path d="M18.3 3.2c0 1.3-1 2.3-2.3 2.3s-2.3-1-2.3-2.3S14.7.9 16 .9s2.3 1 2.3 2.3zm-4.6 25.6c0-1.3 1-2.3 2.3-2.3s2.3 1 2.3 2.3-1 2.3-2.3 2.3-2.3-1-2.3-2.3zm15.1-10.5c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zM3.2 13.7c1.3 0 2.3 1 2.3 2.3s-1 2.3-2.3 2.3S.9 17.3.9 16s1-2.3 2.3-2.3zm5.8-7C9 7.9 7.9 9 6.7 9S4.4 8 4.4 6.7s1-2.3 2.3-2.3S9 5.4 9 6.7zm16.3 21c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zm2.4-21c0 1.3-1 2.3-2.3 2.3S23 7.9 23 6.7s1-2.3 2.3-2.3 2.4 1 2.4 2.3zM6.7 23C8 23 9 24 9 25.3s-1 2.3-2.3 2.3-2.3-1-2.3-2.3 1-2.3 2.3-2.3z" />
-            </g>
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg"  width="1em" height="1em" fill="currentColor" class="theme-toggle__expand ts-icon ts-btn-icon" viewBox="0 0 32 32" style="pointer-events: none;"> <clipPath id="theme-toggle__expand__cutout"> <path d="M0-11h25a1 1 0 0017 13v30H0Z" /> </clipPath> <g clip-path="url(#theme-toggle__expand__cutout)"> <circle cx="16" cy="16" r="8.4" /> <path d="M18.3 3.2c0 1.3-1 2.3-2.3 2.3s-2.3-1-2.3-2.3S14.7.9 16 .9s2.3 1 2.3 2.3zm-4.6 25.6c0-1.3 1-2.3 2.3-2.3s2.3 1 2.3 2.3-1 2.3-2.3 2.3-2.3-1-2.3-2.3zm15.1-10.5c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zM3.2 13.7c1.3 0 2.3 1 2.3 2.3s-1 2.3-2.3 2.3S.9 17.3.9 16s1-2.3 2.3-2.3zm5.8-7C9 7.9 7.9 9 6.7 9S4.4 8 4.4 6.7s1-2.3 2.3-2.3S9 5.4 9 6.7zm16.3 21c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zm2.4-21c0 1.3-1 2.3-2.3 2.3S23 7.9 23 6.7s1-2.3 2.3-2.3 2.4 1 2.4 2.3zM6.7 23C8 23 9 24 9 25.3s-1 2.3-2.3 2.3-2.3-1-2.3-2.3 1-2.3 2.3-2.3z" /> </g> </svg>
         </label>
 
 
         <a class="ts-btn ts-btn--icon ts-back_top-nav ts-fixed-btn" href="#top" data-icon="ion:arrow-up-outline" id="ts-top-btn"><span class="sr-only">Back to top</span></a>
-        <!-- the header variants  should be  live toggleable on th showcase  as aprview  shortcut for user on both theme mdoes  woith this droipdown once they are available. this just adds the classes. enbale this asset when possible-->
         <div class="ts-ui-select" data-ts-ui-select-placeholder="Select nav Style" id="ts-topnav-selector">
           <select class="ts-ui-select__native">
             <option value="default" data-icon="fa-solid fa-bolt">Default</option>
@@ -228,13 +218,9 @@
 
 
 
-      <!--  HERO — effects on dedicated layer elements, not section pseudo-elements -->
       <section class="ts-section ts-hero gradient-canvas" id="top">
         <!-- Canvas auto-injected by ts-gradient-canvas.js into .gradient-canvas#top -->
 
-        <!-- Layer stack: canvas(0) → grid-lines(1) → color-overlay(2) → dots(3) → content(5) → grain(7)
-           Dot grid: classes on SECTION so ToolskinGridBg receives mouse events.
-           Overlay element is direct child so CSS vars cascade from section inline styles. -->
         <div class="ts-effects-layer ba-grid" ></div>
         <div class="ts-color-overlay-layer" style="background: color-mix(in srgb, var(--ts-bg-0) 80%, transparent);">
         </div>
@@ -1039,7 +1025,7 @@
       </section>
 
       <!-- Enhanced UIKit Components -->
-      <section class="ts-section ts-section--alt-mute" id="ui-kit">
+      <section class="ts-section " id="ui-kit">
         <div class="ts-container">
           <div class="ts-section-divider rounded">
             <h2>§6x — Enhanced UI Kit Components</h2>
@@ -1178,10 +1164,10 @@
 
                   <div class="ts-flex ts-flex-col ts-gap-2">
                     <label class="ts-fs-sm ts-text-secondary">Form Elements</label>
-                    <div class="ts-flex ts-gap-3 ts-flex-wrap">
-                      <input type="text" class="ts-input ts-input--sm" placeholder="Username" data-tooltip="Enter your email or username" style="width: 140px;">
-                      <button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm" data-tooltip="Generate random password">
-                        <span class="ts-icon" data-ts-icon="fa-solid fa-dice"></span>
+                    <div class="ts-input-group ts-input-inset-button">
+                      <input type="text" class="ts-input" placeholder="Username" data-tooltip="Enter your email or username" style="width: 340px;">
+                      <button class="ts-btn ts-btn--icon ts-input-btn" data-tooltip="Generate random password" data-ts-icon="fa-solid fa-dice">
+                        <span class="ts-btn-text">Generate random password</span>
                       </button>
                     </div>
                   </div>
@@ -1348,6 +1334,10 @@
                           <span class="ts-ui-sortable__title" style="display:block;padding:2px 0;font-weight:600;cursor:grab;"><i class="fa-solid fa-grip-lines" style="opacity:0.6;margin-right:6px;"></i>Second card</span>
                           <span class="ts-fs-xs ts-text-muted">Try dragging from here ↑</span>
                         </li>
+                        <li class="ts-ui-sortable__item">
+                          <span class="ts-ui-sortable__title" style="display:block;padding:2px 0;font-weight:600;cursor:grab;"><i class="fa-solid fa-grip-lines" style="opacity:0.6;margin-right:6px;"></i>Second card</span>
+                          <span class="ts-fs-xs ts-text-muted">Try dragging from here ↑</span>
+                        </li>
                       </ul>
                     </div>
 
@@ -1459,7 +1449,7 @@
 
 
       <!--  SECTION: FORMS ── -->
-      <section class="ts-section ts-section--alt-mute" id="forms">
+      <section class="ts-section " id="forms">
         <div class="ts-container">
           <div class="ts-section-divider rounded">
             <h2>§6d–6f — Forms, Toggles, Sliders</h2>
@@ -1878,7 +1868,7 @@
 
 
       <!--  SECTION: CARDS ── -->
-      <section class="ts-section ts-section--alt-mute" id="cards">
+      <section class="ts-section " id="cards">
         <div class="ts-container">
           <div class="ts-section-divider rounded ts-zoom-in_">
             <h2>§6b — Cards</h2>
@@ -2284,7 +2274,7 @@
             </div>
           </div>
 
-          <div class="ts-section-divider rounded ts-neon-accent ts-mt-6">
+          <div class="ts-section-divider rounded ts-mt-6">
             <h2>Dashboard App Shell (mini preview)</h2>
           </div>
           <div class="ts-card ts-dashboard">
@@ -2337,13 +2327,13 @@
 
 
       <!-- SOCIAL LINKS SHOWCASE -->
-      <section class="ts-section ts-section--alt-mute ts-bg-grad-surface-radial-soft" id="social-links">
+      <section class="ts-section  ts-bg-grad-surface-radial-soft" id="social-links">
         <div class="ts-container">
           <h2 class="ts-section-title">Social Links</h2>
           <p class="ts-lead ">Flexible social media icon components with multiple style variants.</p>
 
           <!-- Social Links — multi-column grid -->
-          <div class="ts-grid ts-grid--3 ts-gap-3 ts-mt-6">
+          <div class="ts-masonry ts-gap-3 ts-mt-6">
             <div>
               <span class="ts-label">Standard</span>
               <ul class="ts-social-links">
@@ -2433,14 +2423,14 @@
       </section>
 
       <!-- FOOTER SHOWCASE -->
-      <section class="ts-section ts-grain" id="footer-showcase">
+      <section class="ts-section" id="footer-showcase">
         <div class="ts-container">
           <h2 class="ts-section-title">Footer Components</h2>
           <p class="ts-lead ">Comprehensive footer system with widgets, menus, newsletter, and social
             links.</p>
 
           <!-- Menu Bullet Variants -->
-          <div class="ts-grid--auto-fit ts-mt-2">
+          <div class="ts-masonry ts-mt-2">
             <div>
               <h4 class="ts-label">Chevron (›)</h4>
               <ul class="ts-menu-list">
@@ -2591,14 +2581,14 @@
 
         <!-- Right: Image Slider -->
         <div class="ts-split-feature__slider" id="banner-slider" data-ts-slider data-ts-slider-interval="4000">
-          <img src="assets/img/banner-toolskin-1200x900-01.png" alt="Banner Preview 1" class="active" loading="eager" fetchpriority="high" decoding="async">
-          <img src="assets/img/banner-toolskin-1200x900-02.png" alt="Banner Preview 2" loading="lazy" decoding="async">
-          <img src="assets/img/banner-toolskin-1200x900-03.png" alt="Banner Preview 3" loading="lazy" decoding="async">
-          <img src="assets/img/banner-toolskin-1200x900-04.jpg" alt="Banner Preview 4" loading="lazy" decoding="async">
-          <img src="assets/img/banner-toolskin-1200x900-05.jpg" alt="Banner Preview 5" loading="lazy" decoding="async">
-          <img src="assets/img/banner-generator-1.jpg" alt="Banner Generator Interface 1" loading="lazy" decoding="async">
-          <img src="assets/img/banner-generator-2.jpg" alt="Banner Generator Interface 2" loading="lazy" decoding="async">
-          <img src="assets/img/banner-generator-3.jpg" alt="Banner Generator Preview Export" loading="lazy" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-toolskin-1200x900-01.png" alt="Banner Preview 1" class="active" loading="eager" fetchpriority="high" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-toolskin-1200x900-02.png" alt="Banner Preview 2" loading="lazy" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-toolskin-1200x900-03.png" alt="Banner Preview 3" loading="lazy" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-toolskin-1200x900-04.jpg" alt="Banner Preview 4" loading="lazy" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-toolskin-1200x900-05.jpg" alt="Banner Preview 5" loading="lazy" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-generator-1.jpg" alt="Banner Generator Interface 1" loading="lazy" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-generator-2.jpg" alt="Banner Generator Interface 2" loading="lazy" decoding="async">
+          <img src="https://satsea.io/toolskin-showcase/assets/img/banner-generator-3.jpg" alt="Banner Generator Preview Export" loading="lazy" decoding="async">
           <div class="ts-slider-dots" id="slider-dots"></div>
         </div>
       </section>

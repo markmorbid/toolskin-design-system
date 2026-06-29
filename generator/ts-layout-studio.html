@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en" class="ts-banner-generator-app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolskin Layout Studio v2.3</title>
+   
+    <script id="ts-theme-mode-boot"> (function () {try {var key = 'ts-theme-mode'; var m = localStorage.getItem(key); if (!m) return; if (m === 'auto') {m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; } if (m === 'dark' || m === 'light') {document.documentElement.setAttribute('data-theme', m); document.documentElement.setAttribute('data-ts-theme', m); } } catch (e) { /* ignore */ } })(); </script>
+    <!-- Google Fonts — render-blocking (critical for preloader + body text) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" /> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> 
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" /> 
+    <noscript> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" /> </noscript>
+
+    
+    <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/favicon.ico" sizes="any" /> 
+    <link rel="icon" href="https://satsea.io/toolskin-showcase/assets/img/icon.svg" type="image/svg+xml" /> 
+    <link rel="apple-touch-icon" href="https://satsea.io/toolskin-showcase/assets/img/apple-touch-icon.png" />
+
+    <style id="ts-preloader-boot"> html.ts-preloader-lock, html.ts-preloader-lock body {overflow: hidden !important; } html.ts-preloader-lock #ts-app, html.ts-preloader-lock #ts-main {visibility: hidden !important; pointer-events: none !important; } html.ts-preloader-lock .ts-preloader {opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; } /* Hide sidebar during preloader (it's outside #ts-main) */ html.ts-preloader-lock .ts-oce-panel.ts-oce--open, html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab {opacity: 0 !important; z-index: -20 !important; pointer-events: none !important; } </style>
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-assets.js?v=1.0.2" defer></script>
+    <script id="ts-preloader-lock"> document.documentElement.classList.add('ts-preloader-lock'); Promise.all([document.fonts.load('600 1em "Space Grotesk"'), document.fonts.load('400 1em "JetBrains Mono"') ]).then(function () {document.documentElement.classList.add('ts-fonts-ready'); }); </script>
+    <!--<link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/toolskin.css" />-->    
+    <link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/toolskin.css?v=1.0.2" />
+    <link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/ts-layout-editor-dirty-styles.css" />
+
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin.js?v=1.0.2" defer></script>
+
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-uikit.js?v=1.0.2" defer></script>
+    <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin.bannerGenerator.js" defer></script>
+    <style>
+        /* DESIGN SYSTEM TOKENS — edit these to restyle everything  */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        
+
+
+
+        /*Layout studio impoted styles from the last failed review, they can be ommited or analyzed, but they hold fixes form the last delivery wit h the last html  marked line fix*/
+         /* DESIGN SYSTEM TOKENS — edit these to restyle everything  */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+       
+
+
+
+        /*Layout studio impoted styles from the last failed review, they can be ommited or analyzed, but they hold fixes form the last delivery wit h the last html  marked line fix*/
+
+        :root.ts-banner-generator-app, html.ts-banner-generator-app, .ts-banner-generator-app body, :root  {
+            --ts-ls-panel-w: 320px;
+            --ts-ls-topbar-h: 65px;
+            --ts-ls-sidebar-w: 200px;
+            --ts-ls-navbar-h: 45px;
+             --ts-ls-panel-w: 320px;
+             --ts-ls-topbar-h: 65px;
+             --ts-ls-sidebar-w: 200px;
+             --ts-ls-navbar-h: 45px;
+        
+             --ts-panel-w: var(--ts-ls-panel-w);
+
+                      --ts-title-color: #ffffff;
+
+           
+        }
+   
+      
+      
+
+        /*html changes*/
+
+        /* line 282*/
+
+        .ts-bento {
+            display: grid;
+            grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+            gap: var(--ts-bento-gap);
+            grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+            grid-auto-flow: dense;
+            padding: var(--ts-bento-pad);
+            min-height: 100%;
+        }
+
+        /* line 303*/
+
+        .ts-bento__hero {
+            grid-column: span 8;
+            grid-row: span 2;
+        }
+        /* line 336*/
+
+        .ts-stack {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            padding: var(--ts-bento-cell-pad);
+            height: auto;
+            /* if this stack has 100% height on hero or other Layer 1   bento blocks,. the inner elements are pushed  off  the visible boundaries of the bento block so the bvontaienr just grows  empty visibly.  so the elements ar ento proeprly nested.  eliminating this  height the elements keeps ivisble but the  stack and the elements ar ento fully coccupying the  entire   space of the bento element. so that musty be fixed.   flex  or somethign else must be implemented here to make the parent element   proeprly  have the  grid fullffilled automatically and solidly. */
+        }
+
+        /* line 373*/
+
+        .ts-nested-block {
+            background: var(--ts-nest-bg);
+            padding: var(--ts-nest-pad);
+            margin-top: var(--ts-nest-pad);
+            --ts-grid-gap: var(--ts-nest-pad);
+            --ts-this-bg: var(--ts-bg-2);
+        }
+
+        /* line 324*/
+
+        .ts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            gap: var(--ts-grid-gap, 24px);
+            align-items: stretch;
+        }
+
+      
+  
+            /* =====================================================================
+           TOOLSKIN LAYOUT STUDIO — v8 Consolidated CSS
+           ---------------------------------------------------------------------
+           SINGLE SOURCE OF TRUTH:
+             --ts-layout-cols   set by JS via updateGrid(N)
+             --ts-grid-gap      defined here, read by JS
+             --ts-col-width     JS-computed (exact px) from actual rendered width
+             --ts-tile-width    JS-computed (col + gap) — overlay repeating unit
+           All layout derives from these. NO inline styles. NO duplicated calc.
+           ===================================================================== */
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── STUDIO TOKENS ─────────────────────────────────────────────── */
+        :root {
+          --ts-ls-panel-w:     320px;
+          --ts-ls-topbar-h:    60px;
+          --ts-ls-sidebar-w:   200px;
+          --ts-ls-navbar-h:    calc(var(--ts-ls-topbar-h) * .8);
+
+          /* Grid engine — JS overwrites col-width / tile-width after first paint */
+          --ts-layout-cols: 12;
+          --ts-grid-gap:    24px;
+          --ts-col-width:   80px;
+          --ts-tile-width:  104px;
+
+          /* Bento */
+          --ts-bento-gap:      var(--ts-grid-gap);
+          --ts-bento-pad:      var(--ts-sp-8, 32px);
+          --ts-bento-cell-pad: var(--ts-sp-6, 24px);
+          --ts-bento-min-h:    160px;
+          /*--ts-bento-border:   rgba(255,255,255,.07);
+          --ts-bento-border-hi:rgba(255,255,255,.14);*/
+
+          /* Grid overlay fill color */
+          --ts-overlay-fill: color-mix(in srgb, var(--ts-info, #3b82f6) 13%, transparent);
+
+          /* Canvas background mesh (decorative) */
+          --ts-mesh-sz:    28px;
+          --ts-mesh-color: rgba(255,255,255,.024);
+          --ts-bg-mesh:
+            repeating-linear-gradient(0deg,  transparent, transparent calc(var(--ts-mesh-sz) - 1px), var(--ts-mesh-color) var(--ts-mesh-sz)),
+            repeating-linear-gradient(90deg, transparent, transparent calc(var(--ts-mesh-sz) - 1px), var(--ts-mesh-color) var(--ts-mesh-sz));
+
+          /* Nested component surfaces */
+          --ts-nest-bg:   var(--ts-bg-1, #1c1e24);
+          --ts-nest-card: var(--ts-bg-2, #23262e);
+          --ts-nest-pad:  var(--ts-sp-4, 16px);
+         --ts-bento-border: var(--ts-this-bg-border);
+
+         /* THER ESHOULD BE NO MORE HARDCODED COLOR VALUES ANYMMORE  DEDUPE ALL THE    ROOT NBLOCKS AND   TOKENS  FOR DYNAMIC SYSTEM  COLOR  BASE   TOKENIZED  VALUES SO THE  UI IS VCONVERTIBLE. . CURRENTLY THE  IMPLEMENTED ONE IS NOT COVNERTIBVLE TO LIGHT MODE CBECVAUSE OF THE HARDCODED  WHITE   VALUES.   clean up all the blocks i pasted to fixz this mess keeping the design.  */
+            --ts-bento-border-hi: var(--ts-this-bg-border-hover);
+            --ts-overlay-fill: color-mix(in srgb, var(--ts-info, #3b82f6) 8%, transparent);
+            --ts-mesh-sz: calc(var(--ts-bento-cell-pad)*2);
+            --ts-mesh-color: var(--ts-this-bg-border);
+            --ts-bg-mesh: repeating-linear-gradient(0deg,  transparent, transparent calc(var(--ts-mesh-sz) - 1px), var(--ts-mesh-color) var(--ts-mesh-sz)),
+            repeating-linear-gradient(90deg, transparent, transparent calc(var(--ts-mesh-sz) - 1px), var(--ts-mesh-color) var(--ts-mesh-sz));
+            --ts-nest-bg: var(--ts-this-bg-dim);
+            --ts-nest-bg: transparent ;
+            --ts-nest-card: var(--ts-this-bg-dim-2);
+            --ts-nest-card: transparent;
+            --ts-nest-pad: calc(var(--ts-bento-pad) * .65);
+          /* Select chevron SVG */
+          --ts-svg-chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='none' stroke='rgba(232,233,234,.5)' stroke-linecap='square' stroke-miterlimit='10' stroke-width='48' d='M112 184l144 144 144-144'/%3E%3C/svg%3E");
+       
+        --ts-bento-gap: var(--ts-grid-gap);
+            --ts-bento-ui-gap: var(--ts-bento-gap);
+            --ts-bento-pad: var(--ts-sp-6);
+            --ts-bento-ui-pad: var(--ts-bento-pad);
+            --ts-bento-cell-pad: var(--ts-sp-6);
+            --ts-bento-min-h: 160px;
+            --ts-bento-border: var(--ts-this-bg-border);/* fix made here and should be applied globally:   dynamic border and bg system,. no more static values anywhere.  */
+            --ts-bento-bg: var(--ts-this-bg-dim-2);
+            --ts-bento-border-hi: var(--ts-this-bg-border-hover);
+
+        }
+
+        /* ── BASE ──────────────────────────────────────────────────────── */
+        html { color-scheme: dark; overflow: hidden; }
+        body {
+          background: var(--ts-bg-body, #0c0d0f);
+          font-family: var(--ts-font-body, 'Space Grotesk', system-ui, sans-serif);
+          height: 100vh;
+          overflow: hidden;
+        }
+
+        /* ── EDITOR SHELL ──────────────────────────────────────────────── */
+        .ts-editor {
+          display: grid;
+          grid-template-columns: 1fr var(--ts-ls-panel-w);
+          grid-template-rows: var(--ts-ls-topbar-h) 1fr;
+          height: 100vh;
+          width: 100vw;
+          overflow: hidden;
+        }
+
+       
+
+        /* ── WORKBENCH ─────────────────────────────────────────────────── */
+       /* .ts-workbench {
+            grid-column: 1 / -1;
+            grid-row: 2;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            min-height: auto;
+            height: 100%;
+            font-family: var(--ts-font-mono, monospace);
+            margin: calc(var(--ts-bento-pad) + var(--ts-bento-gap));
+            border: 1px solid var(--ts-border-1);
+        }*/
+       .ts-workbench {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden scroll;
+    min-height: auto;
+    height: 100%;
+    font-family: var(--ts-font-mono, monospace);
+    /* margin: calc(var(--ts-bento-pad) + var(--ts-bento-gap)); */
+    border: 1px solid var(--ts-border-1);
+    max-height: calc(100% - var(--ts-mesh-sz)*1);
+    max-width: calc(100% - var(--ts-mesh-sz)*1);
+    flex: 1 1  auto;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: space-between;
+    align-self: center;
+    place-self: center;
+    justify-self: center;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: calc(var(--ts-tile-width)*.25);
+    --ts-sb-border: 0;
+    --ts-sb-size: 8px;
+}
+    .ts-canvas-info-bar {
+    position: fixed;
+    bottom: auto;
+    left: var(--ts-sp-4);
+    display: flex;
+    gap: var(--ts-sp-3);
+    align-items: center;
+    pointer-events: none;
+    top: calc(var(--ts-topbar-h) + var(--ts-sp-2));
+    .ts-canvas-badge {
+    font-size: var(--ts-fs-sm);
+    color: var(--ts-text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--ts-border-0);
+    border-radius: 6px;
+    padding: 4px 7px;
+}
+}
+        .ts-workbench h3, .ts-workbench h4 {
+          font-family: var(--ts-font-body, sans-serif);
+        }
+
+        /* ── CANVAS ────────────────────────────────────────────────────── */
+        .ts-canvas {
+          flex: 1 1 0;
+          min-width: 0;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          background-color: var(--ts-bg-body, #0c0d0f);
+          background-image: var(--ts-bg-mesh);
+        }
+        #ts-master-layout {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          min-height: 100%;
+        }
+        #ts-canvas-area {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    background-color: var(--ts-bg-body);
+    background-image: var(--ts-bg-mesh);
+    overflow: hidden;
+    position: relative;
+    align-content: stretch;
+    flex-wrap: wrap;
+    flex: 1;
+    padding: calc(var(--ts-mesh-sz)*.45);
+    /* background-origin: content-box; */
+}
+#ts-canvas-container[class*="ts-pattern-"] {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent!important;
+}
+        /* Layout container: structural marker only — no display override */
+        .ts-layout-container { position: relative; }
+
+        /* ── APP SHELL ─────────────────────────────────────────────────── */
+        .ts-app {
+          flex: 1;
+          display: grid;
+          grid-template:
+            "nav topbar" var(--ts-ls-navbar-h)
+            "nav main"   1fr
+            / var(--ts-ls-sidebar-w) 1fr;
+          overflow: hidden;
+          min-height: 100%;
+        }
+        .ts-app__nav {
+          grid-area: nav;
+          background: var(--ts-bg-0, #14161a);
+          border-right: 1px solid var(--ts-bento-border);
+          overflow: hidden;
+        }
+        .ts-app__topbar {
+          grid-area: topbar;
+          background: var(--ts-bg-0, #14161a);
+          border-bottom: 1px solid var(--ts-bento-border);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 var(--ts-bento-cell-pad);
+          font-size: 12px;
+          gap: var(--ts-sp-4, 16px);
+        }
+        .ts-app__main {
+          grid-area: main;
+          overflow: auto;
+          position: relative;
+          scrollbar-width: thin;
+        }
+
+        /* ── GRID OVERLAY ──────────────────────────────────────────────────
+           Positioned ABSOLUTE inside .ts-app__main, inset matches --ts-bento-pad
+           exactly so column stripes align with the bento grid cells.
+           Uses JS-computed --ts-col-width and --ts-tile-width for perfect math.
+           NO inline styles — data-visible attribute drives opacity.
+           ─────────────────────────────────────────────────────────────────── */
+        .ts-grid-overlay {
+          position: absolute;
+          inset: var(--ts-bento-pad);
+          pointer-events: none;
+          z-index: 50;
+          opacity: 0;
+          transition: opacity .18s;
+          background-image: repeating-linear-gradient(
+            to right,
+            var(--ts-overlay-fill) 0px,
+            var(--ts-overlay-fill) var(--ts-col-width),
+            transparent            var(--ts-col-width),
+            transparent            var(--ts-tile-width)
+          );
+        }
+        .ts-grid-overlay[data-visible="true"] { opacity: 1; }
+
+        /* ── BENTO GRID ────────────────────────────────────────────────── */
+        .ts-bento {
+
+        --ts-bento-ui-gap: 0;
+        /* here  is an example of isolation of tokens so the main frame of bento usage has a different token tyope   ,  so the main  view of bento class  has no padding or gap. and also, we are able to make this a  oparameter  on the ui controls,. 
+
+        wqe have to  add  ui cotnrols on sldiers ore inpouts so the user cna set uop the gaps and paddigns on the bento setuis  ui  and output onf  the layout.. in this caSE I   SPECIFIED I NEEDE DA  WIREFRAME TYPE OUTPUT.  WE HJAVE TO SOPVLE THE ISSUE OF THE BORDFERS OVERÑLAPPING. THAT CAN BE SOLVED  USING THE  BEFORE  PSEUDOELEMENT ISNDIE THE BENTO ITEMS SO THE BORDERS DOESNT   DUPLICATE.  */
+        --ts-bento-ui-pad: 0;
+
+          display: grid;
+          grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+          gap: var(--ts-bento-gap);
+        --ts-bento-gap: var(--ts-bento-ui-gap);
+        --ts-bento-pad: var(--ts-bento-ui-pad);
+
+          grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+          grid-auto-flow: dense;
+          padding: var(--ts-bento-pad);
+          min-height: 100%;
+        }
+        .ts-bento > * {
+          border: 0px solid var(--ts-bento-border);/*No more borders applied here.*/
+          overflow: hidden;
+          transition: border-color .1s, box-shadow .12s;
+        /*her ei delegated the  broders to the befroe pseudoelement    for optimar flexible  design performance. */
+        /* to perfect it please refer to the styled version from  "D:\Mis Documentos\Projects\Toolskin Framework\toolskin-rebuild\expert-designer\docs-refactror\Layout Studio Attempts\ts-layout-studio-v4.css" */
+
+              &::before {
+                content: "";
+                position: absolute;
+                inset: -1px -1px 0px 0px;
+                outline-style: solid;
+                outline-width: 0px;
+                background-color: var(--ts-bento-bg);
+                outline-offset: -1px;
+                outline-color: var(--ts-bento-border);
+                border-style: solid;
+                border-width: 1px;
+                border-color: var(--ts-bento-border);
+                border-collapse: collapse;
+                box-sizing: content-box;
+                pointer-events: none;
+                z-index: 0;
+                --ts-bento-bg: var(--ts-this-bg-dim-4);
+                --ts-this-bg: black;
+
+            }
+
+        &:hover:not(.ts-tile--selected) {
+              z-index: 99;
+              --ts-bento-border: var(--ts-bento-border-hi);
+                outline: 1px solid var(--ts-bento-border-hi) ;
+
+             &:before {
+              --ts-bento-border: var(--ts-bento-border-hi);
+              border-width: 0px;
+            }
+        }
+        &.ts-tile--selected{
+        --ts-bento-border: var(--ts-accent);
+                outline: 2px solid var(--ts-bento-border) !important;
+                outline-offset:-1px;
+              z-index: 99;
+
+                 &:before {
+              --ts-bento-border: var(--ts-accent);
+              border-width: 0px!important;
+            }
+
+        }
+        }
+
+
+
+        /* ── BENTO TILE SPANS — 12 col (default) ──────────────────────── */
+        .ts-bento__hero  { grid-column: span 8; grid-row: span 2; }
+        .ts-bento__half  { grid-column: span 4; grid-row: span 2; }
+        .ts-bento__third { grid-column: span 4; }
+        .ts-bento__quart { grid-column: span 3; }
+        .ts-bento__wide  { grid-column: span 5; }
+
+        /* ── BENTO TILE SPANS — 8 col ─────────────────────────────────── */
+        [data-ts-cols="8"] .ts-bento__hero  { grid-column: span 5; grid-row: span 2; }
+        [data-ts-cols="8"] .ts-bento__half  { grid-column: span 3; grid-row: span 2; }
+        [data-ts-cols="8"] .ts-bento__third { grid-column: span 3; }
+        [data-ts-cols="8"] .ts-bento__quart { grid-column: span 2; }
+        [data-ts-cols="8"] .ts-bento__wide  { grid-column: span 3; }
+
+        /* ── BENTO TILE SPANS — 16 col ────────────────────────────────── */
+        [data-ts-cols="16"] .ts-bento__hero  { grid-column: span 10; grid-row: span 2; }
+        [data-ts-cols="16"] .ts-bento__half  { grid-column: span 6;  grid-row: span 2; }
+        [data-ts-cols="16"] .ts-bento__third { grid-column: span 5;  }
+        [data-ts-cols="16"] .ts-bento__quart { grid-column: span 4;  }
+        [data-ts-cols="16"] .ts-bento__wide  { grid-column: span 7;  }
+
+        /* ── LAYOUT PRIMITIVES ─────────────────────────────────────────── */
+        .ts-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+          gap: var(--ts-grid-gap, 24px);
+          align-items: stretch;
+        }
+        .ts-split {
+          display: grid;
+          grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+          gap: var(--ts-grid-gap, 24px);
+          align-items: stretch;
+        }
+        .ts-stack {
+          display: grid;
+          grid-template-rows: auto 1fr auto;
+          gap: var(--ts-sp-3, 12px);
+          padding: var(--ts-bento-cell-pad);
+          height: 100%;
+        }
+
+        /* ── NESTING LEVEL VISUAL CUES (CSS-only, no inline styles) ─────── */
+        .ts-layout-container[data-level="2"] {
+          outline: 1px solid color-mix(in srgb, var(--ts-accent, #ff5500) 32%, transparent);
+          outline-offset: -1px;
+        }
+        .ts-layout-container[data-level="3"] {
+          outline: 1px solid color-mix(in srgb, var(--ts-info, #3b82f6) 32%, transparent);
+          outline-offset: -1px;
+        }
+
+        /* ── NESTED COMPONENT STYLES ────────────────────────────────────── 
+           JS creates these elements with only CSS class attributes.
+           NO inline styles are ever added by the engine.
+           ─────────────────────────────────────────────────────────────────── */
+        
+        .ts-nested-card {
+          background: var(--ts-nest-card);
+          border: 0px solid var(--ts-bento-border);
+          padding: var(--ts-nest-pad) !important;
+          min-height: 80px;
+          position: relative;
+
+                --ts-this-bg: var(--ts-bg-1);/* the surfac e color value is applied here via this bg not statically ans a plain value.  we could proefer having a totally  transparent syste,m ui */
+        /* here we delegated again all the borders to the  befroe peseudoelement. this muyt be a rule for the layout elements of the buidler. becasue the borders may break the  visual buidling scaffolding scpaing if we use the no-gap table grid  visual  blueprint i requested originally.-  */
+                &::before {
+                content: "";
+                position: absolute;
+                inset: -1px 0px 0px -1px;/* her ewe adjust the offset to make the before  inset border adjust to the boundarie sof the block.  */
+                outline-style: solid;
+                outline-width: 0px;
+                outline-offset: -1px;
+                outline-color: var(--ts-bento-border);
+                border-style: solid;
+                border-width: 1px;
+                border-color: var(--ts-bento-border);
+                border-collapse: collapse;
+                box-sizing: content-box;
+                pointer-events: none;
+            }
+
+        }
+        .ts-nested-block.ts-split .ts-nested-card { min-height: 100px; }
+
+        /* ── TILE SELECTION INDICATOR ────────────────────────────────────── */
+        .ts-tile--selected {
+          box-shadow: inset 0 0 0 2px var(--ts-accent, #ff5500) !important;
+        }
+        .ts-tile--selected::after {
+          content: "L" attr(data-level);
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background: var(--ts-accent, #ff5500);
+          color: var(--ts-on-accent, #fff);
+          font-size: 9px;
+          font-weight: 700;
+          padding: 2px 6px;
+          border-radius: 999px;
+          font-family: var(--ts-font-mono, monospace);
+          z-index: 20;
+          pointer-events: none;
+          letter-spacing: .04em;
+        }
+
+        /* ── MUTED / PLACEHOLDER TEXT ───────────────────────────────────── */
+        .ts-muted, .ts-placeholder-text {
+          color: var(--ts-text-muted, rgba(232,233,234,.45));
+          font-size: 12px;
+        }
+
+        /* ── SIDEBAR ─────────────────────────────────────────────────────── */
+        .ts-sidebar {
+          width: var(--ts-ls-panel-w);
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          background: var(--ts-bg-0, #14161a);/*m,ust fix:  stop using  static color sufrace.s  this must match the rets of the  blocks  surface fdynamic values , and alos,  when resizing this   block also must resize like the bentos. */
+          border-left: 1px solid var(--ts-border-0, rgba(255,255,255,.07));
+          overflow: hidden;
+          height: 100%;
+        }
+        .ts-sidebar-header {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: var(--ts-ls-navbar-h);
+          padding: 0 var(--ts-sp-4, 16px);
+          border-bottom: 1px solid var(--ts-border-0, rgba(255,255,255,.07));
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          color: var(--ts-text-secondary, rgba(232,233,234,.65));
+        }
+        .ts-sidebar-status {
+          font-size: 11px;
+          font-weight: 400;
+          text-transform: none;
+          letter-spacing: 0;
+          color: var(--ts-text-muted, rgba(232,233,234,.45));
+          padding: 3px 8px;
+          background: var(--ts-bg-2, #23262e);
+          border-radius: 4px;
+        }
+        .ts-code-area {
+          flex: 1;
+          min-height: 0;
+          padding: var(--ts-sp-4, 16px) var(--ts-sp-5, 20px);
+          font-family: var(--ts-font-mono, 'JetBrains Mono', monospace);
+          font-size: 10px;
+          line-height: 1.65;
+          background: var(--ts-bg-body, #0c0d0f);
+          color: var(--ts-text-muted, rgba(232,233,234,.45));
+          border: none;
+          outline: none;
+          resize: none;
+          width: 100%;
+          overflow: auto;
+          scrollbar-width: thin;
+          tab-size: 2;
+          white-space: pre;
+
+          /*-this extarea design must be matched or migrated or  dismissed to  be  the current code   window element used on the current html  on the code export tab, to  mainatin the toolskin ui component unity. */
+        }
+        .ts-sidebar-footer {
+          flex-shrink: 0;
+          padding: var(--ts-sp-3, 12px) var(--ts-sp-4, 16px);
+          border-top: 1px solid var(--ts-border-0, rgba(255,255,255,.07));
+          display: flex;
+          gap: var(--ts-sp-2, 8px);
+
+          /* the sidebar footer , same a s the textarea is mgiratesd to the  current html  structure on the panel footer id element wjere    soem buttosn can be holded (main cta mirrored dor usability) */
+        }
+
+        /* ── INLINE TOAST ────────────────────────────────────────────────── */
+        .ts-ls-toast {
+          position: fixed;
+          bottom: 32px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: var(--ts-bg-3, #2d3038);
+          color: var(--ts-text-primary, #e8e9ea);
+          padding: 10px 22px;
+          border-radius: 8px;
+          border: 1px solid var(--ts-border-1, rgba(255,255,255,.12));
+          font-size: 12px;
+          font-family: var(--ts-font-body, sans-serif);
+          z-index: 9999;
+          pointer-events: none;
+          white-space: nowrap;
+          animation: ts-toast-in .17s ease both;
+          /* we got a system bounded  toast system, so this ewlement is redudnant.  i requested no mroe duplicate or   unnecesary developments,   review is this element is enccesary and if is different form the existent toast saystem and if is  redudnant  rtemove it.  No more regressive additions.  */
+        }
+        @keyframes ts-toast-in {
+          from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+          to   { opacity: 1; transform: translateX(-50%) translateY(0);   }
+        }
+
+        /* ── RESPONSIVE BREAKPOINTS ─────────────────────────────────────── */
+        @media (max-width: 960px) {
+          .ts-bento { grid-template-columns: repeat(6, 1fr) !important; }
+          .ts-bento__hero  { grid-column: span 4 !important; }
+          .ts-bento__half  { grid-column: span 2 !important; }
+          .ts-bento__third,
+          .ts-bento__quart,
+          .ts-bento__wide  { grid-column: span 3 !important; }
+        }
+        @media (max-width: 768px) {
+          .ts-split { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 560px) {
+          .ts-bento { grid-template-columns: 1fr !important; }
+          .ts-bento > * { grid-column: 1 !important; grid-row: auto !important; }
+        }
+
+        :root {
+            --ts-ls-panel-w: 320px;
+            --ts-ls-topbar-h: 65px;
+            --ts-ls-sidebar-w: 200px;
+            --ts-ls-navbar-h: 45px;
+            --ts-layout-cols: 12;
+            --ts-grid-gap: var(--ts-sp-2);
+            --ts-col-width: 80px;
+            --ts-tile-width: 104px;
+            --ts-bento-gap: var(--ts-grid-gap);
+            --ts-bento-pad: var(--ts-sp-6);
+            --ts-bento-cell-pad: var(--ts-sp-6);
+            --ts-bento-min-h: 160px;
+          /*  --ts-bento-border: rgba(255,255,255,.07);
+            --ts-bento-border-hi: rgba(255,255,255,.14);*/
+            --ts-overlay-fill: color-mix(in srgb, var(--ts-info, #3b82f6) 8%, transparent);
+            --ts-mesh-sz: calc(var(--ts-bento-cell-pad)*2);
+        /*    --ts-mesh-color: rgba(255,255,255,.024);
+        */    --ts-bg-mesh: repeating-linear-gradient(0deg,  transparent, transparent calc(var(--ts-mesh-sz) - 1px), var(--ts-mesh-color) var(--ts-mesh-sz)),
+            repeating-linear-gradient(90deg, transparent, transparent calc(var(--ts-mesh-sz) - 1px), var(--ts-mesh-color) var(--ts-mesh-sz));
+           
+            --ts-nest-pad: calc(var(--ts-bento-pad) * .65);
+        }
+      
+
+
+
+        /*html changes*/
+
+        /* line 282*/
+
+        .ts-bento {
+            display: grid;
+            grid-template-columns: repeat(var(--ts-layout-cols, 12), 1fr);
+            gap: var(--ts-bento-gap);
+            grid-auto-rows: minmax(var(--ts-bento-min-h), auto);
+            grid-auto-flow: dense;
+            padding: var(--ts-bento-pad);
+            min-height: 100%;
+        }
+
+        /* line 303*/
+
+        .ts-bento__hero {
+            grid-column: span 8;
+            grid-row: span 2;
+        }
+        /* line 336*/
+
+        .ts-stack {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: var(--ts-sp-3, 12px);
+            padding: var(--ts-bento-cell-pad);
+            height: auto;
+            /* if this stack has 100% height on hero or other Layer 1   bento blocks,. the inner elements are pushed  off  the visible boundaries of the bento block so the bvontaienr just grows  empty visibly.  so the elements ar ento proeprly nested.  eliminating this  height the elements keeps ivisble but the  stack and the elements ar ento fully coccupying the  entire   space of the bento element. so that musty be fixed.   flex  or somethign else must be implemented here to make the parent element   proeprly  have the  grid fullffilled automatically and solidly. */
+            z-index: 2;
+            position:  relative;
+        }
+
+        /* line 373*/
+
+        .ts-nested-block {
+            background: var(--ts-nest-bg);
+            padding: var(--ts-nest-pad);
+            margin-top: var(--ts-nest-pad);
+            --ts-grid-gap: var(--ts-nest-pad);
+        }
+
+        /* line 324*/
+
+        .ts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            gap: var(--ts-grid-gap, 24px);
+            align-items: stretch;
+        }
+
+
+      
+    </style>
+       <!-- Toolskin Configuration -->
+    
+</head>
+
+<body>
+    
+     <div id="ts-preloader" class="ts-preloader" aria-hidden="true">
+        <div class="ts-preloader__brand">
+          <div class="ts-preloader__logo">
+            <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>
+            TOOL<em>SKIN</em>
+          </div>
+          <div class="ts-preloader__bar-wrap"><span class="ts-preloader__bar"></span></div>
+          <div class="ts-preloader__hint">Banner Generator</div>
+        </div>
+    </div>
+    <div id="ts-app" class="ts-editor">
+        <div id="ts-topbar" class="ts-toolbar ts-topbar">
+            <div class="ts-logo ts-topbar__logo">
+                <div class="ts-logo-brand">Tool<em>skin</em></div>
+                <span class="ts-logo-sub">Layout Studio</span>
+                <!-- DON'T OVERRIDE OR MODIFY ANYTHING FROM THIS DESIGN ECEPT FOR THE LOGICAL AND REQUIRED FUNCTIONAL ASSETS NEEDED FOR THE TOOL TO WORK. NO NEW ASSET CREATION IS NEEDED EXCEPT FOR  DYNAMIC TOGGLEABLE OR CONDITIONAL WORKING / INSTANCE BASED ENABLED INPUTS.-->
+            </div> 
+            <div class="ts-topbar-right">
+                <button id="ts-toggle-grid-btn"  class="ts-btn ts-btn--sm" data-active="false">⊞ Grid Overlay</button>
+                  <button id="ts-nest-grid-btn"    class="ts-btn ts-btn--sm">＋ Nest Grid</button>
+                  <button id="ts-nest-split-btn"   class="ts-btn ts-btn--sm">＋ Nest Split</button>
+                  <button id="ts-reset-layout-btn" class="ts-btn ts-btn--sm">↺ Reset</button>
+              
+                    <div class="ts-ui-select" data-ts-ui-select-search="false" data-ts-ui-select-placeholder="Select Columns">
+                        <select class="ts-ui-select__native" id="ts-column-select">
+                            <option value="8">8</option>
+                            <option value="12" selected>12</option>
+                            <option value="16">16</option>
+                        </select>
+                    </div>
+                <div class="ts-btn-group">
+                    <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-load-json" title="Load preset"
+                    data-ts-icon="ion:folder-open" data-icon-position="left">
+                    <span>Load Preset</span>
+                    </button>
+                    <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-save-json" title="Save preset"
+                        data-ts-icon="ion:save" data-icon-position="left">
+                        <span>Save Preset</span></button>
+                    <button class="ts-btn ts-btn--icon ts-btn--secondary" id="ts-btn-preview"
+                        style="text-decoration: none;" data-ts-icon="ion:eye" data-icon-position="left">
+                        <span>Preview &amp; Export</span> <span class="ts-spinner" id="ts-export-spinner"></span>
+                    </button>
+                </div>
+                <div class="ts-btn-group">
+                     <a href="https://satsea.io/toolskin-showcase/generator/" target="_blank" class="ts-btn ts-btn--icon  ts-btn-secondary" style="text-decoration: none;"
+                    data-ts-icon="ion:image-outline" data-icon-position="left">
+                    <span>Banner Generator</span>
+                    </a>
+                    <a href="https://satsea.io/toolskin-showcase" target="_blank" class="ts-btn ts-btn--icon ts-btn-secondary" style="text-decoration: none;"
+                        data-ts-icon="ion:home-outline" data-icon-position="left">
+                        <span>Showcase</span>
+                    </a>
+                     <button class="ts-btn ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
+                      <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" aria-hidden="true"></span>
+                      <span class="ts-icon ts-theme-icon-dark" data-ts-icon="fa-solid fa-moon" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="ts-canvas-area">
+            <div class="ts-canvas-info-bar">
+                <span class="ts-canvas-badge" id="ts-canvas-size-label">Canvas Size</span>
+            </div>
+            <!-- <div id="pattern-sandbox">
+                <div id="pattern-preview"></div>
+            </div> -->
+            <!-- ── WORKBENCH ────────────────────────────────────────────── -->
+            <div class="ts-workbench">
+
+              <!-- CANVAS -->
+              <div class="ts-canvas" id="ts-canvas-container">
+                <div id="ts-master-layout" class="ts-layout-container" data-level="0">
+
+                  <div class="ts-app ts-live-preview" id="ts-root-app">
+
+                    <div class="ts-app__nav">
+                      <div class="ts-stack">
+                        <strong>Sidebar</strong>
+                        <span class="ts-muted">ts-stack · nav</span>
+                        <div class="ts-muted">Dashboard</div>
+                        <div class="ts-muted">Analytics</div>
+                        <div class="ts-muted">Components</div>
+                      </div>
+                    </div>
+
+                    <div class="ts-app__topbar">
+                      <span>Toolskin Layout Studio</span>
+                      <span class="ts-muted" id="ts-grid-status">12 cols · click a tile to select</span>
+                    </div>
+
+                    <div class="ts-app__main" id="ts-app-main">
+                      <!--
+                        Grid overlay: position absolute, inset = --ts-bento-pad.
+                        This inset exactly matches the bento's outer padding so column
+                        stripes align with grid cells. data-visible drives opacity.
+                      -->
+                      <div id="ts-grid-overlay" class="ts-grid-overlay" data-visible="false"></div>
+
+                      <!-- Primary Bento — Level 1 layout tiles -->
+                      <div class="ts-bento" id="ts-primary-bento">
+
+                        <div class="ts-bento__hero ts-layout-container" data-level="1">
+                          <div class="ts-stack">
+                            <div>
+                              <h3>Hero Tile</h3>
+                              <p class="ts-muted">Level 1 · 8 col · 2 rows</p>
+                            </div>
+                            <p class="ts-muted">Click tile → then ＋ Nest Grid or ＋ Nest Split</p>
+                          </div>
+                        </div>
+
+                        <div class="ts-bento__half ts-layout-container" data-level="1">
+                          <div class="ts-stack">
+                            <div>
+                              <h4>Insights</h4>
+                              <p class="ts-muted">Level 1 · 4 col · 2 rows</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="ts-bento__third ts-layout-container" data-level="1">
+                          <div class="ts-stack">
+                            <div>
+                              <h4>Metrics</h4>
+                              <p class="ts-muted">Level 1 · span 4</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="ts-bento__quart ts-layout-container" data-level="1">
+                          <div class="ts-stack">
+                            <div>
+                              <h4>Status</h4>
+                              <p class="ts-muted">Level 1 · span 3</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="ts-bento__wide ts-layout-container" data-level="1">
+                          <div class="ts-split">
+                            <div class="ts-stack">
+                              <strong>Split Left · 5fr</strong>
+                              <p class="ts-muted">Magazine-grade asymmetric layout</p>
+                            </div>
+                            <div class="ts-stack">
+                              <strong>Split Right · 7fr</strong>
+                              <p class="ts-muted">ts-bento__wide · span 5</p>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div><!-- /.ts-bento -->
+                    </div><!-- /#ts-app-main -->
+                  </div><!-- /#ts-root-app -->
+                </div><!-- /#ts-master-layout -->
+              </div><!-- /.ts-canvas -->
+            </div>
+        </div>
+                
+
+                
+        <div id="ts-panel" class=" ts-sidebar-panel">
+            <div id="ts-panel-tabs"  class="ts-panel-tabs ts-sidebar-tabs">
+                <div class="ts-ptab active" data-tab="controls">Controls</div>
+                <div class="ts-ptab" data-tab="code">CSS Code</div>
+            </div>
+            <div id="ts-panel-body" class="ts-panel-body ts-sidebar-body">
+                <div class="ts-tab-pane active" data-pane="controls">
+                    <div class="ts-card">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:grid-outline">Pattern type</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field">
+                                        <label>Select pattern</label>
+                                        <div class="ts-ui-select" data-ts-ui-select-search="false">
+                                            <select class="ts-ui-select__native" id="input-pattern-type">
+                                                <option value="none" selected>None</option>
+                                                <option value="dots">Dots</option>
+                                                <option value="dots-dense">Dots Dense</option>
+                                                <option value="grid">Grid</option>
+                                                <option value="grid-bold">Grid Bold</option>
+                                                <option value="checkerboard">Checkerboard</option>
+                                                <option value="diagonal-stripes">Diagonal Stripes</option>
+                                                <option value="triangle">Triangle</option>
+                                                <option value="circles-grid">Circles Grid</option>
+                                                <option value="cool">WTF Cool</option>
+                                                <option value="cross">Cross</option>
+                                                <option value="zigzag">Zigzag</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="ts-card">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:color-palette-outline">Pattern color</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field">
+                                        <label class="ts-field-label">Pattern
+                                            color</label>
+                                        <div class="ts-color-row">
+                                            <div class="ts-color-swatch">
+                                                <div class="ts-sw" id="sw-pattern-color" style="background:#ff5500">
+                                                </div>
+                                                <input type="color" id="input-pattern-color" value="#ff5500">
+                                            </div>
+                                            <input type="text" class="ts-input-text mono" id="input-pattern-color-text"
+                                                value="#ff5500" maxlength="9">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field">
+                                        <label class="ts-field-label">Background
+                                            color</label>
+                                        <div class="ts-color-row">
+                                            <div class="ts-color-swatch">
+                                                <div class="ts-sw" id="sw-bg-color" style="background:#0a0a0a"></div>
+                                                <input type="color" id="input-bg-color" value="#0a0a0a">
+                                            </div>
+                                            <input type="text" class="ts-input-text mono" id="input-bg-color-text"
+                                                value="#0a0a0a" maxlength="9">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field-hint ts-hint">Leave blank to use accent color</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ts-card">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:play-outline">Animation</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-toggle-row">
+                                        <span class="ts-toggle-label" data-ts-icon="ion:play-outline"
+                                            data-icon-position="left">Enable animation</span>
+                                        <label class="ts-toggle">
+                                            <input type="checkbox" id="input-animated">
+                                            <span class="ts-toggle__knob"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="animation-controls" class="ts-card-row disabled">
+                                <div class="ts-card-col-quarter">
+                                    <div class="ts-field" id="ts-anim-direction-wrap">
+                                        <label>Direction</label>
+                                        <div class="ts-chips ts-align-anchor-grid" id="input-anim-direction" style="
+                                                    --ts-anchor-cols: 2;
+                                                    --ts-btn-h: 22px;
+                                                ">
+                                            <button
+                                                class="ts-chip ts-align-anchor-btn ts-arrow-rotate bottom-right active"
+                                                type="button" value="diagonal" data-icon="ion:arrow-forward"
+                                                data-tooltip="Diagonal motion"><span class="sr-only">Diagonal</span>
+                                            </button>
+                                            <button class="ts-chip ts-align-anchor-btn" type="button" value="horizontal"
+                                                data-icon="ion:arrow-forward" data-tooltip="Horizontal motion"><span
+                                                    class="sr-only">Horizontal</span>
+                                            </button>
+                                            <button class="ts-chip ts-align-anchor-btn" type="button" value="vertical"
+                                                data-icon="ion:arrow-down" data-tooltip="Vertical motion"><span
+                                                    class="sr-only">Vertical</span>
+                                            </button>
+                                            <button class="ts-chip ts-align-anchor-btn" type="button" value="reverse"
+                                                data-icon="ion:arrow-back" data-tooltip="Reverse direction"><span
+                                                    class="sr-only">Reverse</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ts-card-col-half">
+                                    <div class="ts-field">
+                                        <label>Speed</label>
+                                        <div class="ts-range-row">
+                                            <input type="range" class="ts-range" id="input-anim-speed" min="25"
+                                                max="200" step="25" value="100">
+                                            <span class="ts-range-val" id="val-anim-speed">1.0×</span>
+                                        </div>
+                                        <div class="ts-field-hint ts-hint">100% = normal speed, lower =
+                                            slower, higher = faster</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ts-card">
+                        <div class="ts-card-header absolute"><span class="ts-card-title"
+                                data-ts-icon="ion:resize-outline">Scale</span></div>
+                        <div class="ts-card-rows">
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field ts-range-stack">
+                                        <label class="ts-field-label" data-ts-icon="ion:resize-outline">Pattern
+                                            scale</label>
+                                        <div class="ts-range-row">
+                                            <input type="range" class="ts-range" id="input-scale" min="1" max="3"
+                                                step="0.25" value="1">
+                                            <span class="ts-range-val" id="val-scale">1×</span>
+                                        </div>
+
+
+                                        <p class="ts-fs-xs ts-text-muted ts-mt-2">Minimum scale is 1× to prevent pattern
+                                            breakage</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ts-card-row">
+                                <div class="ts-card-col-full">
+                                    <div class="ts-field ts-range-stack">
+                                        <label class="ts-field-label" data-ts-icon="ion:contrast-outline">Pattern
+                                            opacity</label>
+                                        <div class="ts-range-row">
+                                            <input type="range" class="ts-range" id="input-opacity" min="0" max="100"
+                                                value="50">
+                                            <span class="ts-range-val" id="val-opacity">50%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ts-tab-pane" data-pane="code">
+                    <div class="ts-code-window" data-purpose="code-example">
+                        <div class="ts-code-header">
+                            <div class="ts-code-dotbtn red"></div>
+                            <div class="ts-code-dotbtn yellow"></div>
+                            <div class="ts-code-dotbtn green"></div> <span
+                                class="ts-code-label">generated-pattern.css</span>
+                            <button class="ts-code-copy" aria-label="Copy code" data-tooltip="Copy code"
+                                data-ts-icon="ion:copy-outline" data-icon-position="left">
+                                <!-- <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16"
+                                    class="octicon octicon-copy js-clipboard-copy-icon m-2">
+                                    <path
+                                        d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z">
+                                    </path>
+                                    <path
+                                        d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z">
+                                    </path>
+                                </svg> -->
+                            </button>
+                        </div>
+                        <div id="code-export" class="ts-generator-code-export">
+                        </div>
+                        <textarea id="ts-export-textarea" class="ts-code-area ts-generator-code-export" readonly spellcheck="false" placeholder="Layout HTML will appear here…"></textarea>                     
+
+                    </div>
+                </div>
+            </div>
+            <div id="ts-panel-footer" class="ts-sidebar-footer ts-panel-footer">
+                <button id="ts-copy-export-btn" class="ts-btn ts-btn--primary" style="flex:1">Copy HTML</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // ── STATE ──
+            const S = {
+                patternType: 'none',
+                animated: false,
+                animDirection: 'diagonal',
+                animSpeed: 100, // Speed as percentage (100% = normal, 200% = 2x faster, 50% = 2x slower)
+                patternColor: '#ff5500',
+                bgColor: '#0a0a0a',
+                scale: 1,
+                opacity: 50
+            };
+
+            // ── DOM ──
+            const $ = id => document.getElementById(id);
+            const $$ = s => document.querySelectorAll(s);
+
+            // These will be set after DOM is ready
+            let preview = null;
+            let codeExport = null;
+
+            // ── UTILITIES ──
+            function hexValid(h) {
+                return /^#[0-9a-fA-F]{6}$/.test(h);
+            }
+
+            // Non-animatable patterns
+            const NON_ANIMATABLE_PATTERNS = ['zigzag', 'checkerboard', 'diagonal-stripes', 'dots-dense', 'cross'];
+
+            function isPatternAnimatable(patternType) {
+                return !NON_ANIMATABLE_PATTERNS.includes(patternType);
+            }
+
+            function updateAnimationControls() {
+                const animatedEl = $('input-animated');
+                const animControls = $('animation-controls');
+                const canAnimate = isPatternAnimatable(S.patternType);
+
+                if (animatedEl && animControls) {
+                    if (!canAnimate) {
+                        // Disable animation for non-animatable patterns
+                        animatedEl.disabled = true;
+                        animatedEl.checked = false;
+                        S.animated = false;
+                        animControls.classList.add('disabled');
+                        animControls.style.display = 'none';
+                    } else {
+                        animatedEl.disabled = false;
+                        animControls.classList.remove('disabled');
+                        animControls.style.display = S.animated ? '' : 'none';
+                    }
+                }
+            }
+
+            function updatePreview() {
+                if (!preview) {
+                    console.error('Preview element not found');
+                    return;
+                }
+
+                const classes = [`ts-pattern-${S.patternType}`];
+                if (S.animated) {
+                    classes.push('ts-pattern--animated');
+                    // Add direction class
+                    if (S.animDirection === 'reverse') {
+                        classes.push('ts-pattern--anim-reverse');
+                    } else if (S.animDirection === 'horizontal') {
+                        classes.push('ts-pattern--anim-horizontal');
+                    } else if (S.animDirection === 'vertical') {
+                        classes.push('ts-pattern--anim-vertical');
+                    }
+                }
+
+                // Remove all pattern classes first
+                preview.className = '';
+                preview.classList.add(...classes);
+
+                // Apply inline styles - these need to be on the element itself
+                // Enforce minimum scale of 1
+                const safeScale = Math.max(1, S.scale);
+                const styles = {
+                    '--ts-pattern-scale': String(safeScale),
+                    '--ts-pattern-opacity': String(S.opacity / 100),
+                    'background-color': S.bgColor
+                };
+
+                // Only add animation if pattern is animatable
+                if (S.animated && isPatternAnimatable(S.patternType)) {
+                    const baseDuration = 30;
+                    const duration = (baseDuration * 100) / S.animSpeed;
+                    styles['--ts-pattern-anim-duration'] = `${duration}s`;
+                } else {
+                    // Remove animation classes and styles for non-animatable patterns
+                    preview.classList.remove('ts-pattern--animated', 'ts-pattern--anim-reverse',
+                        'ts-pattern--anim-horizontal', 'ts-pattern--anim-vertical');
+                    preview.style.removeProperty('--ts-pattern-anim-duration');
+                    preview.style.removeProperty('--ts-pattern-anim-name');
+                }
+
+                if (S.patternColor && hexValid(S.patternColor)) {
+                    styles['--ts-pattern-color'] = S.patternColor;
+                } else {
+                    // Remove color override to use accent
+                    preview.style.removeProperty('--ts-pattern-color');
+                }
+
+                // Apply all styles using setProperty to ensure they're set correctly
+                Object.keys(styles).forEach(key => {
+                    preview.style.setProperty(key, styles[key]);
+                });
+
+                // Verify variables are actually set
+                const computedScale = getComputedStyle(preview).getPropertyValue('--ts-pattern-scale');
+                const computedOpacity = getComputedStyle(preview).getPropertyValue('--ts-pattern-opacity');
+                console.log('Applied styles:', styles);
+                console.log('Applied classes:', classes);
+                console.log('Computed --ts-pattern-scale:', computedScale);
+                console.log('Computed --ts-pattern-opacity:', computedOpacity);
+
+                updateCode();
+            }
+
+            function updateCode() {
+                if (!codeExport) {
+                    console.warn('Code export element not found');
+                    return;
+                }
+
+                const classes = [`ts-pattern-${S.patternType}`];
+                const safeScale = Math.max(1, S.scale);
+                const canAnimate = isPatternAnimatable(S.patternType);
+
+                if (S.animated && canAnimate) {
+                    classes.push('ts-pattern--animated');
+                    if (S.animDirection === 'reverse') {
+                        classes.push('ts-pattern--anim-reverse');
+                    } else if (S.animDirection === 'horizontal') {
+                        classes.push('ts-pattern--anim-horizontal');
+                    } else if (S.animDirection === 'vertical') {
+                        classes.push('ts-pattern--anim-vertical');
+                    }
+                }
+
+                let output = `/* HTML with inline styles */\n`;
+                output += `<div class="${classes.join(' ')}"`;
+
+                const styleParts = [];
+                styleParts.push(`--ts-pattern-scale: ${safeScale}`);
+                styleParts.push(`--ts-pattern-opacity: ${S.opacity / 100}`);
+                if (S.animated && canAnimate) {
+                    const baseDuration = 30;
+                    const duration = (baseDuration * 100) / S.animSpeed;
+                    styleParts.push(`--ts-pattern-anim-duration: ${duration}s`);
+                }
+                if (S.patternColor && hexValid(S.patternColor)) {
+                    styleParts.push(`--ts-pattern-color: ${S.patternColor}`);
+                }
+                styleParts.push(`background-color: ${S.bgColor}`);
+
+                output += ` style="${styleParts.join('; ')}">\n`;
+                output += `  <!-- Your content -->\n`;
+                output += `</div>\n\n`;
+
+                output += `/* CSS Variables (alternative approach) */\n`;
+                output += `.${classes.join('.')} {\n`;
+                output += `  --ts-pattern-scale: ${safeScale};\n`;
+                output += `  --ts-pattern-opacity: ${S.opacity / 100};\n`;
+                if (S.animated && canAnimate) {
+                    const baseDuration = 30;
+                    const duration = (baseDuration * 100) / S.animSpeed;
+                    output += `  --ts-pattern-anim-duration: ${duration}s; /* ${S.animSpeed}% speed (${(S.animSpeed / 100).toFixed(1)}×) */\n`;
+                }
+                if (S.patternColor && hexValid(S.patternColor)) {
+                    output += `  --ts-pattern-color: ${S.patternColor};\n`;
+                }
+                output += `  background-color: ${S.bgColor};\n`;
+                output += `}`;
+
+                codeExport.textContent = output;
+                console.log('Code exported:', output.substring(0, 100) + '...');
+            }
+
+            function syncAnimDirectionUI() {
+                const wrap = $('input-anim-direction');
+                if (!wrap) return;
+                wrap.querySelectorAll('button[value]').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('value') === S.animDirection);
+                });
+            }
+
+            // ── BIND CONTROLS ──
+            function bindControls() {
+                console.log('🔧 Binding controls...');
+
+                // Pattern type
+                const patternTypeEl = $('input-pattern-type');
+                if (patternTypeEl) {
+                    const handler = (e) => {
+                        console.log('Pattern type changed:', e.target.value);
+                        S.patternType = e.target.value;
+                        updateAnimationControls();
+                        updatePreview();
+                    };
+                    patternTypeEl.addEventListener('change', handler);
+                    console.log('✅ Pattern type control bound', patternTypeEl.value);
+                } else {
+                    console.error('❌ Pattern type input not found');
+                }
+
+                // Animation
+                const animatedEl = $('input-animated');
+                const animControls = $('animation-controls');
+                if (animatedEl) {
+                    animatedEl.addEventListener('change', e => {
+                        if (animatedEl.disabled) {
+                            e.preventDefault();
+                            return;
+                        }
+                        console.log('Animation toggled:', e.target.checked);
+                        S.animated = e.target.checked && isPatternAnimatable(S.patternType);
+                        if (animControls) {
+                            animControls.style.display = S.animated ? '' : 'none';
+                        }
+                        updatePreview();
+                    });
+                    console.log('✅ Animation control bound');
+                } else {
+                    console.error('❌ Animation input not found');
+                }
+
+                // Animation direction (button grid; container id kept for compatibility)
+                const animDirectionWrap = $('input-anim-direction');
+                if (animDirectionWrap) {
+                    animDirectionWrap.addEventListener('click', e => {
+                        const btn = e.target.closest('button[value]');
+                        if (!btn || !animDirectionWrap.contains(btn)) return;
+                        const val = btn.getAttribute('value');
+                        if (!val || val === S.animDirection) return;
+                        console.log('Animation direction changed:', val);
+                        S.animDirection = val;
+                        animDirectionWrap.querySelectorAll('button[value]').forEach(b => {
+                            b.classList.toggle('active', b.getAttribute('value') === val);
+                        });
+                        updatePreview();
+                    });
+                    syncAnimDirectionUI();
+                    console.log('✅ Animation direction control bound');
+                }
+
+                // Animation speed (as percentage/multiplier)
+                const animSpeedEl = $('input-anim-speed');
+                const animSpeedValEl = $('val-anim-speed');
+                if (animSpeedEl) {
+                    const handler = (e) => {
+                        console.log('Animation speed changed:', e.target.value);
+                        S.animSpeed = parseInt(e.target.value);
+                        // Display as multiplier: 100% = 1×, 200% = 2×, 50% = 0.5×
+                        if (animSpeedValEl) {
+                            const multiplier = (S.animSpeed / 100).toFixed(1);
+                            animSpeedValEl.textContent = multiplier + '×';
+                        }
+                        updatePreview();
+                    };
+                    animSpeedEl.addEventListener('input', handler);
+                    animSpeedEl.addEventListener('change', handler);
+                    console.log('✅ Animation speed control bound');
+                }
+
+                // Pattern color
+                function updatePatternColor(val) {
+                    if (!val || val === 'accent' || !hexValid(val)) {
+                        S.patternColor = '';
+                        $('input-pattern-color-text').value = 'accent';
+                        $('sw-pattern-color').style.background = getComputedStyle(document.documentElement).getPropertyValue('--ts-accent') || '#ff5500';
+                    } else {
+                        S.patternColor = val;
+                        $('input-pattern-color').value = val;
+                        $('sw-pattern-color').style.background = val;
+                    }
+                    updatePreview();
+                }
+
+                const patternColorEl = $('input-pattern-color');
+                const patternColorTextEl = $('input-pattern-color-text');
+
+                if (patternColorEl) {
+                    patternColorEl.addEventListener('input', e => {
+                        updatePatternColor(e.target.value);
+                        if (patternColorTextEl) patternColorTextEl.value = e.target.value;
+                    });
+                    console.log('✅ Pattern color control bound');
+                } else {
+                    console.error('❌ Pattern color input not found');
+                }
+
+                if (patternColorTextEl) {
+                    patternColorTextEl.addEventListener('input', e => {
+                        const v = e.target.value.trim();
+                        if (v && v !== 'accent' && hexValid(v)) {
+                            updatePatternColor(v);
+                        }
+                    });
+
+                    patternColorTextEl.addEventListener('blur', e => {
+                        if (!hexValid(e.target.value.trim()) && e.target.value.trim() !== 'accent') {
+                            e.target.value = S.patternColor || 'accent';
+                        }
+                    });
+                    console.log('✅ Pattern color text control bound');
+                } else {
+                    console.error('❌ Pattern color text input not found');
+                }
+
+                // Background color
+                function updateBgColor(val) {
+                    if (hexValid(val)) {
+                        S.bgColor = val;
+                        $('input-bg-color').value = val;
+                        $('sw-bg-color').style.background = val;
+                        updatePreview();
+                    }
+                }
+
+                const bgColorEl = $('input-bg-color');
+                const bgColorTextEl = $('input-bg-color-text');
+
+                if (bgColorEl) {
+                    bgColorEl.addEventListener('input', e => {
+                        updateBgColor(e.target.value);
+                        if (bgColorTextEl) bgColorTextEl.value = e.target.value;
+                    });
+                    console.log('✅ Background color control bound');
+                } else {
+                    console.error('❌ Background color input not found');
+                }
+
+                if (bgColorTextEl) {
+                    bgColorTextEl.addEventListener('input', e => {
+                        const v = e.target.value.trim();
+                        if (hexValid(v)) {
+                            updateBgColor(v);
+                        }
+                    });
+
+                    bgColorTextEl.addEventListener('blur', e => {
+                        if (!hexValid(e.target.value.trim())) {
+                            e.target.value = S.bgColor;
+                        }
+                    });
+                    console.log('✅ Background color text control bound');
+                } else {
+                    console.error('❌ Background color text input not found');
+                }
+
+                // Scale
+                const scaleEl = $('input-scale');
+                const scaleValEl = $('val-scale');
+                if (scaleEl) {
+                    const handler = (e) => {
+                        console.log('Scale changed:', e.target.value);
+                        S.scale = Math.max(1, parseFloat(e.target.value));
+                        if (scaleValEl) scaleValEl.textContent = S.scale + '×';
+                        updatePreview();
+                    };
+                    scaleEl.addEventListener('input', handler);
+                    scaleEl.addEventListener('change', handler);
+                    console.log('✅ Scale control bound, current value:', scaleEl.value);
+                } else {
+                    console.error('❌ Scale input not found');
+                }
+
+                // Opacity
+                const opacityEl = $('input-opacity');
+                const opacityValEl = $('val-opacity');
+                if (opacityEl) {
+                    const handler = (e) => {
+                        console.log('Opacity changed:', e.target.value);
+                        S.opacity = parseInt(e.target.value);
+                        if (opacityValEl) opacityValEl.textContent = S.opacity + '%';
+                        updatePreview();
+                    };
+                    opacityEl.addEventListener('input', handler);
+                    // Also add change event as fallback
+                    opacityEl.addEventListener('change', handler);
+                    console.log('✅ Opacity control bound, current value:', opacityEl.value);
+                } else {
+                    console.error('❌ Opacity input not found');
+                }
+
+                console.log('✅ All controls bound');
+
+                // Reset
+                const resetBtn = $('btn-reset');
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', () => {
+                        console.log('Reset clicked');
+                        S.patternType = 'dots';
+                        S.animated = false;
+                        S.animDirection = 'diagonal';
+                        S.animSpeed = 100;
+                        S.patternColor = '#ff5500';
+                        S.bgColor = '#0a0a0a';
+                        S.scale = 1;
+                        S.opacity = 50;
+
+                        const patternTypeInput = $('input-pattern-type');
+                        if (patternTypeInput) {
+                            patternTypeInput.value = S.patternType;
+                            patternTypeInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                        $('input-animated').checked = S.animated;
+                        if ($('animation-controls')) {
+                            $('animation-controls').style.display = S.animated ? '' : 'none';
+                        }
+                        syncAnimDirectionUI();
+                        $('input-anim-speed').value = S.animSpeed;
+                        $('val-anim-speed').textContent = (S.animSpeed / 100).toFixed(1) + '×';
+                        $('input-pattern-color').value = S.patternColor;
+                        $('input-pattern-color-text').value = S.patternColor;
+                        $('sw-pattern-color').style.background = S.patternColor;
+                        $('input-bg-color').value = S.bgColor;
+                        $('input-bg-color-text').value = S.bgColor;
+                        $('sw-bg-color').style.background = S.bgColor;
+                        $('input-scale').value = S.scale;
+                        $('val-scale').textContent = S.scale + '×';
+                        $('input-opacity').value = S.opacity;
+                        $('val-opacity').textContent = S.opacity + '%';
+
+                        updatePreview();
+                    });
+                    console.log('✅ Reset button bound');
+                } else {
+                    console.error('❌ Reset button not found');
+                }
+
+           
+            }
+
+            // ── INIT ──
+            function init() {
+                console.log('🚀 Initializing Layout generator...');
+                console.log('Document ready state:', document.readyState);
+
+                // Get DOM elements
+                preview = $('ts-canvas-container');
+                codeExport = $('code-export');
+
+                // Debug: log if elements are missing
+                if (!preview) {
+                    console.error('❌ pattern-preview element not found');
+                    return;
+                }
+                if (!codeExport) {
+                    console.error('❌ code-export element not found');
+                    return;
+                }
+
+                console.log('✅ DOM elements found');
+
+                // Toolskin auto-inits from deferred toolskin.js (icons, preloader, range, ui-select).
+
+                // Bind controls
+                console.log('🔧 Binding controls...');
+                bindControls();
+
+                // Update animation controls based on initial pattern
+                updateAnimationControls();
+
+                // Initial preview update
+                console.log('🎨 Updating preview...');
+                updatePreview();
+
+                console.log('✅ Pattern generator initialized successfully');
+                console.log('Current state:', S);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+        });
+    </script>
+
+
+    <script>
+        // === CONFIGURATION ===
+        const ACCORDION_MODE = false;   // Set to false to allow multiple open cards per pane
+
+        // Helper: get all cards inside a pane (or the whole document if no pane)
+        function getCardsInSamePane(element) {
+            const pane = element.closest('.ts-tab-pane');
+            if (pane) {
+                return Array.from(pane.querySelectorAll('.ts-card'));
+            } else {
+                // If no pane, consider all cards on page
+                return Array.from(document.querySelectorAll('.ts-card'));
+            }
+        }
+
+        // Function to open a specific card (adds open class to its header)
+        function openCard(card) {
+            const header = card.querySelector('.ts-card-header.ts-accordion');
+            if (header && !header.classList.contains('open')) {
+                header.classList.add('open');
+            }
+        }
+
+        // Function to close a specific card (removes open class from its header)
+        function closeCard(card) {
+            const header = card.querySelector('.ts-card-header.ts-accordion');
+            if (header && header.classList.contains('open')) {
+                header.classList.remove('open');
+            }
+        }
+
+        // Close all cards inside a given container (pane or whole document)
+        function closeAllCards(container) {
+            const cards = container.querySelectorAll('.ts-card');
+            cards.forEach(card => closeCard(card));
+        }
+
+        // Initialize: attach click handlers to all accordion headers
+        document.querySelectorAll('.ts-card-header.ts-accordion').forEach(header => {
+            header.addEventListener('click', (e) => {
+                const card = header.closest('.ts-card');
+                if (!card) return;
+
+                if (ACCORDION_MODE) {
+                    const pane = card.closest('.ts-tab-pane');
+                    if (pane) {
+                        // Close all other cards in the same pane
+                        const otherCards = Array.from(pane.querySelectorAll('.ts-card')).filter(c => c !== card);
+                        otherCards.forEach(c => closeCard(c));
+                    } else {
+                        // No pane – close all other cards on the page
+                        const allCards = document.querySelectorAll('.ts-card');
+                        allCards.forEach(c => {
+                            if (c !== card) closeCard(c);
+                        });
+                    }
+                    // Open the clicked card (toggle its own state)
+                    header.classList.toggle('open');
+                } else {
+                    // Simple toggle: just this card
+                    header.classList.toggle('open');
+                }
+            });
+        });
+
+        // Make the first card in each tab pane open by default
+        document.querySelectorAll('.ts-tab-pane').forEach(pane => {
+            const firstCard = pane.querySelector('.ts-card');
+            if (firstCard) {
+                openCard(firstCard);
+            }
+        });
+    </script>
+
+
+  <!-- ================================================================
+       TOOLSKIN LAYOUT STUDIO — JS ENGINE v8
+       ================================================================
+       Contracts enforced here:
+
+       SSOT: updateGrid(N) is the ONLY way to change column count.
+         It sets --ts-layout-cols + data-ts-cols + calls computeGridVars().
+
+       computeGridVars(): reads ACTUAL rendered width of #ts-app-main,
+         subtracts the bento padding (--ts-bento-pad × 2) to get the inner
+         container width, then computes exact px values:
+           --ts-col-width  = (inner - (N-1)*gap) / N
+           --ts-tile-width = col-width + gap
+         These are what the overlay repeating-linear-gradient uses.
+
+       NO INLINE STYLES: JS never sets style properties on elements directly.
+         nestGrid() / nestSplit() create elements with CSS classes only.
+         setOverlay() / selectTile() use attribute / class toggling.
+
+       NESTING GUARD: max depth = 3. Clicking inside a level-3 component
+         sets it as selected but getSelectedTile() returns null (depth ≥ 3),
+         so nesting buttons show a toast instead of going deeper.
+       ================================================================ -->
+  <script>
+  (function () {
+    'use strict';
+
+
+      const container = document.getElementById("ts-canvas-container");
+      const sizeLabel = document.getElementById("ts-canvas-size-label");
+
+      // Safety check: ensure both elements exist in the DOM
+      if (!container || !sizeLabel) {
+        console.error("Required layout elements not found.");
+        return;
+      }
+
+      const observer = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          // Use Math.round to avoid decimal pixel artifacts in the UI
+          const width = Math.round(entry.contentRect.width);
+          const height = Math.round(entry.contentRect.height);
+          
+          // Assign the live value to the label div
+          sizeLabel.textContent = `${width}px × ${height}px`;
+        }
+      });
+
+      // Start observing the container
+      observer.observe(container);
+
+
+    /* ── STATE ─────────────────────────────────────────────────── */
+    var currentCols   = 12;
+    var overlayActive = false;
+    var selectedTile  = null;
+    var ro, mo; /* ResizeObserver + MutationObserver — declared early for reset use */
+
+    /* ── STABLE DOM REFS (toolbar — never replaced) ──────────── */
+    var root         = document.documentElement;
+    var masterLayout = document.getElementById('ts-master-layout');
+    var columnSelect = document.getElementById('ts-column-select');
+    var toggleBtn    = document.getElementById('ts-toggle-grid-btn');
+    var nestGridBtn  = document.getElementById('ts-nest-grid-btn');
+    var nestSplitBtn = document.getElementById('ts-nest-split-btn');
+    var resetBtn     = document.getElementById('ts-reset-layout-btn');
+    var exportArea   = document.getElementById('ts-export-textarea');
+    var copyBtn      = document.getElementById('ts-copy-export-btn');
+    var gridStatus   = document.getElementById('ts-grid-status');
+    var selStatus    = document.getElementById('ts-sel-status');
+
+    /* These refs live INSIDE masterLayout — use getters after reset */
+    function getOverlay() { return document.getElementById('ts-grid-overlay'); }
+    function getAppMain() { return document.getElementById('ts-app-main'); }
+
+    /* ── INITIAL STATE (for reset) ───────────────────────────── */
+    var INITIAL_HTML = masterLayout.innerHTML;
+
+    /* ── GRID ENGINE — SINGLE SOURCE OF TRUTH ───────────────────
+       computeGridVars: the ONLY place column math is done.
+         W       = appMain.clientWidth (real rendered px)
+         inner   = W - 2 * bento-pad  (width the bento actually uses)
+         colW    = (inner - (N-1)*gap) / N   ← exact CSS grid col width
+         tileW   = colW + gap                ← overlay repeating unit
+       Both CSS custom properties are then used by .ts-grid-overlay
+       background-image — no other code path computes column width.
+    ─────────────────────────────────────────────────────────────── */
+    function computeGridVars() {
+      var main = getAppMain();
+      if (!main) return;
+      var W   = main.clientWidth;
+      var pad = parseFloat(getComputedStyle(root).getPropertyValue('--ts-bento-pad'))  || 32;
+      var gap = parseFloat(getComputedStyle(root).getPropertyValue('--ts-grid-gap'))   || 24;
+      var N   = currentCols;
+      var inner = W - 2 * pad;
+      var colW  = inner > 0 ? (inner - (N - 1) * gap) / N : 0;
+      var tileW = colW + gap;
+      root.style.setProperty('--ts-col-width',  Math.max(0, colW)  + 'px');
+      root.style.setProperty('--ts-tile-width', Math.max(0, tileW) + 'px');
+    }
+
+    /* updateGrid: single entry point — sets everything from one call */
+    function updateGrid(cols) {
+      currentCols = cols;
+      root.style.setProperty('--ts-layout-cols', cols);
+      root.setAttribute('data-ts-cols', String(cols));
+      computeGridVars();
+      refreshStatus();
+      updateExport();
+    }
+
+    /* ── OVERLAY ─────────────────────────────────────────────── */
+    function setOverlay(active) {
+      overlayActive = active;
+      var ol = getOverlay();
+      if (ol) ol.setAttribute('data-visible', active ? 'true' : 'false');
+      if (toggleBtn) toggleBtn.setAttribute('data-active', active ? 'true' : 'false');
+      if (toggleBtn) toggleBtn.textContent = active ? '⊞ Hide Grid' : '⊞ Grid Overlay';
+    }
+
+    /* ── STATUS BAR ──────────────────────────────────────────── */
+    function refreshStatus() {
+      var lvl = selectedTile ? selectedTile.getAttribute('data-level') : null;
+      var atMax = lvl && parseInt(lvl, 10) >= 3;
+      if (gridStatus) {
+        gridStatus.textContent = currentCols + ' cols · ' +
+          (lvl
+            ? (atMax ? 'L' + lvl + ' — max depth reached' : 'L' + lvl + ' selected — click ＋ to nest')
+            : 'click a tile to select');
+      }
+      if (selStatus) {
+        selStatus.textContent = lvl ? 'L' + lvl + (atMax ? ' (max)' : ' active') : 'no selection';
+      }
+    }
+
+    /* ── TILE SELECTION ──────────────────────────────────────── */
+    function selectTile(el) {
+      masterLayout.querySelectorAll('.ts-tile--selected').forEach(function (e) {
+        e.classList.remove('ts-tile--selected');
+      });
+      selectedTile = el || null;
+      if (el) el.classList.add('ts-tile--selected');
+      refreshStatus();
+    }
+
+    /* Returns the tile to nest into, or null if at/above max depth */
+    function getSelectedTile() {
+      if (selectedTile && masterLayout.contains(selectedTile)) {
+        var lvl = parseInt(selectedTile.getAttribute('data-level') || '0', 10);
+        if (lvl > 0 && lvl < 3) return selectedTile;
+        if (lvl >= 3) return null; /* at max depth */
+      }
+      /* Fallback: first level-1 tile */
+      return masterLayout.querySelector('.ts-layout-container[data-level="1"]') || null;
+    }
+
+    /* ── NESTING ─────────────────────────────────────────────────
+       RULE: created elements have CSS class attributes ONLY.
+       NO inline padding, background, margin, border-radius, or gap.
+       All appearance comes from CSS rules in the <style> block above.
+    ─────────────────────────────────────────────────────────────── */
+    function nestGrid() {
+      var target = getSelectedTile();
+      if (!target)  { toast('Click a tile first to select it'); return; }
+      var lvl    = parseInt(target.getAttribute('data-level') || '0', 10);
+      if (lvl >= 3) { toast('Maximum nesting depth (3) reached'); return; }
+      var newLvl = lvl + 1;
+
+      var grid = document.createElement('div');
+      grid.className = 'ts-grid ts-nested-block ts-layout-container';
+      grid.setAttribute('data-level', newLvl);
+
+      for (var i = 1; i <= 3; i++) {
+        var card = document.createElement('div');
+        card.className = 'ts-stack ts-nested-card';
+        card.innerHTML = '<strong>Card ' + i + '</strong>'
+          + '<span class="ts-muted">L' + newLvl + ' · auto-fit grid</span>';
+        grid.appendChild(card);
+      }
+      target.appendChild(grid);
+      updateExport();
+    }
+
+    function nestSplit() {
+      var target = getSelectedTile();
+      if (!target)  { toast('Click a tile first to select it'); return; }
+      var lvl    = parseInt(target.getAttribute('data-level') || '0', 10);
+      if (lvl >= 3) { toast('Maximum nesting depth (3) reached'); return; }
+      var newLvl = lvl + 1;
+
+      var split = document.createElement('div');
+      split.className = 'ts-split ts-nested-block ts-layout-container';
+      split.setAttribute('data-level', newLvl);
+
+      var left = document.createElement('div');
+      left.className = 'ts-stack ts-nested-card';
+      left.innerHTML = '<strong>← 5fr</strong>'
+        + '<span class="ts-muted">L' + newLvl + ' split left</span>';
+
+      var right = document.createElement('div');
+      right.className = 'ts-stack ts-nested-card';
+      right.innerHTML = '<strong>7fr →</strong>'
+        + '<span class="ts-muted">L' + newLvl + ' split right</span>';
+
+      split.appendChild(left);
+      split.appendChild(right);
+      target.appendChild(split);
+      updateExport();
+    }
+
+    /* ── RESET ───────────────────────────────────────────────── */
+    function resetLayout() {
+      if (ro && getAppMain()) { try { ro.unobserve(getAppMain()); } catch(e){} }
+      if (mo) mo.disconnect();
+
+      masterLayout.innerHTML = INITIAL_HTML;
+      selectTile(null);
+
+      /* Re-observe with fresh DOM */
+      if (ro && getAppMain()) ro.observe(getAppMain());
+      if (mo) mo.observe(masterLayout, MO_OPTS);
+
+      setOverlay(overlayActive);
+      requestAnimationFrame(function () {
+        computeGridVars();
+        updateExport();
+      });
+    }
+
+    /* ── PRISTINE SEMANTIC EXPORT ──────────────────────────────── */
+    var EDITOR_CLASSES = [
+      'ts-layout-container', 'ts-live-preview',
+      'ts-tile--selected', 'ts-nested-block', 'ts-nested-card'
+    ];
+    var EDITOR_ATTRS = ['data-level', 'data-viz-columns', 'data-visible'];
+
+    function getCleanHTML() {
+      var clone = masterLayout.cloneNode(true);
+
+      /* Remove overlay element */
+      var ol = clone.querySelector('#ts-grid-overlay');
+      if (ol) ol.remove();
+
+      /* Strip editor artifacts from every element */
+      clone.querySelectorAll('*').forEach(function (el) {
+        EDITOR_CLASSES.forEach(function (c) { el.classList.remove(c); });
+        EDITOR_ATTRS.forEach(function (a)   { el.removeAttribute(a); });
+        /* Strip any residual JS-injected inline styles (outline, margin-top) */
+        if (el.hasAttribute('style')) {
+          var s = el.getAttribute('style')
+            .replace(/outline\s*:[^;]*;?\s*/gi,    '')
+            .replace(/margin-top\s*:[^;]*;?\s*/gi, '')
+            .trim().replace(/^;+|;+$/g, '');
+          if (s) el.setAttribute('style', s);
+          else   el.removeAttribute('style');
+        }
+        if (el.getAttribute('class') !== null && el.className.trim() === '')
+          el.removeAttribute('class');
+      });
+
+      var html = (new XMLSerializer()).serializeToString(clone);
+      html = html.replace(/ xmlns="[^"]*"/g, '');
+      return prettyHTML(html);
+    }
+
+    /* Lightweight recursive HTML indenter */
+    function prettyHTML(html) {
+      var VOID = 'area base br col embed hr img input link meta param source track wbr'.split(' ');
+      var P    = '  '; /* 2-space indent */
+      var d    = 0;
+      var out  = '';
+      var parts = html.split(/(<[^>]+>)/);
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        if (!p) continue;
+        if (p.charAt(0) === '<' && p.charAt(1) === '!') {
+          out += '\n' + P.repeat(d) + p;
+        } else if (p.charAt(0) === '<' && p.charAt(1) === '/') {
+          d = Math.max(0, d - 1);
+          out += '\n' + P.repeat(d) + p;
+        } else if (p.charAt(0) === '<') {
+          var name = ((p.match(/<([a-zA-Z][\w-]*)/) || [])[1] || '').toLowerCase();
+          out += '\n' + P.repeat(d) + p;
+          if (name && VOID.indexOf(name) === -1 && !/\/>$/.test(p)) d++;
+        } else {
+          var t = p.trim();
+          if (t) out += '\n' + P.repeat(d) + t;
+        }
+      }
+      return out.trim();
+    }
+
+    function updateExport() {
+      try {
+        if (exportArea) exportArea.value = getCleanHTML();
+      } catch (e) {
+        if (exportArea) exportArea.value = '<!-- export error: ' + e.message + ' -->';
+      }
+    }
+
+    /* ── TOAST ───────────────────────────────────────────────── */
+    function toast(msg) {
+      var el = document.createElement('div');
+      el.className = 'ts-ls-toast';
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(function () { if (el.parentNode) el.remove(); }, 2400);
+    }
+
+    /* ── EVENT HANDLERS ──────────────────────────────────────── */
+    if (toggleBtn)    toggleBtn.addEventListener('click',    function ()  { setOverlay(!overlayActive); });
+    if (columnSelect) columnSelect.addEventListener('change', function (e) { updateGrid(parseInt(e.target.value, 10)); });
+    if (nestGridBtn)  nestGridBtn.addEventListener('click',   nestGrid);
+    if (nestSplitBtn) nestSplitBtn.addEventListener('click',  nestSplit);
+    if (resetBtn)     resetBtn.addEventListener('click',      resetLayout);
+
+    /* Click delegation: select tile (level > 0 only, so root L0 is skipped) */
+    masterLayout.addEventListener('click', function (e) {
+      var tile = e.target.closest('.ts-layout-container[data-level]');
+      if (!tile || !masterLayout.contains(tile)) return;
+      var lvl = parseInt(tile.getAttribute('data-level'), 10);
+      if (lvl > 0) { e.stopPropagation(); selectTile(tile); }
+    });
+
+    /* Copy HTML */
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        if (!exportArea || !exportArea.value) return;
+        navigator.clipboard.writeText(exportArea.value).then(function () {
+          copyBtn.textContent = '✓ Copied!';
+          setTimeout(function () { copyBtn.textContent = 'Copy HTML'; }, 1800);
+        }).catch(function () { toast('Copy failed — select and copy manually'); });
+      });
+    }
+
+    /* ── OBSERVERS ───────────────────────────────────────────── */
+
+    /* ResizeObserver on #ts-app-main — recomputes grid vars when panel resizes */
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(function () { computeGridVars(); });
+    } else {
+      window.addEventListener('resize', computeGridVars, { passive: true });
+    }
+
+    /* MutationObserver — auto-refreshes export on any DOM change */
+    var MO_OPTS = { childList: true, subtree: true, attributes: true };
+    mo = new MutationObserver(function () { updateExport(); });
+    mo.observe(masterLayout, MO_OPTS);
+
+    /* ── INIT ────────────────────────────────────────────────── */
+    function init() {
+      var main = getAppMain();
+      if (ro && main) ro.observe(main);
+      updateGrid(12);
+      setOverlay(false);
+      requestAnimationFrame(function () {
+        computeGridVars();
+        updateExport();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+  }());
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-ts-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolskin · Design System Showcase</title>
+
+    <!-- Google Fonts — render-blocking (critical for preloader + body text, prevents FOUT) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- CDN preconnects — reduces latency for render-blocking theme-toggles CSS + dynamic asset loader -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://api.cdnjs.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <!-- Other CDN assets (FA, Ionicons, Lenis, GSAP, etc.) loaded dynamically by toolskin-assets.js -->
+    <noscript>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    </noscript>
+    <link rel="icon" href="assets/img/favicon.ico" sizes="any">
+    <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+  <!-- ToolskinAssets — dynamic asset pipeline (must load before toolskin.js early boot) -->
+  <script src="assets/js/toolskin-assets.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+
+    <!-- Preloader critical CSS — inline so the lock is available at first paint,
+       before the external stylesheet finishes loading. Mirrors generator/index.html
+       <style id="ts-preloader-boot"> pattern. -->
+    <style id="ts-preloader-boot">
+      /* FOUC guard: body background locks to the dark default before external CSS parses.
+         Prevents white flash on cold loads. The external stylesheet overrides this once loaded. */
+      html.ts-preloader-lock body {
+        background-color: #0c0d0f !important;
+      }
+
+      html.ts-preloader-lock,
+      html.ts-preloader-lock body {
+        overflow: hidden !important;
+      }
+
+      html.ts-preloader-lock #ts-app,
+      html.ts-preloader-lock #ts-main {
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      /* Ensure preloader overlay paints before external CSS resolves.
+         Fallback background mirrors --ts-bg-body dark default. */
+      html.ts-preloader-lock .ts-preloader {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        background-color: #0c0d0f !important;
+      }
+
+       /* Hide sidebar during preloader (it's outside #ts-main) */
+    html.ts-preloader-lock .ts-oce-panel.ts-oce--open,
+    html.ts-preloader-lock #ts-debug-root,
+    html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab {
+      opacity: 0 !important;
+      z-index: -20 !important;
+
+      pointer-events: none !important;
+    }
+    </style>
+
+    <!-- Toolskin System (local — render-critical) -->
+    <script>
+      document.documentElement.classList.add('ts-preloader-lock');
+      window.__TOOLSKIN_CONFIG__ = {
+        cursor: { mode: 'simple', follower: true, easing: 0.42, followerEasing: 0.12 },
+        reveal: { enabled: false, useGSAP: false, stagger: 0.05, rootMargin: '0px 0px -40px 0px' },
+        smoothScroll: { enabled: false, duration: 1.2 },
+      };
+      // Font-gate: reveal preloader text only after the two fonts it uses are loaded.
+      // Uses document.fonts.load() for specific families (resolves fast, doesn't wait for FA).
+      Promise.all([
+        document.fonts.load('600 1em "Space Grotesk"'),
+        document.fonts.load('400 1em "JetBrains Mono"')
+      ]).then(function () {
+        document.documentElement.classList.add('ts-fonts-ready');
+      });
+    </script>
+<script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-assets.js" defer></script>
+<!-- GSAP first (cube uses it) -->
+<!-- Three.js -->
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<!-- Toolskin CSS (hosted) -->
+<link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/toolskin-uikit.css">
+
+
+<link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/toolskin.css">
+<link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/js/toolskin.js">
+<link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/js/toolskin-uikit.js">
+
+<style>
+    /* ════════════════════════════════════════════════════════════════════
+   * TS CUBE PORTFOLIO  —  EXTRACTED HEADER STYLES  (PENDING INTEGRATION)
+   * ════════════════════════════════════════════════════════════════════
+   *
+   * STATUS
+   * ──────────────────────────────────────────────────────────────────
+   * These styles are extracted from the cube-portfolio source. They
+   * are pending: filtering, tokenization, updating, and seamless
+   * adaptation INTO the core CSS — preserving the current visual
+   * snapshot while avoiding the creation of new classes and reusing
+   * the existing Toolskin base.
+   *
+   * Keep ONLY what does not already exist in core for displaying or
+   * rendering. Diff the unique properties during the refactor and
+   * fold them into existing components / variants.
+   *
+   * Alternatively, this file may stay isolated UNTIL integration is
+   * complete — but the final cube-portfolio component MUST NOT ship
+   * with its own dedicated CSS sheet.
+   *
+   * ────────────────────────────────────────────────────────────────────
+   * GLOBAL POLICY  (read before editing)
+   * ────────────────────────────────────────────────────────────────────
+   * - Keep ONLY elements that are irreplaceable and do not match any
+   *   existing pattern in the core.
+   * - The rest can be assembled in the HTML using existing core
+   *   classes / variants.
+   * - Creating new classes for things that share properties with
+   *   existing components conflicts with general product deployment.
+   * - Rely ONLY on the core CSS, the asset-based system, and its
+   *   filebase. Do NOT generate new elements for things that share
+   *   properties with what already exists.
+   * - Same applies to tokens: replace ad-hoc values with the current
+   *   production tokens wherever possible.
+   *
+   * ────────────────────────────────────────────────────────────────────
+   * PER-ELEMENT INTEGRATION PLAN
+   * ────────────────────────────────────────────────────────────────────
+   *
+   *  1. RULERS
+   *     The ruler elements are mostly built in JS — VERY FEW CSS
+   *     elements are needed. Those few must persist.
+   *     → Use surface tokens, NOT hardcoded colors, so that
+   *       light-theme switching remains valid.
+   *
+   *  2. BACKGROUND BIG-LETTER DESIGN
+   *     Add as another variant on the core design base.
+   *     → Needs integration, tokenization, and adaptability.
+   *
+   *  3. SWIPE / WIPE NAVIGATION
+   *     Integration is already noted in the isolated JS file (which
+   *     also needs splitting).
+   *     → The styling and handling must be economized and minimized,
+   *       while keeping the same rendering / display capability.
+   *
+   *  4. SIDEBAR  ⚠ NAMING CONFLICT
+   *     The class `ts-portfolio-sidebar` already exists in core. It must be
+   *     REPLACED, not re-scoped — across JS, HTML, and CSS.
+   *     Do NOT keep it: it will break everything.
+   *
+   *  5. MOVING / SLIDING MENU ITEMS
+   *     Should not be a problem to refactor using existing Toolskin
+   *     tokens, classes, and styles. NO new classes should be
+   *     created for this — variants only, if needed.
+   *     The actual COMPONENT is the sliding sidebar. Only the items
+   *     and their interactions will carry rules. Optimize as much as
+   *     possible and avoid creating new classes where elements
+   *     visually share properties. Same for tokens — replace with
+   *     current production tokens where possible.
+   *     This scope is for display purposes only.
+   *
+   *  6. LOADER
+   *     Must be unified with the system's `ts-preloader`:
+   *       - Share styles, DOM, and CSS via aliases / class pending.
+   *       - Add the remaining DOM elements needed to match.
+   *     The JS must remain as it is — it is fit for loading the
+   *     currently deployed assets.
+   *
+   *  7. 3D INTERACTIVE CUBE  (still experimental)
+   *     Works and is usable, but it must become dynamic: able to
+   *     load elements from a gallery source (posts, a folder, or a
+   *     JSON feed) and to bind menu entries to cube tiles
+   *     dynamically through hooks, while remaining a separate asset.
+   *
+   *  8. COMPONENT PAIRING  (ts-cube-gallery + ts-slide-menu)
+   *     - `ts-cube-gallery` is an integratable component on its own.
+   *     - `ts-slide-menu` (pending rename) is a standalone asset
+   *       with hooks for the cube and any other navigation /
+   *       gallery system. Both need integration.
+   *
+   * ════════════════════════════════════════════════════════════════════ */
+
+
+    /* ── THEME TOKENS  (locals only — DO NOT promote, see policy above) ── */
+    :root {
+      --ts-accent-h: 18;
+      --ts-accent-s: 100%;
+      --ts-accent-l: 52%;
+      --ts-bg-body: #080809;
+      --ts-bg-0: #0b0b0d;
+      --ts-bg-1: #101012;
+      --ts-bg-2: #16161a;
+      --ts-bg-3: #1d1d22;
+      --ts-bg-4: #252529;
+      --ts-font-display: 'Space Grotesk', system-ui, sans-serif;
+      --ts-font-body: 'Space Grotesk', system-ui, sans-serif;
+      --ts-font-mono: 'JetBrains Mono', monospace;
+      --sw: 250px;
+      /* sidebar width  */
+      --rsz: 25px;
+      /* ruler size     */
+      --nh: 45px;
+      /* nav height     */
+
+      --ts-ruler-border: rgba(255, 255, 255, .05);
+      --ts-ruler-border: color-mix(in srgb,var(--ts-text-primary), transparent 80%);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--ts-bg-body);
+      color: var(--ts-text-primary);
+      font-family: var(--ts-font-body);
+    }
+
+    /* ── CURSOR ──  (currently disabled — see commented block) */
+    /*#tsc {
+        position:fixed; z-index:9999; pointer-events:none;
+        width:8px; height:8px; border-radius:50%;
+        background:#fff; mix-blend-mode:difference;
+        transform:translate(-50%,-50%);
+        transition:width .2s cubic-bezier(.16,1,.3,1), height .2s cubic-bezier(.16,1,.3,1);
+        will-change:left,top;
+      }
+      #tsc.big { width:38px; height:38px; }
+      */
+
+    /* ── LOADER ──
+     * INTEGRATION: must be unified with system `ts-preloader`. See
+     * point 6 of the per-element plan above. */
+    #ts-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 8000;
+      background: var(--ts-bg-body);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      transition: opacity .65s, visibility .65s;
+    }
+
+    #ts-loader.out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #ts-loader-track {
+      width: 180px;
+      height: 1px;
+      background: rgba(255, 255, 255, .07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #ts-loader-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: var(--ts-accent);
+      width: 0%;
+      transition: none;
+    }
+
+    #ts-loader-num {
+      font-family: var(--ts-font-mono);
+      font-size: 10px;
+      letter-spacing: .2em;
+      color: rgba(255, 255, 255, .3);
+    }
+
+    /* ── RULERS ──
+     * Legacy DOM-based ruler. Superseded by the SVG ruler below
+     * (`.ts-grid-rules*`). Few CSS elements only — these MUST persist
+     * during integration. Replace `rgba(255,255,255,.05)` borders with
+     * surface tokens to keep light-theme switching valid. */
+    #ts-rt {
+      position: fixed;
+      top: 0;
+      left: var(--rsz);
+      right: 0;
+      height: var(--rsz);
+      z-index: 500;
+      pointer-events: none;
+      border-bottom: 1px solid var(--ts-ruler-border);
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .ts-rt-ruler {
+      flex: 1;
+      height: 4px;
+      border-left: 1px solid var(--ts-ruler-border);
+      position: relative;
+    }
+
+    .ts-rt-ruler.m {
+      height: 9px;
+    }
+
+    .ts-rt-ruler.m::before {
+      content: attr(data-v);
+      position: absolute;
+      bottom: 11px;
+      left: 2px;
+      font-size: 7px;
+      font-family: var(--ts-font-mono);
+      color: rgba(255, 255, 255, .2);
+      white-space: nowrap;
+    }
+
+    #ts-rl {
+      position: fixed;
+      top: var(--rsz);
+      left: 0;
+      bottom: 0;
+      width: var(--rsz);
+      z-index: 500;
+      pointer-events: none;
+      border-right: 1px solid var(--ts-ruler-border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ts-rl-ruler {
+      flex: 1;
+      border-top: 1px solid var(--ts-ruler-border);
+    }
+
+    /* ── TOPBAR ──
+     * Likely fully replaceable by an existing core nav variant. Audit
+     * before keeping any rule here. */
+    .ts-topbar-slide {
+      position: fixed;
+      top: var(--rsz);
+      left: var(--rsz);
+      right: 0;
+      height: var(--nh);
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      border-bottom: 1px solid var(--ts-ruler-border);
+      background: color-mix(in srgb, var(--ts-bg-body) 88%, transparent);
+      backdrop-filter: blur(14px);
+    }
+
+    .ts-dims {
+      font-family: var(--ts-font-mono);
+      font-size: 10px;
+      color: var(--ts-text-primary-dim-2);
+      letter-spacing: .05em;
+    }
+
+    .ts-nav-slide {
+      display: flex;
+      list-style: none;
+      gap: 0;
+    }
+
+    .ts-nav-slide a {
+      font-size: 11px;
+      color: var(--ts-text-primary-dim);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .ts-nav-slide a:hover {
+      color: var(--ts-accent);
+    }
+
+    .ts-nav-slide li:not(:last-child) a::after {
+      content: ',\00a0';
+      color: var(--ts-text-primary-dim);
+    }
+
+    .ts-avail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--ts-font-mono);
+      font-size: 10px;
+      color: rgba(255, 255, 255, .28);
+      letter-spacing: .1em;
+    }
+
+    .ts-avail-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ts-accent);
+      animation: tspulse 2s ease-in-out infinite;
+    }
+
+    @keyframes tspulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .3;
+        transform: scale(.6)
+      }
+    }
+
+    /* ── MAIN SHELL ── */
+    #ts-shell-cube {
+      position: fixed;
+      top: calc(var(--rsz) + var(--nh));
+      left: var(--rsz);
+      right: 0;
+      bottom: 0;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── HERO ── */
+    #ts-hero-cube {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    #ts-hero-cube {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        align-content: stretch;
+        justify-content: flex-end;
+    }
+    /* WebGL canvas fills hero */
+    #ts-canvas-cube {
+      position: absolute;
+      inset: 0;
+      /*  width:100%!important;
+        height:100%!important;
+        pointer-events:none; */
+      z-index: 1;
+      display: block;
+    }
+
+    /* TS giant letters
+     * INTEGRATION: promote as a variant on the core design base —
+     * "background big-letter" treatment. Tokenize the color and the
+     * size clamp. See point 2 of the per-element plan above. */
+    #ts-letters {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        font-family: var(--ts-font-display);
+        font-size: clamp(28dvw + 4vmin, 45dvw + 4vmin, 40dvw + 4vmin);
+        font-weight: 800;
+        line-height: .7em;
+        letter-spacing: 0;
+        user-select: none;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+        transform: translateY(var(--rsz));
+        font-size-adjust: .45;
+        text-shadow: var(--ts-shadow);
+        --ts-shadow-steps: 3;
+        --ts-shadow-scale-factor: 0.26;
+        color: transparent;
+        opacity: 0.25!important;
+        order: 2;
+        display: flex;
+    }
+
+    /* Bottom metas */
+    #ts-meta-bl {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .ts-mname {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .ts-mrole {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--ts-text-primary-dim);
+    }
+
+    #ts-meta-bc {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      z-index: 10;
+      transform: translateX(-50%) translateY(10px);
+      text-align: left;
+      opacity: 0;
+    }
+
+    .ts-missue {
+      font-family: var(--ts-font-mono);
+      font-size: 10px;
+      color: var(--ts-text-primary-dim);
+      letter-spacing: .1em;
+      line-height: 1.9;
+    }
+    .ts-cube-footer{
+      display: flex;
+        /* background: var(--ts-this-bg-dim-2); */
+        --ts-this-bg: var(--ts-bg-body);
+        padding: var(--ts-sp-5) var(--ts-sp-6);
+        gap: var(--ts-sp-8);
+        gap: 6.7rem;
+        flex-direction: row;
+        align-items: center;
+        /* position: sticky; */
+        z-index: 4;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        border-top: 1px solid var(--ts-this-bg-border-hover);
+        order: 0;
+        justify-content: flex-start;
+        /* background: linear-gradient(45deg, var(--ts-this-bg), transparent); */
+        /* backdrop-filter: blur(25px); */
+        --scroll-mask: linear-gradient(
+        90deg,
+       var(--scroll-fade-color-visible) var(--scroll-fade-size),
+        var(--scroll-fade-color-visible) calc(100% - var(--scroll-fade-size)),
+        var(--scroll-fade-color-hidden) 100%
+      );
+        --scroll-fade-color-hidden: transparent;
+        --scroll-fade-color-visible: black;
+        --scroll-fade-size: 15dvw;
+        -webkit-mask-image: var(--scroll-mask);
+        mask-image: var(--scroll-mask);
+
+      #ts-meta-bl {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        transform: none;
+      }
+
+      #ts-meta-bc {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        transform: none;
+      }
+    }
+
+
+    /* ── SIDEBAR ──  ⚠ NAMING CONFLICT
+     * `#ts-portfolio-sidebar` collides with an existing core component named the
+     * same way. Must be REPLACED (not re-scoped) across JS, HTML, and
+     * CSS during integration. Do NOT keep this ID — it will break
+     * everything. See point 4 of the per-element plan above. */
+    #ts-portfolio-sidebar {
+        width: var(--sw);
+        flex-shrink: 0;
+        border-left: 1px solid var(--ts-this-bg-border);
+        position: relative;
+        overflow: hidden;
+        grid-area: sidebar;
+        /* backdrop-filter: blur(3px); */
+        --scroll-fade-size: 25dvh;
+        --scroll-fade-color-visible: black;
+        --scroll-fade-color-hidden: transparent;
+        --scroll-mask: linear-gradient(
+        to bottom,
+        var(--scroll-fade-color-hidden) 0px,
+        var(--scroll-fade-color-visible) var(--scroll-fade-size),
+        var(--scroll-fade-color-visible) calc(100% - var(--scroll-fade-size)),
+        var(--scroll-fade-color-hidden) 100%
+      );
+        -webkit-mask-image: var(--scroll-mask);
+        mask-image: var(--scroll-mask);
+        /* background: var(--ts-this-bg); */
+    }
+    #ts-mt {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      will-change: transform;
+    }
+
+    /* Sliding menu items (.ts-slide-menu-item)
+     * INTEGRATION: refactor onto existing Toolskin tokens / classes.
+     * No new classes should be created — variants only, if needed.
+     * The COMPONENT is the sliding sidebar; only items and their
+     * interactions carry rules here. See point 5 of the plan above. */
+     .ts-slide-menu-item {
+      display: block;
+      padding: 13px 20px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: .01em;
+      color: var(--ts-text-primary-dim-2);
+      border-bottom: 1px solid var(--ts-this-bg-border);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(12px) skewY(1.5deg);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), color .22s,transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), padding-left .3s cubic-bezier(.16, 1, .3, 1)!important;
+      background: color-mix(in srgb, var(--ts-bg-body) 88%, transparent);
+      background: var(--ts-this-bg-dim-4);
+      --ts-this-bg: var(--ts-bg-body);
+    }
+    .ts-slide-menu-item.revealed {
+      opacity: 1;
+      transform: translateY(0) skewY(0);
+    }
+
+    .ts-slide-menu-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 0px;
+      background: var(--ts-accent-dim-5);
+      transition: max-width .53s ease, border 300ms ease;
+      border-left: 0px solid transparent;
+      pointer-events: none;
+    }
+    /* Only ONE item is active — the directly hovered one */
+    .ts-slide-menu-item.is-active {
+      color: var(--ts-accent) !important;
+      padding-left: 30px !important;
+      font-weight: 500;
+    }
+
+    .ts-slide-menu-item.is-active::before, .ts-slide-menu-item:hover::before {
+      max-width: 100%;
+      border-left: 3px solid var(--ts-accent);
+    }
+
+    .ts-slide-menu-item.is-dimmed {
+      color: var(--ts-text-muted-dim)!important;
+    }
+    .ts-slide-menu-item.is-dimmed::before {
+      width: 0;
+    }
+
+    /* ── PAGE WIPE ──
+     * INTEGRATION: economize and minimize the styling/handling while
+     * preserving rendering parity. See point 3 of the plan above. */
+    #ts-wipe {
+      position: fixed;
+      inset: 0;
+      z-index: 7000;
+      background: var(--ts-bg-0);
+      pointer-events: none;
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+
+    /* ── DETAIL PAGE ── */
+    #ts-portfolio-detail {
+      position: fixed;
+      inset: 0;
+      z-index: 6000;
+      background: var(--ts-bg-0);
+      transform: translateY(100%);
+      display: flex;
+      flex-direction: column;
+      pointer-events: none;
+      overflow-y: auto;
+    }
+    #ts-portfolio-detail {
+        position: fixed;
+        inset: 0;
+        z-index: 6000;
+        background: var(--ts-bg-0);
+        transform: translateY(100%);
+        display: flex;
+        flex-direction: row;
+        pointer-events: none;
+        overflow-y: auto;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #ts-portfolio-detail.open {
+      pointer-events: all;
+    }
+
+    #ts-dback {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--ts-ruler-border);
+      background: var(--ts-bg-0);
+      font-size: 10px;
+      letter-spacing: .15em;
+      font-family: var(--ts-font-mono);
+      color: rgba(255, 255, 255, .38);
+      transition: color .2s;
+    }
+
+
+    #ts-dback {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        padding: 15px 25px;
+        display: flex;
+        align-items: stretch;
+        gap: 10px;
+      border-block: 1px solid var(--ts-ruler-border);
+        background: var(--ts-this-bg);
+        font-size: 13px;
+        letter-spacing: .15em;
+        font-family: var(--ts-font-mono);
+        color: var(--ts-text-primary-dim-2);
+        transition: color .2s;
+        flex-direction: column;
+        align-content: stretch;
+        justify-content: space-between;
+        cursor: pointer;
+        --ts-this-bg: transparent;
+        max-width: 125px;
+        box-sizing: border-box;
+        &:hover{
+      --ts-this-bg: var(--ts-bg-0);
+
+        }
+    }
+    #ts-dback:hover {
+      color: var(--ts-accent);
+    }
+
+
+
+
+    .ts-dtitle {
+        font-family: var(--ts-font-display);
+        font-size: clamp(30px, 3.5vw, 54px);
+        font-weight: 700;
+        letter-spacing: .048rem;
+        line-height: .93;
+        text-transform: uppercase;
+    }
+    .ts-dtitle em {
+     /* color: var(--ts-accent);*/
+      font-style: normal;
+    }
+
+
+    .ts-ddesc {
+        font-size: 16px;
+        line-height: 1.75;
+        font-weight: 300;
+        color: var(--ts-text-secondary);
+        max-width: unset;
+        padding: var(--rsz);
+        outline: 1px solid  var(--ts-pf-border);
+        flex: 1 1 32.33%;
+        background: var(--ts-this-bg);
+        letter-spacing: 0.038rem;
+        outline-offset: -1px;
+        border-left: 3px solid var(--ts-accent);
+        font-family: var(--ts-font-mono);
+    }
+    .ts-dmeta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 0 0;
+    }
+    .ts-dmeta {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--ts-pf-gap);
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: stretch;
+        justify-content: space-between;
+    }
+    .ts-dmetablock {
+        padding: var(--ts-pf-pad);
+        border: 1px solid var(--ts-pf-border);
+        flex: 1 1 32.33%;
+        background: var(--ts-this-bg);
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: var(--ts-pf-gap);
+        border-radius: var(--ts-pf-rad, 0);
+    }
+
+    .ts-dmetalabel {
+        font-size: 12px;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        color: var(--ts-text-accent);
+        display: block;
+        margin-bottom: 0;
+        font-family: var(--ts-font-mono);
+    }
+    .ts-dmetaval {
+        font-size: 18px;
+        font-weight: 500;
+        display: flex;
+        flex: 1 1 auto;
+    }
+    .ts-dimgs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:  var(--ts-pf-gap);
+    }
+
+    .ts-dimgs img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ts-nav-centered .ts-nav-fixed__links {
+        align-content:  center;
+        align-items:  center;
+        align-items:  center;
+        margin: auto;
+
+        & li,& li>a:not(.ts-btn,.ts-avail,.ts-dims){
+            background: transparent;
+            border-bottom-style: solid;
+            overflow: visible;
+            
+            &:after{
+              display: none;
+            }
+        }
+    }
+    /* ── SVG RULERS  (current implementation)
+     * Promote to a Toolskin core component. Document in the codebase
+     * showcase docs as one of the flagship innovations of the system.
+     * Replace stroke / fill rgba values with surface tokens before
+     * promotion, to keep light-theme switching valid. */
+    .ts-grid-rules {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      font-size: 10px;
+      font-family: monospace;
+    }
+
+    .ts-grid-rules__horizontal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-height: var(--rsz);
+      height: var(--rsz);
+      max-height: var(--rsz);
+    }
+
+    .ts-grid-rules__vertical {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: var(--rsz);
+      width: var(--rsz);
+      max-width: var(--rsz);
+    }
+
+    .ts-grid-rules-line {
+      stroke:  var(--ts-ruler-border);
+      shape-rendering: crispEdges;
+    }
+
+    .ts-grid-rules-text {
+      fill: rgba(255, 255, 255, 0.6);
+      font-size: 8px;
+      dominant-baseline: text-after-edge;
+      font-weight: 300;
+      text-anchor: middle;
+      line-height: 1em;
+      font-variation-settings: "wdth" 100, "wght" 800, "opsz" 30;
+      letter-spacing: .02em;
+    }
+    #ts-shell-cube {
+        position: fixed;
+        top: calc(var(--ts-topbar-h) + var(--rsz));
+        left: var(--rsz);
+        right: 0;
+        bottom: 0;
+        display: flex;
+        overflow: hidden;
+    }
+    #ts-app.ts-cube-portfolio {
+        background-image: var(--ts-bg-grid-pattern);
+    }
+
+    #ts-portfolio-sidebar {
+        width: var(--sw);
+        flex-shrink: 0;
+        border-left: 1px solid var(--ts-this-bg-border);
+        position: relative;
+        overflow: hidden;
+        grid-area: sidebar;
+        /* backdrop-filter: blur(3px); */
+        --scroll-fade-size: 100px;
+        --scroll-fade-color-visible: black;
+        --scroll-fade-color-hidden: transparent;
+        --scroll-mask: linear-gradient(
+        to bottom,
+        var(--scroll-fade-color-hidden) 0px,
+        var(--scroll-fade-color-visible) var(--scroll-fade-size),
+        var(--scroll-fade-color-visible) calc(100% - var(--scroll-fade-size)),
+        var(--scroll-fade-color-hidden) 100%
+      );
+        -webkit-mask-image: var(--scroll-mask);
+        mask-image: var(--scroll-mask);
+    }
+    div#ts-app.ts-cube-portfolio {
+        background-image: var(--ts-bg-grid-pattern);
+    }
+
+
+
+    #ts-letters {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        font-family: var(--ts-font-display);
+        font-size: clamp(28dvw + 4vmin, 45dvw + 4vmin, 40dvw + 4vmin);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: 0;
+        user-select: none;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+        transform: translateY(var(--rsz));
+        font-size-adjust: .45;
+        text-shadow: var(--ts-shadow);
+        --ts-shadow-steps: 3;
+        --ts-shadow-scale-factor: 0.26;
+     color: transparent;
+     opacity:0.25!important;
+    }
+    #ts-letters{
+      -webkit-text-stroke: 2px var(--ts-text-secondary);
+      text-transform: uppercase;
+       --ts-text-secondary-dim: var(--ts-bg-body);
+
+      letter-spacing: 1.2vw;
+      text-shadow: 0 1px 0 var(--ts-text-secondary-dim),
+       -1px -1px 0 var(--ts-text-secondary-dim),
+       /*main 3d shadow*/ 
+      -1px 0px 0 var(--ts-bg-2),
+      -2px 1px 0 var(--ts-bg-2),
+      -3px 2px 0 var(--ts-bg-2),
+      -4px 3px 0 var(--ts-bg-2),
+      -5px 4px 0 var(--ts-bg-1),
+      -6px 5px 0 var(--ts-bg-1),
+      -7px 6px 0 var(--ts-bg-1),
+      -8px 7px 0 var(--ts-bg-1),
+      -9px 8px 0 var(--ts-bg-1), 
+      -10px 9px 0 var(--ts-bg-1), 
+      -11px 10px 0 var(--ts-bg-1), 
+      -12px 11px 0 var(--ts-bg-1), 
+      -13px 12px 0 var(--ts-bg-1), 
+      -14px 13px 0 var(--ts-bg-0), 
+      -15px 14px 0 var(--ts-bg-0), 
+      -16px 15px 0 var(--ts-bg-0), 
+      /*top right*/ 0 -1px 1px var(--ts-text-primary), 
+      0 -1px 0px var(--ts-text-primary), 
+      /*bottom left corner*/
+      -15px 14px 0px var(--ts-text-secondary), 
+      -16px 15px 0px var(--ts-text-secondary), 
+      -17px 16px 0px var(--ts-text-secondary), 
+      -18px 17px 0px var(--ts-text-secondary), 
+      -1px -1px 0 var(--ts-text-secondary), 
+      -1px 0px 0 var(--ts-text-secondary), 
+      /*top left corner*/ 
+      -19px 15px 0 var(--ts-text-secondary), 
+      -18px 14px 0 var(--ts-text-secondary), 
+      -17px 13px 0 var(--ts-text-secondary), 
+      -16px 12px 0 var(--ts-text-secondary), 
+      -15px 11px 0 var(--ts-text-secondary), 
+      -14px 10px 0 var(--ts-text-secondary), 
+      -13px 9px 0 var(--ts-text-secondary), 
+      -12px 8px 0 var(--ts-text-secondary), 
+      -11px 7px 0 var(--ts-text-secondary), 
+      -10px 6px 0 var(--ts-text-secondary), 
+      -9px 5px 0 var(--ts-text-secondary), 
+      -8px 4px 0 var(--ts-text-secondary), 
+      -7px 3px 0 var(--ts-text-secondary), 
+      -6px 2px 0 var(--ts-text-secondary), 
+      -5px 1px 0 var(--ts-text-secondary), 
+      -4px 0px 0 var(--ts-text-secondary), 
+      /*lower right / (upper right side for capital T like H etc letters. */ 
+      0px 2px 0px var(--ts-text-secondary), 
+      -1px 3px 0px var(--ts-text-secondary), 
+      -2px 4px 0px var(--ts-text-secondary), 
+      -3px 5px 0px var(--ts-text-secondary), 
+      -4px 6px 0px var(--ts-text-secondary), 
+      -5px 7px 0px var(--ts-text-secondary), 
+      -6px 8px 0px var(--ts-text-secondary), 
+      -7px 9px 0px var(--ts-text-secondary), 
+      -8px 10px 0px var(--ts-text-secondary), 
+      -9px 11px 0px var(--ts-text-secondary), 
+      -10px 12px 0px var(--ts-text-secondary), 
+      -11px 13px 0px var(--ts-text-secondary), 
+      -12px 15px 0px var(--ts-text-secondary), 
+      -13px 15px 0px var(--ts-text-secondary), 
+      -14px 16px 0px var(--ts-text-secondary), 
+      -15px 16px 0px var(--ts-text-secondary);
+      
+      
+    }
+    .ts-cube-footer {}
+
+    #ts-app.ts-cube-portfolio{
+         --ts-bg-grid-pattern: repeating-linear-gradient(0deg,
+          transparent,
+          transparent calc(var(--ts-bg-grid-size) - 1px),
+          var(--ts-bg-grid-line) var(--ts-bg-grid-size)),
+        repeating-linear-gradient(90deg,
+          transparent,
+          transparent calc(var(--ts-bg-grid-size) - 1px),
+          var(--ts-bg-grid-line) var(--ts-bg-grid-size));
+    }
+
+    #ts-portfolio-sidebar{
+        transition: mask-image 300ms ease allow-discrete;
+        
+        .ts-slide-menu-item {
+                    font-weight: 500;
+
+           &:before {
+            content: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%!important;
+            max-width: 100%!important;
+            background: var(--ts-accent-dim-5);
+
+            transition:  
+                display 200ms ease allow-discrete, 
+                transform 200ms ease;
+            border-left: 3px solid var(--ts-accent);
+            pointer-events: none;
+            transform: translateX(-101%) translateZ(0);
+            opacity:1;
+            }
+        
+            &:hover,
+            &.is-active  {
+                 &:before  {
+                    border-left: 3px solid var(--ts-accent);
+                    opacity:1;
+                    transform: translateX(0%)  translateZ(0);
+                }
+            }
+
+               
+
+            &:not(:hover,.is-active){
+                color: var(--ts-text-primary-dim);
+            }
+
+            &:is(:hover):not(.is-active){
+                color: var(--ts-accent) ;
+                padding-left: 30px ;
+            }
+        
+        }
+    }
+
+
+    .ts-cube-footer,#ts-letters,#ts-topbar {
+            filter: blur(0);
+            transition-property: filter, opacity, transform, margin, max-width;
+            transition-duration: 300ms;
+            transition-timing-function: ease;
+        }
+
+
+    div#ts-app.ts-cube-portfolio:has(#ts-portfolio-sidebar:hover) {
+        transition:  background-position 700ms ease .3s allow-discrete, background-size 700ms ease .3s allow-discrete, background-image 700ms ease .3s allow-discrete;
+        --ts-bg-grid-line: var(--ts-border-2)!important;
+        position: relative;
+        --ts-pdmult: calc(var(--ts-pdv) * var(--ts-grid-scale));
+        --ts-pd: 80px;
+        --ts-pdv: 130px;
+        --sw-fs: calc(var(--sw) * .065 - .1vmin);
+        --sw: calc(var(--ts-pdv) * 3);
+        
+        background-image: var(--ts-bg-grid-pattern)!important;
+        --ts-bg-grid-size: var(--ts-pdmult);
+        background-size: var(--ts-pdmult) var(--ts-pdmult)!important;
+        background-position: 0% 0;
+        background-origin:border-box;
+        background-repeat: repeat;
+        
+
+        #ts-portfolio-sidebar {
+             -webkit-mask-image: none;
+                mask-image: none;
+            
+
+            .ts-slide-menu-item{
+                font-size: var(--sw-fs);
+                transition-delay: 0s!important;
+                /* border-width: 0px; */
+                
+                
+             
+            }
+        }
+        .ts-cube-footer,#ts-letters,#ts-topbar {
+            filter: blur(15px);
+            opacity: 0!important;
+        }
+        #ts-topbar {
+            /* max-height:0; */
+            margin-top: calc(var(--ts-topbar-h)*-1);
+        }
+         .ts-cube-footer{
+             transform: translateX(-100%);
+         }
+        #ts-hero-cube canvas#ts-canvas-cube {
+          flex: 1 1 auto;
+          background: transparent;
+          z-index: 999999999!important;
+          object-fit: contain;
+        }
+        #ts-hero-cube {
+                  z-index: 999999999!important;
+            position: relative;
+        }
+
+        #ts-shell-cube {
+            position: fixed;
+            top: var(--rsz);
+            left: var(--rsz);
+            right: 0;
+          
+        }
+    }
+
+    #ts-portfolio-detail {
+        position: fixed;
+        inset: 0;
+        z-index: 6000;
+        background-color: var(--ts-this-bg-dim);
+        transform: translateY(100%);
+        display: flex;
+        flex-direction: row-reverse;
+        pointer-events: none;
+        overflow-y: auto;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: center;
+        justify-content: space-between;
+        --ts-sb-size: 0px;
+        backdrop-filter: blur(25px) saturate(2.5);
+        border-right: 1px solid var(--ts-pf-border);
+        margin-right:-1px;
+
+        &, & *{
+            --ts-this-bg:var(--ts-bg-0-t);
+
+
+        }
+
+        & > div{
+            background-color: transparent;
+
+                border: 1px solid var(--ts-pf-border);
+             & div{
+               background: var(--ts-this-bg-dim-2);
+             border-color: var(--ts-pf-border);
+               
+        }
+              & p{
+                     
+               background: var(--ts-this-bg-dim-2);
+                 }
+
+        }
+       
+    }
+    #ts-portfolio-detail {
+        --ts-pf-body-pad: calc(var(--rsz)*3.5);
+        --ts-pf-pad: calc(var(--rsz)*.95);
+        --ts-pf-gap: calc(var(--ts-pf-pad)*.5);
+        --ts-pf-border: var(--ts-border-1);
+    }
+    div#ts-dback {
+        flex: 1 1 auto;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        margin-inline: -1px;
+        font-size: 1.32rem;
+    }
+
+
+    #ts-app {
+        display: grid;
+        grid-template-columns: 1fr var(--ts-panel-w);
+        grid-template-rows: var(--ts-topbar-h) 1fr;
+        height: 100vh;
+        width: 100vw;
+        --ts-panel-w: var(--sw);
+    }
+
+
+    #ts-hero-cube {
+      flex: 1 1 auto;
+
+        max-width: calc(100% - var(--sw))!important;
+
+    }
+
+    canvas#ts-canvas-cube {
+              position: relative!important;
+      width: 100%!important;
+      height: auto!important;
+      min-width: unset!important;
+      min-height: unset!important;
+    display: grid!important;
+      flex: 1 1 auto;
+      aspect-ratio: unset;
+      
+    }
+    .ts-grid-rules__horizontal {
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-height: var(--rsz);
+        height: var(--rsz);
+        max-height: var(--rsz);
+        background-color: var(--ts-bg-body);
+    }
+    .ts-grid-rules__vertical {
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width: var(--rsz);
+        width: var(--rsz);
+        max-width: var(--rsz);
+        background-color: var(--ts-bg-body);
+    }
+
+
+
+    /*quick updates*/
+    :root #ts-portfolio-detail, :root #ts-portfolio-detail * {
+
+            --ts-pf-body-pad:calc(var(--rsz)*3.5 - 2vmin);
+            --ts-pf-pad:calc(var(--rsz)*.85);
+          --ts-pf-gap:calc(var(--ts-pf-pad)*.5);
+
+
+        --ts-pf-border: var(--ts-this-bg-border);
+      --ts-scroll-mask-rotation--bottom: 180deg;
+      --ts-scroll-mask-rotation--top: 90deg;
+      --ts-scroll-mask-rotation: 0deg;
+      --ts-scroll-mask: linear-gradient(var(--ts-scroll-mask-rotation), var(--ts-scroll-mask-gradient));
+      --ts-scroll-mask--bottom: linear-gradient(var(--ts-scroll-mask-rotation--bottom), var(--ts-scroll-mask-gradient));
+      --ts-scroll-mask--top: linear-gradient(var(--ts-scroll-mask-rotation--top), var(--ts-scroll-mask-gradient));
+        
+      --ts-scroll-mask-gradient:  var(--ts-scroll-fade-color-visible) var(--ts-scroll-fade-size),
+                                    var(--ts-scroll-fade-color-visible) calc(100% - var(--ts-scroll-fade-size)),
+                                    var(--ts-scroll-fade-color-hidden) 100%;
+        --ts-scroll-fade-color-hidden: transparent;
+        --ts-scroll-fade-color-visible: black;
+        --ts-scroll-fade-size: 15dvw;
+    }
+    #ts-portfolio-detail {
+        position: fixed;
+        inset: 0;
+        transform: translateY(100%)!important;
+        display: none;
+        flex-direction: row-reverse;
+        pointer-events: none;
+        overflow-y: auto;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--ts-this-bg-dim);
+        --ts-sb-size: 0px;
+        backdrop-filter: blur(25px) saturate(2.5);
+     
+        
+        
+        #ts-dback {
+               position: sticky;
+              top: 0;
+              padding: 15px 25px;
+              display: flex;
+              align-items: stretch;
+              gap: 10px;
+              border: 0px solid var(--ts-pf-border);
+              border-block-width: 1px;
+              background: var(--ts-this-bg-dim-4);
+              font-size: 13px;
+              letter-spacing: .15em;
+              font-family: var(--ts-font-mono);
+              color: var(--ts-text-primary-dim-2);
+              transition: color .2s;
+              flex-direction: column;
+              align-content: stretch;
+              justify-content: space-between;
+              cursor: pointer;
+              --ts-this-bg: transparent;
+              max-width: 125px;
+              box-sizing: border-box;
+                 flex: 1 1 auto;
+                height: 100%;
+                display: flex;
+                justify-content: flex-start;
+                margin-inline: -1px;
+                font-size: 1.32rem;
+                
+                &:hover{
+                    --ts-this-bg: var(--ts-bg-3-t);
+                    color: var(--ts-accent);
+                }
+             
+            }
+
+          #ts-dbody {
+              padding: var(--ts-pf-body-pad);
+              flex: 1 1  calc(50dvw + 10vmin);
+              display: grid;
+              grid-template-columns: repeat(1, 1fr);
+              height: 100dvh;
+              align-items: center;
+              justify-content: stretch;
+              justify-items: stretch;
+              border: 1px solid var(--ts-pf-border);
+              overflow-y: scroll;
+              gap: var(--ts-pf-gap);
+              max-height: 100dvh;
+              background-color: transparent;
+          }
+
+            .ts-dol {
+              font-size: 13px;
+              letter-spacing: .22em;
+              text-transform: uppercase;
+              color: var(--ts-accent);
+              margin-bottom: 5px;
+              display: block;
+              font-family: var(--ts-font-mono);
+          }
+        
+
+            &.ts-vertical-modern {
+                         background-color: var(--ts-this-bg-dim);
+                    flex-direction: column;
+                    pointer-events: none;
+                    overflow-y: auto;
+                    flex-wrap: nowrap;
+                    align-items: stretch;
+                    --ts-sb-size: 8px;
+                    backdrop-filter: blur(25px) saturate(2.5);
+                    outline: 1px solid var(--ts-this-bg-border);
+                    margin: 0;
+                    outline-offset: -1px;
+                    align-content: stretch;
+                    flex-wrap: wrap;
+                    flex-direction: row!important;
+                    scrollbar-width: none;
+                    
+
+                    #ts-dback {
+                         flex: 1 1 40dvw;
+                      height: auto;
+                      display: flex;
+                      flex-direction: row;
+                      flex-wrap: wrap;
+                      justify-content: flex-start;
+                      margin: 0px;
+                      font-size: 1.4rem;
+                      position: sticky;
+                      /* width: 100%; */
+                      max-width: unset;
+                      align-items: center;
+                      align-content: flex-end;
+                      min-height: 20dvh;
+                      /* max-height: 200px; */
+                      background-color: var(--ts-bg-0);
+                      z-index: 1;
+                      padding: 2dvw;
+
+                      &:before {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        background-image: var(--ts-portfolio-img-header);
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        -webkit-mask-image: var(--ts-scroll-mask--bottom);
+                        mask-image: var(--ts-scroll-mask--bottom);
+                        z-index: -1;
+                        /* mask-position: 100% bottom; */
+                    }
+                  }
+            }
+            &.open{
+                    z-index: 99999999999999999999999999999!important;
+                    translate: none!important;
+                    rotate: none!important;
+                    scale: none!important;
+                    transform: translate(0px, 0px)!important;
+                    opacity: 1!important;
+                    display: flex!important;
+                    pointer-events: all;
+                    flex-direction: column;
+                    flex-wrap: wrap;
+                    align-content: stretch;
+            }
+    }
+
+
+
+</style>
+
+</head>
+<body>
+  <div id="tsc"></div>
+
+<!-- LOADER -->
+<!-- <div id="ts-loader">
+  <div id="ts-loader-num">0%</div>
+  <div id="ts-loader-track"><div id="ts-loader-fill"></div></div>
+</div> -->
+<div id="ts-preloader" class="ts-preloader ts-preloader--minimal-bar" >
+  <div class="ts-preloader__brand">
+    <div class="ts-preloader__logo">
+      <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" >
+        <path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z" />
+      </svg>
+      TOOL<em>CUBE</em>
+    </div>
+    <div id="ts-loader-track" class="ts-preloader__bar-wrap"><span id="ts-loader-fill" class="ts-preloader__bar"></span></div>
+    <div class="ts-preloader__hint">Loading Toolskin Cubefolio</div>
+      <div id="ts-loader-num" class="ts-preloader__perc">0%</div>
+  </div>
+</div>
+
+<div id="ts-app" class="ts-cube-portfolio ts-ruler-frame">
+  
+
+      <!-- WIPE + DETAIL -->
+      <div id="ts-wipe"></div>
+      <div id="ts-portfolio-detail" role="dialog" aria-modal="true">
+        <div id="ts-dback" role="button" tabindex="0">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 5H1M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          BACK
+        </div>
+        <div id="ts-dbody">
+          <span class="ts-dol"  id="d-ol"></span>
+          <h1  class="ts-dtitle" id="d-title"></h1>
+          <p   class="ts-ddesc"  id="d-desc"></p>
+          <div class="ts-dmeta"  id="d-meta"></div>
+          <div class="ts-dimgs"  id="d-imgs"></div>
+        </div>
+      </div>
+
+      <!-- RULERS -->
+      <div id="ts-rt" aria-hidden="true"></div>
+      <div id="ts-rl" aria-hidden="true"></div>
+
+      <!-- TOPBAR -->
+      <nav id="ts-topbar" class="ts-topbar ts-nav-fixed ts-nav-centered spaced ts-topbar-slide">
+        <span class="ts-dims" id="ts-dims">—</span>
+        <ul class="ts-nav-slide ts-nav-fixed__links">
+          <li><a href="#">Featured Works</a></li>
+          <li><a href="#">Archive</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+        <div class="ts-avail"><div class="ts-avail-dot"></div>Available Now</div>
+      </nav>
+
+      <!-- SHELL -->
+      <div id="ts-shell-cube">
+        <div id="ts-hero-cube">
+          <canvas id="ts-canvas-cube"></canvas>
+          <div id="ts-letters" aria-hidden="true">TS</div>
+          <div class="ts-cube-footer">
+            <div id="ts-meta-bl"><div class="ts-mname">Toolskin</div><div class="ts-mrole">Design System · v1.0</div></div>
+          <div id="ts-meta-bc"><div class="ts-missue">Issue N°001 / Coll. 2026<br>Ref. TS-032026-R01</div></div>
+          </div>
+        </div>
+        <aside id="ts-portfolio-sidebar"><div id="ts-mt"></div></aside>
+      </div>
+
+
+    </div>
+  <script>
+/* ════════════════════════════════════════════════════════════════════
+   TOOLSKIN CUBE PORTFOLIO – PERFORMANCE TUNED
+   - Scroll: faster lerp, near‑instant feedback
+   - Hover: 150ms debounce, timer cleared on exit
+   - Cube: slow idle & smooth face rotation
+   - Tiles clickable → opens project detail
+   ════════════════════════════════════════════════════════════════════ */
+
+// ── CONFIGURATION ────────────────────────────────────────────────
+const CONFIG = {
+  targetTiles: 54,
+  autoScroll: false,
+  tileSize: 1,
+  gap: 1.25,
+  border: 0.02,
+  rotationDuration: 0.8,
+};
+
+// ── BASE PROJECT DATA (your 16 items) ──────────────────────────
+const BASE_PROJECTS = [
+  { id: 'ts_1', slug: 'moving-portraits', title: 'Moving Portraits', type: 'Film Direction', year: '2025', client: 'Self-initiated', desc: 'A study in stillness and time — portraits that breathe through subtle motion and duration.', main: 'https://picsum.photos/300?random=1', imgs: ['https://picsum.photos/600/450?random=2','https://picsum.photos/600/450?random=3','https://picsum.photos/600/450?random=4','https://picsum.photos/600/450?random=5'] },
+  { id: 'ts_2', slug: 'issey-miyake-ss25', title: 'Issey Miyake SS25', type: 'Fashion · Digital', year: '2025', client: 'Issey Miyake', desc: 'Interactive digital campaign for the Spring/Summer 2025 collection. Pleats, motion, and material translated into web.', main: 'https://picsum.photos/300?random=6', imgs: ['https://picsum.photos/600/450?random=7','https://picsum.photos/600/450?random=8','https://picsum.photos/600/450?random=9'] },
+  { id: 'ts_3', slug: 'studies-in-motion', title: 'Studies in Motion', type: 'Motion Design', year: '2025', client: 'Self-initiated', desc: 'An ongoing archive of kinetic explorations — objects, light, and bodies in movement captured through digital lenses.', main: 'https://picsum.photos/300?random=10', imgs: ['https://picsum.photos/600/450?random=11','https://picsum.photos/600/450?random=12','https://picsum.photos/600/450?random=13','https://picsum.photos/600/450?random=14'] },
+  { id: 'ts_4', slug: 'ruby-campbell', title: 'Ruby Campbell', type: 'Portrait · Campaign', year: '2026', client: 'Ruby Campbell', desc: 'Editorial portrait series and digital campaign — texture, grain, and raw authenticity.', main: 'https://picsum.photos/300?random=15', imgs: ['https://picsum.photos/600/450?random=16','https://picsum.photos/600/450?random=17'] },
+  { id: 'ts_5', slug: 'shaped-by-earth', title: 'Shaped by Earth', type: 'Brand · Experience', year: '2025', client: 'Shaped by Earth', desc: 'Digital identity and immersive brand experience for a sustainable luxury materials brand.', main: 'https://picsum.photos/300?random=18', imgs: ['https://picsum.photos/600/450?random=19','https://picsum.photos/600/450?random=20','https://picsum.photos/600/450?random=21','https://picsum.photos/600/450?random=22','https://picsum.photos/600/450?random=23'] },
+  { id: 'ts_6', slug: 'echoes-in-light', title: 'Echoes in Light', type: 'Installation · Web', year: '2026', client: 'Self-initiated', desc: 'A generative light installation translated to interactive web — sound, photons, and real-time WebGL reflections.', main: 'https://picsum.photos/300?random=24', imgs: ['https://picsum.photos/600/450?random=25','https://picsum.photos/600/450?random=26','https://picsum.photos/600/450?random=27','https://picsum.photos/600/450?random=28'] },
+  { id: 'ts_7', slug: 'archive-001', title: 'Archive 001', type: 'Photography', year: '2024', client: 'Self-initiated', desc: 'A curated visual archive spanning five years of documentary photography across three continents.', main: 'https://picsum.photos/300?random=29', imgs: ['https://picsum.photos/600/450?random=30','https://picsum.photos/600/450?random=31'] },
+  { id: 'ts_8', slug: 'surface-tension', title: 'Surface Tension', type: 'Interactive Web', year: '2025', client: 'Atelier Noir', desc: 'Fluid simulation and interactive surface for luxury fragrance brand — physics-driven WebGL.', main: 'https://picsum.photos/300?random=32', imgs: ['https://picsum.photos/600/450?random=33','https://picsum.photos/600/450?random=34','https://picsum.photos/600/450?random=35'] },
+  { id: 'ts_9', slug: 'deep-field', title: 'Deep Field', type: 'Generative Art', year: '2026', client: 'Gallery Kiosk', desc: 'Generative star-field series exploring deep-time and astronomical scale through procedural geometry.', main: 'https://picsum.photos/300?random=36', imgs: ['https://picsum.photos/600/450?random=37','https://picsum.photos/600/450?random=38','https://picsum.photos/600/450?random=39','https://picsum.photos/600/450?random=40'] },
+  { id: 'ts_10', slug: 'frequency', title: 'Frequency', type: 'Audio-Visual', year: '2025', client: 'Resonance Lab', desc: 'Real-time audio-reactive visuals — frequency data mapped to 3D geometry and volumetric light.', main: 'https://picsum.photos/300?random=41', imgs: ['https://picsum.photos/600/450?random=42','https://picsum.photos/600/450?random=43'] },
+  { id: 'ts_11', slug: 'meridian', title: 'Meridian', type: 'Brand Identity', year: '2025', client: 'Meridian Studio', desc: 'Full visual identity system for interdisciplinary design studio — mark, type system, motion guidelines.', main: 'https://picsum.photos/300?random=44', imgs: ['https://picsum.photos/600/450?random=45','https://picsum.photos/600/450?random=46','https://picsum.photos/600/450?random=47','https://picsum.photos/600/450?random=48'] },
+  { id: 'ts_12', slug: 'chromatic', title: 'Chromatic', type: '3D · Render', year: '2026', client: 'Self-initiated', desc: 'Color field study — 3D rendered environments built around single dominant hues and material extremes.', main: 'https://picsum.photos/300?random=49', imgs: ['https://picsum.photos/600/450?random=50','https://picsum.photos/600/450?random=51','https://picsum.photos/600/450?random=52'] },
+  { id: 'ts_13', slug: 'concrete-forest', title: 'Concrete Forest', type: 'Urban Photography', year: '2024', client: 'Self-initiated', desc: 'Long-form photographic study of brutalist architecture in post-industrial European cities.', main: 'https://picsum.photos/300?random=53', imgs: ['https://picsum.photos/600/450?random=54','https://picsum.photos/600/450?random=55','https://picsum.photos/600/450?random=56','https://picsum.photos/600/450?random=57'] },
+  { id: 'ts_14', slug: 'drift', title: 'Drift', type: 'Short Film', year: '2025', client: 'Self-initiated', desc: 'A 14-minute short film about displacement, memory, and the geography of coastlines.', main: 'https://picsum.photos/300?random=58', imgs: ['https://picsum.photos/600/450?random=59','https://picsum.photos/600/450?random=60'] },
+  { id: 'ts_15', slug: 'neon-garden', title: 'Neon Garden', type: 'Experiential', year: '2026', client: 'Flux Events', desc: 'Immersive LED garden installation for festival environment spanning 2000m² of programmable light.', main: 'https://picsum.photos/300?random=61', imgs: ['https://picsum.photos/600/450?random=62','https://picsum.photos/600/450?random=63','https://picsum.photos/600/450?random=64','https://picsum.photos/600/450?random=65'] },
+  { id: 'ts_16', slug: 'signal-noise', title: 'Signal / Noise', type: 'Data Visualisation', year: '2025', client: 'Open Research Co', desc: 'Interactive visualisation of global radio frequency pollution patterns — real-time spectrum data.', main: 'https://picsum.photos/300?random=66', imgs: ['https://picsum.photos/600/450?random=67','https://picsum.photos/600/450?random=68','https://picsum.photos/600/450?random=69'] },
+];
+
+// ── BUILD PROJECT LIST ──────────────────────────────────────────
+function buildProjects(target) {
+  const list = [];
+  let i = 0;
+  while (list.length < target) {
+    const base = BASE_PROJECTS[i % BASE_PROJECTS.length];
+    list.push({ ...base, id: base.id + '_' + list.length });
+    i++;
+  }
+  return list;
+}
+
+const PROJECTS = buildProjects(CONFIG.targetTiles);
+const N = PROJECTS.length;
+const MENU_LIST = [...PROJECTS, ...PROJECTS, ...PROJECTS, ...PROJECTS];
+const ITEM_H = 43;
+
+// ── HELPER: face index ──────────────────────────────────────────
+function getFaceIdx(index, total) {
+  const perFace = Math.ceil(total / 6);
+  return Math.floor(index / perFace);
+}
+
+// ── SHADERS ──────────────────────────────────────────────────────
+const VS = `
+  varying float vFacing;
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    vec3 wn = normalize(normalMatrix * normal);
+    vec3 vd = normalize(-(modelViewMatrix * vec4(position,1.0)).xyz);
+    vFacing = dot(wn, vd);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+  }`;
+
+const FS = `
+  precision highp float;
+  uniform sampler2D tMap;
+  uniform float uAlpha;
+  uniform float uIsActive;
+  uniform float uBorder;
+  varying vec2 vUv;
+  varying float vFacing;
+  void main() {
+    vec4 color = texture2D(tMap, vUv);
+    color.a = uAlpha;
+    float isBack = step(vFacing, 0.0);
+    float darken = mix(1.0, 0.22, isBack);
+    darken = mix(darken, 1.0, uIsActive);
+    color.rgb *= darken;
+    color.rgb *= mix(1.0, 1.2, uIsActive);
+    vec2 border = step(uBorder, vUv) * step(uBorder, 1.0 - vUv);
+    float isBorder = 1.0 - border.x * border.y;
+    color.rgb = mix(color.rgb, vec3(0.0), isBorder * 0.3);
+    gl_FragColor = color;
+  }`;
+
+// ── PLACEMENT FUNCTION ──────────────────────────────────────────
+function placeTile(media, index, length, size) {
+  const perFace = Math.ceil(length / 6);
+  const faceIdx = Math.floor(index / perFace);
+  const local = index % perFace;
+  const cols = Math.ceil(Math.sqrt(perFace));
+  const col = local % cols;
+  const row = Math.floor(local / cols);
+  const fd = size * 1.9;
+  const sp = size * CONFIG.gap;
+  const ctr = (cols - 1) / 2;
+
+  const faces = [
+    { x: fd, y: (row - ctr) * sp, z: (col - ctr) * sp, rx: 0, ry: Math.PI/2, rz: 0 },
+    { x: -fd, y: (row - ctr) * sp, z: -(col - ctr) * sp, rx: 0, ry: -Math.PI/2, rz: 0 },
+    { x: (col - ctr) * sp, y: fd, z: (row - ctr) * sp, rx: -Math.PI/2, ry: 0, rz: 0 },
+    { x: (col - ctr) * sp, y: -fd, z: -(row - ctr) * sp, rx: Math.PI/2, ry: 0, rz: 0 },
+    { x: (col - ctr) * sp, y: (row - ctr) * sp, z: fd, rx: 0, ry: 0, rz: 0 },
+    { x: -(col - ctr) * sp, y: (row - ctr) * sp, z: -fd, rx: 0, ry: Math.PI, rz: 0 },
+  ];
+  const f = faces[faceIdx] || faces[0];
+  media.mesh.position.set(f.x, f.y, f.z);
+  media.mesh.rotation.set(f.rx, f.ry, f.rz);
+  media.faceIdx = faceIdx;
+}
+
+// ── WEBGL RENDERER ──────────────────────────────────────────────
+(function() {
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const ph = document.getElementById('ts-canvas-cube');
+  ph.replaceWith(renderer.domElement);
+  Object.assign(renderer.domElement.style, {
+    position: 'absolute', inset: '0',
+    width: '100%', height: '100%', zIndex: '999', display: 'block'
+  });
+  renderer.domElement.id = 'ts-canvas-cube';
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 4;
+  const clock = new THREE.Clock();
+  const geo = new THREE.PlaneGeometry(CONFIG.tileSize, CONFIG.tileSize);
+
+  class TileMedia {
+    constructor(index, length, texture) {
+      this.index = index;
+      this.length = length;
+      this.texture = texture;
+      this.faceIdx = 0;
+      this._mkMat();
+      this._mkMesh();
+    }
+    _mkMat() {
+      this.mat = new THREE.ShaderMaterial({
+        vertexShader: VS,
+        fragmentShader: FS,
+        uniforms: {
+          tMap: { value: this.texture },
+          uAlpha: { value: 0 },
+          uIsActive: { value: 0 },
+          uBorder: { value: CONFIG.border },
+          uTime: { value: 0 },
+        },
+        transparent: true,
+        side: THREE.DoubleSide,
+      });
+    }
+    _mkMesh() {
+      this.mesh = new THREE.Mesh(geo, this.mat);
+      this.mesh.scale.set(1,1,1);
+    }
+    show({ delay = 0 } = {}) {
+      gsap.timeline({ delay, defaults: { ease: 'expo.inOut', duration: 1.5 } })
+        .fromTo(this.mat.uniforms.uAlpha, { value: 0 }, { value: 1 }, 0);
+    }
+    setAlpha(v) {
+      gsap.killTweensOf(this.mat.uniforms.uAlpha);
+      gsap.to(this.mat.uniforms.uAlpha, { value: v, duration: .8, ease: 'power2.out' });
+    }
+    setActive(v) {
+      gsap.killTweensOf(this.mat.uniforms.uIsActive);
+      gsap.to(this.mat.uniforms.uIsActive, { value: v ? 1 : 0, duration: .8, ease: 'power2.out' });
+    }
+    update() { this.mat.uniforms.uTime.value += 0.016; }
+    destroy() {
+      gsap.killTweensOf(this.mat.uniforms.uAlpha);
+      gsap.killTweensOf(this.mat.uniforms.uIsActive);
+      this.mat.dispose();
+    }
+  }
+
+  class IndexGallery {
+    constructor() {
+      this.parentGroup = new THREE.Group();
+      this.group = new THREE.Group();
+      this.parentGroup.add(this.group);
+      this.rotX = 0.02;
+      this.rotY = 0.06;
+      this.rotZ = 0.01;
+      this.tScale = 1.0;
+      this.targetTScale = 1.0;
+      this.lastT = 0;
+      this.gScale = 0.45;
+      this.medias = [];
+      this.transitionToHide = false;
+      this.rotationTween = null;
+      scene.add(this.parentGroup);
+      // Raycaster for tile clicks
+      this.raycaster = new THREE.Raycaster();
+      this.mouse = new THREE.Vector2();
+      // Click handler
+      renderer.domElement.addEventListener('click', this.onTileClick.bind(this));
+    }
+
+    build(texMap) {
+      PROJECTS.forEach((proj, i) => {
+        const textures = texMap.get(proj.id);
+        if (!textures || textures.length === 0) return;
+        const texIndex = i % textures.length;
+        const tex = textures[texIndex];
+        if (!tex) return;
+        const m = new TileMedia(i, N, tex);
+        m.slug = proj.slug;
+        const sz = Math.max(m.mesh.scale.x, m.mesh.scale.y);
+        placeTile(m, i, N, sz);
+        this.group.add(m.mesh);
+        this.medias.push(m);
+        m.show({ delay: 0.25 + i * 0.04 });
+      });
+      this.group.rotation.x = 0;
+      this.group.rotation.y = 0;
+      const tl = gsap.timeline({ defaults: { ease: 'expo.inOut', duration: 2.5 } });
+      tl.fromTo(this.parentGroup.scale,
+        { x: 0, y: 0, z: 0 },
+        { x: this.gScale, y: this.gScale, z: this.gScale }, 0
+      ).fromTo(this.parentGroup.rotation,
+        { x: -Math.PI * 0.2, y: -Math.PI * 1.85 },
+        { x: 0, y: 0 }, 0
+      ).timeScale(0.85);
+    }
+
+    rotateToFace(faceIdx) {
+      const targets = [
+        { x: 0, y: -Math.PI/2, z: 0 },
+        { x: 0, y:  Math.PI/2, z: 0 },
+        { x: -Math.PI/2, y: 0, z: 0 },
+        { x:  Math.PI/2, y: 0, z: 0 },
+        { x: 0, y: 0, z: 0 },
+        { x: 0, y: Math.PI, z: 0 }
+      ];
+      const target = targets[faceIdx] || targets[4];
+      if (this.rotationTween) this.rotationTween.kill();
+      this.rotationTween = gsap.to(this.group.rotation, {
+        x: target.x,
+        y: target.y,
+        z: target.z,
+        duration: CONFIG.rotationDuration,
+        ease: 'power3.inOut',
+        onComplete: () => { this.rotationTween = null; }
+      });
+      this.targetTScale = 0.25;
+      gsap.to(this, { tScale: this.targetTScale, duration: 0.8, ease: 'power2.out' });
+    }
+
+    resetRotation() {
+      if (this.rotationTween) {
+        this.rotationTween.kill();
+        this.rotationTween = null;
+      }
+      this.targetTScale = 1.0;
+      gsap.to(this, { tScale: this.targetTScale, duration: 1.2, ease: 'power2.out' });
+    }
+
+    onMouseEnter(slug) {
+      if (this.transitionToHide) return;
+      const tile = this.medias.find(m => m.slug === slug);
+      if (tile) this.rotateToFace(tile.faceIdx);
+      this.medias.forEach(m => {
+        const hit = m.slug === slug;
+        m.setAlpha(hit ? 1 : 0.1);
+        m.setActive(hit);
+      });
+      gsap.to(this.parentGroup.scale, { x: .55, y: .55, z: .55, duration: 1, ease: 'expo.out' });
+    }
+
+    onMouseLeave() {
+      if (this.transitionToHide) return;
+      this.resetRotation();
+      this.medias.forEach(m => { m.setAlpha(1); m.setActive(false); });
+      gsap.to(this.parentGroup.scale, { x: this.gScale, y: this.gScale, z: this.gScale, duration: 1, ease: 'expo.out' });
+    }
+
+    // ── TILE CLICK HANDLER ──────────────────────────────────────
+    onTileClick(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      this.raycaster.setFromCamera(this.mouse, camera);
+      const meshes = this.medias.map(m => m.mesh);
+      const intersects = this.raycaster.intersectObjects(meshes);
+      if (intersects.length > 0) {
+        const hitMesh = intersects[0].object;
+        const media = this.medias.find(m => m.mesh === hitMesh);
+        if (media && media.slug) {
+          const project = PROJECTS.find(p => p.slug === media.slug);
+          if (project) {
+            openDetail(project);
+          }
+        }
+      }
+    }
+
+    update(elapsed) {
+      const d = elapsed - this.lastT;
+      this.lastT = elapsed;
+      if (d > 0.2) return;
+      const speed = this.tScale;
+      this.group.rotation.x += d * this.rotX * speed;
+      this.group.rotation.y += d * this.rotY * speed;
+      this.group.rotation.z += d * this.rotZ * speed;
+      this.medias.forEach(m => m.update());
+    }
+
+    destroy() {
+      this.medias.forEach(m => { this.group.remove(m.mesh); m.destroy(); });
+      scene.remove(this.parentGroup);
+      renderer.domElement.removeEventListener('click', this.onTileClick);
+    }
+  }
+
+  // Resize
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
+  // RAF
+  let gallery = null;
+  (function raf() {
+    requestAnimationFrame(raf);
+    if (gallery) gallery.update(clock.getElapsedTime());
+    renderer.render(scene, camera);
+  })();
+
+  // Expose API
+  window._TSGallery = {
+    preload(onProg, onDone) {
+      const mgr = new THREE.LoadingManager();
+      const ldr = new THREE.TextureLoader(mgr);
+      const texMap = new Map();
+      let totalImages = 0;
+      PROJECTS.forEach(p => {
+        const count = 1 + Math.min(2, (p.imgs || []).length);
+        totalImages += count;
+      });
+      mgr.onProgress = (_, l, t) => onProg(l / t);
+      mgr.onLoad = () => onDone(texMap);
+      PROJECTS.forEach(p => {
+        const urls = [p.main];
+        const extras = (p.imgs || []).slice(0, 2);
+        urls.push(...extras);
+        const textures = [];
+        urls.forEach(url => {
+          ldr.load(url, tex => {
+            tex.needsUpdate = true;
+            tex.colorSpace = THREE.SRGBColorSpace;
+            textures.push(tex);
+            if (textures.length === urls.length) {
+              texMap.set(p.id, textures);
+            }
+          }, undefined, () => {
+            textures.push(null);
+            if (textures.length === urls.length) {
+              texMap.set(p.id, textures.filter(t => t !== null));
+            }
+          });
+        });
+      });
+    },
+    init(texMap) {
+      gallery = new IndexGallery();
+      gallery.build(texMap);
+    },
+    enter(slug) { gallery?.onMouseEnter(slug); },
+    leave() { gallery?.onMouseLeave(); },
+  };
+})();
+
+// ── SIDEBAR MENU ──────────────────────────────────────────────────
+const mt = document.getElementById('ts-mt');
+const sb = document.getElementById('ts-portfolio-sidebar');
+mt.style.height = (MENU_LIST.length * ITEM_H) + 'px';
+
+MENU_LIST.forEach((proj, idx) => {
+  const a = document.createElement('a');
+  a.className = 'ts-slide-menu-item';
+  a.href = '#';
+  a.textContent = proj.title;
+  a.dataset.slug = proj.slug;
+  a.dataset.idx = idx;
+  mt.appendChild(a);
+});
+
+const links = Array.from(mt.querySelectorAll('.ts-slide-menu-item'));
+
+// ── Reveal animation ─────────────────────────────────────────────
+function revealMenu() {
+  links.forEach((el, i) => {
+    const delay = i * 30 + (i % 10) * 20;
+    el.style.transitionDelay = delay + 'ms';
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(-40px)';
+    setTimeout(() => {
+      el.classList.add('revealed');
+      el.style.opacity = '1';
+      el.style.transform = 'translateX(0)';
+    }, delay + 100);
+  });
+}
+
+// ── SCROLL: snap to nearest item after wheel stops ──────────────
+let mTgt = 0, mCur = 0;
+const maxScroll = Math.max(0, MENU_LIST.length * ITEM_H - sb.clientHeight);
+let wheelTimeout = null;
+
+function snapToNearestItem() {
+  const rawIndex = Math.round(-mCur / ITEM_H);
+  const clampedIndex = Math.max(0, Math.min(MENU_LIST.length - 1, rawIndex));
+  const targetPos = -clampedIndex * ITEM_H;
+  mTgt = targetPos;
+  mCur = mTgt;
+  mt.style.transform = `translateY(${mCur}px)`;
+  // Optionally trigger hover on that item (simulate)
+  const targetLink = links[clampedIndex];
+  if (targetLink && !activeLink) {
+    targetLink.dispatchEvent(new Event('mouseenter'));
+  }
+}
+
+function updateMenuScroll(target) {
+  mTgt = target;
+}
+
+if (CONFIG.autoScroll) {
+  sb.addEventListener('mousemove', e => {
+    const rect = sb.getBoundingClientRect();
+    const relY = (e.clientY - rect.top) / rect.height;
+    updateMenuScroll(-relY * maxScroll);
+  });
+}
+
+sb.addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaY;
+  let newTarget = mTgt - delta * 0.5;
+  newTarget = Math.max(-maxScroll, Math.min(0, newTarget));
+  updateMenuScroll(newTarget);
+  clearTimeout(wheelTimeout);
+  wheelTimeout = setTimeout(snapToNearestItem, 150);
+}, { passive: false });
+
+// ── SCROLL LOOP – faster lerp for immediate feedback ────────────
+(function menuRaf() {
+  requestAnimationFrame(menuRaf);
+  // Use a much higher lerp (0.5) so it follows wheel almost instantly
+  if (Math.abs(mTgt - mCur) > 0.5) {
+    mCur += (mTgt - mCur) * 0.5;   // was 0.08 – now 0.5
+  } else {
+    mCur = mTgt;
+  }
+  mt.style.transform = `translateY(${mCur}px)`;
+})();
+
+// ── HOVER: debounced to avoid flicker, timer cleared ──────────
+let activeLink = null;
+let hoverTimer = null;
+
+links.forEach(lnk => {
+  lnk.addEventListener('mouseenter', () => {
+    // Clear any pending timer from previous hover
+    if (hoverTimer) {
+      clearTimeout(hoverTimer);
+      hoverTimer = null;
+    }
+    // Remove active from previous
+    if (activeLink) {
+      activeLink.classList.remove('is-active');
+      activeLink.style.transition = '';
+    }
+    // Set a short delay before activating to avoid flicker on quick passes
+    hoverTimer = setTimeout(() => {
+      // Override transition for instant visual
+      lnk.style.transition = 'none';
+      activeLink = lnk;
+      lnk.classList.add('is-active');
+      window._TSGallery?.enter(lnk.dataset.slug);
+      // Restore transition after a tiny delay
+      setTimeout(() => { lnk.style.transition = ''; }, 50);
+      hoverTimer = null;
+    }, 50); // 150ms debounce
+  });
+
+  lnk.addEventListener('click', e => {
+    e.preventDefault();
+    const p = PROJECTS.find(x => x.slug === lnk.dataset.slug);
+    if (p) openDetail(p);
+  });
+});
+
+sb.addEventListener('mouseleave', () => {
+  // Clear any pending hover timer
+  if (hoverTimer) {
+    clearTimeout(hoverTimer);
+    hoverTimer = null;
+  }
+  if (activeLink) {
+    activeLink.classList.remove('is-active');
+    activeLink.style.transition = '';
+    activeLink = null;
+  }
+  window._TSGallery?.leave();
+});
+
+// ── DETAIL PAGE ──────────────────────────────────────────────────
+const detEl = document.getElementById('ts-portfolio-detail');
+const wipeEl = document.getElementById('ts-wipe');
+
+function openDetail(p) {
+  document.getElementById('d-ol').textContent = p.type + ' · ' + p.year;
+  const w = p.title.split(' ');
+  document.getElementById('d-title').innerHTML = `<em>${w[0]}</em> ${w.slice(1).join(' ')}`;
+  document.getElementById('d-desc').textContent = p.desc;
+  document.getElementById('d-meta').innerHTML =
+    [['Year', p.year], ['Type', p.type], ['Client', p.client]]
+      .map(([k, v]) => `<div class="ts-dmetablock"><span class="ts-dmetalabel">${k}</span><span class="ts-dmetaval">${v}</span></div>`)
+      .join('');
+  document.getElementById('d-imgs').innerHTML =
+    p.imgs.slice(0, 4).map(s => `<img src="${s}" alt="${p.title}" loading="lazy">`).join('');
+
+  gsap.timeline()
+    .set(wipeEl, { scaleY: 0, transformOrigin: 'bottom' })
+    .to(wipeEl, { scaleY: 1, duration: 0.42, ease: 'power3.inOut' })
+    .set(detEl, { transform: 'translateY(0)', opacity: 1 })
+    .call(() => { 
+      // 1. Pass the first image URL safely into a CSS token on the parent
+      if (p.imgs && p.imgs.length > 0) {
+        detEl.style.setProperty('--ts-portfolio-img-header', `url('${p.imgs[0]}')`);
+      }
+      // 2. Existing logic
+      detEl.classList.add('open'); 
+      detEl.classList.add('ts-vertical-modern'); 
+      detEl.scrollTop = 0; 
+    })
+    .to(wipeEl, { scaleY: 0, transformOrigin: 'top', duration: 0.38, ease: 'power3.inOut' });
+}
+
+function closeDetail() {
+  gsap.timeline()
+    .set(wipeEl, { scaleY: 0, transformOrigin: 'bottom' })
+    .to(wipeEl, { scaleY: 1, duration: 0.38, ease: 'power3.inOut' })
+    .set(detEl, { transform: 'translateY(100%)' })
+    .call(() => detEl.classList.remove('open'))
+    .call(() => detEl.classList.remove('ts-vertical-modern'))
+    .to(wipeEl, { scaleY: 0, transformOrigin: 'top', duration: 0.34, ease: 'power3.inOut' });
+}
+
+document.getElementById('ts-dback').addEventListener('click', closeDetail);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && detEl.classList.contains('open')) closeDetail(); });
+
+// ── LOADER ──────────────────────────────────────────────────────
+const loaderEl = document.getElementById('ts-preloader');
+const fillEl = document.getElementById('ts-loader-fill');
+const numEl = document.getElementById('ts-loader-num');
+let dispPct = 0, realPct = 0, loaderDone = false;
+
+(function lRaf() {
+  if (loaderDone) return;
+  requestAnimationFrame(lRaf);
+  dispPct += (realPct - dispPct) * 0.1;
+  const p = Math.min(99, Math.floor(dispPct * 100));
+  fillEl.style.width = p + '%';
+  numEl.textContent = p + '%';
+})();
+
+window._TSGallery.preload(
+  prog => { realPct = Math.max(realPct, prog); },
+  texMap => {
+    realPct = 1;
+    setTimeout(() => {
+      window._TSGallery.init(texMap);
+      fillEl.style.width = '100%';
+      numEl.textContent = '100%';
+      loaderDone = true;
+      setTimeout(() => {
+        loaderEl.classList.add('out');
+        loaderEl.classList.add('is-done');
+      document.documentElement.classList.remove('ts-preloader-lock');
+      document.documentElement.classList.remove('ts-assets-loading');
+
+        gsap.to('#ts-letters', { opacity: 1, y: 0, duration: 1.3, ease: 'power4.out', delay: .05 });
+        gsap.to('#ts-meta-bl', { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .3 });
+        gsap.to('#ts-meta-bc', { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .45 });
+        revealMenu();
+      }, 350);
+    }, 250);
+  }
+);
+
+// ── RULERS ──────────────────────────────────────────────────────
+function getCSSVar(name, el = document.documentElement) {
+  return getComputedStyle(el).getPropertyValue(name).trim();
+}
+
+const rsz = parseFloat(getCSSVar("--rsz")) || 1;
+
+function createRulerSVG({ width, height, orientation = "horizontal", step = 10, majorStep = 100 }) {
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  const thickness = rsz;
+  svg.setAttribute("class", `ts-grid-rules__${orientation}`);
+  svg.setAttribute("width", orientation === "horizontal" ? width : thickness);
+  svg.setAttribute("height", orientation === "horizontal" ? thickness : height);
+  svg.setAttribute("viewBox", orientation === "horizontal" ? `0 0 ${width} ${thickness}` : `0 0 ${thickness} ${height}`);
+  const max = orientation === "horizontal" ? width : height;
+  for (let i = 0; i <= max; i += step) {
+    const isMajor = i % majorStep === 0;
+    const isMid = i % 50 === 0;
+    const line = document.createElementNS(ns, "line");
+    if (orientation === "horizontal") {
+      line.setAttribute("x1", i);
+      line.setAttribute("x2", i);
+      line.setAttribute("y1", 0);
+      line.setAttribute("y2", isMajor ? 10 : isMid ? 7 : 5);
+    } else {
+      line.setAttribute("y1", i);
+      line.setAttribute("y2", i);
+      line.setAttribute("x1", 0);
+      line.setAttribute("x2", isMajor ? 10 : isMid ? 7 : 5);
+    }
+    line.setAttribute("class", "ts-grid-rules-line");
+    if (!isMajor) line.setAttribute("opacity", "0.5");
+    svg.appendChild(line);
+    if (isMajor && i !== 0) {
+      const text = document.createElementNS(ns, "text");
+      if (orientation === "horizontal") {
+        text.setAttribute("x", i);
+        text.setAttribute("y", 18);
+      } else {
+        text.setAttribute("x", 18);
+        text.setAttribute("y", i + 4);
+        text.setAttribute("transform", `rotate(-90 14 ${i})`);
+      }
+      text.setAttribute("class", "ts-grid-rules-text");
+      text.textContent = i;
+      svg.appendChild(text);
+    }
+  }
+  return svg;
+}
+
+function mountRulers(container) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "ts-grid-rules";
+  function render() {
+    wrapper.innerHTML = "";
+    const rect = container.getBoundingClientRect();
+    const horizontal = createRulerSVG({ width: Math.round(rect.width), height: 18, orientation: "horizontal" });
+    const vertical = createRulerSVG({ width: 18, height: Math.round(rect.height), orientation: "vertical" });
+    wrapper.appendChild(horizontal);
+    wrapper.appendChild(vertical);
+  }
+  render();
+  const ro = new ResizeObserver(render);
+  ro.observe(container);
+  container.appendChild(wrapper);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector("#ts-app");
+  if (!container) {
+    console.warn("Ruler init failed: container not found");
+    return;
+  }
+  mountRulers(container);
+  document.getElementById('ts-dims').textContent = `${window.innerWidth}px × ${window.innerHeight}px`;
+});
+</script>
+</body>
+</html>

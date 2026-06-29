@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en" class="ts-banner-generator-app" data-ts-cols="12">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toolskin Layout Studio v2</title>
+  <script>
+  // 1. Only run if hosted on HTTPS (ignores local file:// or http:// localhost)
+  if (window.location.protocol === 'https:') {
+    
+    // Generate a progressive/unique number based on the current timestamp
+    const uniqueNum = Date.now(); 
+    let elementCounter = 0;
+
+    // 2. Target all CSS links and JS scripts
+    const elements = document.querySelectorAll('link[rel="stylesheet"], script[src]');
+
+    elements.forEach((el) => {
+      // Get the current source attribute
+      const attrName = el.tagName === 'LINK' ? 'href' : 'src';
+      const originalPath = el.getAttribute(attrName);
+
+      if (originalPath) {
+        // 3. Match any path containing "assets/" followed by a subfolder
+        const assetsRegex = /assets\/[^\/]+\//;
+
+        if (assetsRegex.test(originalPath)) {
+          // Increment counter so each file gets a completely different progressive number
+          elementCounter++; 
+          const separator = originalPath.includes('?') ? '&' : '?';
+          
+          // Append the unique progressive version string
+          const newPath = `${originalPath}${separator}v=${uniqueNum}-${elementCounter}`;
+          el.setAttribute(attrName, newPath);
+        }
+      }
+    });
+  }
+</script>
+  <script id="ts-theme-mode-boot">(function(){try{var key='ts-theme-mode';var m=localStorage.getItem(key);if(!m)return;if(m==='auto'){m=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(m==='dark'||m==='light'){document.documentElement.setAttribute('data-theme',m);document.documentElement.setAttribute('data-ts-theme',m);}}catch(e){}})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+  <link rel="icon" href="../assets/img/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+
+  <style id="ts-preloader-boot">
+    html.ts-preloader-lock, html.ts-preloader-lock body { overflow: hidden !important; }
+    html.ts-preloader-lock #ts-app, html.ts-preloader-lock #ts-main { visibility: hidden !important; pointer-events: none !important; }
+    html.ts-preloader-lock .ts-preloader { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+    html.ts-preloader-lock .ts-oce-panel.ts-oce--open,
+    html.ts-preloader-lock .ts-oce-panel.ts-oce--open .ts-oce-fab { opacity: 0 !important; z-index: -20 !important; pointer-events: none !important; }
+  </style>
+
+  <script src="../assets/js/toolskin-assets.js" defer></script>
+  <script id="ts-preloader-lock">
+    document.documentElement.classList.add('ts-preloader-lock');
+    Promise.all([
+      document.fonts.load('600 1em "Space Grotesk"'),
+      document.fonts.load('400 1em "JetBrains Mono"')
+    ]).then(function(){ document.documentElement.classList.add('ts-fonts-ready'); });
+  </script>
+
+
+  <!-- Toolskin framework -->
+  <link rel="stylesheet" href="../assets/css/toolskin.css">
+  <script src="../assets/js/toolskin.js" defer></script>
+  <script src="../assets/js/toolskin-uikit.js" defer></script>
+  <script src="../assets/js/toolskin.bannerGenerator.js" defer></script>
+
+  <style>
+  
+  </style>
+   <link rel="stylesheet" href="../assets/css/ts-layout-editor-default-styles.css">
+    <link rel="stylesheet" href="../assets/css/ts-layout-editor-dirty-styles3.1-temp.css">
+
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="ts-preloader" class="ts-preloader" aria-hidden="true">
+  <div class="ts-preloader__brand">
+    <div class="ts-preloader__logo">
+      <svg class="ts-preloader__bolt" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.4-1.6 9.5L192 192h174.8c21.8 0 36.3 22.6 27.2 42.6L179.2 481.2c-7.5 16.4-30.4 12.6-32.5-5.4L128 256z"/></svg>
+      TOOL<em>SKIN</em>
+    </div>
+    <div class="ts-preloader__bar-wrap"><span class="ts-preloader__bar"></span></div>
+    <div class="ts-preloader__hint">Layout Studio · v3</div>
+  </div>
+</div>
+
+<!-- ================================================================
+     EDITOR SHELL
+================================================================ -->
+<div id="ts-app"  class="ts-editor">
+
+  <!-- ── TOPBAR (§8 — global only) ──────────────────────────── -->
+  <nav id="ts-topbar" class="ts-toolbar ts-topbar">
+    <div class="ts-logo ts-topbar__logo">
+      <div class="ts-logo-brand">Tool<em>skin</em></div>
+      <span class="ts-logo-sub">Layout Studio</span>
+    </div>
+    <div class="ts-topbar-right">
+      <button id="ts-toggle-grid-btn" class="ts-btn " data-active="false" data-icon="ion:grid-outline">Grid Overlay</button>
+      <button id="ts-nest-grid-btn"   class="ts-btn " data-icon="fa-solid fa-diagram-next">Nest Grid</button>
+      <button id="ts-nest-split-btn"  class="ts-btn " data-icon="fa-solid fa-diagram-predecessor">Nest Split</button>
+      <button id="ts-reset-layout-btn" class="ts-btn " data-icon="ion:reload-sharp">Reset</button>
+
+      <!-- Column select -->
+      <div class="ts-ui-select ts-ui-select--bignum ts-ui-select--split" data-ts-ui-select-search="false" data-ts-ui-select-placeholder="Select Columns">
+        <select class="ts-ui-select__native" id="ts-column-select" placeholder="Select Columns" alt="Select Columns">
+          <option value="3">3 </option>
+          <option value="8">8 </option>
+          <option value="12" selected>12 </option>
+          <option value="16">16 </option>
+        </select>
+      </div>
+
+      <!-- [F7] Gap slider — controls --ts-grid-gap SSOT
+      <div class="ts-gap-control">
+        <span class="ts-gap-label">Gap</span>
+        <input type="range" id="ts-gap-slider" class="ts-range" min="0" max="48" step="4" value="0">
+        <span class="ts-gap-val" id="ts-gap-val">0px</span>
+      </div> -->
+
+<!-- These controls needs to be implemented.   loading a preset (json file)  or loading a saved  project or scaffoid or  layuout saved in json format so the user can save his tmeplate) -->
+      <div class="ts-btn-group">
+          <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-load-json" data-ts-icon="ion:folder-open"><span>Load Layout</span></button>
+        <button class="ts-btn ts-btn--icon ts--btn-secondary" id="ts-btn-save-json" data-ts-icon="ion:save"><span>Save Layout</span></button>
+<!-- The previou literally shjould be an iframe wherre the scafgfold must be visualized ion an export modal, using the sma eone used on banner generator, and using the same  methods and  syste as on the tree viewer script wjere the ifrae is content and theme aware and loads properly its inner assets  wiothout stucking in prleoading.. the scaffold needs the  layout html and the base css   required for user to copy and pase in any instance of toolskin layout  main   context or any section  within any  frontend  where toolskin is  loaded, seamlessly used as a  module asset or  any layout element inside a section or  container.  the styles  only   appllies from the core css and should work only for  the grids and  layout workout. sizing and   repsonsive blocks management, along with the smart gaps and  paddings user choosed on the scaffold designer.  the rets of the design relies on the sassets the suer assembles inse eacxh cotnainer.  the other   forntend elements form the   layout vbuolder (the  title div with h4, storng, p, spans,) ar eonyl for ui usage context and must not be used on the export. they ar eonly overlay  like reference and guide only elements  that must not be visible or  rendered on final  export on user  final code. all borders, and grid  backgroudn and styles ar eonly gfor editor purposes  but the grid suyste and the gaps  and the  grid contianer collapsing and flex rtelations of each inner and nested element  export must me soldily prioir and consistent and   perfectly  able to coitnain any card or   toolskin asset on a   good desing  preventing brwakign or   loose strange design incompatibiility issues.. -->
+
+        <button class="ts-btn ts-btn--icon ts-btn--secondary" id="ts-btn-preview" data-ts-icon="ion:eye">
+          <span>Preview &amp; Export</span><span class="ts-spinner" id="ts-export-spinner"></span>
+        </button>
+        <button class="ts-btn ts-theme-toggle" data-theme-toggle aria-label="Toggle theme">
+          <span class="ts-icon ts-theme-icon-light" data-ts-icon="fa-solid fa-sun" aria-hidden="true"></span>
+          <span class="ts-icon ts-theme-icon-dark"  data-ts-icon="fa-solid fa-moon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── CANVAS ─────────────────────────────────────────────── -->
+  <div id="ts-canvas-area">
+    <div class="ts-canvas-info-bar">
+        <span class="ts-canvas-badge" id="ts-canvas-size-label">Canvas Size</span>
+      </div>
+    <div class="ts-canvas" id="ts-canvas-container">
+      <div id="ts-master-layout" class="ts-layout-container" data-level="0">
+        <!-- scaffold injects here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SIDEBAR PANEL (§7) ─────────────────────────────────── -->
+  <div id="ts-panel" class="ts-sidebar-panel">
+
+    <div class="ts-panel-tabs" id="ts-panel-tabs">
+      <div class="ts-ptab active" data-tab="controls">Controls</div>
+      <div class="ts-ptab" data-tab="code">CSS Code</div>
+    </div>
+
+    <div class="ts-panel-body" id="ts-panel-body">
+
+      <!-- Controls Pane -->
+      <div class="ts-tab-pane active" data-pane="controls">
+
+        <!-- §7 Section 1: SCAFFOLD -->
+        <div class="ts-card">
+          <div class="ts-card-header">
+            <span class="ts-card-title" data-ts-icon="ion:apps-outline">Scaffold</span>
+          </div>
+          <div class="ts-card-rows">
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-field">
+                  <label class="ts-field-label">Select a Scaffold Preset</label>
+                  <div class="ts-ui-select" data-ts-ui-select-search="false">
+                    <select class="ts-ui-select__native" id="ts-scaffold-select" placeholder="Select a Template"  data-icon="fa-solid fa-ruler-combined" >
+                      <option value="app-shell" selected  data-icon="fa-solid fa-hard-drive">App Shell</option>
+                      <option value="dashboard" data-icon="fa-solid fa-chart-gantt">Dashboard</option>
+                      <option value="landing" data-icon="fa-solid fa-chart-gantt">Landing Page</option>
+                      <option value="bento" data-icon="fa-solid fa-trowel-bricks">Bento Canvas</option>
+                      <option value="split" data-icon="fa-solid fa-table-columns">Split View</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <button id="ts-reset-btn" class="ts-btn" style="width:100%"
+                        data-ts-icon="ion:refresh-outline">
+                  <span>Reset Scaffold</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- §7 Section 2: GRID SYSTEM -->
+        <div class="ts-card">
+          <div class="ts-card-header">
+            <span class="ts-card-title" data-ts-icon="ion:grid-outline">Grid System</span>
+          </div>
+          <div class="ts-card-rows">
+            <!-- Columns -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-field">
+                  <label class="ts-field-lbl">Columns Gridset</label>
+                  <div class="ts-chip-group ts-chips" id="ts-col-chips">
+                    <button class="ts-chip" data-cols="8">8 Columns</button>
+                    <button class="ts-chip active" data-cols="12">12 Columns</button>
+                    <button class="ts-chip" data-cols="16">16 Columns</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Gap -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-field">
+                  <label class="ts-field-label">Gap</label>
+                  <div class="ts-range-row">
+                    <input type="range" class="ts-range" id="ts-gap-range" min="0" max="48" step="4" value="0">
+                    <span class="ts-range-val" id="ts-gap-val">0px</span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Padding -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-field">
+                  <label class="ts-field-label">Padding</label>
+                  <div class="ts-range-row">
+                    <input type="range" class="ts-range" id="ts-pad-range" min="0" max="48" step="4" value="24">
+                    <span class="ts-range-val" id="ts-pad-val">24px</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Min Height -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-field">
+                  <label class="ts-field-label">Min tile height</label>
+                  <div class="ts-range-row">
+                    <input type="range" class="ts-range" id="ts-minh-range" min="80" max="400" step="8" value="160">
+                    <span class="ts-range-val" id="ts-minh-val">160px</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Grid Overlay Toggle -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-toggle-row">
+                  <span class="ts-toggle-label" data-ts-icon="ion:grid-outline">
+                    Grid overlay
+                  </span>
+                  <label class="ts-toggle">
+                    <input type="checkbox" id="ts-overlay-toggle">
+                    <span class="ts-toggle__knob"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- §7 Section 3: SELECTED TILE -->
+        <div class="ts-card" id="ts-tile-section">
+          <div class="ts-card-header">
+            <span class="ts-card-title" data-ts-icon="ion:square-outline">
+              Selected Tile
+              <span id="ts-tile-level-badge" style="margin-left:8px; font-size:9px; background:var(--ts-accent,#ff5500); color:var(--ts-on-accent,#fff); padding:1px 6px; border-radius:999px; font-family:var(--ts-font-mono,monospace); font-weight:700; vertical-align:middle;"></span>
+            </span>
+          </div>
+          <div class="ts-card-rows">
+            <!-- Span chips -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-field">
+                  <label class="ts-field-lbl">Span</label>
+                  <div class="ts-chip-group ts-chips" id="ts-span-chips">
+                    <button class="ts-chip" data-span="ts-bento__hero">Hero</button>
+                    <button class="ts-chip" data-span="ts-bento__half">Half</button>
+                    <button class="ts-chip" data-span="ts-bento__third">Third</button>
+                    <button class="ts-chip" data-span="ts-bento__quart">Quarter</button>
+                    <button class="ts-chip" data-span="ts-bento__wide">Wide</button>
+                    <button class="ts-chip" data-span="ts-bento__full">Full</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Inner layout chips -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-full">
+                <div class="ts-field">
+                  <label class="ts-field-lbl">Inner Layout</label>
+                  <div class="ts-chip-group ts-chips" id="ts-layout-chips">
+                    <button class="ts-chip" data-layout="ts-stack">Stack</button>
+                    <button class="ts-chip" data-layout="ts-split">Split</button>
+                    <button class="ts-chip" data-layout="ts-grid">Grid</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Nest buttons -->
+            <div class="ts-card-row">
+              <div class="ts-card-col-half">
+                <button id="ts-nest-grid-btn" class="ts-btn " style="width:100%"
+                        data-ts-icon="ion:add-circle-outline">
+                  <span>Nest Grid</span>
+                </button>
+              </div>
+              <div class="ts-card-col-half">
+                <button id="ts-nest-split-btn" class="ts-btn " style="width:100%"
+                        data-ts-icon="ion:git-branch-outline">
+                  <span>Nest Split</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No tile selected placeholder -->
+        <div class="ts-tile-placeholder" id="ts-tile-placeholder">
+          Click a tile to select it
+        </div>
+
+      </div><!-- /controls pane -->
+
+      <!-- Code Pane -->
+      <div class="ts-tab-pane" data-pane="code" style="height:100%; display:none; flex-direction:column;">
+        <div class="ts-code-window">
+          <div class="ts-code-header">
+            <div class="ts-code-dotbtn red"></div>
+            <div class="ts-code-dotbtn yellow"></div>
+            <div class="ts-code-dotbtn green"></div>
+            <span class="ts-code-label">layout-export.html</span>
+            <button class="ts-code-copy" id="ts-copy-header-btn">Copy</button>
+          </div>
+          <textarea id="ts-export-textarea" readonly spellcheck="false"
+                    placeholder="Layout HTML will appear here…"></textarea>
+        </div>
+      </div>
+
+    </div><!-- /panel-body -->
+
+    <div class="ts-panel-footer">
+      <button id="ts-copy-export-btn" class="ts-btn ts-btn--primary" style="width:100%">
+        Copy HTML
+      </button>
+    </div>
+
+  </div><!-- /#ts-panel -->
+
+</div><!-- /#ts-app -->
+
+
+<!-- ================================================================
+     TOOLSKIN LAYOUT STUDIO — JS ENGINE v3
+     ================================================================
+     SSOT Contracts (§2):
+       updateGrid(N)   → sole entry for column changes
+       updateGap(px)   → sole entry for gap changes
+       updatePad(px)   → sole entry for padding changes
+       updateMinH(px)  → sole entry for min-height changes
+       computeGridVars → reads actual px from bento DOM, writes :root tokens
+
+     Grid Overlay (§3b):
+       renderOverlayCols() → creates N .ts-grid-overlay__col children
+       Overlay CSS Grid has same template as .ts-bento — zero drift
+
+     No inline styles rule (§9):
+       JS never sets element.style.* — only CSS custom properties on :root
+       and data-* / class attributes on elements
+
+     Nesting guard (§9):
+       getSelectedTile() returns null at depth ≥ 3
+================================================================ -->
+<script>
+(function () {
+  'use strict';
+
+ /* ── CANVAS SIZE OBSERVER ─────────────────────────────────── */
+    var sizeLabel = document.getElementById('ts-canvas-size-label');
+    var canvasEl  = document.getElementById('ts-canvas-container');
+    if (canvasEl && sizeLabel && typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(function(entries) {
+        var r = entries[0].contentRect;
+        sizeLabel.textContent = Math.round(r.width) + 'px × ' + Math.round(r.height) + 'px';
+      }).observe(canvasEl);
+    }
+  /* ── STATE ─────────────────────────────────────────────── */
+  var currentCols    = 12;
+  var currentGap     = 0;
+  var currentPad     = 24;
+  var currentMinH    = 160;
+  var overlayActive  = false;
+  var selectedTile   = null;
+  var currentScaffold = 'app-shell';
+  var ro, mo;
+
+  /* ── DOM REFS ───────────────────────────────────────────── */
+  var root           = document.documentElement;
+  var masterLayout   = document.getElementById('ts-master-layout');
+  var canvasSizeBadge= document.getElementById('ts-canvas-size-badge');
+  var scaffoldSelect = document.getElementById('ts-scaffold-select');
+  var resetBtn       = document.getElementById('ts-reset');
+  var resetBtn2     = document.getElementById('ts-reset-layout-btn');
+  var overlayToggle  = document.getElementById('ts-overlay-toggle');
+  var overlayToggle2   = document.getElementById('ts-toggle-grid-btn');
+  var gapRange       = document.getElementById('ts-gap-range');
+  var gapSlider    = document.getElementById('ts-gap-slider');
+    var gapValEl     = document.getElementById('ts-gap-val');
+  var gapVal         = document.getElementById('ts-gap-val');
+  var padRange       = document.getElementById('ts-pad-range');
+  var padVal         = document.getElementById('ts-pad-val');
+  var minhRange      = document.getElementById('ts-minh-range');
+  var minhVal        = document.getElementById('ts-minh-val');
+  var exportArea     = document.getElementById('ts-export-textarea');
+  var copyBtn        = document.getElementById('ts-copy-export');
+  var copyHeaderBtn  = document.getElementById('ts-copy-header');
+  var nestGridBtn    = document.getElementById('ts-nest-grid');
+  var nestSplitBtn   = document.getElementById('ts-nest-split');
+  var nestGridBtn2  = document.getElementById('ts-nest-grid-btn');
+    var nestSplitBtn2 = document.getElementById('ts-nest-split-btn');
+    var gridStatus   = document.getElementById('ts-grid-status');
+    var selStatus    = document.getElementById('ts-sel-status');
+
+  var tileLevelBadge = document.getElementById('ts-tile-level-badge');
+  var tileSection    = document.getElementById('ts-tile-section');
+  var tilePlaceholder= document.getElementById('ts-tile-placeholder');
+
+  /* Live refs (inside scaffold — must be fetched after scaffold change) */
+  function getOverlay() { return document.getElementById('ts-grid-overlay'); }
+  function getPrimaryBento() { return document.getElementById('ts-primary-bento'); }
+  function getAppMain()   { return document.getElementById('ts-app-main'); }
+
+  /* ── SSOT: computeGridVars (§2, B05) ────────────────────────
+     Reads ACTUAL rendered px from the bento element's computed style.
+     NOT from getPropertyValue on var() strings (those return raw tokens).
+  ─────────────────────────────────────────────────────────────── */
+  function computeGridVars() {
+    var bento = getPrimaryBento();
+    if (!bento) return;
+    var cs   = getComputedStyle(bento);
+    var pad  = parseFloat(cs.paddingLeft)  || 0;
+    var gap  = parseFloat(cs.columnGap)    || 0;
+    var W    = bento.clientWidth;
+    var N    = currentCols;
+    var inner = W - 2 * pad;
+    var colW  = inner > 0 ? (inner - (N - 1) * gap) / N : 0;
+    var tileW = colW + gap;
+    root.style.setProperty('--ts-col-width',  Math.max(0, colW)  + 'px');
+    root.style.setProperty('--ts-tile-width', Math.max(0, tileW) + 'px');
+    /* Update canvas size badge */
+    var canvas = document.getElementById('ts-canvas-container');
+    if (canvas && canvasSizeBadge) {
+      canvasSizeBadge.textContent =
+        Math.round(canvas.clientWidth) + 'px × ' + Math.round(canvas.clientHeight) + 'px';
+    }
+    /* Update overlay grid after resize */
+    renderOverlayCols();
+  }
+
+  /* ── SSOT: updateGrid (§2) ─────────────────────────────── */
+  function updateGrid(cols) {
+    currentCols = cols;
+    root.style.setProperty('--ts-layout-cols', cols);
+    root.setAttribute('data-ts-cols', String(cols));
+    /* Sync column chip active state */
+    document.querySelectorAll('#ts-col-chips .ts-chip').forEach(function (b) {
+      b.classList.toggle('active', parseInt(b.dataset.cols) === cols);
+    });
+    renderOverlayCols();
+    computeGridVars();
+    updateExport();
+  }
+/* the gap slider is not  working right. the gapos arte  working   reposndign  directly to the poaddings. thta may be  becasuew fo the css  asighning to the gaps or paddingh.  so the gaps must be overrided again to avoid that form hgappening. the gaps should not be altered qhen ytouvchign the slider for the paddigns or viceeversa. . two separate controls. . AND ALOS.  WHEN  OTOUCHIGN THE GAPS.. WE HAVE TO HANDLE THE ISSUE WITH THE BACKGROUND GRIDS SO MAKEW THE GRID ELEMENT DEIGSN MATCH THE BACCKGROUNF  GRID ESIGNS ORT MAKE THE TILES SCAPE    IN STEPS  SO THE ELEMENTS  HATCJ PERFECTLY WOTHT HE  GRID LINES EDGES. THIS SUI A SECODNARY TASK. but the gap mapping with the padsssdign muyst be removed.  and  the gap must  be  also working along qwith the   grid system perfectly. */
+  /* ── SSOT: updateGap (§2) ──────────────────────────────── */
+  function updateGap(px) {
+    currentGap = px;
+    root.style.setProperty('--ts-grid-gap', px + 'px');
+    /* §10: set gap mode on bento */
+    var bento = getPrimaryBento();
+    if (bento) {
+      var mode = px === 0 ? 'wireframe' : px < 24 ? 'card' : 'spaced';
+      bento.setAttribute('data-gap-mode', mode);
+    }
+    /* Enforce rhythm law: pad >= gap */
+    if (px > currentPad) {
+      updatePad(px);
+      if (padRange) padRange.value = px;
+      if (padVal) padVal.textContent = px + 'px';
+    }
+    computeGridVars();
+    updateExport();
+  }
+/* currently we have mixzed paddighn types.  WE NEED A GLOBAL    FLEXIBLE AND NESTABLE PROPORTIONAL USABLE PADDIGN THAT RTEPSONDS TO THE SLIDER  UI.  THE MAIN ONE. ands then we need a  non-manipulative,   STATIC  paddign for ui onlty usage pourpiose for the labels and the ui   visualization of the  tags, labels and elements for dispolaying info properly adn tidy. CURRENTLY  THEY ARE USED  WITH DIFFERTNT CLASSES.   BENTO-PAD  AND  GAPS ARE  THE DYNAMIC ONE.S BUT PELAse consolidater  the twqo type of spaxcewrs  with proper names and use  inbheritable and nestable ones t baht shrinks  on ensted cards  so the layout doenst breaks and scales better the inner elements proprotional to the available space. */
+  /* ── SSOT: updatePad (§2) ──────────────────────────────── */
+  function updatePad(px) {
+    currentPad = px;
+    root.style.setProperty('--ts-bento-pad', px + 'px');
+    computeGridVars();
+    updateExport();
+  }
+
+  /* ── SSOT: updateMinH (§2) ─────────────────────────────── */
+  function updateMinH(px) {
+    currentMinH = px;
+    root.style.setProperty('--ts-bento-min-h', px + 'px');
+    updateExport();
+  }
+
+  /* ── GRID OVERLAY (§3b) — CSS Grid cells ───────────────────
+     Creates N .ts-grid-overlay__col children inside the overlay element.
+     The overlay has the identical grid-template-columns as .ts-bento.
+     Browser grid engine ensures zero drift.
+  ─────────────────────────────────────────────────────────────── */
+
+  /*FIX NEEDED:  the ovcerlay needs to be on a n upper level and  was just imporved with css above on the attached css fgilke.   THE PVOELAY  IS NOT STUICKED ON THE VIEWPORT  WHEN THE BENTO IS SCROLLED. SO IT NEEDS TO BE ATTACHE DON AN UPPER LEVEL RMEINING MAPPED WITH THE MATCHING COLUMN GRID.  THE BEIGHT MUST REMAIN  FULLY   CONSISTENT RGERADLESS THE  SCORLLING OF THE BENTO.  BUT NOT USIGN FIXED POSITIONING.  BUT KEEING IT IN THIS SCOPE,  MAKE STHAT SCPOLLING    JUST KEEOPS THE   OVERLAY HEIGHT STUCK ON THE    INITIASL VIREPORT  VERITCLA HEIGHT WHILE SCORLLING    KEEPS   WITHOUT THE OVERLAY  VISIBLE.   as this overlay is not addapting to the bento heigth. keep the  current syling of the grid   a si  left it, with a sibtile color alpha,  and the fashed     broders  on t erahc column element. the columns must cover  the      sidebars inside the    app shett and other layouts which dotn cover this overlay ccurrently. */
+  function renderOverlayCols() {
+    var ol = getOverlay();
+    if (!ol) return;
+    /* Only rebuild if count changed */
+    if (ol.children.length === currentCols) return;
+    ol.innerHTML = '';
+    for (var i = 0; i < currentCols; i++) {
+      var col = document.createElement('div');
+      col.className = 'ts-grid-overlay__col';
+      ol.appendChild(col);
+    }
+  }
+
+  /* ── OVERLAY TOGGLE ────────────────────────────────────── */
+  function setOverlay(active) {
+    overlayActive = active;
+    var ol = getOverlay();
+    if (ol) ol.setAttribute('data-visible', active ? 'true' : 'false');
+    if (overlayToggle) overlayToggle.checked = active;
+    renderOverlayCols();
+  }
+
+  /* ── STATUS ─────────────────────────────────────────────── */
+  function refreshTilePanel() {
+    var hasSelection = selectedTile && masterLayout.contains(selectedTile);
+    if (tileSection) {
+      tileSection.classList.toggle('active', hasSelection);
+      /* show/hide differently since it's inside a ts-card */
+      tileSection.style.display = hasSelection ? '' : 'none';
+    }
+    if (tilePlaceholder) {
+      tilePlaceholder.style.display = hasSelection ? 'none' : '';
+    }
+    if (!hasSelection) {
+      /* Clear active span/layout chips */
+      document.querySelectorAll('#ts-span-chips .ts-chip, #ts-layout-chips .ts-chip').forEach(function (b) {
+        b.classList.remove('active');
+      });
+      if (tileLevelBadge) tileLevelBadge.textContent = '';
+      updateInnerTopbar('');
+      return;
+    }
+    var lvl = parseInt(selectedTile.getAttribute('data-level') || '0', 10);
+    var atMax = lvl >= 3;
+    if (tileLevelBadge) tileLevelBadge.textContent = 'L' + lvl + (atMax ? ' MAX' : '');
+    if (nestGridBtn)  nestGridBtn.disabled  = atMax;
+    if (nestSplitBtn) nestSplitBtn.disabled = atMax;
+    /* Reflect active span class */
+    var SPANS = ['ts-bento__hero','ts-bento__half','ts-bento__third','ts-bento__quart','ts-bento__wide','ts-bento__full'];
+    document.querySelectorAll('#ts-span-chips .ts-chip').forEach(function (b) {
+      b.classList.toggle('active', selectedTile.classList.contains(b.dataset.span));
+    });
+    /* Reflect inner layout class */
+    var inner = selectedTile.querySelector(':scope > .ts-stack, :scope > .ts-split, :scope > .ts-grid');
+    document.querySelectorAll('#ts-layout-chips .ts-chip').forEach(function (b) {
+      b.classList.toggle('active', inner && inner.classList.contains(b.dataset.layout));
+    });
+    updateInnerTopbar(currentCols + ' cols · L' + lvl + (atMax ? ' — max depth' : ' selected'));
+  }
+
+  function updateInnerTopbar(text) {
+    var el = document.getElementById('ts-grid-status');
+    if (el) el.textContent = text || (currentCols + ' cols · click a tile to select');
+  }
+
+  /* ── TILE SELECTION (§9) ───────────────────────────────── */
+  function selectTile(el) {
+    masterLayout.querySelectorAll('.ts-tile--selected').forEach(function (e) {
+      e.classList.remove('ts-tile--selected');
+    });
+    selectedTile = el || null;
+    if (el) el.classList.add('ts-tile--selected');
+    refreshTilePanel();
+  }
+
+  /* Returns target tile for nesting, or null if at max depth */
+  function getSelectedTile() {
+    if (selectedTile && masterLayout.contains(selectedTile)) {
+      var lvl = parseInt(selectedTile.getAttribute('data-level') || '0', 10);
+      if (lvl >= 3) return null;
+      if (lvl > 0)  return selectedTile;
+    }
+    return masterLayout.querySelector('.ts-layout-container[data-level="1"]') || null;
+  }
+
+  /* ── SPAN SWITCHER ─────────────────────────────────────── */
+
+  /* this code needs to update the title of the   tile  bvlocks  too. as the static ones remains   stuck on the  initial ones. */
+  var SPAN_CLASSES = ['ts-bento__hero','ts-bento__half','ts-bento__third','ts-bento__quart','ts-bento__wide','ts-bento__full'];
+  function setSpan(spanClass) {
+    if (!selectedTile) return;
+    SPAN_CLASSES.forEach(function (c) { selectedTile.classList.remove(c); });
+    selectedTile.classList.add(spanClass);
+    refreshTilePanel();
+    updateExport();
+  }
+
+  /* ── LAYOUT SWITCHER ───────────────────────────────────── */
+  function setInnerLayout(layoutClass) {
+    if (!selectedTile) return;
+    /* Find or create the inner layout container */
+    var inner = selectedTile.querySelector(':scope > .ts-stack, :scope > .ts-split, :scope > .ts-grid');
+    if (!inner) {
+      /* If tile has direct children (nested blocks), wrap them */
+      inner = document.createElement('div');
+      inner.className = layoutClass + ' ts-nested-block ts-layout-container';
+      inner.setAttribute('data-level', selectedTile.getAttribute('data-level'));
+      while (selectedTile.firstChild) inner.appendChild(selectedTile.firstChild);
+      selectedTile.appendChild(inner);
+    } else {
+      ['ts-stack','ts-split','ts-grid'].forEach(function (c) { inner.classList.remove(c); });
+      inner.classList.add(layoutClass);
+    }
+    refreshTilePanel();
+    updateExport();
+  }
+
+  /* ── NESTING (§9) — CSS classes only, no inline styles ─── */
+  function nestGrid() {
+    var target = getSelectedTile();
+    if (!target) { toast('Max depth reached — select a tile at L1 or L2'); return; }
+    var lvl    = parseInt(target.getAttribute('data-level') || '0', 10);
+    if (lvl >= 3) { toast('Maximum nesting depth (3) reached'); return; }
+    var newLvl = lvl + 1;
+    var grid = document.createElement('div');
+    grid.className = 'ts-grid ts-nested-block ts-layout-container';
+    grid.setAttribute('data-level', newLvl);
+    for (var i = 1; i <= 3; i++) {
+      var card = document.createElement('div');
+      card.className = 'ts-stack ts-nested-card';
+      card.innerHTML = '<strong style="position:relative;z-index:1">Card ' + i + '</strong>'
+        + '<span class="ts-muted" style="position:relative;z-index:1">L' + newLvl + ' · grid</span>';
+      grid.appendChild(card);
+    }
+    target.appendChild(grid);
+    updateExport();
+  }
+
+  function nestSplit() {
+    var target = getSelectedTile();
+    if (!target) { toast('Max depth reached — select a tile at L1 or L2'); return; }
+    var lvl    = parseInt(target.getAttribute('data-level') || '0', 10);
+    if (lvl >= 3) { toast('Maximum nesting depth (3) reached'); return; }
+    var newLvl = lvl + 1;
+    var split = document.createElement('div');
+    split.className = 'ts-split ts-nested-block ts-layout-container';
+    split.setAttribute('data-level', newLvl);
+    [['← 5fr', 'split left'], ['7fr →', 'split right']].forEach(function (pair) {
+      var card = document.createElement('div');
+      card.className = 'ts-stack ts-nested-card';
+      card.innerHTML = '<strong style="position:relative;z-index:1">' + pair[0] + '</strong>'
+        + '<span class="ts-muted" style="position:relative;z-index:1">L' + newLvl + ' · ' + pair[1] + '</span>';
+      split.appendChild(card);
+    });
+    target.appendChild(split);
+    updateExport();
+  }
+/* this section needs a proper  append  and  json like   scturturong for masinainability and export matching. also the  inner  lements needs tporper  wrapping woith classes. so the exports are  proeprly styled and  coded. */
+
+  /* ── SCAFFOLD PRESETS (§5) ─────────────────────────────── */
+  function makeStack(title, sub) {
+    return '<div class="ts-stack">'
+      + '<div class="ts-layout-tag"><h4 class="ts-layout-tag_title">' + title + '</h4>'
+      + '<p class="ts-layout-tag_subtitle ts-muted">' + sub + '</p></div>'
+      + '</div>';
+  }
+
+  var SCAFFOLDS = {
+    'app-shell': { cols: 12, gap: 0, pad: 24, minh: 160, label: 'App Shell' },
+    'dashboard': { cols: 12, gap: 0, pad: 0,  minh: 160, label: 'Dashboard' },
+    'landing':   { cols: 12, gap: 24, pad: 32, minh: 120, label: 'Landing Page' },
+    'bento':     { cols: 12, gap: 0, pad: 0,  minh: 200, label: 'Bento Canvas' },
+    'split':     { cols: 12, gap: 24, pad: 24, minh: 400, label: 'Split View' }
+  };
+/* this section needs a proper  append  and  json like   scturturong for masinainability and export matching. also the  inner  lements needs tporper  wrapping woith classes. so the exports are  proeprly styled and  coded. */
+  function renderAppShell() {
+    return '<div class="ts-app ts-live-preview" id="ts-root-app">'
+      /* Nav */
+      + '<div class="ts-app__nav">'
+      + '<div class="ts-stack">'
+      + '<strong style="position:relative;z-index:1">Sidebar</strong>'
+      + '<span class="ts-muted" style="position:relative;z-index:1">ts-stack · nav</span>'
+      + '<div class="ts-muted" style="position:relative;z-index:1">Dashboard</div>'
+      + '<div class="ts-muted" style="position:relative;z-index:1">Analytics</div>'
+      + '<div class="ts-muted" style="position:relative;z-index:1">Components</div>'
+      + '</div></div>'
+      /* Inner topbar */
+      + '<div class="ts-app__topbar">'
+      + '<span>App Shell</span>'
+      + '<span class="ts-muted" id="ts-grid-status" style="margin-left:auto">12 cols · click a tile to select</span>'
+      + '</div>'
+      /* Main */
+      + '<div class="ts-app__main" id="ts-app-main">'
+      + '<div id="ts-grid-overlay" class="ts-grid-overlay" data-visible="false"></div>'
+      + '<div class="ts-bento" id="ts-primary-bento" data-gap-mode="wireframe">'
+      + '<div class="ts-bento__hero ts-layout-container" data-level="1">' + makeStack('Hero Tile', 'L1 · 8 col · 2 rows') + '</div>'
+      + '<div class="ts-bento__half ts-layout-container" data-level="1">' + makeStack('Insights', 'L1 · 4 col · 2 rows') + '</div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('Metrics', 'L1 · span 4') + '</div>'
+      + '<div class="ts-bento__quart ts-layout-container" data-level="1">' + makeStack('Status', 'L1 · span 3') + '</div>'
+      + '<div class="ts-bento__wide ts-layout-container" data-level="1">'
+      + '<div class="ts-split">'
+      + '<div class="ts-stack"><strong style="position:relative;z-index:1">← 5fr</strong><p class="ts-muted" style="position:relative;z-index:1">Split left</p></div>'
+      + '<div class="ts-stack"><strong style="position:relative;z-index:1">7fr →</strong><p class="ts-muted" style="position:relative;z-index:1">ts-bento__wide</p></div>'
+      + '</div></div>'
+      + '</div></div></div>';
+  }
+
+  function renderDashboard() {
+    return '<div class="ts-app__main" id="ts-app-main" style="overflow:auto;position:relative;grid-area:unset;background-image:var(--ts-bg-mesh,none);background-size:24px 24px;flex:1;min-height:0;">'
+      + '<div id="ts-grid-overlay" class="ts-grid-overlay" data-visible="false"></div>'
+      + '<div class="ts-bento" id="ts-primary-bento" data-gap-mode="wireframe">'
+      + '<div class="ts-bento__full ts-layout-container" data-level="1">' + makeStack('Dashboard Header', 'L1 · full width') + '</div>'
+      + '<div class="ts-bento__hero ts-layout-container" data-level="1">' + makeStack('Main Chart', 'L1 · 8 col · 2 rows') + '</div>'
+      + '<div class="ts-bento__half ts-layout-container" data-level="1">' + makeStack('KPIs', 'L1 · 4 col · 2 rows') + '</div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('Widget A', 'L1 · span 4') + '</div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('Widget B', 'L1 · span 4') + '</div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('Widget C', 'L1 · span 4') + '</div>'
+      + '</div></div>';
+  }
+
+  function renderLanding() {
+    return '<div class="ts-app__main" id="ts-app-main" style="overflow:auto;position:relative;grid-area:unset;flex:1;min-height:0;background-image:var(--ts-bg-mesh,none);background-size:24px 24px;">'
+      + '<div id="ts-grid-overlay" class="ts-grid-overlay" data-visible="false"></div>'
+      + '<div class="ts-bento" id="ts-primary-bento" data-gap-mode="card">'
+      + '<div class="ts-bento__full ts-layout-container" data-level="1">' + makeStack('Navigation', 'ts-bento__full · full width') + '</div>'
+      + '<div class="ts-bento__full ts-layout-container" data-level="1">'
+      + '<div class="ts-split">'
+      + '<div class="ts-stack"><strong style="position:relative;z-index:1">Hero · 5fr</strong><p class="ts-muted" style="position:relative;z-index:1">Headline + CTA</p></div>'
+      + '<div class="ts-stack"><strong style="position:relative;z-index:1">Visual · 7fr</strong><p class="ts-muted" style="position:relative;z-index:1">Feature imagery</p></div>'
+      + '</div></div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('Feature 1', 'L1 · span 4') + '</div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('Feature 2', 'L1 · span 4') + '</div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('Feature 3', 'L1 · span 4') + '</div>'
+      + '<div class="ts-bento__full ts-layout-container" data-level="1">' + makeStack('CTA Zone', 'ts-bento__full · full width') + '</div>'
+      + '</div></div>';
+  }
+
+  function renderBento() {
+    return '<div class="ts-app__main" id="ts-app-main" style="overflow:auto;position:relative;grid-area:unset;flex:1;min-height:0;background-image:var(--ts-bg-mesh,none);background-size:24px 24px;">'
+      + '<div id="ts-grid-overlay" class="ts-grid-overlay" data-visible="false"></div>'
+      + '<div class="ts-bento" id="ts-primary-bento" data-gap-mode="wireframe">'
+      + '<div class="ts-bento__hero  ts-layout-container" data-level="1">' + makeStack('A · Hero', 'span 8 · 2 rows') + '</div>'
+      + '<div class="ts-bento__half  ts-layout-container" data-level="1">' + makeStack('B · Half', 'span 4 · 2 rows') + '</div>'
+      + '<div class="ts-bento__third ts-layout-container" data-level="1">' + makeStack('C', 'span 4') + '</div>'
+      + '<div class="ts-bento__quart ts-layout-container" data-level="1">' + makeStack('D', 'span 3') + '</div>'
+      + '<div class="ts-bento__wide  ts-layout-container" data-level="1">' + makeStack('E · Wide', 'span 5') + '</div>'
+      + '<div class="ts-bento__full  ts-layout-container" data-level="1">' + makeStack('F · Full', '1 / -1') + '</div>'
+      + '</div></div>';
+  }
+
+  function renderSplit() {
+    return '<div class="ts-app__main" id="ts-app-main" style="overflow:auto;position:relative;grid-area:unset;flex:1;min-height:0;background-image:var(--ts-bg-mesh,none);background-size:24px 24px;">'
+      + '<div id="ts-grid-overlay" class="ts-grid-overlay" data-visible="false"></div>'
+      + '<div class="ts-bento" id="ts-primary-bento" data-gap-mode="card">'
+      + '<div class="ts-bento__full ts-layout-container" data-level="1">'
+      + '<div class="ts-split">'
+      + '<div class="ts-stack"><strong style="position:relative;z-index:1">Left · 5fr</strong><p class="ts-muted" style="position:relative;z-index:1">Primary content area</p></div>'
+      + '<div class="ts-stack"><strong style="position:relative;z-index:1">Right · 7fr</strong><p class="ts-muted" style="position:relative;z-index:1">Secondary / media area</p></div>'
+      + '</div></div>'
+      + '</div></div>';
+  }
+
+  var RENDER_FNS = {
+    'app-shell': renderAppShell,
+    'dashboard': renderDashboard,
+    'landing':   renderLanding,
+    'bento':     renderBento,
+    'split':     renderSplit
+  };
+
+  /* ── LOAD SCAFFOLD ─────────────────────────────────────── */
+  function loadScaffold(name) {
+    /* Disconnect observers before DOM surgery */
+    if (ro) { try { ro.disconnect(); } catch(e){} }
+    if (mo) mo.disconnect();
+
+    currentScaffold = name;
+    selectTile(null);
+
+    var cfg = SCAFFOLDS[name] || SCAFFOLDS['app-shell'];
+    var fn  = RENDER_FNS[name] || RENDER_FNS['app-shell'];
+
+    masterLayout.innerHTML = fn();
+
+    /* Apply scaffold defaults */
+    currentCols = cfg.cols;
+    currentGap  = cfg.gap;
+    currentPad  = cfg.pad;
+    currentMinH = cfg.minh;
+    root.style.setProperty('--ts-layout-cols', currentCols);
+    root.setAttribute('data-ts-cols', String(currentCols));
+    root.style.setProperty('--ts-grid-gap',    currentGap  + 'px');
+    root.style.setProperty('--ts-bento-pad',   currentPad  + 'px');
+    root.style.setProperty('--ts-bento-min-h', currentMinH + 'px');
+
+    /* Sync range UIs */
+    if (gapRange)  { gapRange.value  = currentGap;  if (gapVal)  gapVal.textContent  = currentGap  + 'px'; }
+    if (padRange)  { padRange.value  = currentPad;  if (padVal)  padVal.textContent  = currentPad  + 'px'; }
+    if (minhRange) { minhRange.value = currentMinH; if (minhVal) minhVal.textContent = currentMinH + 'px'; }
+
+    /* Sync col chips */
+    document.querySelectorAll('#ts-col-chips .ts-chip').forEach(function (b) {
+      b.classList.toggle('active', parseInt(b.dataset.cols) === currentCols);
+    });
+
+    /* Set gap mode */
+    var bento = getPrimaryBento();
+    if (bento) {
+      var mode = currentGap === 0 ? 'wireframe' : currentGap < 24 ? 'card' : 'spaced';
+      bento.setAttribute('data-gap-mode', mode);
+    }
+
+    /* Restore overlay state */
+    setOverlay(overlayActive);
+
+    /* Reconnect observers */
+    var appMain = getAppMain();
+    if (ro && appMain) ro.observe(appMain);
+    if (mo) mo.observe(masterLayout, MO_OPTS);
+
+    requestAnimationFrame(function () {
+      computeGridVars();
+      updateExport();
+    });
+    /* B-fix-1: guarantee textarea populates after all deferred scripts settle */
+    setTimeout(updateExport, 300);
+  }
+
+  /* ── EXPORT SYSTEM (§11) ────────────────────────────────── */
+  var STRIP_CLASSES = [
+    'ts-layout-container','ts-live-preview','ts-tile--selected',
+    'ts-nested-block','ts-nested-card'
+  ];
+  var STRIP_ATTRS = ['data-level','data-visible','data-gap-mode'];
+
+  function getCleanHTML() {
+    var clone = masterLayout.cloneNode(true);
+    /* Remove overlay */
+    var ol = clone.querySelector('#ts-grid-overlay');
+    if (ol) ol.remove();
+    /* Remove inner topbar status */
+    var tb = clone.querySelector('.ts-app__topbar');
+    if (tb) { var st = tb.querySelector('#ts-grid-status'); if(st) tb.removeChild(st); }
+    /* B-fix-2: strip the clone root itself (querySelectorAll excludes the root element) */
+    STRIP_CLASSES.forEach(function (c) { clone.classList.remove(c); });
+    STRIP_ATTRS.forEach(function (a)   { clone.removeAttribute(a); });
+    clone.removeAttribute('style');
+    if (clone.className === '') clone.removeAttribute('class');
+    /* Strip editor artifacts from all descendants */
+    clone.querySelectorAll('*').forEach(function (el) {
+      STRIP_CLASSES.forEach(function (c) { el.classList.remove(c); });
+      STRIP_ATTRS.forEach(function (a)   { el.removeAttribute(a); });
+      el.removeAttribute('style'); /* no inline styles ever */
+      if (el.className === '') el.removeAttribute('class');
+    });
+    var html = (new XMLSerializer()).serializeToString(clone);
+    html = html.replace(/ xmlns="[^"]*"/g, '');
+    return prettyHTML(html);
+  }
+
+  function prettyHTML(html) {
+    var VOID = 'area base br col embed hr img input link meta param source track wbr'.split(' ');
+    var P = '  '; var d = 0; var out = '';
+    var parts = html.split(/(<[^>]+>)/);
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i]; if (!p) continue;
+      if (p[0] === '<' && p[1] === '!') {
+        out += '\n' + P.repeat(d) + p;
+      } else if (p[0] === '<' && p[1] === '/') {
+        d = Math.max(0, d - 1); out += '\n' + P.repeat(d) + p;
+      } else if (p[0] === '<') {
+        var name = ((p.match(/<([a-zA-Z][\w-]*)/) || [])[1] || '').toLowerCase();
+        out += '\n' + P.repeat(d) + p;
+        if (name && VOID.indexOf(name) < 0 && !/\/>$/.test(p)) d++;
+      } else {
+        var t = p.trim(); if (t) out += '\n' + P.repeat(d) + t;
+      }
+    }
+    return out.trim();
+  }
+
+  function updateExport() {
+    try {
+      if (exportArea) exportArea.value = getCleanHTML();
+    } catch (e) {
+      if (exportArea) exportArea.value = '<!-- export error: ' + e.message + ' -->';
+    }
+  }
+
+  /* ── COPY ───────────────────────────────────────────────── */
+  function doCopy(btn) {
+    if (!exportArea || !exportArea.value) return;
+    navigator.clipboard.writeText(exportArea.value).then(function () {
+      var orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(function () { btn.textContent = orig; }, 1800);
+    }).catch(function () { toast('Copy failed — select and copy manually'); });
+  }
+
+  /* ── TOAST ──────────────────────────────────────────────── */
+  function toast(msg) {
+    var el = document.createElement('div');
+    el.className = 'ts-ls-toast';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(function () { if (el.parentNode) el.remove(); }, 2400);
+  }
+
+  /* ── TAB SYSTEM ─────────────────────────────────────────── */
+  function initTabs() {
+    var tabs  = document.querySelectorAll('.ts-ptab');
+    var panes = document.querySelectorAll('.ts-tab-pane');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t)  { t.classList.remove('active'); });
+        panes.forEach(function (p) { p.classList.remove('active'); p.style.display = 'none'; });
+        tab.classList.add('active');
+        var pane = document.querySelector('[data-pane="' + tab.dataset.tab + '"]');
+        if (pane) {
+          pane.classList.add('active');
+          pane.style.display = tab.dataset.tab === 'code' ? 'flex' : 'block';
+          if (tab.dataset.tab === 'code') pane.style.flexDirection = 'column';
+          if (tab.dataset.tab === 'code') pane.style.height = '100%';
+        }
+      });
+    });
+  }
+
+  /* ── ACCORDION ──────────────────────────────────────────── */
+  function initAccordion() {
+    document.querySelectorAll('.ts-card-header.ts-accordion').forEach(function (hdr) {
+      hdr.addEventListener('click', function () { hdr.classList.toggle('open'); });
+    });
+    /* Open first card in each pane by default */
+    document.querySelectorAll('.ts-tab-pane').forEach(function (pane) {
+      var first = pane.querySelector('.ts-card-header.ts-accordion');
+      if (first) first.classList.add('open');
+    });
+  }
+
+ /* ── GRID ENGINE — SSOT ────────────────────────────────────
+       [F9] reads paddingLeft + columnGap from the actual rendered bento
+       element — NOT getPropertyValue() which returns raw "var(...)" strings
+       that parseFloat turns into NaN.
+    ──────────────────────────────────────────────────────────── */
+    function computeGridVars() {
+      var main  = getAppMain();
+      var bento = getPrimaryBento() || (main && main.querySelector('.ts-bento'));
+      if (!main || !bento) return;
+
+      var cs  = getComputedStyle(bento);
+      var pad = parseFloat(cs.paddingLeft)  || 0;   /* actual rendered px */
+      var gap = parseFloat(cs.columnGap)    || 0;   /* actual rendered px */
+      var N   = currentCols;
+      var W   = main.clientWidth;
+      var inner = W - 2 * pad;
+      var colW  = inner > 0 ? (inner - (N - 1) * gap) / N : 0;
+      var tileW = colW + gap;
+
+      root.style.setProperty('--ts-col-width',  Math.max(0, colW)  + 'px');
+      root.style.setProperty('--ts-tile-width', Math.max(0, tileW) + 'px');
+      /* Expose resolved bento-pad as px so .ts-grid-overlay margin resolves */
+      root.style.setProperty('--ts-bento-pad', pad + 'px');
+    }
+
+    /* updateGrid: ONLY entry point for column count changes */
+    function updateGrid(cols) {
+      currentCols = cols;
+      root.style.setProperty('--ts-layout-cols', cols);
+      root.setAttribute('data-ts-cols', String(cols));
+      requestAnimationFrame(function() { computeGridVars(); refreshStatus(); updateExport(); });
+    }
+
+    /* updateGap: ONLY entry point for gap changes */
+    function updateGap(px) {
+      currentGap = px;
+      root.style.setProperty('--ts-grid-gap', px + 'px');
+      //if (gapValEl) gapValEl.textContent = px + 'px';
+      if (gapVal) gapVal.textContent = px + 'px';
+      requestAnimationFrame(function() { computeGridVars(); updateExport(); });
+    }
+  /* ── OBSERVERS ──────────────────────────────────────────── */
+  var MO_OPTS = { childList: true, subtree: true, attributes: true };
+
+  /* ── EVENT WIRING ───────────────────────────────────────── */
+  function wireEvents() {
+    /* Scaffold picker */
+    if (scaffoldSelect) {
+      scaffoldSelect.addEventListener('change', function (e) { loadScaffold(e.target.value); });
+    }
+    /* Reset */
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () { loadScaffold(currentScaffold); });
+    }
+    /* Reset */
+    if (resetBtn2) {
+      resetBtn2.addEventListener('click', function () { loadScaffold(currentScaffold); });
+    }
+    /* Overlay toggle */
+    if (overlayToggle) {
+      overlayToggle.addEventListener('change', function (e) { setOverlay(e.target.checked); });
+    }
+    /* Overlay toggle */
+    if (overlayToggle2) {
+      overlayToggle2.addEventListener('change', function (e) { setOverlay(e.target.checked); });
+    }
+    /* Gap slider */
+    if (gapRange) {
+      gapRange.addEventListener('input', function (e) {
+        var v = parseInt(e.target.value);
+        if (gapVal) gapVal.textContent = v + 'px';
+        updateGap(v);
+      });
+    }
+    /* Gap slider */
+    if (gapSlider) {
+      gapSlider.addEventListener('input', function(e) { updateGap(parseInt(e.target.value, 10)); });
+    }
+
+    /* Pad slider */
+    if (padRange) {
+      padRange.addEventListener('input', function (e) {
+        var v = parseInt(e.target.value);
+        if (padVal) padVal.textContent = v + 'px';
+        updatePad(v);
+      });
+    }
+    /* Min height slider */
+    if (minhRange) {
+      minhRange.addEventListener('input', function (e) {
+        var v = parseInt(e.target.value);
+        if (minhVal) minhVal.textContent = v + 'px';
+        updateMinH(v);
+      });
+    }
+    /* Column chips */
+    document.getElementById('ts-col-chips').addEventListener('click', function (e) {
+      var btn = e.target.closest('.ts-chip[data-cols]');
+      if (!btn) return;
+      updateGrid(parseInt(btn.dataset.cols));
+    });
+    /* Span chips */
+    document.getElementById('ts-span-chips').addEventListener('click', function (e) {
+      var btn = e.target.closest('.ts-chip[data-span]');
+      if (!btn) return;
+      setSpan(btn.dataset.span);
+    });
+    /* Layout chips */
+    document.getElementById('ts-layout-chips').addEventListener('click', function (e) {
+      var btn = e.target.closest('.ts-chip[data-layout]');
+      if (!btn) return;
+      setInnerLayout(btn.dataset.layout);
+    });
+    /* Nest buttons */
+    if (nestGridBtn)  nestGridBtn.addEventListener('click',  nestGrid);
+    if (nestSplitBtn) nestSplitBtn.addEventListener('click', nestSplit);
+     if (nestGridBtn2)  nestGridBtn2.addEventListener('click',  nestGrid);
+    if (nestSplitBtn2) nestSplitBtn2.addEventListener('click', nestSplit);
+    /* Copy buttons */
+    if (copyBtn)       copyBtn.addEventListener('click',       function () { doCopy(copyBtn); });
+    if (copyHeaderBtn) copyHeaderBtn.addEventListener('click', function () { doCopy(copyHeaderBtn); });
+    /* Tile selection — click delegation */
+    masterLayout.addEventListener('click', function (e) {
+      var tile = e.target.closest('.ts-layout-container[data-level]');
+      if (!tile || !masterLayout.contains(tile)) return;
+      var lvl = parseInt(tile.getAttribute('data-level'), 10);
+      if (lvl > 0) { e.stopPropagation(); selectTile(tile); }
+    });
+  }
+
+
+    /* ── STATUS BAR ──────────────────────────────────────────── */
+    function refreshStatus() {
+      var lvl = selectedTile ? selectedTile.getAttribute('data-level') : null;
+      var atMax = lvl && parseInt(lvl, 10) >= 3;
+      if (gridStatus) {
+        gridStatus.textContent = currentCols + ' cols · ' +
+          (lvl
+            ? (atMax ? 'L' + lvl + ' — max depth reached' : 'L' + lvl + ' selected — click ＋ to nest')
+            : 'click a tile to select');
+      }
+      if (selStatus) {
+        selStatus.textContent = lvl ? 'L' + lvl + (atMax ? ' (max)' : ' active') : 'no selection';
+      }
+    }
+  /* ── INIT ───────────────────────────────────────────────── */
+  function init() {
+    /* Setup tabs and accordion first */
+    initTabs();
+    initAccordion();
+    /* Initial tile panel state */
+    if (tileSection)     tileSection.style.display = 'none';
+    if (tilePlaceholder) tilePlaceholder.style.display = '';
+    /* Wire all events */
+    wireEvents();
+    /* ResizeObserver for col-width recompute */
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(function () { computeGridVars(); });
+    } else {
+      window.addEventListener('resize', computeGridVars, { passive: true });
+    }
+    /* MutationObserver for live export updates */
+    mo = new MutationObserver(function () { updateExport(); });
+    /* Load default scaffold */
+    loadScaffold('app-shell');
+
+     var main = getAppMain();
+      if (ro && main) ro.observe(main);
+      updateGrid(12);
+      updateGap(0);
+      setOverlay(false);
+      requestAnimationFrame(function() { computeGridVars(); updateExport(); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+}());
+</script>
+
+</body>
+</html>

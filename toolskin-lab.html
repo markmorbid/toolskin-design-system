@@ -9,11 +9,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <!-- Other CDN assets loaded dynamically by toolskin-assets.js -->
+  <script src="https://satsea.io/toolskin-showcase/assets/js/toolskin-assets.js" defer></script>
   <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </noscript>
+<!--     <link rel="stylesheet" href="https://satsea.io/toolskin-showcase/assets/css/toolskin.css" /> -->
     <link rel="stylesheet" href="assets/css/toolskin.css" />
-  <script src="assets/js/toolskin-assets.js" defer></script>
+
   <script src="assets/js/toolskin.js" defer></script>
   <script src="assets/js/toolskin-uikit.js" defer></script>
    <!-- Toolskin System (local — render-critical) -->
@@ -25,6 +27,11 @@
         smoothScroll: { enabled: false, duration: 1.2 },
       };
       
+    </script>
+<script>
+      window.__TOOLSKIN_CONFIG__ = {
+        stylesheetDebugger: { enabled: true }
+      };
     </script>
   <style>
     body { font-family: var(--ts-font-body, 'Space Grotesk', system-ui, sans-serif); }
@@ -768,7 +775,7 @@ margin-block: var(--ts-sp-6);
     <header class="lab-hero">
       <h1>Toolskin UI Kit Lab</h1>
       <p>
-        Vanilla-only components in <code>assets/js/toolskin-uikit.js</code>; UI Kit styles are merged into <code>assets/css/toolskin.css</code>.
+        Vanilla-only components in <code>https://satsea.io/toolskin-showcase/assets/js/toolskin-uikit.js</code>; UI Kit styles are merged into <code>https://satsea.io/toolskin-showcase/assets/css/toolskin.css</code>.
         No jQuery. Prefix <code>ts-ui-*</code> and API <code>window.ToolskinUIKit</code>.
         Reference widgets mirror the jQuery UI showcase patterns (accordion, spinner, sortable, etc.) without external UI libraries.
       </p>

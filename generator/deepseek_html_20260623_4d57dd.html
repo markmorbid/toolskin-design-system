@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rule-Based Grid Template System</title>
+    <style>
+        /* ─────────────────────────────── RESET & BASE ─────────────────────────────── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #0d0e12;
+            color: #e8edf5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        /* ─────────────────────────────── MAIN APP ─────────────────────────────── */
+        .app {
+            max-width: 1300px;
+            width: 100%;
+            background: #16181e;
+            border-radius: 28px;
+            padding: 32px 36px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid #2a2e38;
+        }
+
+        /* ─── TOOL SKIN BRAND (from image) ─── */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #262b34;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(145deg, #4f7cff, #6c5ce7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(79, 124, 255, 0.35);
+        }
+
+        .brand h1 {
+            font-weight: 600;
+            font-size: 20px;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #e8edf5 60%, #8b9bb5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand h1 span {
+            font-weight: 300;
+            color: #6f7d96;
+            -webkit-text-fill-color: #6f7d96;
+        }
+
+        .brand-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            color: #8b9bb5;
+        }
+
+        .brand-status .badge {
+            background: #232832;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #bcc9e0;
+            border: 1px solid #323a47;
+        }
+
+        .brand-status .progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-status .progress-track {
+            width: 100px;
+            height: 5px;
+            background: #232832;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .brand-status .progress-fill {
+            height: 100%;
+            width: 35%;
+            background: linear-gradient(90deg, #4f7cff, #6c5ce7);
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+
+        .brand-status .progress-label {
+            font-weight: 500;
+            font-size: 13px;
+            color: #c8d4e8;
+            min-width: 36px;
+        }
+
+        /* ─────────────────────────────── CONTROLS ─────────────────────────────── */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 24px;
+            align-items: center;
+            margin-bottom: 28px;
+            padding: 16px 20px;
+            background: #1e222b;
+            border-radius: 16px;
+            border: 1px solid #2a2f3a;
+        }
+
+        .controls .group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .controls label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #9aabbf;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .controls select,
+        .controls input[type="number"] {
+            background: #0d0e12;
+            border: 1px solid #323a47;
+            color: #e8edf5;
+            padding: 7px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            transition: border 0.2s;
+            min-width: 70px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .controls select:hover,
+        .controls input[type="number"]:hover {
+            border-color: #4f7cff;
+        }
+        .controls select:focus,
+        .controls input[type="number"]:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.15);
+        }
+
+        .controls input[type="number"] {
+            width: 64px;
+            min-width: 54px;
+            padding: 7px 8px;
+            text-align: center;
+            -moz-appearance: textfield;
+        }
+        .controls input[type="number"]::-webkit-outer-spin-button,
+        .controls input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .controls .btn {
+            background: linear-gradient(135deg, #4f7cff, #6c5ce7);
+            border: none;
+            color: #fff;
+            padding: 7px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+            font-family: inherit;
+            box-shadow: 0 4px 14px rgba(79, 124, 255, 0.25);
+        }
+        .controls .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(79, 124, 255, 0.35);
+        }
+        .controls .btn:active {
+            transform: translateY(0);
+        }
+
+        .controls .token-display {
+            font-size: 12px;
+            color: #6f7d96;
+            background: #0d0e12;
+            padding: 4px 14px;
+            border-radius: 40px;
+            border: 1px solid #2a2f3a;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            letter-spacing: 0.3px;
+        }
+
+        .controls .token-display strong {
+            color: #bcc9e0;
+            font-weight: 600;
+        }
+
+        /* ─────────────────────────────── GRID CONTAINER ─────────────────────────────── */
+        .grid-container {
+            position: relative;
+            border-radius: 16px;
+            background: #11141b;
+            padding: 2px;
+            border: 1px solid #262b34;
+            min-height: 220px;
+            transition: min-height 0.3s;
+        }
+
+        .grid {
+            display: grid;
+            gap: 6px;
+            border-radius: 14px;
+            padding: 6px;
+            background: #11141b;
+            min-height: 200px;
+            transition: grid-template-areas 0.35s ease, grid-template-columns 0.35s ease;
+        }
+
+        /* ─── Grid items ─── */
+        .grid-item {
+            background: #1e2530;
+            border-radius: 12px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            border: 1px solid #2f3643;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            min-height: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-item:hover {
+            background: #262e3c;
+            border-color: #3f485a;
+        }
+
+        .grid-item .item-label {
+            font-weight: 600;
+            font-size: 15px;
+            color: #d6e0f0;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grid-item .item-label .idx {
+            font-weight: 400;
+            font-size: 12px;
+            color: #6f7d96;
+            background: #0d0e12;
+            padding: 1px 10px;
+            border-radius: 40px;
+            border: 1px solid #2a2f3a;
+        }
+
+        .grid-item .item-meta {
+            font-size: 12px;
+            color: #6f7d96;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .grid-item .item-content {
+            font-size: 13px;
+            color: #9aabbf;
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .grid-item .nested-badge {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            background: #2f3a4a;
+            padding: 2px 10px;
+            border-radius: 40px;
+            color: #a0b4cc;
+            border: 1px solid #3f4a5a;
+            margin-top: 6px;
+        }
+
+        /* ─── Color accents per item ─── */
+        .grid-item[data-accent="0"] {
+            border-left: 3px solid #4f7cff;
+        }
+        .grid-item[data-accent="1"] {
+            border-left: 3px solid #6c5ce7;
+        }
+        .grid-item[data-accent="2"] {
+            border-left: 3px solid #00b894;
+        }
+        .grid-item[data-accent="3"] {
+            border-left: 3px solid #fdcb6e;
+        }
+        .grid-item[data-accent="4"] {
+            border-left: 3px solid #e17055;
+        }
+        .grid-item[data-accent="5"] {
+            border-left: 3px solid #74b9ff;
+        }
+        .grid-item[data-accent="6"] {
+            border-left: 3px solid #a29bfe;
+        }
+        .grid-item[data-accent="7"] {
+            border-left: 3px solid #fd79a8;
+        }
+
+        /* ─── Nested grid inside item ─── */
+        .nested-grid {
+            display: grid;
+            gap: 4px;
+            width: 100%;
+            margin-top: 8px;
+            background: #0d0e12;
+            border-radius: 10px;
+            padding: 4px;
+            border: 1px solid #2a2f3a;
+        }
+
+        .nested-grid .nested-item {
+            background: #1a1f28;
+            border-radius: 8px;
+            padding: 10px 14px;
+            border: 1px solid #2f3643;
+            font-size: 13px;
+            color: #bcc9e0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 38px;
+        }
+
+        .nested-grid .nested-item .ni-idx {
+            font-size: 11px;
+            color: #6f7d96;
+            background: #0d0e12;
+            padding: 0 8px;
+            border-radius: 30px;
+            border: 1px solid #262b34;
+        }
+
+        /* ─────────────────────────────── INFO BAR ─────────────────────────────── */
+        .info-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 28px;
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: #1e222b;
+            border-radius: 14px;
+            border: 1px solid #2a2f3a;
+            font-size: 13px;
+            color: #8b9bb5;
+        }
+
+        .info-bar .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-bar .info-item .label {
+            font-weight: 400;
+            color: #6f7d96;
+        }
+        .info-bar .info-item .value {
+            font-weight: 500;
+            color: #d6e0f0;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 13px;
+            background: #0d0e12;
+            padding: 1px 12px;
+            border-radius: 30px;
+            border: 1px solid #2a2f3a;
+        }
+
+        .info-bar .info-item .value.token-val {
+            color: #a29bfe;
+        }
+
+        /* ─────────────────────────────── RESPONSIVE ─────────────────────────────── */
+        @media (max-width: 800px) {
+            .app {
+                padding: 20px 18px 28px;
+            }
+            .brand h1 {
+                font-size: 16px;
+            }
+            .brand-status .progress-track {
+                width: 60px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .controls .group {
+                flex-wrap: wrap;
+            }
+            .grid {
+                gap: 4px;
+                padding: 4px;
+            }
+            .grid-item {
+                padding: 12px 14px;
+                min-height: 52px;
+            }
+            .info-bar {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .brand-status {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            .grid-item .item-label {
+                font-size: 13px;
+            }
+        }
+
+        /* ─────────────────────────────── ANIMATIONS ─────────────────────────────── */
+        @keyframes fadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-item {
+            animation: fadeSlide 0.3s ease forwards;
+        }
+        .grid-item:nth-child(2) {
+            animation-delay: 0.04s;
+        }
+        .grid-item:nth-child(3) {
+            animation-delay: 0.08s;
+        }
+        .grid-item:nth-child(4) {
+            animation-delay: 0.12s;
+        }
+        .grid-item:nth-child(5) {
+            animation-delay: 0.16s;
+        }
+        .grid-item:nth-child(6) {
+            animation-delay: 0.20s;
+        }
+        .grid-item:nth-child(7) {
+            animation-delay: 0.24s;
+        }
+        .grid-item:nth-child(8) {
+            animation-delay: 0.28s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app" id="app">
+
+        <!-- ─── BRAND BAR (TOOL SKIN) ─── -->
+        <div class="brand-bar">
+            <div class="brand">
+                <div class="brand-icon">◆</div>
+                <h1>TOOL <span>SKIN</span></h1>
+            </div>
+            <div class="brand-status">
+                <span class="badge">SHOWCASE</span>
+                <div class="progress-wrap">
+                    <span class="progress-label">35%</span>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <span style="font-weight:400;font-size:12px;color:#6f7d96;">LOADING</span>
+            </div>
+        </div>
+
+        <!-- ─── CONTROLS ─── -->
+        <div class="controls">
+            <div class="group">
+                <label>Children</label>
+                <input type="number" id="childCount" value="3" min="1" max="12" />
+                <button class="btn" id="renderBtn">Render</button>
+            </div>
+
+            <div class="group">
+                <label>Template</label>
+                <select id="templateSelect">
+                    <option value="auto">auto</option>
+                    <option value="split-1-2">split 1:2</option>
+                    <option value="split-2-1">split 2:1</option>
+                    <option value="split-stack">stack</option>
+                    <option value="triple">triple</option>
+                    <option value="dominant">dominant</option>
+                    <option value="header-body">header-body</option>
+                    <option value="grid-2x2">grid 2×2</option>
+                    <option value="asymmetric">asymmetric</option>
+                    <option value="repeat">repeat</option>
+                </select>
+            </div>
+
+            <div class="group">
+                <label>Token</label>
+                <select id="tokenSelect">
+                    <option value="default">default</option>
+                    <option value="compact">compact</option>
+                    <option value="spacious">spacious</option>
+                    <option value="fixed">fixed</option>
+                </select>
+            </div>
+
+            <div class="token-display">
+                token: <strong id="tokenDisplay">default</strong>
+            </div>
+        </div>
+
+        <!-- ─── GRID ─── -->
+        <div class="grid-container">
+            <div class="grid" id="grid"></div>
+        </div>
+
+        <!-- ─── INFO BAR ─── -->
+        <div class="info-bar">
+            <div class="info-item">
+                <span class="label">template</span>
+                <span class="value" id="infoTemplate">—</span>
+            </div>
+            <div class="info-item">
+                <span class="label">areas</span>
+                <span class="value" id="infoAreas">—</span>
+            </div>
+            <div class="info-item">
+                <span class="label">rows</span>
+                <span class="value" id="infoRows">—</span>
+            </div>
+            <div class="info-item">
+                <span class="label">cols</span>
+                <span class="value" id="infoCols">3</span>
+            </div>
+            <div class="info-item">
+                <span class="label">children</span>
+                <span class="value" id="infoChildren">—</span>
+            </div>
+            <div class="info-item">
+                <span class="label">nested</span>
+                <span class="value" id="infoNested">0</span>
+            </div>
+            <div class="info-item">
+                <span class="label">token</span>
+                <span class="value token-val" id="infoToken">default</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  TEMPLATE DEFINITIONS
+        //  Each template is a 2D array of area names.
+        //  Every area name must form a perfect rectangle.
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const TEMPLATES = {
+
+            // ─── 2 children ───
+            'split-1-2': {
+                areas: [
+                    ['a', 'b', 'b'],
+                    ['a', 'b', 'b']
+                ],
+                label: 'split 1:2'
+            },
+            'split-2-1': {
+                areas: [
+                    ['a', 'a', 'b'],
+                    ['a', 'a', 'b']
+                ],
+                label: 'split 2:1'
+            },
+            'split-stack': {
+                areas: [
+                    ['a', 'a', 'a'],
+                    ['b', 'b', 'b']
+                ],
+                label: 'stack'
+            },
+
+            // ─── 3 children ───
+            'triple': {
+                areas: [
+                    ['a', 'b', 'c'],
+                    ['a', 'b', 'c'],
+                    ['a', 'b', 'c']
+                ],
+                label: 'triple'
+            },
+            'dominant': {
+                areas: [
+                    ['a', 'a', 'b'],
+                    ['a', 'a', 'c']
+                ],
+                label: 'dominant'
+            },
+            'header-body': {
+                areas: [
+                    ['a', 'a', 'a'],
+                    ['b', 'c', 'd']
+                ],
+                label: 'header-body'
+            },
+
+            // ─── 4 children ───
+            'grid-2x2': {
+                areas: [
+                    ['a', 'b', 'b'],
+                    ['c', 'd', 'd']
+                ],
+                label: 'grid 2×2'
+            },
+            'asymmetric': {
+                areas: [
+                    ['a', 'a', 'b'],
+                    ['c', 'c', 'd']
+                ],
+                label: 'asymmetric'
+            },
+
+            // ─── 5+ children (repeat) ───
+            'repeat': {
+                areas: [
+                    ['a', 'b', 'c'],
+                    ['d', 'e', 'f'],
+                    ['g', 'h', 'i']
+                ],
+                label: 'repeat'
+            }
+        };
+
+        // ─── Nested templates (level 2 only, simpler) ───
+        const NESTED_TEMPLATES = {
+            2: [
+                ['a', 'b'],
+                ['a', 'b']
+            ],
+            3: [
+                ['a', 'b', 'c'],
+                ['a', 'b', 'c']
+            ],
+            4: [
+                ['a', 'b'],
+                ['c', 'd']
+            ]
+        };
+
+        // ─── Token configs ───
+        const TOKENS = {
+            default: { gap: 6, padding: 6, minHeight: 200 },
+            compact: { gap: 3, padding: 4, minHeight: 160 },
+            spacious: { gap: 12, padding: 10, minHeight: 260 },
+            fixed: { gap: 6, padding: 6, minHeight: 240 }
+        };
+
+        // ─── Child → template mapping ───
+        function getTemplateForCount(count, explicit) {
+            if (explicit && TEMPLATES[explicit]) return explicit;
+            if (count === 2) return 'split-1-2';
+            if (count === 3) return 'triple';
+            if (count === 4) return 'grid-2x2';
+            return 'repeat';
+        }
+
+        // ─── Get nested template for count ───
+        function getNestedTemplate(count) {
+            if (count === 2) return NESTED_TEMPLATES[2];
+            if (count === 3) return NESTED_TEMPLATES[3];
+            if (count === 4) return NESTED_TEMPLATES[4];
+            // fallback: 2 columns
+            return [
+                ['a', 'b'],
+                ['c', 'd']
+            ];
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  RENDER ENGINE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            const count = parseInt(document.getElementById('childCount').value, 10) || 3;
+            const templateKey = document.getElementById('templateSelect').value;
+            const tokenKey = document.getElementById('tokenSelect').value;
+
+            // Clamp count
+            const clamped = Math.min(Math.max(count, 1), 12);
+
+            // Resolve template
+            const effectiveTemplate = templateKey === 'auto' ?
+                getTemplateForCount(clamped, null) :
+                (TEMPLATES[templateKey] ? templateKey : getTemplateForCount(clamped, null));
+
+            const templateDef = TEMPLATES[effectiveTemplate];
+            if (!templateDef) {
+                grid.innerHTML = '<div style="padding:40px;color:#6f7d96;text-align:center;">No template available</div>';
+                return;
+            }
+
+            const token = TOKENS[tokenKey] || TOKENS.default;
+
+            // ─── Build area map ───
+            const areaMatrix = templateDef.areas;
+            const rows = areaMatrix.length;
+            const cols = areaMatrix[0] ? areaMatrix[0].length : 3;
+
+            // Flatten area names in order of appearance (first occurrence)
+            const areaOrder = [];
+            const seen = new Set();
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const name = areaMatrix[r][c];
+                    if (!seen.has(name)) {
+                        seen.add(name);
+                        areaOrder.push(name);
+                    }
+                }
+            }
+
+            const areaCount = areaOrder.length;
+
+            // ─── Build grid-template-areas string ───
+            const areaRows = areaMatrix.map(row => `"${row.join(' ')}"`);
+            const areasStr = areaRows.join('\n');
+
+            // ─── Determine how many children to render ───
+            // We render up to areaCount children, but also respect the user's count
+            const childCount = Math.min(clamped, areaCount);
+            // If user wants more than areas, we repeat the last area pattern
+            // But for simplicity, we'll just render up to areaCount
+
+            // ─── Generate child data ───
+            const children = [];
+            for (let i = 0; i < childCount; i++) {
+                const areaName = areaOrder[i % areaOrder.length] || 'a';
+                const accent = i % 8;
+                const hasNested = (i === 1 || i === 3) && childCount > 2; // demo nested on some items
+                const nestedChildrenCount = hasNested ? (i === 1 ? 3 : 2) : 0;
+                children.push({
+                    index: i,
+                    area: areaName,
+                    accent,
+                    hasNested,
+                    nestedCount: nestedChildrenCount,
+                    label: `Item ${i + 1}`,
+                    content: i === 0 ? 'Primary' :
+                        i === 1 ? 'Secondary' :
+                        i === 2 ? 'Tertiary' : `Element ${i + 1}`
+                });
+            }
+
+            // ─── Build grid CSS ───
+            grid.style.gridTemplateAreas = areasStr;
+            grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            grid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            grid.style.gap = `${token.gap}px`;
+            grid.style.padding = `${token.padding}px`;
+            grid.style.minHeight = `${token.minHeight}px`;
+
+            // ─── Render items ───
+            // Create a map from area name to the child index
+            const areaToChild = {};
+            children.forEach((child, idx) => {
+                areaToChild[child.area] = idx;
+            });
+
+            // We need to render all areas, but only fill those that have children
+            // For areas without children, we render an empty placeholder
+            const renderedAreas = new Set();
+
+            let html = '';
+
+            // First pass: render children in their areas
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const areaName = areaMatrix[r][c];
+                    if (renderedAreas.has(areaName)) continue;
+                    renderedAreas.add(areaName);
+
+                    const childIdx = areaToChild[areaName];
+                    const child = childIdx !== undefined ? children[childIdx] : null;
+
+                    if (child) {
+                        // Render a populated item
+                        const accent = child.accent;
+                        const label = child.label;
+                        const content = child.content;
+                        const hasNested = child.hasNested;
+                        const nestedCount = child.nestedCount;
+
+                        let nestedHtml = '';
+                        if (hasNested && nestedCount > 0) {
+                            const nt = getNestedTemplate(nestedCount);
+                            const nRows = nt.length;
+                            const nCols = nt[0] ? nt[0].length : 2;
+                            const nAreas = [];
+                            const nSeen = new Set();
+                            for (let nr = 0; nr < nRows; nr++) {
+                                for (let nc = 0; nc < nCols; nc++) {
+                                    const nName = nt[nr][nc];
+                                    if (!nSeen.has(nName)) {
+                                        nSeen.add(nName);
+                                        nAreas.push(nName);
+                                    }
+                                }
+                            }
+                            const nAreaRows = nt.map(row => `"${row.join(' ')}"`).join('\n');
+                            const nItems = nAreas.slice(0, nestedCount);
+
+                            nestedHtml = `<div class="nested-grid" style="grid-template-areas:${nAreaRows};grid-template-columns:repeat(${nCols},1fr);grid-template-rows:repeat(${nRows},1fr);gap:4px;">`;
+                            for (let ni = 0; ni < nItems.length; ni++) {
+                                const nName = nItems[ni];
+                                nestedHtml += `<div class="nested-item" style="grid-area:${nName};">
+                                        <span class="ni-idx">${ni + 1}</span> Sub-${ni + 1}
+                                    </div>`;
+                            }
+                            nestedHtml += `</div>`;
+                        }
+
+                        html += `
+                                <div class="grid-item" style="grid-area:${areaName};" data-accent="${accent}">
+                                    <div class="item-label">
+                                        ${label}
+                                        <span class="idx">${childIdx + 1}</span>
+                                    </div>
+                                    <div class="item-meta">${content}</div>
+                                    ${hasNested ? `<span class="nested-badge">⧉ nested ${nestedCount}</span>` : ''}
+                                    ${nestedHtml}
+                                </div>
+                            `;
+                    } else {
+                        // Empty placeholder
+                        html += `
+                                <div class="grid-item" style="grid-area:${areaName}; opacity:0.3; border:1px dashed #2a2f3a; justify-content:center; align-items:center; min-height:50px;">
+                                    <span style="font-size:12px; color:#4a5568;">${areaName}</span>
+                                </div>
+                            `;
+                    }
+                }
+            }
+
+            grid.innerHTML = html;
+
+            // ─── Update info bar ───
+            document.getElementById('infoTemplate').textContent = effectiveTemplate;
+            document.getElementById('infoAreas').textContent = areaCount;
+            document.getElementById('infoRows').textContent = rows;
+            document.getElementById('infoCols').textContent = cols;
+            document.getElementById('infoChildren').textContent = childCount;
+            document.getElementById('infoNested').textContent = children.filter(c => c.hasNested).length;
+            document.getElementById('infoToken').textContent = tokenKey;
+            document.getElementById('tokenDisplay').textContent = tokenKey;
+
+            // Update progress
+            const pct = Math.min(Math.round((childCount / areaCount) * 100), 100);
+            document.querySelector('.progress-fill').style.width = `${Math.max(pct, 10)}%`;
+            document.querySelector('.progress-label').textContent = `${Math.max(pct, 10)}%`;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  EVENT BINDING
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        document.getElementById('renderBtn').addEventListener('click', renderGrid);
+        document.getElementById('childCount').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') renderGrid();
+        });
+        document.getElementById('templateSelect').addEventListener('change', renderGrid);
+        document.getElementById('tokenSelect').addEventListener('change', renderGrid);
+
+        // ─── Auto-render on load ───
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGrid();
+            // Progress animation
+            setTimeout(() => {
+                document.querySelector('.progress-fill').style.transition = 'width 0.8s ease';
+            }, 100);
+        });
+
+        // ─── Handle window resize for responsiveness ───
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(renderGrid, 200);
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  EXPOSE FOR CONSOLE PLAY
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        window.__gridSystem = {
+            templates: TEMPLATES,
+            nestedTemplates: NESTED_TEMPLATES,
+            tokens: TOKENS,
+            render: renderGrid,
+            getTemplateForCount
+        };
+
+        console.log('🎯 Grid System ready — try __gridSystem.render()');
+        console.log('📐 Templates:', Object.keys(TEMPLATES));
+        console.log('🔑 Tokens:', Object.keys(TOKENS));
+    </script>
+
+</body>
+</html>
