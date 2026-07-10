@@ -1,0 +1,273 @@
+/* #crazy_fix_rules: Tables work fine here, but they have redundancies and lack intelligent flexibility and a style that allows for responsiveness and prevents breakage using a modern table design implementation. Furthermore, cells with actions don't have internal containers for button cells, and there's no real support for image cells, nor proper padding or column sizing. We need better handling of grids and parameters. The internal elements of a table are really difficult and standard to manage. I managed to improve the checkboxes and selected states. And the bulk selection feature now looks better. But the sacrifice for bulk menu reveal and the logic for tool design isn't in the main JS core, but in a separate JS for demonstration purposes. It needs to be merged. */
+/* ── Table sort + scroll + sticky thead + bulk bar ─────────────── */
+.ts-ui-table--sortable,
+.ts-ui-table-scroll,
+.ts-ui-bulk-bar {
+	--ts-table-border: var(--ts-border-1);
+	--ts-table-cell-border: color-mix(in srgb, var(--ts-table-border), transparent 40%);
+	--ts-table-head-border: color-mix(in srgb, var(--ts-table-border), transparent 50%);
+	--ts-table-bg-th: var(--ts-bg-0);
+	--ts-table-bg-1: var(--ts-bg-1);
+	--ts-table-bg-2: var(--ts-bg-2);
+	--ts-table-cell-pad: var(--ts-sp-3);
+	--ts-table-cb-size: 1.2rem;
+	--ts-table-cell-fs: var(--ts-fs-sm);
+	--ts-table-th-fs: calc(var(--ts-table-cell-fs)*.9);
+	/*Non-critical/non-wildcard local tokens moved (those that can be moved and have their priority modified over the element they affect when placed in the rule). Within the scope of the token block, criteria should prioritize accessibility and avoid non-redundant or confusing/duplicate scope injection into other scoped tokens. If they work locally, they should remain local. Therefore, scanning the tokens first is vital before implementing any changes. Verify that any changes made do not break the design, mapping all tokens, subtokens, and token systems, and applying cascading rules to improve the structure in nested styles, reducing and optimizing the code.*/
+	--ts-table-select-accent: color-mix(in srgb, var(--ts-accent), var(--ts-table-bg-1) 72%);
+
+}
+
+.ts-ui-table--sortable {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+
+	& thead {
+		/* generated a scope for the thead element aas it may have classes applied on it and the childs are direct foprm that elementy so it needs to be the diretc scope for the   childs moved and nested.  */
+		& th {
+			position: sticky;
+			top: 0;
+			z-index: 2;
+			background-color: var(--ts-table-bg-th);
+			color: var(--ts-text-primary);
+			font-size: var(--ts-table-th-fs);
+			font-weight: 600;
+			text-align: left;
+			padding: var(--ts-table-cell-pad);
+			border-bottom: 1px solid var(--ts-table-head-border);
+			background-clip: padding-box;
+			user-select: none;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		& th:is(.ts-ui-th--sortable, th[data-sort-key], th[data-ts-ui-sort]) {
+			position: sticky;
+			padding-right: calc(var(--ts-table-cell-pad)* 1.2);
+
+			&::after {
+				content: '⇅';
+				position: absolute;
+				right: calc(var(--ts-table-cell-pad)*.7);
+				top: 50%;
+				left: auto;
+				margin-left: 0 !important;
+				float: none;
+				transform: translateY(-50%);
+				font-size: var(--ts-table-th-fs);
+				line-height: 1;
+				opacity: 1 !important;
+				font-style: normal;
+				font-weight: 400;
+				color: var(--ts-accent);
+				vertical-align: middle;
+				pointer-events: none;
+			}
+
+			/*unified  states for the th headers arrows of the thead. they are grouped based on their  css  rule properties , so the selectors alternates are poerfectly matching, and the filtered lone rule that applies the accent color is below , shrinking a lot the rules and making it  more  efficient. */
+			&.ts-ui-th--sort-asc::after,
+			&.ts-ui-th--active:not(.ts-ui-th--reverse)::after {
+				content: '▲';
+				opacity: 1 !important;
+			}
+
+			&.ts-ui-th--sort-desc::after,
+			&.ts-ui-th--active.ts-ui-th--reverse::after {
+				content: '▼';
+				opacity: 1 !important;
+			}
+
+			&.ts-ui-th--active::after {
+				color: var(--ts-accent-alt, var(--ts-accent));
+			}
+		}
+	}
+
+	/* same operation done for the thead for the tbody on this case:  rules ar enot applied directly for the tbody but the tbody is repeated several times and cotnains as scopoe the rets of the elementys and also is sinside the main scope so it wraps the rules on it wiothout conflicting or  breaking anything.  */
+	& tbody {
+		tr {
+			td {
+				padding: var(--ts-table-cell-pad);
+				font-size: var(--ts-table-cell-fs);
+				color: var(--ts-text-secondary);
+				border: 0px solid var(--ts-table-cell-border);
+				border-bottom-width: 1px;
+				vertical-align: middle;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				border-bottom: 1px solid var(--ts-table-cell-border);
+			}
+
+			&:last-child td {
+				border-bottom-width: 0px;
+			}
+
+			/*This is a variant of the `tr` element with a direct rule for the `td`. There are no other styles in this scope for the selector, so this time we're keeping it unnested.
+			Special note: I need the script to comment out duplicate lines or non-previous styles in the rule, because they need to remain in the stylesheet (they were written as interchangeable fallback declarations). They need to be commented out for cleaner code. If possible, after commenting them out, it's best to group them and create a large comment block with them.*/
+			&.ts-ui-row--selected td {
+				/*background-color: color-mix(in srgb, var(--ts-accent), transparent 92%);
+				border-color: color-mix(in srgb, var(--ts-table-select-accent), transparent 10%);*/
+				background-color: var(--ts-this-bg-dim-2);
+				border-color: var(--ts-this-bg);
+				color: var(--ts-accent-bright-2);
+				--ts-this-bg: var(--ts-table-select-accent);
+				/*In this case, these types of tokens are wildcard tokens that should not be moved because
+				these tokens are specifically placed to give this element the attribute in the local scope for the background color of the featured surface, which the this-bg color system processes in the main layer. Preliminary token analysis should differentiate between global tokens and applicable local tokens that must be kept in local scopes like this. The system we are working with is essentially a token-based system that should omit CSS rules for direct declarative properties... and is token-based only, so it is important to differentiate which tokens can be moved from the local scope to the global scope and which cannot. This feature can be implemented for a v2 experiment, but it is important not to delete the tokens and to ensure they always reach their destination. They must be mapped, and you should always perform a workflow mapping pre-test to ensure they are always readable with the correct values.*/
+			}
+		}
+
+	}
+
+	/*a special variant of the th with a class apllied on  the main ewlemewnt directly, so i defined it without need of nesting as it only has one rule */
+	&.ts-ui-table--grid {
+		& th,
+		& td {
+			/*a good way to prevent redundancies on border rules is to wipe them all and just declasre border 0px solid and border color token one time, adns  then delcare    the border affected if there are not more than one.   shortening the ammount of declarations.  that cannot be done with outline.*/
+			border: 0px solid var(--ts-table-cell-border);
+			border-left-width: 1px;
+			border-right-width: 1px;
+		}
+
+		thead th {
+			/*here the priority overide is to  keep the    style on the th over the general style on the  td  tuyle so we split  the rpiority on the thead and th color  different rule below and keep the   other grouped rule  above. */
+			border-bottom-color: var(--ts-table-head-border);
+		}
+	}
+
+	&.ts-ui-table--striped {
+		& th,
+		& td {
+			/*a good way to prevent redundancies on border rules is to wipe them all and just declasre border 0px solid and border color token one time, adns  then delcare    the border affected if there are not more than one.   shortening the ammount of declarations.  that cannot be done with outline.*/
+			border: 0px solid var(--ts-table-cell-border);
+			border-left-width: 1px;
+			border-right-width: 1px;
+		}
+
+		/*This specific row style has too many rules. Nesting involves nesting the container, the row, and all states, ordering them according to priority and correctly overriding token states. You can maintain the original cascade order, but nesting must respect the selector itself and where it belongs. Therefore, selected, off, and even states belong to the row, but the color is applied to the td for either the inactive or active state in even and odd states with those styles. Nesting requires the & selector and other tools.*/
+		& tbody tr {
+			&:nth-child(odd) td {
+				background-color: color-mix(in srgb, var(--ts-table-bg-2), transparent 72%);
+			}
+
+			&:nth-child(even) td {
+				background-color: color-mix(in srgb, var(--ts-table-bg-1), transparent 55%);
+			}
+
+			&.ts-ui-row--selected {
+				/*general td child styles on this case of selected state*/
+				& td {
+					background-color: color-mix(in srgb, var(--ts-table-select-accent), transparent 88%);
+				}
+
+				&:nth-child(odd) td {
+					background-color: var(--ts-this-bg-dim-2);
+				}
+
+				&:nth-child(even) td {
+					background-color: var(--ts-this-bg-dim-4);
+				}
+			}
+		}
+	}
+}
+
+.ts-ui-table-scroll {
+	position: relative;
+	max-height: min(420px, 70vh);
+	overflow: auto;
+	overflow-x: auto;
+	border-radius: var(--ts-radius-md);
+	border: 1px solid color-mix(in srgb, var(--ts-table-border), transparent 35%);
+	background-color: var(--ts-table-bg-1);
+}
+
+.ts-ui-table-bulk-wrap {
+	position: relative;
+	/*padding-bottom: 4.5rem;*/
+}
+
+.ts-ui-table__select-all,
+.ts-ui-row-checkbox {
+	--ts-ui-control-size: var(--ts-table-cb-size);
+	vertical-align: middle;
+}
+
+.ts-ui-checkbox-cell {
+	width: calc(var(--ts-table-cb-size)*3.5);
+	text-align: center !important;
+	text-overflow: clip !important;
+	padding-inline: 0 !important;
+}
+
+.ts-ui-bulk-bar {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	inset: var(--ts-table-cell-pad);
+	top: auto;
+	z-index: 5;
+	display: flex !important;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: calc(var(--ts-table-cell-pad)*.8);
+	padding: var(--ts-table-cell-pad) calc(var(--ts-table-cell-pad)*1.4);
+	border-radius: var(--ts-radius-base);
+	border: 1px solid color-mix(in srgb, var(--ts-table-border, var(--ts-border-1)), var(--ts-text-primary) 4%);
+	background-color: color-mix(in srgb, var(--ts-table-bg-th), transparent 20%);
+	backdrop-filter: blur(4px) grayscale(0);
+	/* @refactor:backdrop-critical */
+	/* @refactor:glass-dependent */
+	/* @refactor:needs-solid-fallback */
+	/* @refactor:token-dependency */
+	box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.21);
+	/* margin-right: var(--ts-ui-scrollbar-size); */
+	justify-content: space-between;
+	transition-property: opacity, transform;
+	transition-duration: 0.4s;
+	transition-timing-function: var(--ts-panel-ease-out);
+}
+
+.ts-ui-bulk-bar:not([hidden], [style*="display: none"], [style*="display:none"]) {
+	display: flex !important;
+	opacity: 1 !important;
+	transform: translateY(0) !important;
+	pointer-events: all !important;
+}
+
+.ts-ui-bulk-bar[hidden],
+.ts-ui-bulk-bar[style*="display: none"],
+.ts-ui-bulk-bar[style*="display:none"] {
+	display: flex !important;
+	opacity: 0 !important;
+	transform: translateY(var(--ts-table-cell-pad)) !important;
+	pointer-events: none !important;
+}
+
+.ts-ui-bulk-bar__count {
+	font-size: var(--ts-fs-lg);
+	font-weight: 500;
+	color: var(--ts-text-primary);
+	margin-right: var(--ts-table-cell-pad);
+	padding-right: calc(var(--ts-table-cell-pad)*1.2);
+	border-right: 1px solid var(--ts-table-border);
+}
+
+.ts-ui-bulk-bar__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: calc(var(--ts-table-cell-pad)*.8);
+	flex: 1;
+}
+
+.ts-ui-bulk-bar__actions .ts-btn {
+	--ts-btn-radius: 6px;
+	--ts-btn-fs: var(--ts-fs-2xs) !important;
+}
+
+.ts-ui-bulk-bar__actions .ts-btn.ts-btn--danger {
+	margin-left: auto;
+}
