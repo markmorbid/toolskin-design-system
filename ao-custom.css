@@ -68,9 +68,9 @@ body :is(a[rel="tag"], button, .button, .btn, input[type="submit"], .smenu a, .r
     color: var(--ts-btn-color) !important;
     &.selected,
     &.active {
-        --ts-btn-color: var(--ts-btn-color-active);
-        --ts-btn-bg: var(--ts-btn-bg-active);
-        --ts-btn-border: var(--ts-btn-border-active);
+        --ts-btn-color: var(--ts-btn-color-active)!important;
+        --ts-btn-bg: var(--ts-btn-bg-active)!important;
+        --ts-btn-border: var(--ts-btn-border-active)!important;
     }
 }
 :where(div, ul, nav, .smenu, #section):not(header, .fixheadresp, .fixheadresp *, .sub-menu):has(>:is(a[rel="tag"], button, .button, .btn, input[type="submit"], li>a, a.btn, a.button, a.botoncito)) {
@@ -151,7 +151,7 @@ a.botoncito {
     ul.smenu {
         order: 1;
         float: none;
-        padding: 12px 0;
+        padding: 0;
         overflow: hidden;
         display: flex;
         gap: 3px;
@@ -1052,20 +1052,64 @@ a.botoncito {
     padding: 0 25px;
     display: flex;
     flex-wrap: wrap;
+               border-color: var(--ts-border-0)!important;
+ align-items: stretch;
+    align-content: stretch;
+    
+    
     .user_control {
         float: none;
         margin: 0;
         order: 0;
+
+        & a {
+          color: var(--ts-text-secondary);
+          display: flex;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: center;
+          flex-direction: row;
+            gap: 8px;
+
+            & * {
+                margin: 0;
+            }
+            
+        }
     }
     ul.smenu {
         order: 1;
         float: none;
-        padding: 12px 0;
+        padding: 0;
         overflow: hidden;
         display: flex;
-        gap: 3px;
+        gap: 0px;
         flex: 0 1 auto;
         flex-wrap: wrap;
+        align-items: stretch;
+        align-content: stretch;
+
+        & li {
+             flex: 1 1 auto;
+            display: inline-flex; 
+ border-radius: 0!important;
+            --ts-btn-radius: 0!important;
+            border-color: var(--ts-border-0)!important;
+    margin-left: -1px;
+        }
+        & li a {
+            border-block-width: 0px!important;
+            border-color: inherit!important;
+
+            flex: 1 1 auto;
+            display: flex;
+            border-radius: 0!important;
+            --ts-btn-radius: 0!important;
+ border-radius: 0!important;
+            --ao-border-radius: 0!important;
+
+        }
+        
     }
 }
 @media only screen and (max-width: 540px) {
