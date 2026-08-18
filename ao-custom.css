@@ -2169,6 +2169,8 @@ header.responsive .logo h1.text {
     padding-top: 0;
     width: 100%;
     height: auto;
+        height: 100%;
+flex: 1 1 auto;
     object-fit: cover;
     & img {
         margin-top: 0px;
@@ -2181,6 +2183,7 @@ header.responsive .logo h1.text {
 .module .content .items .item .poster:has(a>.see) {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+    flex: 1 1 ;
     & img {
         scale: 1 !important;
     }
@@ -2556,24 +2559,54 @@ span.item_type,
     position: relative;
     width: 100%;
     -ms-touch-action: pan-y;
+    padding-bottom: 10px;
     .owl-wrapper {
         display: flex !important;
         gap: 0px;
         .owl-item {
             float: none;
             padding-inline: 5px;
+            display: flex;
+            flex-direction: column;
             article.item {
-                padding-inline: 0px;
+    --ts-this-bg: var(--ts-bg-0);
+
+                padding: 0px;
+   background: var(--ts-this-bg-dim) !important;
+    border: 1px solid var(--ts-this-bg-border);
+      display: flex;
+            flex-direction: column;
+                  border-radius: 8px!important ;
+                 & .data {
+            overflow: hidden;
+            margin: 0;
+            font-size: 13px;
+            font-weight: 500;
+            background: inherit;
+            padding: 10px 15px;
+            text-align: center;
+            white-space: nowrap;
+            width: 100%;
+            min-height: fit-content;
+            box-sizing: border-box;
+            border-bottom-right-radius: 8px!important ;
+            border-bottom-left-radius: 8px!important;
+        }
+
+                & .poster{
+                    flex: 1 1 auto;
+                }
             }
         }
     }
 }
-#contenedor .module .content.full_width_layout .items {
+#contenedor .module .content.full_width_layout .items, #archive-content.items {
+    padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     grid-template-rows: unset;
     grid-auto-rows: 1fr;
-    gap: 10px;
+    gap: 15px;
     width: 100%;
     align-content: stretch;
     align-items: stretch;
@@ -2597,7 +2630,13 @@ span.item_type,
         --ts-this-bg: var(--ts-bg-0);
         background: var(--ts-this-bg);
         border-radius: var(--ao-border-radius) !important;
-        overflow: hidden;
+         overflow: hidden; 
+
+        &:has(.dtinfo):hover{
+            overflow:visible;
+            z-index: 99;
+        }
+        
         & .poster {
             border: none;
             --ts-this-bg: var(--ts-bg-0);
@@ -3020,4 +3059,9 @@ p#calendario_vacio {
     float: none;
     margin: 0x;
     font-size: 1.3em;
+}
+@media (max-width: 991.98px) {
+    header.main .hbox .logo {
+        width: auto;
+    }
 }
